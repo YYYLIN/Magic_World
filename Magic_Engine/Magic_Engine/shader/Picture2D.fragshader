@@ -1,0 +1,17 @@
+#version 400  
+
+in vec2 TexCoord;
+
+out vec4 FragColor; 
+
+uniform sampler2D sampler0;
+uniform vec4 AmbientColor;
+
+void main()  
+{
+    vec4 TexColor = texture2D(sampler0, TexCoord);
+
+    FragColor = TexColor * AmbientColor;  
+
+//	FragColor = vec4(1.0);
+}  

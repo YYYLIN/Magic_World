@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="MagicEngine">
+      <UniqueIdentifier>{09785b94-2300-4036-a284-2d1fca844701}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MagicWindows">
+      <UniqueIdentifier>{f9e42d68-65c4-4b75-8929-2acfbd96ddd1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MagicEngine\Shader">
+      <UniqueIdentifier>{a4dfb46d-0883-4693-b066-29889c61d8b0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MagicWindows.cpp">
+      <Filter>MagicWindows</Filter>
+    </ClCompile>
+    <ClCompile Include="MagicEngineContext.cpp">
+      <Filter>MagicEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="MagicTexture.cpp">
+      <Filter>MagicEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="MagicPen.cpp">
+      <Filter>MagicEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="MagicShader.cpp">
+      <Filter>MagicEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="MagicMath.cpp">
+      <Filter>MagicEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="MagicCamera.cpp">
+      <Filter>MagicEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="MagicVexter.cpp">
+      <Filter>MagicEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="MagicUIElemeent.cpp">
+      <Filter>MagicEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="MagicCircle.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MagicAlphaWindow.cpp">
+      <Filter>MagicEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="SpecialEffectsPanel.cpp">
+      <Filter>MagicWindows</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="MagicWindows.h">
+      <Filter>MagicWindows</Filter>
+    </ClInclude>
+    <ClInclude Include="MagicEngineContext.h">
+      <Filter>MagicEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="MagicTexture.h">
+      <Filter>MagicEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="MagicPen.h">
+      <Filter>MagicEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="MagicShader.h">
+      <Filter>MagicEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="GrowableArray.hpp">
+      <Filter>MagicEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="MagicMath.h">
+      <Filter>MagicEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="MagicCamera.h">
+      <Filter>MagicEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="MagicVexter.h">
+      <Filter>MagicEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Magic_Macro.h">
+      <Filter>MagicEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="MagicUIElemeent.h">
+      <Filter>MagicEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="MagicCircle.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MagicAlphaWindow.h">
+      <Filter>MagicEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="SpecialEffectsPanel.h">
+      <Filter>MagicWindows</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shader\Picture2D.fragshader">
+      <Filter>MagicEngine\Shader</Filter>
+    </None>
+    <None Include="shader\Picture2D.vertshader">
+      <Filter>MagicEngine\Shader</Filter>
+    </None>
+    <None Include="shader\SelfLuminous.fragshader">
+      <Filter>MagicEngine\Shader</Filter>
+    </None>
+    <None Include="shader\SelfLuminous.vertshader">
+      <Filter>MagicEngine\Shader</Filter>
+    </None>
+  </ItemGroup>
+</Project>
