@@ -146,10 +146,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="MagicMath.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="MagicMath.cpp" />
+    <ClInclude Include="MagicMath.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

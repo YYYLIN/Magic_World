@@ -18,12 +18,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="MagicMath.cpp">
-      <Filter>Math</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="MagicMath.h">
+    <ClInclude Include="MagicMath.hpp">
       <Filter>Math</Filter>
     </ClInclude>
   </ItemGroup>
