@@ -40,14 +40,6 @@ bool MagicPen::Initialize()
 
 	m_Picture2D.UnUse();
 
-	float pPictrueVexter[] = {
-		0.0f,
-		1.0f,
-		2.0f,
-		3.0f
-	};
-	m_MagicPictrueVexter.Create(4, 1, pPictrueVexter);
-
 	return true;
 }
 
@@ -89,9 +81,12 @@ void MagicPen::DrawPicture(const glm::mat4& CameraMatrix, glm::mat4& WorldMatrix
 	glEnable(GL_TEXTURE_2D);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
-	glBindVertexArray(m_MagicPictrueVexter.GetVBO());
-	glDrawArrays(GL_QUADS, 0, 4);
 	glBindVertexArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, PostionUV);
+	glDrawArrays(GL_QUADS, 0, 4);
+
 	glDisable(GL_TEXTURE_2D);
 	glDisable(GL_BLEND);
 

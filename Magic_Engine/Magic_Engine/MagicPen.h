@@ -24,8 +24,6 @@ public:
 	inline int GetWinHeight() { return m_WinHeight; }
 	inline int GetWinWidth() { return m_WinWidth; }
 
-	MagicVexter* GetQuadVexter() { return &m_MagicPictrueVexter; }
-
 	glm::mat4 GetorthoMatrix() { return orthoMatrix; }
 
 	void AddSpecialEffects(MagicShader* _shader, const string& _Text);
@@ -36,8 +34,6 @@ private:
 	int m_WinWidth, m_WinHeight;
 	MagicShader m_Picture2D;
 	map<string, MagicShader*> Map_SpecialEffectsPanel;
-
-	MagicVexter m_MagicPictrueVexter;
 
 	glm::mat4 orthoMatrix, projectionMatrix;
 };

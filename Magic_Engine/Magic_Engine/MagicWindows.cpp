@@ -25,7 +25,7 @@ bool MagicWindows::Initialize()
 		return false;
 	m_MagicEngineContext.GetPen()->ReshapeWinSize(1024, 768);
 
-//	result = EnableAlphaWindow(m_hwnd, 1024, 768, &m_SGDI);
+	result = EnableAlphaWindow(m_hwnd, 1024, 768, &m_SGDI);
 	if (!result)
 		return false;
 
@@ -141,11 +141,11 @@ void MagicWindows::Run()     //过程处理函数
 		{
 			m_MagicEngineContext.Render();
 
-			//glReadPixels(0, 0, m_SGDI.m_Width, m_SGDI.m_Height, GL_BGRA_EXT, GL_UNSIGNED_BYTE, m_SGDI.m_pBackBuffer);
-//			glBindTexture(GL_TEXTURE_2D, m_MagicSceneCircle.GetTextrue());
-//			glGetTexImage(GL_TEXTURE_2D, 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, m_SGDI.m_pBackBuffer);
+			glReadPixels(0, 0, m_SGDI.m_Width, m_SGDI.m_Height, GL_BGRA_EXT, GL_UNSIGNED_BYTE, m_SGDI.m_pBackBuffer);
+			glBindTexture(GL_TEXTURE_2D, m_MagicSceneCircle.GetTextrue());
+			glGetTexImage(GL_TEXTURE_2D, 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, m_SGDI.m_pBackBuffer);
 
-//			UpdataAlphaWindow(&m_SGDI);
+			UpdataAlphaWindow(&m_SGDI);
 		}
 	}
 
