@@ -82,6 +82,39 @@ namespace Magic
 	}
 
 	template<typename T>
+	tvector4<T> operator+ (tvector4<T> const & v1, tvector4<T> const & v2)
+	{
+		return tvector4<T>(
+			v1.x + v2.x,
+			v1.y + v2.y,
+			v1.z + v2.z,
+			v1.w + v2.w
+			);
+	}
+
+	template<typename T>
+	tvector4<T> operator* (typename tvector4<T>::value_type const & s, tvector4<T> const & v)
+	{
+		return tvector4<T>(
+			s * v.x,
+			s * v.y,
+			s * v.z,
+			s * v.w
+			);
+	}
+
+	template<typename T>
+	tvector4<T> operator* (tvector4<T> const & v, typename tvector4<T>::value_type const & s)
+	{
+		return tvector4<T>(
+			v.x * s,
+			v.y * s,
+			v.z * s,
+			v.w * s
+			);
+	}
+
+	template<typename T>
 	tvector4<T> operator*(tvector4<T> const & v1, tvector4<T> const & v2)
 	{
 		return tvector4<T>(
@@ -154,7 +187,27 @@ namespace Magic
 	template<typename T>
 	tMatrix4x4<T> & operator* (tMatrix4x4<T> const & m1, tMatrix4x4<T> const & m2)
 	{
-		return 0.0f;
+		return tMatrix4x4<T>(
+			m1.x0 * m2.x0 + m1.x1 * m2.y0 + m1.x2 * m2.z0 + m1.x3 * m2.w0,
+			m1.x0 * m2.x1 + m1.x1 * m2.y1 + m1.x2 * m2.z1 + m1.x3 * m2.w1,
+			m1.x0 * m2.x2 + m1.x1 * m2.y2 + m1.x2 * m2.z2 + m1.x3 * m2.w2,
+			m1.x0 * m2.x3 + m1.x1 * m2.y3 + m1.x2 * m2.z3 + m1.x3 * m2.w3,
+
+			m1.y0 * m2.x0 + m1.y1 * m2.y0 + m1.y2 * m2.z0 + m1.y3 * m2.w0,
+			m1.y0 * m2.x1 + m1.y1 * m2.y1 + m1.y2 * m2.z1 + m1.y3 * m2.w1,
+			m1.y0 * m2.x2 + m1.y1 * m2.y2 + m1.y2 * m2.z2 + m1.y3 * m2.w2,
+			m1.y0 * m2.x3 + m1.y1 * m2.y3 + m1.y2 * m2.z3 + m1.y3 * m2.w3,
+
+			m1.z0 * m2.x0 + m1.z1 * m2.y0 + m1.z2 * m2.z0 + m1.z3 * m2.w0,
+			m1.z0 * m2.x1 + m1.z1 * m2.y1 + m1.z2 * m2.z1 + m1.z3 * m2.w1,
+			m1.z0 * m2.x2 + m1.z1 * m2.y2 + m1.z2 * m2.z2 + m1.z3 * m2.w2,
+			m1.z0 * m2.x3 + m1.z1 * m2.y3 + m1.z2 * m2.z3 + m1.z3 * m2.w3,
+
+			m1.w0 * m2.x0 + m1.w1 * m2.y0 + m1.w2 * m2.z0 + m1.w3 * m2.w0,
+			m1.w0 * m2.x1 + m1.w1 * m2.y1 + m1.w2 * m2.z1 + m1.w3 * m2.w1,
+			m1.w0 * m2.x2 + m1.w1 * m2.y2 + m1.w2 * m2.z2 + m1.w3 * m2.w2,
+			m1.w0 * m2.x3 + m1.w1 * m2.y3 + m1.w2 * m2.z3 + m1.w3 * m2.w3
+			);
 	}
 
 	//-----------------tMatrix4x4-------------------------------------------

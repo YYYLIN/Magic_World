@@ -14,6 +14,7 @@ MagicSceneCircle::~MagicSceneCircle()
 bool MagicSceneCircle::Initialize(glm::vec4 _PosSize)
 {
 	bool result;
+
 	result = MagicSceneEx::Initialize(_PosSize);
 	if (!result)
 		return false;

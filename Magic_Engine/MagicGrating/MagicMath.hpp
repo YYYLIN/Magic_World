@@ -60,6 +60,12 @@ namespace Magic
 	};
 
 	template<typename T>
+	tvector4<T> operator+ (tvector4<T> const & v1, tvector4<T> const & v2);
+	template<typename T>
+	tvector4<T> operator* (typename tvector4<T>::value_type const & s, tvector4<T> const & v);
+	template<typename T>
+	tvector4<T> operator* (tvector4<T> const & v, typename tvector4<T>::value_type const & s);
+	template<typename T>
 	tvector4<T> operator* (tvector4<T> const & v1, tvector4<T> const & v2);
 
 	/*
@@ -82,7 +88,7 @@ namespace Magic
 			};
 			struct
 			{
-				tvector4<T> value[4];
+				tvector4<T> value_row[4];
 			};
 		};
 

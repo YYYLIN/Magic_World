@@ -109,7 +109,7 @@ void SpecialEffectsPanel::DrawSpecialEffects(const glm::mat4& CameraMatrix, glm:
 	glEnable(GL_TEXTURE_2D);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
-	glBindVertexArray(MagicEngineContext::pMagicEngineContext->GetPen()->GetQuadVexter()->GetVBO());
+	glBindVertexArray(0);
 	glDrawArrays(GL_QUADS, 0, 4);
 	glBindVertexArray(0);
 	glDisable(GL_TEXTURE_2D);

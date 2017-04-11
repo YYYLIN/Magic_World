@@ -3,16 +3,10 @@
 
 int main()
 {
-	Magic::vector3 Vec3(1, 2, 3);
+	Magic::vector4 Vec4_1(1, 2, 3, 4);
+	Magic::vector4 Vec4_2(0, 4, 5, 6);
 
-	Magic::vector3 VEC3_1(Vec3);
-
-	Magic::vector3 VEC3_4(1.0f);
-
-	Magic::vector3 VVV;
-
-	Magic::vector3 VEC3_2 = VEC3_1;
-	VEC3_1 = VEC3_4;
+	Magic::vector4 Vec4_3 = 3.0f * Vec4_1;
 
 	return true;
 }
