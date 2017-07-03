@@ -16,20 +16,83 @@
     <Filter Include="Math">
       <UniqueIdentifier>{e4865735-0716-465b-b2f7-bec7355ad50c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MagicGrating">
+      <UniqueIdentifier>{736d52e0-4ffe-45b7-a6fe-efd8e3b80bbe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DataStructure">
+      <UniqueIdentifier>{cc25da0d-376d-4248-b534-232219bcb86e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ExportAPI">
+      <UniqueIdentifier>{98d44c42-5fd5-422d-ac4b-721456e55048}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MagicMath.hpp">
+    <ClInclude Include="MagicVertexBufferObject.h">
+      <Filter>MagicGrating</Filter>
+    </ClInclude>
+    <ClInclude Include="MagicGlobalVariable.h">
+      <Filter>MagicGrating</Filter>
+    </ClInclude>
+    <ClInclude Include="MagicShaderObject.h">
+      <Filter>MagicGrating</Filter>
+    </ClInclude>
+    <ClInclude Include="MagicList.hpp">
+      <Filter>DataStructure</Filter>
+    </ClInclude>
+    <ClInclude Include="MagicFrameBufferObject.h">
+      <Filter>MagicGrating</Filter>
+    </ClInclude>
+    <ClInclude Include="MagicGrating\MagicMath.hpp">
       <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="MagicGrating\MagicError.h">
+      <Filter>ExportAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="MagicGrating\MagicGratingAPI.h">
+      <Filter>ExportAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="MagicGrating\MagicMacro.h">
+      <Filter>ExportAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="MagicGrating\MagicStruct.h">
+      <Filter>ExportAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="DynamicQueue.hpp">
+      <Filter>DataStructure</Filter>
+    </ClInclude>
+    <ClInclude Include="MagicInsideMacro.h">
+      <Filter>MagicGrating</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="源.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="MagicVertexBufferObject.cpp">
+      <Filter>MagicGrating</Filter>
+    </ClCompile>
+    <ClCompile Include="MagicGlobalVariable.cpp">
+      <Filter>MagicGrating</Filter>
+    </ClCompile>
+    <ClCompile Include="MagicShaderObject.cpp">
+      <Filter>MagicGrating</Filter>
+    </ClCompile>
+    <ClCompile Include="MagicFrameBufferObject.cpp">
+      <Filter>MagicGrating</Filter>
+    </ClCompile>
+    <ClCompile Include="MagicGratingAPI.cpp">
+      <Filter>MagicGrating</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="MagicMath.inl">
+    <None Include="MagicList.inl">
+      <Filter>DataStructure</Filter>
+    </None>
+    <None Include="MagicGrating\MagicMath.inl">
       <Filter>Math</Filter>
+    </None>
+    <None Include="DynamicQueue.inl">
+      <Filter>DataStructure</Filter>
     </None>
   </ItemGroup>
 </Project>

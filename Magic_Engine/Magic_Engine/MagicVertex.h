@@ -4,17 +4,17 @@
 #include <gl/glew.h>
 #include "glut.h"
 
-class MagicVexter
+class MagicVertex
 {
 public:
-	MagicVexter();
-	~MagicVexter();
+	MagicVertex();
+	~MagicVertex();
 
-	void Create(unsigned int _size,unsigned char _vexterNumber,float* _data);
+	void Create(unsigned int _size,unsigned char _VertexNumber,float* _data);
 	void Delete();
 
-	float* StartUpdataVexter();
-	void EndUpdataVexter();
+	float* StartUpdataVertex();
+	void EndUpdataVertex();
 
 	GLuint GetVBO() { return vaoHandle; }
 private:

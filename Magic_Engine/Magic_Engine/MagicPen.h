@@ -6,7 +6,7 @@
 #include <gtx/transform2.hpp>
 #include "MagicShader.h"
 #include "MagicTexture.h"
-#include "MagicVexter.h"
+#include "MagicVertex.h"
 
 class MagicPen
 {

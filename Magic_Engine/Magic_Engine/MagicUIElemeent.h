@@ -1,6 +1,5 @@
 #pragma once
 #include "MagicEngineContext.h"
-#include "GrowableArray.hpp"
 
 struct SceneExMessage
 {

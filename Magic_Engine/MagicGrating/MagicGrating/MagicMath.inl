@@ -142,7 +142,7 @@ namespace Magic
 		value[1] = _tMatrix4x4.value[1];
 		value[2] = _tMatrix4x4.value[2];
 		value[3] = _tMatrix4x4.value[3];*/
-		memcpy(&this, &_tMatrix4x4, sizeof(tMatrix4x4<T>));
+		memcpy(this, &_tMatrix4x4, sizeof(tMatrix4x4<T>));
 	}
 
 	template<typename T>
@@ -174,7 +174,7 @@ namespace Magic
 		value[1] = m.value[1];
 		value[2] = m.value[2];
 		value[3] = m.value[3];*/
-		memcpy(&this, &m, sizeof(tMatrix4x4<T>));
+		memcpy(this, &m, sizeof(tMatrix4x4<T>));
 		return *this;
 	}
 
@@ -185,7 +185,7 @@ namespace Magic
 	}
 
 	template<typename T>
-	tMatrix4x4<T> & operator* (tMatrix4x4<T> const & m1, tMatrix4x4<T> const & m2)
+	tMatrix4x4<T> operator* (tMatrix4x4<T> const & m1, tMatrix4x4<T> const & m2)
 	{
 		return tMatrix4x4<T>(
 			m1.x0 * m2.x0 + m1.x1 * m2.y0 + m1.x2 * m2.z0 + m1.x3 * m2.w0,

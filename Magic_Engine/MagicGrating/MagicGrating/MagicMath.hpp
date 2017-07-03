@@ -106,7 +106,7 @@ namespace Magic
 	};
 
 	template<typename T>
-	tMatrix4x4<T> & operator* (tMatrix4x4<T> const & m1, tMatrix4x4<T> const & m2);
+	tMatrix4x4<T> operator* (tMatrix4x4<T> const & m1, tMatrix4x4<T> const & m2);
 
 
 

@@ -13,6 +13,9 @@
 #include "MagicCircle.h"
 #include "MagicAlphaWindow.h"
 #include "SpecialEffectsPanel.h"
+#include "MagicGratingAPI.h"
+
+#pragma comment(lib,"MagicGrating.lib")
 
 class MagicWindows
 {
@@ -39,6 +42,15 @@ private:
 	MagicEngineContext m_MagicEngineContext;
 	MagicSceneCircle m_MagicSceneCircle;
 	SpecialEffectsPanel m_SpecialEffectsPanel;
+
+	MGContext m_MGContext;
+	MGShader m_Shader;
+	MGVertexArrays m_VertexArrays;
+	MGBuffer m_VertexBuffer;
+	MGFrameBuffer m_MGFrameBuffer;
+	unsigned int m_ShaderCamera;
+	unsigned int m_Shaderprojection;
+	unsigned int m_Shaderworld;
 
 	SGDI m_SGDI;
 	wchar_t m_applicationName[256];

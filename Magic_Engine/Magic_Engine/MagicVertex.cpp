@@ -1,22 +1,22 @@
-#include "MagicVexter.h"
+#include "MagicVertex.h"
 
 
 
-MagicVexter::MagicVexter()
+MagicVertex::MagicVertex()
 {
 	vaoHandle = 0;
 	vboHandles = 0;
 }
 
 
-MagicVexter::~MagicVexter()
+MagicVertex::~MagicVertex()
 {
 	if (vaoHandle)
 		Delete();
 }
 
 
-void MagicVexter::Create(unsigned int _size, unsigned char _vexterNumber, float* _data)
+void MagicVertex::Create(unsigned int _size, unsigned char _VertexNumber, float* _data)
 {
 	// Create and populate the buffer objects  
 	glGenBuffers(1, &vboHandles);
@@ -25,7 +25,7 @@ void MagicVexter::Create(unsigned int _size, unsigned char _vexterNumber, float*
 	//绑定VBO以供使用  
 	glBindBuffer(GL_ARRAY_BUFFER, vboHandles);
 	//加载数据到VBO  
-	glBufferData(GL_ARRAY_BUFFER, _size * sizeof(float) * _vexterNumber, _data, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, _size * sizeof(float) * _VertexNumber, _data, GL_STATIC_DRAW);
 
 	glGenVertexArrays(1, &vaoHandle);
 	glBindVertexArray(vaoHandle);
@@ -33,24 +33,24 @@ void MagicVexter::Create(unsigned int _size, unsigned char _vexterNumber, float*
 	glEnableVertexAttribArray(0);
 
 	glBindBuffer(GL_ARRAY_BUFFER, vboHandles);
-	glVertexAttribPointer(0, _vexterNumber, GL_FLOAT, GL_FALSE, 0, (GLubyte *)0);
+	glVertexAttribPointer(0, _VertexNumber, GL_FLOAT, GL_FALSE, 0, (GLubyte *)0);
 
 	glBindVertexArray(0);
 }
 
-void MagicVexter::Delete()
+void MagicVertex::Delete()
 {
 	glDeleteBuffers(1, &vboHandles);
 	glDeleteVertexArrays(1, &vaoHandle);
 }
 
-float* MagicVexter::StartUpdataVexter()
+float* MagicVertex::StartUpdataVertex()
 {
 	glBindBuffer(GL_ARRAY_BUFFER_ARB, vboHandles);
 	return (float*)glMapBuffer(GL_ARRAY_BUFFER_ARB, GL_READ_WRITE_ARB);
 }
 
-void MagicVexter::EndUpdataVexter()
+void MagicVertex::EndUpdataVertex()
 {
 	glUnmapBuffer(GL_ARRAY_BUFFER_ARB);
 }

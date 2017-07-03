@@ -1,6 +1,20 @@
 #include "MagicWindows.h"
 
+struct VertexShaderType
+{
+	Magic::vector3 m_pos;
+};
 
+Magic::vector4 Shader_VertexShader(void* const pVertex, void* const pVariate)
+{
+	VertexShaderType* pVertexShaderType = (VertexShaderType*)pVertex;
+	return Magic::vector4(pVertexShaderType->m_pos.x, pVertexShaderType->m_pos.y, pVertexShaderType->m_pos.z, 1.0f);
+}
+
+Magic::vector4 Shader_PixelShader(void* const pIn, void* const pVariate)
+{
+	return Magic::vector4(1.0f, 0, 0, 1);
+}
 
 MagicWindows::MagicWindows()
 {
@@ -20,24 +34,68 @@ bool MagicWindows::Initialize()
 	if (!result)
 		return false;
 
-	result = m_MagicEngineContext.Initialize(m_hwnd);
-	if (!result)
-		return false;
-	m_MagicEngineContext.GetPen()->ReshapeWinSize(1024, 768);
+	/*	result = m_MagicEngineContext.Initialize(m_hwnd);
+		if (!result)
+			return false;
+		m_MagicEngineContext.GetPen()->ReshapeWinSize(1024, 768);*/
 
 	result = EnableAlphaWindow(m_hwnd, 1024, 768, &m_SGDI);
 	if (!result)
 		return false;
 
-	m_MagicEngineContext.SetBackColor(1.0f, 0.0f, 0.0f, 1.0f);
 
-	result = m_MagicSceneCircle.MagicScene::Initialize(glm::vec4(0, 0, 1024, 768), &m_MagicEngineContext);
+	/*	m_MagicEngineContext.SetBackColor(1.0f, 0.0f, 0.0f, 1.0f);
+
+		result = m_MagicSceneCircle.MagicScene::Initialize(glm::vec4(0, 0, 1024, 768), &m_MagicEngineContext);
+		if (!result)
+			return false;
+
+		result = m_SpecialEffectsPanel.Initialize(1024, 768);
+		if (!result)
+			return false;*/
+			//--------------------------------------------
+	result = CreateMagicGratingContext(&m_MGContext);
 	if (!result)
 		return false;
-
-	result = m_SpecialEffectsPanel.Initialize(1024, 768);
+	result = InitMagicGratingContext(m_MGContext);
 	if (!result)
 		return false;
+	BindMagicGratingContext(m_MGContext);
+	BindMGDisplayContext(m_MGContext, m_SGDI.m_pBackBuffer, 1024, 768, MG_BGRA, MG_UCHAR);
+	//--------------------------------------------
+	MG_CreateFrameBufferObject(&m_MGFrameBuffer);
+	MG_BindFrameBuffer(m_MGFrameBuffer);
+	result = MG_InitFrameBuffer(1024, 768);
+	if (!result)
+		return false;
+	MG_ClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	//-------------Shader-------------------------
+	CreateMagicShaderObject(&m_Shader);
+	BindMagicShaderObject(m_Shader);
+	m_ShaderCamera = MGAddShaderVariate(sizeof(Magic::Matrix4));
+	m_Shaderprojection = MGAddShaderVariate(sizeof(Magic::Matrix4));
+	m_Shaderworld = MGAddShaderVariate(sizeof(Magic::Matrix4));
+	InitMagicShaderObject(Shader_VertexShader, Shader_PixelShader);
+
+	MG_SetShaderVariate(m_ShaderCamera, &Magic::Matrix4());
+	MG_SetShaderVariate(m_Shaderprojection, &Magic::Matrix4());
+	MG_SetShaderVariate(m_Shaderworld, &Magic::Matrix4());
+	//--------------------------------------------
+	MG_CreateVertexArrays(&m_VertexArrays);
+	MG_BindVertexArrays(m_VertexArrays);
+	MG_EnableVertexAttribArray(1);
+
+	float pVertex[] =
+	{
+		0.5f,0.0f,0.0f,
+		0.0f,0.5f,0.0f,
+		-0.5f,0.0f,0.0f
+	};
+
+	MG_CreateBuffer(&m_VertexBuffer);
+	MG_BindBuffer(MG_ARRAY_BUFFER, m_VertexBuffer);
+	MG_BufferData(MG_ARRAY_BUFFER, sizeof(float) * 3 * 3, pVertex);
+	MG_VertexAttribPointer(0, 3, MG_FLOAT);
 
 	return true;
 }
@@ -139,11 +197,17 @@ void MagicWindows::Run()     //过程处理函数
 		}
 		else
 		{
-			m_MagicEngineContext.Render();
+			/*
+						m_MagicEngineContext.Render();
 
-			glReadPixels(0, 0, m_SGDI.m_Width, m_SGDI.m_Height, GL_BGRA_EXT, GL_UNSIGNED_BYTE, m_SGDI.m_pBackBuffer);
-			glBindTexture(GL_TEXTURE_2D, m_MagicSceneCircle.GetTextrue());
-			glGetTexImage(GL_TEXTURE_2D, 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, m_SGDI.m_pBackBuffer);
+						glReadPixels(0, 0, m_SGDI.m_Width, m_SGDI.m_Height, GL_BGRA_EXT, GL_UNSIGNED_BYTE, m_SGDI.m_pBackBuffer);
+						glBindTexture(GL_TEXTURE_2D, m_MagicSceneCircle.GetTextrue());
+						glGetTexImage(GL_TEXTURE_2D, 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, m_SGDI.m_pBackBuffer);*/
+			MG_Clear(MG_COLOR_BUFFER);
+
+			MGDrawArrays(MG_DrawPoints, 0, 3);
+
+			MG_WaitSwapFrame();
 
 			UpdataAlphaWindow(&m_SGDI);
 		}
@@ -155,6 +219,12 @@ void MagicWindows::Run()     //过程处理函数
 
 void MagicWindows::Shutdown()
 {
+	MG_DeleteBuffer(&m_VertexBuffer);
+	MG_DeleteVertexArrays(&m_VertexArrays);
+	DeleteMagicShaderObject(&m_Shader);
+	MG_DeleteFrameBufferObject(&m_MGFrameBuffer);
+	DeleteMagicGratingContext(&m_MGContext);
+
 	DisableAlphaWindow(&m_SGDI);
 	// 删除窗口。
 	DestroyWindow(m_hwnd);

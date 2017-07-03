@@ -1,12 +1,14 @@
-#include <stdio.h>
-#include "MagicMath.hpp"
+#include <windows.h>
 
-int main()
+int WINAPI _tDllMain(HINSTANCE hInstance, DWORD fdwReason, PVOID pvReserved)
 {
-	Magic::vector4 Vec4_1(1, 2, 3, 4);
-	Magic::vector4 Vec4_2(0, 4, 5, 6);
-
-	Magic::vector4 Vec4_3 = 3.0f * Vec4_1;
-
-	return true;
+	switch (fdwReason)
+	{
+	case DLL_PROCESS_ATTACH:
+	case DLL_THREAD_ATTACH:
+	case DLL_THREAD_DETACH:
+	case DLL_PROCESS_DETACH:
+		break;
+	}
+	return TRUE;
 }

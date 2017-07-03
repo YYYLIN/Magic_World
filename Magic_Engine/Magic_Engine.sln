@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Magic_Engine", "Magic_Engine\Magic_Engine.vcxproj", "{E724C4D6-2A2C-4742-99B5-9E021FEF6392}"
+	ProjectSection(ProjectDependencies) = postProject
+		{77087E63-1BA7-46AA-BE00-2C360638DDA8} = {77087E63-1BA7-46AA-BE00-2C360638DDA8}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MagicGrating", "MagicGrating\MagicGrating.vcxproj", "{77087E63-1BA7-46AA-BE00-2C360638DDA8}"
 EndProject

@@ -1,8 +1,9 @@
-#pragma once
+#ifndef _GROWABLEARRAY_HPP_
+#define _GROWABLEARRAY_HPP_
 
 #include <process.h>
 #include "windows.h"
-
+#include <vcruntime_new.h>
 
 //--------------------------------------------------------------------------------------
 // A growable array
@@ -30,6 +31,10 @@ public:
 	{
 		//	assert(nIndex >= 0 && nIndex < m_nSize);
 		return m_pData[nIndex];
+	}
+	inline TYPE& GetEnd()
+	{
+		return m_pData[m_nSize - 1];
 	}
 	inline int  GetSize() const
 	{
@@ -337,7 +342,7 @@ int CGrowableArray <TYPE>::LastIndexOf(const TYPE& value, int iEnd, int nNumElem
 	}
 
 	// Search
-	for (int i = iEnd; i >(iEnd - nNumElements); i--)
+	for (int i = iEnd; i > (iEnd - nNumElements); i--)
 	{
 		if (value == m_pData[i])
 			return i;
@@ -373,3 +378,6 @@ void CGrowableArray <TYPE>::RemoveAll()
 {
 	SetSize(0);
 }
+
+
+#endif

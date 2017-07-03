@@ -44,9 +44,6 @@
     <ClCompile Include="MagicCamera.cpp">
       <Filter>MagicEngine</Filter>
     </ClCompile>
-    <ClCompile Include="MagicVexter.cpp">
-      <Filter>MagicEngine</Filter>
-    </ClCompile>
     <ClCompile Include="MagicUIElemeent.cpp">
       <Filter>MagicEngine</Filter>
     </ClCompile>
@@ -58,6 +55,9 @@
     </ClCompile>
     <ClCompile Include="SpecialEffectsPanel.cpp">
       <Filter>MagicWindows</Filter>
+    </ClCompile>
+    <ClCompile Include="MagicVertex.cpp">
+      <Filter>MagicEngine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -76,16 +76,10 @@
     <ClInclude Include="MagicShader.h">
       <Filter>MagicEngine</Filter>
     </ClInclude>
-    <ClInclude Include="GrowableArray.hpp">
-      <Filter>MagicEngine</Filter>
-    </ClInclude>
     <ClInclude Include="MagicMath.h">
       <Filter>MagicEngine</Filter>
     </ClInclude>
     <ClInclude Include="MagicCamera.h">
-      <Filter>MagicEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="MagicVexter.h">
       <Filter>MagicEngine</Filter>
     </ClInclude>
     <ClInclude Include="Magic_Macro.h">
@@ -102,6 +96,9 @@
     </ClInclude>
     <ClInclude Include="SpecialEffectsPanel.h">
       <Filter>MagicWindows</Filter>
+    </ClInclude>
+    <ClInclude Include="MagicVertex.h">
+      <Filter>MagicEngine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
