@@ -12,7 +12,7 @@ public:
 
 	void SetPanelSize(float _w, float _h);
 
-	void DrawSpecialEffects(const glm::mat4& CameraMatrix, glm::mat4& WorldMatrix, GLuint texture, glm::vec2& Pos,
+	void DrawSpecialEffects(glm::mat4 CameraMatrix, glm::mat4& WorldMatrix, GLuint texture, glm::vec2& Pos,
 		glm::vec2& WidthHight, Magic::Color4& Color4, glm::vec2* pUV = 0);
 private:
 	MagicShader m_SelfLuminous;  //×Ô·¢¹â

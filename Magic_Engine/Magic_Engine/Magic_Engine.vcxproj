@@ -155,19 +155,23 @@
     <ClCompile Include="MagicCircle.cpp" />
     <ClCompile Include="MagicEngineContext.cpp" />
     <ClCompile Include="MagicMath.cpp" />
+    <ClCompile Include="MagicModelObject.cpp" />
     <ClCompile Include="MagicPen.cpp" />
     <ClCompile Include="MagicShader.cpp" />
     <ClCompile Include="MagicTexture.cpp" />
     <ClCompile Include="MagicUIElemeent.cpp" />
     <ClCompile Include="MagicVertex.cpp" />
     <ClCompile Include="MagicWindows.cpp" />
+    <ClCompile Include="MagicWorld.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SpecialEffectsPanel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MagicAlphaWindow.h" />
     <ClInclude Include="MagicCircle.h" />
+    <ClInclude Include="MagicModelObject.h" />
     <ClInclude Include="MagicUIElemeent.h" />
+    <ClInclude Include="MagicWorld.h" />
     <ClInclude Include="Magic_Macro.h" />
     <ClInclude Include="MagicCamera.h" />
     <ClInclude Include="MagicEngineContext.h" />

@@ -8,17 +8,25 @@ class MagicVertex
 {
 public:
 	MagicVertex();
-	~MagicVertex();
+	virtual ~MagicVertex();
 
-	void Create(unsigned int _size,unsigned char _VertexNumber,float* _data);
+	void CreateVBO(const unsigned char &_number = 1, bool _ARRAYBuffer = false);
+	void BindCreate(const unsigned char &_number, unsigned char _size, unsigned int _VertexNumber, void* _data);
 	void Delete();
 
-	float* StartUpdataVertex();
+	void* StartUpdataVertex(const unsigned char &_number);
 	void EndUpdataVertex();
 
-	GLuint GetVBO() { return vaoHandle; }
+	void* StartUpdataIndex();
+	void EndUpdataIndex();
+
+	GLuint GetVAO() { return vaoHandle; }
+	inline unsigned int GetVertexNumber() { return m_VertexNumber; }
+	inline unsigned int GetIndexNumber() { return m_IndexNumber; }
 private:
-	GLuint vboHandles;
+	unsigned char m_vboNumber;
+	unsigned int m_VertexNumber, m_IndexNumber;
+	GLuint*vboHandles;
 	GLuint vaoHandle;//vertex array object 
 };
 

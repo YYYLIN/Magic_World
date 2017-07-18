@@ -71,7 +71,7 @@ void SpecialEffectsPanel::SetPanelSize(float _w, float _h)
 }
 
 
-void SpecialEffectsPanel::DrawSpecialEffects(const glm::mat4& CameraMatrix, glm::mat4& WorldMatrix, GLuint texture, glm::vec2& Pos,
+void SpecialEffectsPanel::DrawSpecialEffects(glm::mat4 CameraMatrix, glm::mat4& WorldMatrix, GLuint texture, glm::vec2& Pos,
 	glm::vec2& WidthHight, Magic::Color4& Color4, glm::vec2* pUV)
 {
 	float PostionUV[16];

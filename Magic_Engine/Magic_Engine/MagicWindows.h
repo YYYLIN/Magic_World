@@ -14,6 +14,7 @@
 #include "MagicAlphaWindow.h"
 #include "SpecialEffectsPanel.h"
 #include "MagicGratingAPI.h"
+#include "MagicWorld.h"
 
 #pragma comment(lib,"MagicGrating.lib")
 
@@ -40,17 +41,19 @@ private:
 private:
 	int m_ResultMessage;
 	MagicEngineContext m_MagicEngineContext;
-	MagicSceneCircle m_MagicSceneCircle;
+	//	MagicSceneCircle m_MagicSceneCircle;
+	MagicWorld m_MagicWorld;
 	SpecialEffectsPanel m_SpecialEffectsPanel;
 
-	MGContext m_MGContext;
-	MGShader m_Shader;
-	MGVertexArrays m_VertexArrays;
-	MGBuffer m_VertexBuffer;
-	MGFrameBuffer m_MGFrameBuffer;
-	unsigned int m_ShaderCamera;
-	unsigned int m_Shaderprojection;
-	unsigned int m_Shaderworld;
+	/*
+		MGContext m_MGContext;
+		MGShader m_Shader;
+		MGVertexArrays m_VertexArrays;
+		MGBuffer m_VertexBuffer;
+		MGFrameBuffer m_MGFrameBuffer;
+		unsigned int m_ShaderCamera;
+		unsigned int m_Shaderprojection;
+		unsigned int m_Shaderworld;*/
 
 	SGDI m_SGDI;
 	wchar_t m_applicationName[256];

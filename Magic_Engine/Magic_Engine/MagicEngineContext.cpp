@@ -81,12 +81,12 @@ void MagicScene::SetDisplayState(bool _state)
 	DisplayState = _state;
 }
 
-void MagicScene::SpiritAdd(MagicCommon* _common)
+void MagicScene::SpiritAdd(MagicUICommon* _common)
 {
 	v_Common.push_back(_common);
 }
 
-void MagicScene::DeleteSpirit(MagicCommon* _common)
+void MagicScene::DeleteSpirit(MagicUICommon* _common)
 {
 	if (v_Common.size())
 	{

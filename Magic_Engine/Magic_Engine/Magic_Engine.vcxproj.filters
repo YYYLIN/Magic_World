@@ -18,6 +18,12 @@
     <Filter Include="MagicEngine\Shader">
       <UniqueIdentifier>{a4dfb46d-0883-4693-b066-29889c61d8b0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MagicEngine\Object">
+      <UniqueIdentifier>{bc11a9e0-28a0-4772-9d20-e2fbaecdafdd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MagicEngine\World">
+      <UniqueIdentifier>{6f949c48-9551-4431-b77d-27100fbf07d9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -59,6 +65,12 @@
     <ClCompile Include="MagicVertex.cpp">
       <Filter>MagicEngine</Filter>
     </ClCompile>
+    <ClCompile Include="MagicModelObject.cpp">
+      <Filter>MagicEngine\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="MagicWorld.cpp">
+      <Filter>MagicEngine\World</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MagicWindows.h">
@@ -99,6 +111,12 @@
     </ClInclude>
     <ClInclude Include="MagicVertex.h">
       <Filter>MagicEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="MagicModelObject.h">
+      <Filter>MagicEngine\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="MagicWorld.h">
+      <Filter>MagicEngine\World</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

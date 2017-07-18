@@ -23,18 +23,25 @@ class MagicCommon
 	friend MagicScene;
 	friend MagicEngineContext;
 public:
-	MagicCommon::MagicCommon() {}
-	virtual MagicCommon::~MagicCommon()
+	MagicCommon() = default;
+	virtual ~MagicCommon()
 	{}
-
-	virtual void DrawSpirit() {}
 
 protected:
 	inline virtual void Updata() { return; }
 	virtual	void Render(glm::mat4 CameraMatrix) = 0;
 };
 
-class MagicSpirit :public MagicCommon
+class MagicUICommon :public MagicCommon
+{
+public:
+	MagicUICommon() = default;
+	virtual ~MagicUICommon() {}
+
+	virtual void DrawSpirit() {}
+};
+
+class MagicSpirit :public MagicUICommon
 {
 public:
 	MagicSpirit();
@@ -55,7 +62,7 @@ protected:
 };
 
 
-class MagicScene :public MagicCommon
+class MagicScene :public MagicUICommon
 {
 public:
 	MagicScene();
@@ -67,8 +74,8 @@ public:
 
 	inline bool GetDisplayState() { return DisplayState; }
 
-	void SpiritAdd(MagicCommon*);
-	void DeleteSpirit(MagicCommon*);
+	void SpiritAdd(MagicUICommon*);
+	void DeleteSpirit(MagicUICommon*);
 
 	virtual GLuint GetFBOTextrue() { return 0; }
 
@@ -83,7 +90,7 @@ protected:
 	glm::vec4 m_PosSize;
 	MagicScene* pUpperScene;
 
-	vector<MagicCommon*> v_Common;
+	vector<MagicUICommon*> v_Common;
 };
 
 HGLRC CreateRCContxt(HDC _hdc);

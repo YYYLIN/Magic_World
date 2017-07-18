@@ -16,7 +16,7 @@ public:
 
 	bool Initialize();
 
-	void DrawPicture(const glm::mat4& CameraMatrix, glm::mat4& WorldMatrix, GLuint texture, glm::vec2& Pos,
+	void DrawPicture(glm::mat4 CameraMatrix, glm::mat4& WorldMatrix, GLuint texture, glm::vec2& Pos,
 		glm::vec2& WidthHight, Magic::Color4& Color4, glm::vec2* pUV = 0);
 
 	void ReshapeWinSize(int width, int height);
@@ -33,6 +33,7 @@ public:
 private:
 	int m_WinWidth, m_WinHeight;
 	MagicShader m_Picture2D;
+	MagicShader m_LightShader;
 	map<string, MagicShader*> Map_SpecialEffectsPanel;
 
 	glm::mat4 orthoMatrix, projectionMatrix;

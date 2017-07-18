@@ -1,0 +1,27 @@
+//强制要求支持一个特定版本的GLSL版本  
+#version 400  
+
+layout(location = 0) in vec3 PositionVertex;
+layout(location = 1) in vec2 TextrueCoord;
+layout(location = 2) in vec3 Normal;
+
+uniform mat4 worldMatrix;
+uniform mat4 CameraMatrix;
+uniform mat4 projectionMatrix;
+uniform mat4 LightMatrix;
+
+out vec2 TexCoord;
+out vec4 LightPos;
+out vec3 OutNormal;
+
+void main()  
+{ 
+    mat4 posMatrix = projectionMatrix * CameraMatrix * worldMatrix;
+    mat4 LightposMatrix = projectionMatrix * LightMatrix * worldMatrix;
+
+    gl_Position = posMatrix * vec4 (PositionVertex, 1.0); 
+	LightPos = LightposMatrix * vec4 (PositionVertex, 1.0); 
+	//物体法线变换
+	OutNormal = transpose(inverse(mat3(worldMatrix))) * Normal;
+	TexCoord = TextrueCoord;
+}  

@@ -1,7 +1,8 @@
 //强制要求支持一个特定版本的GLSL版本  
 #version 400  
 
-uniform vec4 PositionUV[4];
+layout(location = 0) in vec4 PositionUV;
+
 uniform mat4 worldMatrix;
 uniform mat4 CameraMatrix;
 uniform mat4 projectionMatrix;
@@ -12,6 +13,6 @@ void main()
 { 
     mat4 posMatrix = projectionMatrix * CameraMatrix * worldMatrix;
 
-    gl_Position = posMatrix * vec4(PositionUV[index].x,PositionUV[index].y,0.0,1.0); 
-	TexCoord = vec2(PositionUV[index].z,PositionUV[index].w);
+    gl_Position = posMatrix * vec4 (PositionUV.x,PositionUV.y,0.0, 1.0); 
+	TexCoord = PositionUV.zw;
 }  

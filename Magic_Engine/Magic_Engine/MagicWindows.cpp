@@ -34,26 +34,36 @@ bool MagicWindows::Initialize()
 	if (!result)
 		return false;
 
-	/*	result = m_MagicEngineContext.Initialize(m_hwnd);
-		if (!result)
-			return false;
-		m_MagicEngineContext.GetPen()->ReshapeWinSize(1024, 768);*/
-
-	result = EnableAlphaWindow(m_hwnd, 1024, 768, &m_SGDI);
+	result = m_MagicEngineContext.Initialize(m_hwnd);
 	if (!result)
 		return false;
+	m_MagicEngineContext.GetPen()->ReshapeWinSize(1024, 768);
 
-
-	/*	m_MagicEngineContext.SetBackColor(1.0f, 0.0f, 0.0f, 1.0f);
-
-		result = m_MagicSceneCircle.MagicScene::Initialize(glm::vec4(0, 0, 1024, 768), &m_MagicEngineContext);
-		if (!result)
-			return false;
-
-		result = m_SpecialEffectsPanel.Initialize(1024, 768);
+	/*
+		result = EnableAlphaWindow(m_hwnd, 1024, 768, &m_SGDI);
 		if (!result)
 			return false;*/
-			//--------------------------------------------
+
+
+	m_MagicEngineContext.SetBackColor(1.0f, 1.0f, 1.0f, 1.0f);
+
+	result = m_MagicWorld.Initialize();
+	if (!result)
+		return false;
+	m_MagicEngineContext.SpiritAdd(&m_MagicWorld);
+
+/*
+	result = m_MagicSceneCircle.MagicScene::Initialize(glm::vec4(0, 0, 1024, 768), &m_MagicEngineContext);
+	if (!result)
+		return false;*/
+
+
+
+	result = m_SpecialEffectsPanel.Initialize(1024, 768);
+	if (!result)
+		return false;
+	//--------------------------------------------
+/*
 	result = CreateMagicGratingContext(&m_MGContext);
 	if (!result)
 		return false;
@@ -95,7 +105,7 @@ bool MagicWindows::Initialize()
 	MG_CreateBuffer(&m_VertexBuffer);
 	MG_BindBuffer(MG_ARRAY_BUFFER, m_VertexBuffer);
 	MG_BufferData(MG_ARRAY_BUFFER, sizeof(float) * 3 * 3, pVertex);
-	MG_VertexAttribPointer(0, 3, MG_FLOAT);
+	MG_VertexAttribPointer(0, 3, MG_FLOAT);*/
 
 	return true;
 }
@@ -197,19 +207,21 @@ void MagicWindows::Run()     //过程处理函数
 		}
 		else
 		{
-			/*
-						m_MagicEngineContext.Render();
 
+			m_MagicEngineContext.Render();
+
+			/*
 						glReadPixels(0, 0, m_SGDI.m_Width, m_SGDI.m_Height, GL_BGRA_EXT, GL_UNSIGNED_BYTE, m_SGDI.m_pBackBuffer);
 						glBindTexture(GL_TEXTURE_2D, m_MagicSceneCircle.GetTextrue());
 						glGetTexImage(GL_TEXTURE_2D, 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, m_SGDI.m_pBackBuffer);*/
-			MG_Clear(MG_COLOR_BUFFER);
+						/*
+									MG_Clear(MG_COLOR_BUFFER);
 
-			MGDrawArrays(MG_DrawPoints, 0, 3);
+									MGDrawArrays(MG_DrawPoints, 0, 3);
 
-			MG_WaitSwapFrame();
+									MG_WaitSwapFrame();
 
-			UpdataAlphaWindow(&m_SGDI);
+									UpdataAlphaWindow(&m_SGDI);*/
 		}
 	}
 
@@ -219,11 +231,12 @@ void MagicWindows::Run()     //过程处理函数
 
 void MagicWindows::Shutdown()
 {
-	MG_DeleteBuffer(&m_VertexBuffer);
-	MG_DeleteVertexArrays(&m_VertexArrays);
-	DeleteMagicShaderObject(&m_Shader);
-	MG_DeleteFrameBufferObject(&m_MGFrameBuffer);
-	DeleteMagicGratingContext(&m_MGContext);
+	/*
+		MG_DeleteBuffer(&m_VertexBuffer);
+		MG_DeleteVertexArrays(&m_VertexArrays);
+		DeleteMagicShaderObject(&m_Shader);
+		MG_DeleteFrameBufferObject(&m_MGFrameBuffer);
+		DeleteMagicGratingContext(&m_MGContext);*/
 
 	DisableAlphaWindow(&m_SGDI);
 	// 删除窗口。

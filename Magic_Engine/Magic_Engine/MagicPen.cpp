@@ -33,17 +33,48 @@ bool MagicPen::Initialize()
 	m_Picture2D.AddUniform("worldMatrix");
 	m_Picture2D.AddUniform("CameraMatrix");
 	m_Picture2D.AddUniform("projectionMatrix");
-	m_Picture2D.AddUniform("PositionUV");
 
 	m_Picture2D.AddUniform("sampler0");
 	m_Picture2D.AddUniform("AmbientColor");
 
 	m_Picture2D.UnUse();
 
+	AddSpecialEffects(&m_Picture2D, "Picture2D");
+
+	//-------------------------------------------------------------------------
+	result = m_LightShader.LoadFromFile(GL_VERTEX_SHADER, "shader/Light.vertshader");
+	if (!result)
+		return false;
+	result = m_LightShader.LoadFromFile(GL_FRAGMENT_SHADER, "shader/Light.fragshader");
+	if (!result)
+		return false;
+	result = m_LightShader.CreateAndLinkProgram();
+	if (!result)
+		return false;
+
+	m_LightShader.Use();
+
+	m_LightShader.AddUniform("worldMatrix");
+	m_LightShader.AddUniform("CameraMatrix");
+	m_LightShader.AddUniform("projectionMatrix");
+	m_LightShader.AddUniform("LightMatrix");
+
+	m_LightShader.AddUniform("sampler0");
+	m_LightShader.AddUniform("shadowMap");
+	m_LightShader.AddUniform("AmbientColor");
+
+	glUniform1i((m_LightShader)("sampler0"), 0);
+	glUniform1i((m_LightShader)("shadowMap"), 1);
+
+	m_LightShader.UnUse();
+
+	AddSpecialEffects(&m_LightShader, "Light");
+
+
 	return true;
 }
 
-void MagicPen::DrawPicture(const glm::mat4& CameraMatrix, glm::mat4& WorldMatrix, GLuint texture, glm::vec2& Pos,
+void MagicPen::DrawPicture(glm::mat4 CameraMatrix, glm::mat4& WorldMatrix, GLuint texture, glm::vec2& Pos,
 	glm::vec2& WidthHight, Magic::Color4& Color4, glm::vec2* pUV)
 {
 	float PostionUV[16];
@@ -70,7 +101,6 @@ void MagicPen::DrawPicture(const glm::mat4& CameraMatrix, glm::mat4& WorldMatrix
 		PostionUV[14] = 0.0f; PostionUV[15] = 1.0f;
 	}
 
-	glUniform4fv((m_Picture2D)("PositionUV"), 4, PostionUV);
 	glUniformMatrix4fv((m_Picture2D)("CameraMatrix"), 1, GL_FALSE, &CameraMatrix[0][0]);
 	glUniformMatrix4fv((m_Picture2D)("worldMatrix"), 1, GL_FALSE, &WorldMatrix[0][0]);
 
