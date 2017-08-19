@@ -32,21 +32,25 @@ public:
 	MagicModelObject();
 	virtual ~MagicModelObject();
 
-	bool Initialize(const int &_Number);
+	bool CreateObject(const int &_Number);
 	void Shutdown();
 
 	bool LoadObject(const int& _pos, const char* _VertexPath, const char* _TextruePath);
+
+	void SetWorldMatrix(const glm::mat4& _matrix);
 
 	inline int GetNumber() { return m_Number; }
 
 	inline GLuint GetVAO(int _pos) { return pModuleObject[_pos].m_Vertex.GetVAO(); }
 	inline GLuint GetTextrue(int _pos) { return pModuleObject[_pos].m_Textrue.GetTextrue(); }
 	inline unsigned int GetIndexNumber(int _pos) { return pModuleObject[_pos].m_Vertex.GetIndexNumber(); }
-	inline unsigned int GetVertexNumber(int _pos) { return pModuleObject[_pos].m_Vertex.GetIndexNumber(); }
+	inline unsigned int GetVertexNumber(int _pos) { return pModuleObject[_pos].m_Vertex.GetVertexNumber(); }
+	inline const glm::mat4& GetWorldMatrix() { return m_WorldMatrix; }
 
 private:
 	int m_Number;
 	ModuleObject* pModuleObject;
+	glm::mat4 m_WorldMatrix;
 };
 
 #endif

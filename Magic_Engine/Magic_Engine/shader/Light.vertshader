@@ -8,19 +8,27 @@ layout(location = 2) in vec3 Normal;
 uniform mat4 worldMatrix;
 uniform mat4 CameraMatrix;
 uniform mat4 projectionMatrix;
+uniform mat4 LightprojectionMatrix;
 uniform mat4 LightMatrix;
 
+out vec3 ModelPos;
 out vec2 TexCoord;
-out vec4 LightPos;
+out vec4 LightProPos;
 out vec3 OutNormal;
+
+out vec3 LightDirection;
+out vec3 CameraPos;
 
 void main()  
 { 
     mat4 posMatrix = projectionMatrix * CameraMatrix * worldMatrix;
-    mat4 LightposMatrix = projectionMatrix * LightMatrix * worldMatrix;
+    mat4 LightposMatrix = LightprojectionMatrix * LightMatrix * worldMatrix;
 
+	LightDirection = vec3(LightMatrix[0].z,LightMatrix[1].z,LightMatrix[2].z);
+	CameraPos = inverse(mat3(CameraMatrix)) * -CameraMatrix[3].xyz;
+	ModelPos = vec3(worldMatrix * vec4(PositionVertex, 1.0));
     gl_Position = posMatrix * vec4 (PositionVertex, 1.0); 
-	LightPos = LightposMatrix * vec4 (PositionVertex, 1.0); 
+	LightProPos = LightposMatrix * vec4 (PositionVertex, 1.0); 
 	//物体法线变换
 	OutNormal = transpose(inverse(mat3(worldMatrix))) * Normal;
 	TexCoord = TextrueCoord;

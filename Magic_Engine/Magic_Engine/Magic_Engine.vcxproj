@@ -155,6 +155,7 @@
     <ClCompile Include="MagicCircle.cpp" />
     <ClCompile Include="MagicEngineContext.cpp" />
     <ClCompile Include="MagicMath.cpp" />
+    <ClCompile Include="MagicMessage.cpp" />
     <ClCompile Include="MagicModelObject.cpp" />
     <ClCompile Include="MagicPen.cpp" />
     <ClCompile Include="MagicShader.cpp" />
@@ -169,6 +170,7 @@
   <ItemGroup>
     <ClInclude Include="MagicAlphaWindow.h" />
     <ClInclude Include="MagicCircle.h" />
+    <ClInclude Include="MagicMessage.h" />
     <ClInclude Include="MagicModelObject.h" />
     <ClInclude Include="MagicUIElemeent.h" />
     <ClInclude Include="MagicWorld.h" />

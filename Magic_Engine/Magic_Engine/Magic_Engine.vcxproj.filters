@@ -24,6 +24,9 @@
     <Filter Include="MagicEngine\World">
       <UniqueIdentifier>{6f949c48-9551-4431-b77d-27100fbf07d9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MagicEngine\Message">
+      <UniqueIdentifier>{966af791-a890-4202-aa63-ae202d0845de}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -39,9 +42,6 @@
       <Filter>MagicEngine</Filter>
     </ClCompile>
     <ClCompile Include="MagicPen.cpp">
-      <Filter>MagicEngine</Filter>
-    </ClCompile>
-    <ClCompile Include="MagicShader.cpp">
       <Filter>MagicEngine</Filter>
     </ClCompile>
     <ClCompile Include="MagicMath.cpp">
@@ -71,6 +71,12 @@
     <ClCompile Include="MagicWorld.cpp">
       <Filter>MagicEngine\World</Filter>
     </ClCompile>
+    <ClCompile Include="MagicMessage.cpp">
+      <Filter>MagicEngine\Message</Filter>
+    </ClCompile>
+    <ClCompile Include="MagicShader.cpp">
+      <Filter>MagicEngine\Shader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MagicWindows.h">
@@ -83,9 +89,6 @@
       <Filter>MagicEngine</Filter>
     </ClInclude>
     <ClInclude Include="MagicPen.h">
-      <Filter>MagicEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="MagicShader.h">
       <Filter>MagicEngine</Filter>
     </ClInclude>
     <ClInclude Include="MagicMath.h">
@@ -117,6 +120,12 @@
     </ClInclude>
     <ClInclude Include="MagicWorld.h">
       <Filter>MagicEngine\World</Filter>
+    </ClInclude>
+    <ClInclude Include="MagicMessage.h">
+      <Filter>MagicEngine\Message</Filter>
+    </ClInclude>
+    <ClInclude Include="MagicShader.h">
+      <Filter>MagicEngine\Shader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

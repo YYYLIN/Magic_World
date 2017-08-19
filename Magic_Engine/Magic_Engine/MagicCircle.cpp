@@ -24,7 +24,7 @@ bool MagicSceneCircle::Initialize(glm::vec4 _PosSize)
 		return false;
 
 	int w = _PosSize.z, h = _PosSize.w;
-	result = m_FEPBuffer.Initialize(w, h);
+	result = m_FEPBuffer.Initialize(w, h, MagicFBOTextrue::COLOR4);
 	if (!result)
 		return false;
 
@@ -53,7 +53,7 @@ void MagicSceneCircle::RenderReset(glm::mat4& CameraMatrix)
 	worldMatrix[3].y = m_MagicTextrue.GetHeight() / 10;
 	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_FEPBuffer.GetFBOTextrue());
 	glClear(GL_COLOR_BUFFER_BIT);
-	pPen->DrawPicture(CameraMatrix, worldMatrix, m_MagicTextrue.GetTextrue(), glm::vec2(-m_MagicTextrue.GetWidth() / 10, -m_MagicTextrue.GetHeight() / 10), glm::vec2(m_MagicTextrue.GetWidth() / 5, m_MagicTextrue.GetHeight() / 5), Magic::Color4());
+	pPen->DrawPicture(CameraMatrix, worldMatrix, m_MagicTextrue.GetTextrue(), glm::vec2(-m_MagicTextrue.GetWidth() / 10, -m_MagicTextrue.GetHeight() / 10), glm::vec2(m_MagicTextrue.GetWidth() / 5, m_MagicTextrue.GetHeight() / 5));
 
 	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, this->GetFBOTextrue());
 	worldMatrix = glm::mat4();

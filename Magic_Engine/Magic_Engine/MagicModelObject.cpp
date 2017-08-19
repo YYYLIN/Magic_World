@@ -217,7 +217,7 @@ bool LoodFileOBJ(const char* _filename, FILE_OBG_TYPE* _pFILE_OBG_TYPE)
 				_pFILE_OBG_TYPE->Position[a].z = _pPosition[index].z;
 				index = _Index2 - 1;
 				_pFILE_OBG_TYPE->UV[a].x = _pTexture[index].x;
-				_pFILE_OBG_TYPE->UV[a].y = 1 - _pTexture[index].y;
+				_pFILE_OBG_TYPE->UV[a].y = _pTexture[index].y;
 				index = _Index3 - 1;
 				_pFILE_OBG_TYPE->Normal[a].x = _pNormal[index].x;
 				_pFILE_OBG_TYPE->Normal[a].y = _pNormal[index].y;
@@ -276,7 +276,7 @@ MagicModelObject::~MagicModelObject()
 }
 
 
-bool MagicModelObject::Initialize(const int &_Number)
+bool MagicModelObject::CreateObject(const int &_Number)
 {
 	m_Number = _Number;
 	pModuleObject = new ModuleObject[m_Number];
@@ -299,34 +299,26 @@ bool MagicModelObject::LoadObject(const int& _pos, const char* _VertexPath, cons
 
 	//¼ÓÔØOBJÎÄ¼þ
 	FILE_OBG_TYPE _FILE_OBG_TYPE;
-	/*
-		bool result = LoodFileOBJ(_VertexPath, &_FILE_OBG_TYPE);
-		if (!result)
-			return false;*/
 
-			/*
-				_pModuleObject->m_Vertex.CreateVBO(3, true);
-				_pModuleObject->m_Vertex.BindCreate(0, 3, _FILE_OBG_TYPE.VertexNumber, _FILE_OBG_TYPE.Position);
-				_pModuleObject->m_Vertex.BindCreate(1, 2, _FILE_OBG_TYPE.VertexNumber, _FILE_OBG_TYPE.UV);
-				_pModuleObject->m_Vertex.BindCreate(2, 3, _FILE_OBG_TYPE.VertexNumber, _FILE_OBG_TYPE.Normal);
-				_pModuleObject->m_Vertex.BindCreate(0xFF, sizeof(unsigned short), _FILE_OBG_TYPE.IndexNumber, _FILE_OBG_TYPE.Index);*/
-	float _pData[] =
-	{
-		0.0f,0.0f,0.0f,
-		30.0f,30.0f,0.0f,
-		-30.0f,30.0f,0.0f,
+	bool result = LoodFileOBJ(_VertexPath, &_FILE_OBG_TYPE);
+	if (!result)
+		return false;
 
-		0.0f,0.0f,0.0f,
-		30.0f,-30.0f,0.0f,
-		-30.0f,-30.0f,0.0f
-	};
-	_pModuleObject->m_Vertex.CreateVBO(1, false);
-	_pModuleObject->m_Vertex.BindCreate(0, 3, 6, _pData);
 
-	/*
-		result = _pModuleObject->m_Textrue.Initialize(_TextruePath, LOAD_PNG);
-		if (!result)
-			return false;*/
+	_pModuleObject->m_Vertex.CreateVBO(3, true);
+	_pModuleObject->m_Vertex.BindCreate(0, 3, _FILE_OBG_TYPE.VertexNumber, _FILE_OBG_TYPE.Position);
+	_pModuleObject->m_Vertex.BindCreate(1, 2, _FILE_OBG_TYPE.VertexNumber, _FILE_OBG_TYPE.UV);
+	_pModuleObject->m_Vertex.BindCreate(2, 3, _FILE_OBG_TYPE.VertexNumber, _FILE_OBG_TYPE.Normal);
+	_pModuleObject->m_Vertex.BindCreate(0xFF, sizeof(unsigned short), _FILE_OBG_TYPE.IndexNumber, _FILE_OBG_TYPE.Index);
+
+	result = _pModuleObject->m_Textrue.Initialize(_TextruePath, LOAD_PNG);
+	if (!result)
+		return false;
 
 	return true;
+}
+
+void MagicModelObject::SetWorldMatrix(const glm::mat4& _matrix)
+{
+	m_WorldMatrix = _matrix;
 }

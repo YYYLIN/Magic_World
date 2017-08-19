@@ -9,7 +9,7 @@ uniform vec4 AmbientColor;
 
 void main()  
 {
-    vec4 TexColor = texture2D(sampler0, TexCoord);
+	vec4 TexColor = texture2D(sampler0, TexCoord);
 
-    gl_FragColor = TexColor * AmbientColor;  
+	gl_FragColor = TexColor * AmbientColor;  
 }  

@@ -65,11 +65,16 @@ protected:
 class MagicFBOTextrue :public MagicTexture
 {
 public:
+	enum MODE {
+		COLOR4,
+		DEPTH
+	};
+
 	MagicFBOTextrue();
 	virtual ~MagicFBOTextrue();
 
-	virtual bool Initialize(int&, int&);
-	bool ResetSize(int&, int&);
+	virtual bool Initialize(const int&, const int&, const MODE _mode);
+	bool ResetSize(const int&, const int&);
 
 	//参数;1.只创建深度数据      GL_DEPTH_COMPONENT32
 	//     2.创建深度和模板缓存  GL_DEPTH24_STENCIL8_EXT
@@ -79,10 +84,14 @@ public:
 
 	inline GLuint GetDepth_Stencil() { return m_Depth_Stencil; }
 
+	void Use();
+	void UnUse(const int& _w, const int& _h);
+
 protected:
 	virtual void Shutdown();
 private:
 	GLuint m_Textrue;//颜色缓冲区
 	GLuint m_Depth_Stencil;
+	MODE m_MODE;
 };
 

@@ -2,8 +2,9 @@
 
 #include "MagicEngineContext.h"
 #include "MagicModelObject.h"
+#include "MagicMessage.h"
 
-class MagicWorld :public MagicCommon
+class MagicWorld :public MagicCommon, public MagicMessage
 {
 public:
 	MagicWorld();
@@ -12,15 +13,23 @@ public:
 	bool Initialize();
 	void Shutdown();
 
+	virtual void MessageHandle(unsigned int _MessageType, unsigned int _Message);
+
 	void AddModelObject(MagicModelObject* _pMagicModelObject);
 protected:
 	virtual void Updata();
 	virtual	void Render(glm::mat4 CameraMatrix);
 
-	void RenderLightModel(glm::mat4 CameraMatrix, MagicModelObject* _pMagicModelObject);
+	void RenderLightModel(MagicShader* _pShader, MagicModelObject* _pMagicModelObject);
 private:
 	MagicModelObject m_MagicModelObject;
-	MagicShader* pLightShader;
+	MagicModelObject m_GroundModelObject, m_BallModelObject;
+	MagicFBOTextrue m_DepthFBO;
+
+	MagicShader* pLightShader, *pDepthShader;
+
+	glm::mat4 m_LightMatrix;
+	glm::mat4 m_CameraMatrix;
 
 	vector<MagicModelObject*> G_MagicModelObject;
 };

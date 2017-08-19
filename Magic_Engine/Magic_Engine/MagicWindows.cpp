@@ -52,60 +52,61 @@ bool MagicWindows::Initialize()
 		return false;
 	m_MagicEngineContext.SpiritAdd(&m_MagicWorld);
 
-/*
-	result = m_MagicSceneCircle.MagicScene::Initialize(glm::vec4(0, 0, 1024, 768), &m_MagicEngineContext);
-	if (!result)
-		return false;*/
+	/*
+		result = m_MagicSceneCircle.MagicScene::Initialize(glm::vec4(0, 0, 1024, 768), &m_MagicEngineContext);
+		if (!result)
+			return false;*/
 
 
 
-	result = m_SpecialEffectsPanel.Initialize(1024, 768);
-	if (!result)
-		return false;
-	//--------------------------------------------
-/*
-	result = CreateMagicGratingContext(&m_MGContext);
-	if (!result)
-		return false;
-	result = InitMagicGratingContext(m_MGContext);
-	if (!result)
-		return false;
-	BindMagicGratingContext(m_MGContext);
-	BindMGDisplayContext(m_MGContext, m_SGDI.m_pBackBuffer, 1024, 768, MG_BGRA, MG_UCHAR);
-	//--------------------------------------------
-	MG_CreateFrameBufferObject(&m_MGFrameBuffer);
-	MG_BindFrameBuffer(m_MGFrameBuffer);
-	result = MG_InitFrameBuffer(1024, 768);
-	if (!result)
-		return false;
-	MG_ClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-	//-------------Shader-------------------------
-	CreateMagicShaderObject(&m_Shader);
-	BindMagicShaderObject(m_Shader);
-	m_ShaderCamera = MGAddShaderVariate(sizeof(Magic::Matrix4));
-	m_Shaderprojection = MGAddShaderVariate(sizeof(Magic::Matrix4));
-	m_Shaderworld = MGAddShaderVariate(sizeof(Magic::Matrix4));
-	InitMagicShaderObject(Shader_VertexShader, Shader_PixelShader);
+			/*
+				result = m_SpecialEffectsPanel.Initialize(1024, 768);
+				if (!result)
+					return false;*/
+					//--------------------------------------------
+				/*
+					result = CreateMagicGratingContext(&m_MGContext);
+					if (!result)
+						return false;
+					result = InitMagicGratingContext(m_MGContext);
+					if (!result)
+						return false;
+					BindMagicGratingContext(m_MGContext);
+					BindMGDisplayContext(m_MGContext, m_SGDI.m_pBackBuffer, 1024, 768, MG_BGRA, MG_UCHAR);
+					//--------------------------------------------
+					MG_CreateFrameBufferObject(&m_MGFrameBuffer);
+					MG_BindFrameBuffer(m_MGFrameBuffer);
+					result = MG_InitFrameBuffer(1024, 768);
+					if (!result)
+						return false;
+					MG_ClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+					//-------------Shader-------------------------
+					CreateMagicShaderObject(&m_Shader);
+					BindMagicShaderObject(m_Shader);
+					m_ShaderCamera = MGAddShaderVariate(sizeof(Magic::Matrix4));
+					m_Shaderprojection = MGAddShaderVariate(sizeof(Magic::Matrix4));
+					m_Shaderworld = MGAddShaderVariate(sizeof(Magic::Matrix4));
+					InitMagicShaderObject(Shader_VertexShader, Shader_PixelShader);
 
-	MG_SetShaderVariate(m_ShaderCamera, &Magic::Matrix4());
-	MG_SetShaderVariate(m_Shaderprojection, &Magic::Matrix4());
-	MG_SetShaderVariate(m_Shaderworld, &Magic::Matrix4());
-	//--------------------------------------------
-	MG_CreateVertexArrays(&m_VertexArrays);
-	MG_BindVertexArrays(m_VertexArrays);
-	MG_EnableVertexAttribArray(1);
+					MG_SetShaderVariate(m_ShaderCamera, &Magic::Matrix4());
+					MG_SetShaderVariate(m_Shaderprojection, &Magic::Matrix4());
+					MG_SetShaderVariate(m_Shaderworld, &Magic::Matrix4());
+					//--------------------------------------------
+					MG_CreateVertexArrays(&m_VertexArrays);
+					MG_BindVertexArrays(m_VertexArrays);
+					MG_EnableVertexAttribArray(1);
 
-	float pVertex[] =
-	{
-		0.5f,0.0f,0.0f,
-		0.0f,0.5f,0.0f,
-		-0.5f,0.0f,0.0f
-	};
+					float pVertex[] =
+					{
+						0.5f,0.0f,0.0f,
+						0.0f,0.5f,0.0f,
+						-0.5f,0.0f,0.0f
+					};
 
-	MG_CreateBuffer(&m_VertexBuffer);
-	MG_BindBuffer(MG_ARRAY_BUFFER, m_VertexBuffer);
-	MG_BufferData(MG_ARRAY_BUFFER, sizeof(float) * 3 * 3, pVertex);
-	MG_VertexAttribPointer(0, 3, MG_FLOAT);*/
+					MG_CreateBuffer(&m_VertexBuffer);
+					MG_BindBuffer(MG_ARRAY_BUFFER, m_VertexBuffer);
+					MG_BufferData(MG_ARRAY_BUFFER, sizeof(float) * 3 * 3, pVertex);
+					MG_VertexAttribPointer(0, 3, MG_FLOAT);*/
 
 	return true;
 }
@@ -163,6 +164,7 @@ LRESULT CALLBACK MagicWindows::MessageHandler(HWND hwnd, UINT umsg, WPARAM wpara
 	{
 		if (wparam == VK_ESCAPE)    // 如果被按下的键是ESC
 			DestroyWindow(hwnd);		// 销毁窗口, 并发送一条WM_DESTROY消息
+		m_MagicWorld.MessageHandle(wparam, lparam);
 		return 0;
 	}
 

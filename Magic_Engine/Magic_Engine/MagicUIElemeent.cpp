@@ -42,7 +42,7 @@ bool MagicSceneEx::Initialize(glm::vec4 _PosSize)
 		return false;
 
 	int w = _PosSize.z, h = _PosSize.w;
-	result = m_FBOBuffer.Initialize(w, h);
+	result = m_FBOBuffer.Initialize(w, h, MagicFBOTextrue::COLOR4);
 	if (!result)
 		return false;
 
@@ -77,7 +77,7 @@ void MagicSceneEx::Render(glm::mat4 CameraMatrix)
 		Camera[3].x = m_PosSize.x;
 		Camera[3].y = m_PosSize.y;
 		pPen->DrawPicture(Camera, glm::mat4(), m_FBOBuffer.GetTextrue(),
-			glm::vec2(0.0f), glm::vec2(m_FBOBuffer.GetWidth(), m_FBOBuffer.GetHeight()), Magic::Color4(1.0f, 1.0f, 1.0f, 1.0f));
+			glm::vec2(0.0f), glm::vec2(m_FBOBuffer.GetWidth(), m_FBOBuffer.GetHeight()));
 	}
 }
 

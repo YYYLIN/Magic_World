@@ -2,6 +2,26 @@
 #pragma comment(lib,"glew32.lib")
 #include <GL/glew.h>  
 
+void MagicPen::Enable(StateType _StateType)
+{
+	switch (_StateType)
+	{
+	case BLEND:
+		glEnable(GL_BLEND);
+		return;
+	}
+}
+
+void MagicPen::Disable(StateType _StateType)
+{
+	switch (_StateType)
+	{
+	case BLEND:
+		glDisable(GL_BLEND);
+		return;
+	}
+}
+
 
 MagicPen::MagicPen()
 {
@@ -37,6 +57,8 @@ bool MagicPen::Initialize()
 	m_Picture2D.AddUniform("sampler0");
 	m_Picture2D.AddUniform("AmbientColor");
 
+	glUniform4f((m_Picture2D)("AmbientColor"), 1.0f, 1.0f, 1.0f, 1.0f);
+
 	m_Picture2D.UnUse();
 
 	AddSpecialEffects(&m_Picture2D, "Picture2D");
@@ -57,6 +79,7 @@ bool MagicPen::Initialize()
 	m_LightShader.AddUniform("worldMatrix");
 	m_LightShader.AddUniform("CameraMatrix");
 	m_LightShader.AddUniform("projectionMatrix");
+	m_LightShader.AddUniform("LightprojectionMatrix");
 	m_LightShader.AddUniform("LightMatrix");
 
 	m_LightShader.AddUniform("sampler0");
@@ -70,18 +93,44 @@ bool MagicPen::Initialize()
 
 	AddSpecialEffects(&m_LightShader, "Light");
 
+	//-------------------------------------------------------------------------
+	result = m_DepthShader.LoadFromFile(GL_VERTEX_SHADER, "shader/Depth.vertshader");
+	if (!result)
+		return false;
+	result = m_DepthShader.LoadFromFile(GL_FRAGMENT_SHADER, "shader/Depth.fragshader");
+	if (!result)
+		return false;
+	result = m_DepthShader.CreateAndLinkProgram();
+	if (!result)
+		return false;
+
+	m_DepthShader.Use();
+
+	m_DepthShader.AddUniform("worldMatrix");
+	m_DepthShader.AddUniform("CameraMatrix");
+	m_DepthShader.AddUniform("projectionMatrix");
+
+	m_DepthShader.UnUse();
+
+	AddSpecialEffects(&m_DepthShader, "Depth");
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	glDisable(GL_BLEND);
+
+	glEnableVertexAttribArray(0);
 
 	return true;
 }
 
-void MagicPen::DrawPicture(glm::mat4 CameraMatrix, glm::mat4& WorldMatrix, GLuint texture, glm::vec2& Pos,
-	glm::vec2& WidthHight, Magic::Color4& Color4, glm::vec2* pUV)
+void MagicPen::DrawPicture(const glm::mat4& CameraMatrix, const glm::mat4& WorldMatrix, GLuint texture, const glm::vec2& Pos,
+	const glm::vec2& WidthHight, glm::vec2* pUV)
 {
 	float PostionUV[16];
 
 	m_Picture2D.Use();
 
-	memset(PostionUV, 0x00, sizeof(float) * 16);
 	PostionUV[0] = Pos.x; PostionUV[1] = Pos.y;
 	PostionUV[4] = Pos.x + WidthHight.x; PostionUV[5] = Pos.y;
 	PostionUV[8] = Pos.x + WidthHight.x; PostionUV[9] = Pos.y + WidthHight.y;
@@ -104,10 +153,7 @@ void MagicPen::DrawPicture(glm::mat4 CameraMatrix, glm::mat4& WorldMatrix, GLuin
 	glUniformMatrix4fv((m_Picture2D)("CameraMatrix"), 1, GL_FALSE, &CameraMatrix[0][0]);
 	glUniformMatrix4fv((m_Picture2D)("worldMatrix"), 1, GL_FALSE, &WorldMatrix[0][0]);
 
-	glUniform4f((m_Picture2D)("AmbientColor"), Color4.R, Color4.G, Color4.B, Color4.A);
 
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_TEXTURE_2D);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
@@ -116,9 +162,9 @@ void MagicPen::DrawPicture(glm::mat4 CameraMatrix, glm::mat4& WorldMatrix, GLuin
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, PostionUV);
 	glDrawArrays(GL_QUADS, 0, 4);
+	glDrawArrays(GL_LINE_STRIP, 0, 4);
 
 	glDisable(GL_TEXTURE_2D);
-	glDisable(GL_BLEND);
 
 	m_Picture2D.UnUse();
 }
@@ -127,7 +173,7 @@ void MagicPen::ReshapeWinSize(int width, int height)
 {
 	m_WinWidth = width;
 	m_WinHeight = height;
-	orthoMatrix = glm::mat4(1.0f);
+
 	//左下角x坐标，右上角x坐标，左下角y坐标，右上角y坐标 坐标全相对于窗口左下角 原点
 	orthoMatrix = glm::ortho(
 		0.0f, (float)width,
@@ -140,6 +186,12 @@ void MagicPen::ReshapeWinSize(int width, int height)
 	m_Picture2D.Use();
 	glUniformMatrix4fv((m_Picture2D)("projectionMatrix"), 1, GL_FALSE, &orthoMatrix[0][0]);
 	m_Picture2D.UnUse();
+}
+
+
+void MagicPen::SetAmbientColor(const Magic::Color4& Color4)
+{
+	glUniform4f((m_Picture2D)("AmbientColor"), Color4.R, Color4.G, Color4.B, Color4.A);
 }
 
 void MagicPen::AddSpecialEffects(MagicShader* _shader, const string& _Text)
