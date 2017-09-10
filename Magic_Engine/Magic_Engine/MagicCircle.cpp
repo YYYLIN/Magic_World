@@ -46,16 +46,4 @@ void MagicSceneCircle::Updata()
 
 void MagicSceneCircle::RenderReset(glm::mat4& CameraMatrix)
 {
-	MagicPen* pPen = MagicEngineContext::pMagicEngineContext->GetPen();
-	glm::mat4 worldMatrix;
-	worldMatrix = glm::rotate(m_Angle, glm::vec3(0.0f, 0.0f, 1.0f));
-	worldMatrix[3].x = m_MagicTextrue.GetWidth() / 10;
-	worldMatrix[3].y = m_MagicTextrue.GetHeight() / 10;
-	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_FEPBuffer.GetFBOTextrue());
-	glClear(GL_COLOR_BUFFER_BIT);
-	pPen->DrawPicture(CameraMatrix, worldMatrix, m_MagicTextrue.GetTextrue(), glm::vec2(-m_MagicTextrue.GetWidth() / 10, -m_MagicTextrue.GetHeight() / 10), glm::vec2(m_MagicTextrue.GetWidth() / 5, m_MagicTextrue.GetHeight() / 5));
-
-	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, this->GetFBOTextrue());
-	worldMatrix = glm::mat4();
-	SpecialEffectsPanel::pSpecialEffectsPanel->DrawSpecialEffects(CameraMatrix, worldMatrix, m_FEPBuffer.GetTextrue(), glm::vec2(), glm::vec2(m_PosSize.z, m_PosSize.w), Magic::Color4());
 }

@@ -31,6 +31,6 @@ private:
 	glm::mat4 m_LightMatrix;
 	glm::mat4 m_CameraMatrix;
 
-	vector<MagicModelObject*> G_MagicModelObject;
+	std::vector<MagicModelObject*> G_MagicModelObject;
 };
 

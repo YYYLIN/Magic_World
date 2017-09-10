@@ -41,27 +41,6 @@ public:
 	virtual void DrawSpirit() {}
 };
 
-class MagicSpirit :public MagicUICommon
-{
-public:
-	MagicSpirit();
-	virtual ~MagicSpirit();
-
-	bool Initialize(MagicScene* _scene);
-	bool Initialize(MagicEngineContext* _engine);
-
-	void SetDisplayState(bool _state);
-
-	void DrawSpirit();
-protected:
-	virtual bool Initialize();
-	virtual void Render(glm::mat4 CameraMatrix);
-protected:
-	bool DisplayState;
-	MagicScene* pUpperScene;
-};
-
-
 class MagicScene :public MagicUICommon
 {
 public:
@@ -74,15 +53,19 @@ public:
 
 	inline bool GetDisplayState() { return DisplayState; }
 
-	void SpiritAdd(MagicUICommon*);
-	void DeleteSpirit(MagicUICommon*);
-
 	virtual GLuint GetFBOTextrue() { return 0; }
+
+	void AddCommon(MagicCommon*);
+	void RemoveCommon(MagicCommon*);
+
+	virtual void ResetDrawRECT(float _x, float _y, float _w, float _h);
 
 protected:
 	virtual bool Initialize(glm::vec4 _PosSize);
 	virtual void Updata();
 	virtual	void Render(glm::mat4 CameraMatrix);
+	virtual void RenderStart();
+	virtual void RenderEnd();
 
 protected:
 	bool DisplayState;
@@ -90,25 +73,31 @@ protected:
 	glm::vec4 m_PosSize;
 	MagicScene* pUpperScene;
 
-	vector<MagicUICommon*> v_Common;
+	std::vector<MagicCommon*> v_Common;
 };
 
 HGLRC CreateRCContxt(HDC _hdc);
 
-class MagicEngineContext
+class MagicEngineContext :public MagicScene
 {
 public:
 	MagicEngineContext();
 	~MagicEngineContext();
 
-	bool Initialize(HWND _hwnd);
+	bool Initialize(HWND _hwnd, float _x, float _y, float _w, float _h);
 	void Shutdown();
 
 	void Render(void);
 
-	MagicTexture* LoadTextrue(const char* file_name, string name, char format);
-	MagicTexture* LoadTextrue(const unsigned char* Data, int _width, int _height, string name);
-	void DeleteTextrue(string);
+	MagicTexture* LoadTextrue(const char* file_name, const char* _name, char format);
+	MagicTexture* LoadTextrue(const unsigned char* Data, int _width, int _height, const char* _name);
+	void DeleteTextrue(const char* _name);
+
+	void SetBackColor(float, float, float, float);
+
+	virtual void ResetDrawRECT(float _x, float _y, float _w, float _h);
+
+	bool AddPen_Common(const char* _name, Magic::Pen_Common* _common);
 
 	//获得渲染器
 	const GLubyte* GetRenderer();
@@ -122,14 +111,9 @@ public:
 	GLint Getmajor();
 	//小版本号
 	GLint Getminor();
-	MagicTexture* GetTextrue(string _name);
+	MagicTexture* GetTextrue(const char* _name);
 
-	MagicPen* GetPen() { return &m_MagicPen; }
-
-	void SetBackColor(float, float, float, float);
-
-	void SpiritAdd(MagicCommon*);
-	void DeleteSpirit(MagicCommon*);
+	Magic::Pen_Common* GetPen(const char* _name);
 
 	float GetDiffTime() { return diffTime; }
 
@@ -138,6 +122,8 @@ protected:
 
 private:
 	void SetFPS();
+	virtual void RenderStart();
+	virtual void RenderEnd();
 
 private:
 	Magic::Color4 m_BackColor;
@@ -145,10 +131,10 @@ private:
 	float FPS, FPSTime;
 	double diffTime, lastTime;
 
-	vector<MagicCommon*> v_Common;
-	map<string, MagicTexture*> Map_Texture;
+	std::map<std::string, Magic::Pen_Common*> Map_Pen_Common;
+	std::map<std::string, MagicTexture*> Map_Texture;
 
-	MagicPen m_MagicPen;
+	Magic::Pen_Basis m_Pen_Basis;
 
 	//Windows
 	HGLRC m_hRC;

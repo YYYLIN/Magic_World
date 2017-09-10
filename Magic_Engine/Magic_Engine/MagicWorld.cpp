@@ -66,8 +66,8 @@ bool MagicWorld::Initialize()
 	m_DepthFBO.Initialize(1024, 1024, MagicFBOTextrue::DEPTH);
 	m_DepthFBO.CreateDepthStencil(GL_DEPTH24_STENCIL8);
 
-	pLightShader = (*MagicEngineContext::pMagicEngineContext->GetPen())["Light"];
-	pDepthShader = (*MagicEngineContext::pMagicEngineContext->GetPen())["Depth"];
+//	pLightShader = (*MagicEngineContext::pMagicEngineContext->GetPen())["Light"];
+//	pDepthShader = (*MagicEngineContext::pMagicEngineContext->GetPen())["Depth"];
 
 	m_CameraMatrix = glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, -10.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	m_CameraMatrix *= glm::rotate(45.0f, 1.0f, 0.0f, 0.0f);
@@ -134,7 +134,7 @@ void MagicWorld::Render(glm::mat4 CameraMatrix)
 
 	projectionMatrix = glm::perspective(70.0f, (float)1024 / (float)768, 0.1f, 10000.0f);
 	lightOrtho = glm::ortho(
-		-50.0f, 50.0f, 
+		-50.0f, 50.0f,
 		-50.0f, 50.0f, 0.1f, 100.0f);
 
 	m_DepthFBO.Use();
@@ -144,7 +144,7 @@ void MagicWorld::Render(glm::mat4 CameraMatrix)
 	glUniformMatrix4fv((*pDepthShader)("CameraMatrix"), 1, GL_FALSE, &m_LightMatrix[0][0]);
 	glUniformMatrix4fv((*pDepthShader)("projectionMatrix"), 1, GL_FALSE, &lightOrtho[0][0]);
 
-	for (vector<MagicModelObject*>::iterator _piterator = G_MagicModelObject.begin();_piterator != G_MagicModelObject.end(); _piterator++)
+	for (std::vector<MagicModelObject*>::iterator _piterator = G_MagicModelObject.begin(); _piterator != G_MagicModelObject.end(); _piterator++)
 	{
 		RenderLightModel(pDepthShader, *_piterator);
 	}
@@ -168,7 +168,7 @@ void MagicWorld::Render(glm::mat4 CameraMatrix)
 	glBindTexture(GL_TEXTURE_2D, m_DepthFBO.GetTextrue());
 	glActiveTexture(GL_TEXTURE0);
 
-	for (vector<MagicModelObject*>::iterator _piterator = G_MagicModelObject.begin();_piterator != G_MagicModelObject.end(); _piterator++)
+	for (std::vector<MagicModelObject*>::iterator _piterator = G_MagicModelObject.begin(); _piterator != G_MagicModelObject.end(); _piterator++)
 	{
 		RenderLightModel(pLightShader, *_piterator);
 	}
@@ -180,15 +180,16 @@ void MagicWorld::Render(glm::mat4 CameraMatrix)
 
 	glDisable(GL_DEPTH_TEST);
 
+/*
 	MagicPen* pPen = MagicEngineContext::pMagicEngineContext->GetPen();
-	pPen->DrawPicture(CONST_CAMERA, glm::mat4(), m_DepthFBO.GetTextrue(), glm::vec2(0, 0), glm::vec2(256, 256));
+	pPen->DrawPicture(CONST_CAMERA, glm::mat4(), m_DepthFBO.GetTextrue(), glm::vec2(0, 0), glm::vec2(256, 256));*/
 }
 
 void MagicWorld::RenderLightModel(MagicShader* _pShader, MagicModelObject* _pMagicModelObject)
 {
 	glUniformMatrix4fv((*_pShader)("worldMatrix"), 1, GL_FALSE, &_pMagicModelObject->GetWorldMatrix()[0][0]);
 
-	for (int a = 0;a < _pMagicModelObject->GetNumber();a++)
+	for (int a = 0; a < _pMagicModelObject->GetNumber(); a++)
 	{
 		glBindTexture(GL_TEXTURE_2D, _pMagicModelObject->GetTextrue(a));
 		glBindVertexArray(_pMagicModelObject->GetVAO(a));

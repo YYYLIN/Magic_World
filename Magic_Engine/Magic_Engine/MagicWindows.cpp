@@ -34,10 +34,9 @@ bool MagicWindows::Initialize()
 	if (!result)
 		return false;
 
-	result = m_MagicEngineContext.Initialize(m_hwnd);
+	result = m_MagicEngineContext.Initialize(m_hwnd, 0, 0, 1024, 768);
 	if (!result)
 		return false;
-	m_MagicEngineContext.GetPen()->ReshapeWinSize(1024, 768);
 
 	/*
 		result = EnableAlphaWindow(m_hwnd, 1024, 768, &m_SGDI);
@@ -50,7 +49,7 @@ bool MagicWindows::Initialize()
 	result = m_MagicWorld.Initialize();
 	if (!result)
 		return false;
-	m_MagicEngineContext.SpiritAdd(&m_MagicWorld);
+	m_MagicEngineContext.AddCommon(&m_MagicWorld);
 
 	/*
 		result = m_MagicSceneCircle.MagicScene::Initialize(glm::vec4(0, 0, 1024, 768), &m_MagicEngineContext);

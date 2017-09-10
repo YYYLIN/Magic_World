@@ -8,26 +8,24 @@
 #include <string>
 #include <fstream> 
 
-using namespace std;
-
 class MagicShader
 {
 public:
 	MagicShader();
 	~MagicShader();
 
-	bool LoadFromFile(GLenum whichShader, const string& filename);
-	bool LoadFromString(GLenum whichShader, const string& source);
+	bool LoadFromFile(GLenum whichShader, const std::string& filename);
+	bool LoadFromString(GLenum whichShader, const std::string& source);
 	//创建链接到着色器对象上
 	bool CreateAndLinkProgram();
 	void Use();
 	void UnUse();
 
-	void AddAttribute(const string& attribute);
-	void AddUniform(const string& uniform);
+	void AddAttribute(const std::string& attribute);
+	void AddUniform(const std::string& uniform);
 
-	GLuint operator[](const string& attribute);
-	GLuint operator()(const string& uniform);
+	GLuint operator[](const std::string& attribute);
+	GLuint operator()(const std::string& uniform);
 
 	void DeleteShaderProgram();
 
@@ -39,7 +37,7 @@ private:
 	int totalShaders;
 	GLuint programHandle; //着色器程序对象
 	GLuint Shaders[3];
-	map<string, GLuint> AttributeList;
-	map<string, GLuint> UniformLocationList;
+	std::map<std::string, GLuint> AttributeList;
+	std::map<std::string, GLuint> UniformLocationList;
 };
 

@@ -56,7 +56,7 @@ void MagicSceneEx::Render(glm::mat4 CameraMatrix)
 	if (DisplayState)
 	{
 		MagicEngineContext* pEngine = MagicEngineContext::pMagicEngineContext;
-		MagicPen* pPen = pEngine->GetPen();
+	//	Magic::Pen_Basis* pPen = pEngine->GetPen();
 		glm::mat4 Camera = CONST_CAMERA;
 
 		if (m_DrawMessage)
@@ -76,8 +76,9 @@ void MagicSceneEx::Render(glm::mat4 CameraMatrix)
 		Camera = CONST_CAMERA;
 		Camera[3].x = m_PosSize.x;
 		Camera[3].y = m_PosSize.y;
+/*
 		pPen->DrawPicture(Camera, glm::mat4(), m_FBOBuffer.GetTextrue(),
-			glm::vec2(0.0f), glm::vec2(m_FBOBuffer.GetWidth(), m_FBOBuffer.GetHeight()));
+			glm::vec2(0.0f), glm::vec2(m_FBOBuffer.GetWidth(), m_FBOBuffer.GetHeight()));*/
 	}
 }
 

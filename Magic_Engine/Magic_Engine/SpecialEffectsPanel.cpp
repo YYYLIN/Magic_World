@@ -45,11 +45,11 @@ bool SpecialEffectsPanel::Initialize(float _w, float _h)
 
 	SetPanelSize(_w, _h);
 
-	glUniformMatrix4fv((m_SelfLuminous)("projectionMatrix"), 1, GL_FALSE, &MagicEngineContext::pMagicEngineContext->GetPen()->GetorthoMatrix()[0][0]);
+//	glUniformMatrix4fv((m_SelfLuminous)("projectionMatrix"), 1, GL_FALSE, &MagicEngineContext::pMagicEngineContext->GetPen()->GetorthoMatrix()[0][0]);
 
 	m_SelfLuminous.UnUse();
 
-	MagicEngineContext::pMagicEngineContext->GetPen()->AddSpecialEffects(&m_SelfLuminous, "SelfLuminous");
+//	MagicEngineContext::pMagicEngineContext->GetPen()->AddSpecialEffects(&m_SelfLuminous, "SelfLuminous");
 
 	return true;
 }

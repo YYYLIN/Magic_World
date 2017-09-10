@@ -9,6 +9,9 @@
 *.idb
 *.sdf
 *.log
+*.exp
+[Debug]
+[Release]
 
 # Precompiled Headers
 *.gch

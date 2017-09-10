@@ -19,16 +19,16 @@ MagicShader::~MagicShader()
 	DeleteShaderProgram();
 }
 
-bool MagicShader::LoadFromFile(GLenum whichShader, const string& filename)
+bool MagicShader::LoadFromFile(GLenum whichShader, const std::string& filename)
 {
-	ifstream fp;
-	fp.open(filename.c_str(), ios_base::in);
+	std::ifstream fp;
+	fp.open(filename.c_str(), std::ios_base::in);
 	if (fp.bad())
 	{
-		cout << "读取着色器错误: " << filename << endl;
+		std::cout << "读取着色器错误: " << filename << std::endl;
 		return false;
 	}
-	string line, buffer;
+	std::string line, buffer;
 	while (getline(fp, line))
 	{
 		buffer.append(line);
@@ -45,7 +45,7 @@ bool MagicShader::LoadFromFile(GLenum whichShader, const string& filename)
 }
 
 
-bool MagicShader::LoadFromString(GLenum type, const string& source)
+bool MagicShader::LoadFromString(GLenum type, const std::string& source)
 {
 	//步骤
 	//1. glCreateShader
@@ -58,7 +58,7 @@ bool MagicShader::LoadFromString(GLenum type, const string& source)
 	//错误检测  
 	if (0 == shader)
 	{
-		cerr << "错误：创建着色器失败" << endl;
+		std::cerr << "错误：创建着色器失败" << std::endl;
 		exit(1);
 	}
 	const char * ptmp = source.c_str();
@@ -82,8 +82,8 @@ bool MagicShader::LoadFromString(GLenum type, const string& source)
 			GLsizei written;
 			//得到日志信息并输出  
 			glGetShaderInfoLog(shader, logLen, &written, log);
-			cerr << "vertex shader compile log : " << endl;
-			cerr << log << endl;
+			std::cerr << "vertex shader compile log : " << std::endl;
+			std::cerr << log << std::endl;
 			free(log);//释放空间  
 			return false;
 		}
@@ -101,7 +101,7 @@ bool MagicShader::CreateAndLinkProgram()
 	programHandle = glCreateProgram();
 	if (!programHandle)
 	{
-		cerr << "ERROR : create program failed" << endl;
+		std::cerr << "ERROR : create program failed" << std::endl;
 		exit(1);
 	}
 	if (Shaders[VERTEX_SHADER] != 0) {
@@ -120,7 +120,7 @@ bool MagicShader::CreateAndLinkProgram()
 	glGetProgramiv(programHandle, GL_LINK_STATUS, &linkStatus);
 	if (GL_FALSE == linkStatus)
 	{
-		cerr << "错误 : 链接着色器程序对象" << endl;
+		std::cerr << "错误 : 链接着色器程序对象" << std::endl;
 		GLint logLen;
 		glGetProgramiv(programHandle, GL_INFO_LOG_LENGTH,
 			&logLen);
@@ -130,8 +130,8 @@ bool MagicShader::CreateAndLinkProgram()
 			GLsizei written;
 			glGetProgramInfoLog(programHandle, logLen,
 				&written, log);
-			cerr << "Program log : " << endl;
-			cerr << log << endl;
+			std::cerr << "Program log : " << std::endl;
+			std::cerr << log << std::endl;
 		}
 	}
 
@@ -152,23 +152,23 @@ void MagicShader::UnUse()
 	glUseProgram(0);
 }
 
-void MagicShader::AddAttribute(const string& attribute)
+void MagicShader::AddAttribute(const std::string& attribute)
 {
 	AttributeList[attribute] = glGetAttribLocation(programHandle, attribute.c_str());
 }
 
 //An indexer that returns the location of the attribute
-GLuint MagicShader::operator [](const string& attribute)
+GLuint MagicShader::operator [](const std::string& attribute)
 {
 	return AttributeList[attribute];
 }
 
-void MagicShader::AddUniform(const string& uniform)
+void MagicShader::AddUniform(const std::string& uniform)
 {
 	UniformLocationList[uniform] = glGetUniformLocation(programHandle, uniform.c_str());
 }
 
-GLuint MagicShader::operator()(const string& uniform)
+GLuint MagicShader::operator()(const std::string& uniform)
 {
 	return UniformLocationList[uniform];
 }

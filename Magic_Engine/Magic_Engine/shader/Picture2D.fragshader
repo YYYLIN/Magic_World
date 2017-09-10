@@ -1,15 +1,13 @@
 #version 400  
 
 in vec2 TexCoord;
+in vec4 Out_Color
 
 out vec4 gl_FragColor; 
 
 uniform sampler2D sampler0;
-uniform vec4 AmbientColor;
 
 void main()  
 {
-	vec4 TexColor = texture2D(sampler0, TexCoord);
-
-	gl_FragColor = TexColor * AmbientColor;  
+	gl_FragColor =  texture2D(sampler0, TexCoord) * Out_Color;  
 }  

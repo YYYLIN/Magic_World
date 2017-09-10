@@ -4,57 +4,9 @@
 const glm::mat4 CONST_CAMERA = glm::lookAt(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
 
-MagicSpirit::MagicSpirit()
-{
-
-}
-MagicSpirit::~MagicSpirit()
-{
-
-}
-
-bool MagicSpirit::Initialize(MagicScene* _scene)
-{
-	pUpperScene = _scene;
-	pUpperScene->SpiritAdd(this);
-	return this->Initialize();
-}
-
-bool MagicSpirit::Initialize(MagicEngineContext* _engine)
-{
-	pUpperScene = 0;
-	_engine->SpiritAdd(this);
-	return this->Initialize();
-}
-
-void MagicSpirit::SetDisplayState(bool _state)
-{
-	if (DisplayState != _state)
-	{
-		DisplayState = _state;
-		DrawSpirit();
-	}
-}
-
-void MagicSpirit::DrawSpirit()
-{
-	if (pUpperScene)
-		pUpperScene->DrawSpirit();
-}
-
-bool MagicSpirit::Initialize()
-{
-	DisplayState = true;
-	return true;
-}
-
-void MagicSpirit::Render(glm::mat4 CameraMatrix)
-{
-}
-
 MagicScene::MagicScene()
 {
-
+	DisplayState = 0;
 }
 
 MagicScene::~MagicScene()
@@ -65,14 +17,14 @@ MagicScene::~MagicScene()
 bool MagicScene::Initialize(glm::vec4 _PosSize, MagicScene* _scene)
 {
 	pUpperScene = _scene;
-	pUpperScene->SpiritAdd(this);
+	pUpperScene->AddCommon(this);
 	return this->Initialize(_PosSize);
 }
 
 bool MagicScene::Initialize(glm::vec4 _PosSize, MagicEngineContext* _engine)
 {
 	pUpperScene = 0;
-	_engine->SpiritAdd(this);
+	_engine->AddCommon(this);
 	return this->Initialize(_PosSize);
 }
 
@@ -81,26 +33,37 @@ void MagicScene::SetDisplayState(bool _state)
 	DisplayState = _state;
 }
 
-void MagicScene::SpiritAdd(MagicUICommon* _common)
+void MagicScene::AddCommon(MagicCommon* _common)
 {
 	v_Common.push_back(_common);
 }
 
-void MagicScene::DeleteSpirit(MagicUICommon* _common)
+void MagicScene::RemoveCommon(MagicCommon* _common)
 {
 	if (v_Common.size())
 	{
-		for (unsigned int a = 0; a < v_Common.size(); a++)
+		for (auto _auto = v_Common.begin(); _auto != v_Common.end(); _auto++)
 		{
-			if (_common == v_Common[a])
-				v_Common.erase(v_Common.begin() + a);
+			if (_common == *_auto)
+			{
+				v_Common.erase(_auto);
+				return;
+			}
 		}
 	}
 }
 
+void MagicScene::ResetDrawRECT(float _x, float _y, float _w, float _h)
+{
+	m_PosSize.x = _x;
+	m_PosSize.y = _y;
+	m_PosSize.z = _w;
+	m_PosSize.w = _h;
+}
+
 bool MagicScene::Initialize(glm::vec4 _PosSize)
 {
-	m_PosSize = _PosSize;
+	this->ResetDrawRECT(_PosSize.x, _PosSize.y, _PosSize.z, _PosSize.w);
 	DisplayState = true;
 
 	return true;
@@ -124,6 +87,16 @@ void MagicScene::Render(glm::mat4 CameraMatrix)
 		for (unsigned int a = 0; a < v_Common.size(); a++)
 			v_Common[a]->Render(CameraMatrix);
 	}
+}
+
+void MagicScene::RenderStart()
+{
+
+}
+
+void MagicScene::RenderEnd()
+{
+
 }
 
 HGLRC CreateRCContxt(HDC _hdc)
@@ -192,7 +165,7 @@ MagicEngineContext::~MagicEngineContext()
 }
 
 
-bool MagicEngineContext::Initialize(HWND _hwnd)
+bool MagicEngineContext::Initialize(HWND _hwnd, float _x, float _y, float _w, float _h)
 {
 	bool result;
 
@@ -201,6 +174,10 @@ bool MagicEngineContext::Initialize(HWND _hwnd)
 	m_HDC = GetDC(m_hWnd);
 	m_hRC = CreateRCContxt(m_HDC);
 	if (!m_hRC)
+		return false;
+
+	result = MagicScene::Initialize(glm::vec4(_x, _y, _w, _h));
+	if (!result)
 		return false;
 
 	m_BackColor.R = 0.0f; m_BackColor.G = 0.0f; m_BackColor.B = 0.0f;
@@ -216,7 +193,7 @@ bool MagicEngineContext::Initialize(HWND _hwnd)
 	//启用背面剔除
 	glEnable(GL_CULL_FACE);
 
-	result = m_MagicPen.Initialize();
+	result = m_Pen_Basis.Initialize();
 	if (!result)
 		return false;
 
@@ -224,16 +201,8 @@ bool MagicEngineContext::Initialize(HWND _hwnd)
 }
 void MagicEngineContext::Shutdown()
 {
-	v_Common.clear();
-
-
-	for (map<string, MagicTexture*>::iterator i = Map_Texture.begin(); i != Map_Texture.end(); /*i++*/)
-	{
-		delete Map_Texture[i->first];
-		Map_Texture.erase(i);
-		i++;
-	}
-
+	for (std::map<std::string, MagicTexture*>::iterator i = Map_Texture.begin(); i != Map_Texture.end(); i++)
+		delete i->second;
 }
 
 void MagicEngineContext::Render(void)
@@ -242,14 +211,15 @@ void MagicEngineContext::Render(void)
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	for (unsigned int a = 0; a < v_Common.size(); a++)
-		v_Common[a]->Render(CONST_CAMERA);
+	this->RenderStart();
+	MagicScene::Render(CONST_CAMERA);
+	this->RenderEnd();
 
 	SwapBuffers(m_HDC);
 }
 
 
-MagicTexture* MagicEngineContext::LoadTextrue(const char* file_name, string name, char format)
+MagicTexture* MagicEngineContext::LoadTextrue(const char* file_name, const char* _name, char format)
 {
 	bool result;
 	MagicTexture* pTextrue;
@@ -259,11 +229,12 @@ MagicTexture* MagicEngineContext::LoadTextrue(const char* file_name, string name
 	result = pTextrue->Initialize(file_name, format);
 	if (!result)
 		return 0;
-	Map_Texture[name] = pTextrue;
+	Map_Texture.insert(std::map<std::string, MagicTexture*>::value_type(_name, pTextrue));
+
 	return pTextrue;
 }
 
-MagicTexture* MagicEngineContext::LoadTextrue(const unsigned char* Data, int _width, int _height, string name)
+MagicTexture* MagicEngineContext::LoadTextrue(const unsigned char* Data, int _width, int _height, const char* _name)
 {
 	bool result;
 	MagicTexture* pTextrue;
@@ -273,17 +244,46 @@ MagicTexture* MagicEngineContext::LoadTextrue(const unsigned char* Data, int _wi
 	result = pTextrue->Initialize(Data, _width, _height);
 	if (!result)
 		return 0;
-	Map_Texture[name] = pTextrue;
+	Map_Texture.insert(std::map<std::string, MagicTexture*>::value_type(_name, pTextrue));
+
 	return pTextrue;
 }
 
-void MagicEngineContext::DeleteTextrue(string name)
+void MagicEngineContext::DeleteTextrue(const char* _name)
 {
-	MagicTexture* pTextrue = Map_Texture[name];
-	delete pTextrue;
-	Map_Texture.erase(name);
+	auto _auto = Map_Texture.find(_name);
+	if (_auto != Map_Texture.end())
+	{
+		delete _auto->second;
+		Map_Texture.erase(_auto);
+	}
 
 	return;
+}
+
+void MagicEngineContext::SetBackColor(float r, float g, float b, float a)
+{
+	m_BackColor.R = r;
+	m_BackColor.G = g;
+	m_BackColor.B = b;
+	m_BackColor.A = a;
+	glClearColor(r, g, b, a);
+}
+
+void MagicEngineContext::ResetDrawRECT(float _x, float _y, float _w, float _h)
+{
+	MagicScene::ResetDrawRECT(_x, _y, _w, _h);
+	glMatrixMode(GL_MODELVIEW);
+	glViewport(_x, _y, _w, _h); //设置视频口
+}
+
+bool MagicEngineContext::AddPen_Common(const char* _name, Magic::Pen_Common* _common)
+{
+	auto _auto = Map_Pen_Common.insert(std::map<std::string, Magic::Pen_Common*>::value_type(_name, _common));
+	if (_auto.second)
+		return true;
+	else
+		return false;
 }
 
 
@@ -321,35 +321,22 @@ GLint MagicEngineContext::Getminor()
 	return minor;
 }
 
-MagicTexture* MagicEngineContext::GetTextrue(string _name)
+MagicTexture* MagicEngineContext::GetTextrue(const char* _name)
 {
-	return Map_Texture[_name];
+	auto _auto = Map_Texture.find(_name);
+	if (_auto != Map_Texture.end())
+		return _auto->second;
+	else
+		return 0;
 }
 
-void MagicEngineContext::SetBackColor(float r, float g, float b, float a)
+Magic::Pen_Common* MagicEngineContext::GetPen(const char* _name)
 {
-	m_BackColor.R = r;
-	m_BackColor.G = g;
-	m_BackColor.B = b;
-	m_BackColor.A = a;
-	glClearColor(r, g, b, a);
-}
-
-void MagicEngineContext::SpiritAdd(MagicCommon* _common)
-{
-	v_Common.push_back(_common);
-}
-
-void MagicEngineContext::DeleteSpirit(MagicCommon* _common)
-{
-	if (v_Common.size())
-	{
-		for (unsigned int a = 0; a < v_Common.size(); a++)
-		{
-			if (_common == v_Common[a])
-				v_Common.erase(v_Common.begin() + a);
-		}
-	}
+	auto _auto = Map_Pen_Common.find(_name);
+	if (_auto != Map_Pen_Common.end())
+		return _auto->second;
+	else
+		return 0;
 }
 
 void MagicEngineContext::Updata()
@@ -381,4 +368,15 @@ void MagicEngineContext::SetFPS()
 		lastTime = currentTime; //将当前时间currentTime赋给持续时间lastTime，作为下一秒的基准时间
 		frameCount = 0;//将本次帧数frameCount值清零
 	}
+}
+
+void MagicEngineContext::RenderStart()
+{
+	m_Pen_Basis.RenderStart();
+}
+
+void MagicEngineContext::RenderEnd()
+{
+	m_Pen_Basis.SetStartPosSize(m_PosSize.x, m_PosSize.y, m_PosSize.z, m_PosSize.w);
+	m_Pen_Basis.RenderEnd();
 }

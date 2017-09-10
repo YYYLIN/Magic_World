@@ -15,7 +15,6 @@
 
 #define MagicTextrue_LINEAR 0x01  //œﬂ–‘≤Â÷µ
 
-using namespace std;
 
 namespace Magic
 {
