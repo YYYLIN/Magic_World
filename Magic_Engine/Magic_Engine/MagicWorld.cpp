@@ -51,6 +51,7 @@ bool MagicWorld::Initialize()
 	m_GroundModelObject.SetWorldMatrix(worldMatrix);
 	AddModelObject(&m_GroundModelObject);
 
+/*
 	result = m_BallModelObject.CreateObject(1);
 	if (!result)
 		return false;
@@ -61,7 +62,7 @@ bool MagicWorld::Initialize()
 	worldMatrix[3].y = 10.0f;
 	worldMatrix[3].x = 20.0f;
 	m_BallModelObject.SetWorldMatrix(worldMatrix);
-	AddModelObject(&m_BallModelObject);
+	AddModelObject(&m_BallModelObject);*/
 
 	m_DepthFBO.Initialize(1024, 1024, MagicFBOTextrue::DEPTH);
 	m_DepthFBO.CreateDepthStencil(GL_DEPTH24_STENCIL8);

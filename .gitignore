@@ -10,6 +10,9 @@
 *.sdf
 *.log
 *.exp
+*.opendb
+*.db
+*.vs
 [Debug]
 [Release]
 

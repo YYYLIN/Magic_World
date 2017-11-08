@@ -1,7 +1,7 @@
 #version 400  
 
 in vec2 TexCoord;
-in vec4 Out_Color
+in vec4 Out_Color;
 
 out vec4 gl_FragColor; 
 
