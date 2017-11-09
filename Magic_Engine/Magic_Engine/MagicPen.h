@@ -7,6 +7,8 @@
 #include "MagicShader.h"
 #include "MagicTexture.h"
 #include "MagicVertex.h"
+#include "Magic_Macro.h"
+#include "Magic_Fonts.h"
 
 #include "vector"
 
@@ -60,6 +62,7 @@ namespace Magic
 		struct PICTRUE_DRAW
 		{
 			glm::vec2 m_PitrueUV[4];
+			Magic_Fonts* pFonts;
 			MagicTexture* pNowTexture;
 			std::vector<PICTRUE_VERTEX> V_Vertex;
 			std::vector<unsigned int> V_Index;
@@ -122,7 +125,7 @@ namespace Magic
 			std::vector<LINEPATIERN_MESSAGE> V_LinePattern_Message;
 			std::vector<VBO_VERTEX> V_VBO_VERTEX;
 			std::vector<glm::mat4> V_CameraMatrix;
-			PICTRUE_VERTEX Pictrue_Draw;
+			PICTRUE_DRAW Pictrue_Draw;
 			LINE_DRAW Line_Draw;
 
 			DRAW_BOX();
@@ -144,6 +147,292 @@ namespace Magic
 
 		bool Initialize();
 
+		/*
+		功能:
+		参数:
+		返回值:
+		*/
+		void DrawVertex(Pen_Normal::DRAW_MODE _drawMode, Magic::VERTEX_BUFFER* _VertexVuffer, unsigned int _StartPos, unsigned int _DrawNumber);
+
+		/*
+		功能:
+		参数:
+		返回值:
+		*/
+		void DrawVertex(Pen_Normal::DRAW_MODE _drawMode, const float* _pPos, const Magic::Color4* _pColor, unsigned int _Number);
+
+		/*
+		功能:
+		参数:
+		返回值:
+		*/
+		void DrawVertex(Pen_Normal::DRAW_MODE _drawMode, const float* _pPos, unsigned int _Number);
+
+		/*
+		功能:
+		参数:
+		返回值:
+		*/
+		void DrawLine(float _x1, float _y1, float _x2, float _y2);
+
+		/*
+		功能:
+		参数:
+		返回值:
+		*/
+		void DrawPicture(float _x, float _y, float _w, float _h);
+
+		/*
+		功能:
+		参数:
+		返回值:
+		*/
+		void DrawTEXT(float _x, float _y, const char* _text, unsigned char _ArrayState = CHARATER_LEFT_ARRAY);
+
+		/*
+		功能:
+		参数:
+		返回值:
+		*/
+		void DrawRectangle(Pen_Normal::DRAW_MODE  _drawMode, float _x, float _y, float _w, float _h);
+
+		/*
+		功能:
+		参数:
+		返回值:
+		*/
+		void BindFonts(Magic_Fonts* _pFonts);
+
+		/*
+		功能:
+		参数:
+		返回值:
+		*/
+		void BindPicture(MagicTexture* _pTexture);
+
+		/*
+		功能:
+		参数:
+		返回值:
+		*/
+		void BindPictureUVPos(glm::vec2 _TictureWH, float _x, float _y, float _w, float _h);
+
+		/*
+		功能:
+		参数:
+		返回值:
+		*/
+		void BindPictureUVPos(float _Left, float _Right, float _Up, float _Down);
+
+		/*
+		功能:
+		参数:
+		返回值:
+		*/
+		void BindPictureUVPosfault();
+
+		/*
+		功能:
+		参数:
+		返回值:
+		*/
+		void SetColor(const Magic::Color4& _color);
+
+		/*
+		功能:
+		参数:
+		返回值:
+		*/
+		void SetDrawWH(float _w, float _h);
+
+		/*
+		功能:
+		参数:
+		返回值:
+		*/
+		void EnableScissor();
+
+		/*
+		功能:
+		参数:
+		返回值:
+		*/
+		void SetScissor(int _x, int _y, int _w, float _h, int _fboHeight);
+
+		/*
+		功能:
+		参数:
+		返回值:
+		*/
+		void DisableScissor();
+
+		/*
+		功能:
+		参数:
+		返回值:
+		*/
+		void SetPointSize(float _size);
+
+		/*
+		功能:
+		参数:
+		返回值:
+		*/
+		void EnablePointSMOOTH();
+
+		/*
+		功能:
+		参数:
+		返回值:
+		*/
+		void DisablePointSMOOTH();
+
+		/*
+		功能:
+		参数:
+		返回值:
+		*/
+		void SetLineWidth(float _width);
+
+		/*
+		功能:
+		参数:
+		返回值:
+		*/
+		void EnableLinePattern();
+
+		/*
+		功能:
+		参数:
+		返回值:
+		*/
+		void SetLinePattern(int _factor, unsigned short _pattern);
+
+		/*
+		功能:
+		参数:
+		返回值:
+		*/
+		void DisableLinePattern();
+
+		/*
+		功能:
+		参数:
+		返回值:
+		*/
+		void EnableAlpha();
+
+		/*
+		功能:
+		参数:
+		返回值:
+		*/
+		void DisableAlpha();
+
+		/*
+		功能:
+		参数:
+		返回值:
+		*/
+		void EnablePolygonSMOOTH();
+
+		/*
+		功能:
+		参数:
+		返回值:
+		*/
+		void DisablePolygonSMOOTH();
+
+		/*
+		功能:
+		参数:
+		返回值:
+		*/
+		void EnableLineSMOOTH();
+
+		/*
+		功能:
+		参数:
+		返回值:
+		*/
+		void DisableLineSMOOTH();
+
+		/*
+		功能:
+		参数:
+		返回值:
+		*/
+		void SetCameraMatrix(const glm::mat4& _matrix);
+
+		/*
+		功能:
+		参数:
+		返回值:
+		*/
+		void SetWorldMatrix(const glm::mat4& _matrix);
+
+		/*
+		功能:
+		参数:
+		返回值:
+		*/
+		void ResetWorldMatrix();
+
+		/*
+		功能:
+		参数:
+		返回值:
+		*/
+		void SetDrawFaceMode(Magic::Pen_Normal::DRAW_FACE_MODE _mode);
+
+		/*
+		功能:
+		参数:
+		返回值:
+		*/
+		virtual void RenderStart();
+
+		/*
+		功能:
+		参数:
+		返回值:
+		*/
+		virtual void RenderEnd();
+
+		/*
+		功能:
+		参数:
+		返回值:
+		*/
+		void SetNowRenderArea(int _pos);
+
+		/*
+		功能:
+		参数:
+		返回值:
+		*/
+		inline int GetNowRenderArea() { return m_NowDraw_Box; }
+
+		/*
+		功能:
+		参数:
+		返回值:
+		*/
+		inline const Magic::Color4& GetNowColor() { return pNowDRAW_BOX->NowColor; }
+
+		/*
+		功能:
+		参数:
+		返回值:
+		*/
+		inline Magic_Fonts* GetNowFonts() { return pNowDRAW_BOX->Pictrue_Draw.pFonts; }
+
+		/*
+		功能:
+		参数:
+		返回值:
+		*/
+		unsigned int GetDrawMessageNumber() { return m_DrawMessageNumber; }
 	private:
 		int m_Draw_Box_Number;
 		Magic::VERTEX_BUFFER m_Pitrue_VBO;

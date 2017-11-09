@@ -164,6 +164,7 @@
     <ClCompile Include="MagicVertex.cpp" />
     <ClCompile Include="MagicWindows.cpp" />
     <ClCompile Include="MagicWorld.cpp" />
+    <ClCompile Include="Magic_Fonts.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SpecialEffectsPanel.cpp" />
   </ItemGroup>
@@ -174,6 +175,7 @@
     <ClInclude Include="MagicModelObject.h" />
     <ClInclude Include="MagicUIElemeent.h" />
     <ClInclude Include="MagicWorld.h" />
+    <ClInclude Include="Magic_Fonts.h" />
     <ClInclude Include="Magic_Macro.h" />
     <ClInclude Include="MagicCamera.h" />
     <ClInclude Include="MagicEngineContext.h" />

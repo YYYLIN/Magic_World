@@ -392,6 +392,7 @@ MagicFBOTextrue::MagicFBOTextrue()
 {
 	m_Textrue = 0;
 	m_Depth_Stencil = 0;
+	m_MultisampleNumber = 0;
 }
 
 MagicFBOTextrue::~MagicFBOTextrue()
@@ -399,11 +400,11 @@ MagicFBOTextrue::~MagicFBOTextrue()
 	Shutdown();
 }
 
-bool MagicFBOTextrue::Initialize(const int& w, const int& h, const MODE _mode)
+bool MagicFBOTextrue::Initialize(const int& _w, const int& _h, const MODE _mode, unsigned char _MultisampleNumber)
 {
-	width = w;
-	height = h;
-	m_MODE = _mode;
+	width = _w;
+	height = _h;
+
 
 	glGenFramebuffers(1, &m_Textrue);
 	//绑定
@@ -411,38 +412,56 @@ bool MagicFBOTextrue::Initialize(const int& w, const int& h, const MODE _mode)
 
 	//分配一块RGBA贴图空间给FBO绘图使用    可以绑定多个纹理 glActiveTexture(GL_TEXTURE0);使用来区分
 	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	
+
+	GLenum _textrue_mode = GL_TEXTURE_2D, _attachment = GL_COLOR_ATTACHMENT0;
+	m_MultisampleNumber = _MultisampleNumber;
+	m_MODE = _mode;
+
+	if (m_MultisampleNumber)
+		_textrue_mode = GL_TEXTURE_2D_MULTISAMPLE;
+	else
+		_textrue_mode = GL_TEXTURE_2D;
+	glBindTexture(_textrue_mode, texture);
+
+
 	//声明贴图大小及格式分配空间
-	switch (_mode)
+	switch (m_MODE)
 	{
 	case COLOR4:
 		//设置过滤
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-		//framebuffer的RGBA贴图-绑定纹理与FBO
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+		glTexParameteri(_textrue_mode, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(_textrue_mode, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		if (m_MultisampleNumber)
+			glTexImage2DMultisample(_textrue_mode, m_MultisampleNumber, GL_RGBA, width, height, GL_TRUE);
+		else
+			glTexImage2D(_textrue_mode, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+
+		_attachment = GL_COLOR_ATTACHMENT0;
 
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		break;
 	case DEPTH:
 		//储存一个边框颜色，然后把深度贴图的纹理环绕选项设置为GL_CLAMP_TO_BORDER
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+		glTexParameteri(_textrue_mode, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+		glTexParameteri(_textrue_mode, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
 		GLfloat borderColor[] = { 1.0, 1.0, 1.0, 1.0 };
-		glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, texture, 0);
+		glTexParameterfv(_textrue_mode, GL_TEXTURE_BORDER_COLOR, borderColor);
+		if (m_MultisampleNumber)
+			glTexImage2DMultisample(_textrue_mode, m_MultisampleNumber, GL_DEPTH_COMPONENT, width, height, GL_TRUE);
+		else
+			glTexImage2D(_textrue_mode, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+		_attachment = GL_DEPTH_ATTACHMENT;
 		//不适用任何颜色数据进行渲染
 		glDrawBuffer(GL_NONE);
 		glReadBuffer(GL_NONE);
 		break;
 	}
-	
 
+	glTexParameteri(_textrue_mode, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(_textrue_mode, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	//framebuffer的RGBA贴图-绑定纹理与FBO
+	glFramebufferTexture2D(GL_FRAMEBUFFER, _attachment, _textrue_mode, texture, 0);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -451,32 +470,37 @@ bool MagicFBOTextrue::Initialize(const int& w, const int& h, const MODE _mode)
 	return true;
 }
 
-bool MagicFBOTextrue::ResetSize(const int& w,const int& h)
+bool MagicFBOTextrue::ResetSize(const int& _w, const int& _h, unsigned char _MultisampleNumber)
 {
-	this->~MagicFBOTextrue();
-	return this->Initialize(w, h, m_MODE);
+	this->Shutdown();
+	MagicTexture::Shutdown();
+	return this->Initialize(_w, _h, m_MODE, _MultisampleNumber);
 }
 
 bool MagicFBOTextrue::CreateDepthStencil(GLenum _type)
 {
 	//分配zbuffer给FBO 使用 
-	glBindFramebufferEXT(GL_RENDERBUFFER, m_Textrue);
+	glBindFramebuffer(GL_RENDERBUFFER, m_Textrue);
 
-	glGenRenderbuffersEXT(1, &m_Depth_Stencil);
+	glGenRenderbuffers(1, &m_Depth_Stencil);
 	//绑定
-	glBindRenderbufferEXT(GL_RENDERBUFFER, m_Depth_Stencil);
-	glRenderbufferStorageEXT(GL_RENDERBUFFER, _type, width, height);
+	glBindRenderbuffer(GL_RENDERBUFFER, m_Depth_Stencil);
+	if (m_MultisampleNumber)
+		glRenderbufferStorageMultisample(GL_RENDERBUFFER, m_MultisampleNumber, _type, width, height);
+	else
+		glRenderbufferStorage(GL_RENDERBUFFER, _type, width, height);
+
 	//绑定到当前的FBO对象上
-	glFramebufferRenderbufferEXT(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER, m_Depth_Stencil);
-	if (_type == GL_DEPTH24_STENCIL8_EXT)
-		glFramebufferRenderbufferEXT(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT_EXT, GL_RENDERBUFFER, m_Depth_Stencil);
-	GLenum status = glCheckFramebufferStatusEXT(GL_RENDERBUFFER);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_Depth_Stencil);
+	if (_type == GL_DEPTH24_STENCIL8)
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_Depth_Stencil);
+	GLenum status = glCheckFramebufferStatus(GL_RENDERBUFFER);
 	if (status != GL_FRAMEBUFFER_COMPLETE)
 	{
 		fprintf(stderr, "FBO #2 Error!\n");
 		return false;
 	}
-	glBindFramebufferEXT(GL_FRAMEBUFFER, 0);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	return true;
 }
@@ -497,12 +521,12 @@ void MagicFBOTextrue::Shutdown()
 {
 	if (m_Textrue)
 	{
-		glDeleteFramebuffersEXT(1, &m_Textrue);
+		glDeleteFramebuffers(1, &m_Textrue);
 		m_Textrue = 0;
 	}
 	if (m_Depth_Stencil)
 	{
-		glDeleteFramebuffersEXT(1, &m_Depth_Stencil);
+		glDeleteFramebuffers(1, &m_Depth_Stencil);
 		m_Depth_Stencil = 0;
 	}
 }

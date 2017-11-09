@@ -57,6 +57,17 @@ namespace Magic
 		void SetIndexBuffer(unsigned char _BufferPos);
 
 		/*
+		功能:设置索引缓存区
+		参数:
+		_BufferPos = 设置第几个缓存区域
+		_divisor = 为0时更新每个定点时刷新下一个对象
+		如果为1时刷新第一个实例时刷新下一个对象
+		如果为2时刷新第二个实例时刷新下一个对象(以此内推)
+		返回值:空
+		*/
+		void SetInstancedArray(unsigned char _BufferPos, unsigned int _divisor);
+
+		/*
 		功能:动态写入数据
 		(写入GPU的数据大小将缓存最大的一次数据为准)
 		参数:

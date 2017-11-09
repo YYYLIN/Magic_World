@@ -77,6 +77,9 @@
     <ClCompile Include="MagicShader.cpp">
       <Filter>MagicEngine\Shader</Filter>
     </ClCompile>
+    <ClCompile Include="Magic_Fonts.cpp">
+      <Filter>MagicEngine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MagicWindows.h">
@@ -126,6 +129,9 @@
     </ClInclude>
     <ClInclude Include="MagicShader.h">
       <Filter>MagicEngine\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Magic_Fonts.h">
+      <Filter>MagicEngine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
