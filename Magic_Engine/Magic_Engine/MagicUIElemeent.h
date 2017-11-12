@@ -17,12 +17,17 @@ public:
 	virtual void DrawSpirit();
 	virtual void SetDisplayState(bool);
 
+	virtual glm::vec2 GetFrameBufferSize();
+
 	inline virtual GLuint GetFBOTextrue() { return m_FBOBuffer.GetFBOTextrue(); }
 	inline virtual GLuint GetTextrue() { return m_FBOBuffer.GetTextrue(); }
 protected:
 	virtual bool Initialize(glm::vec4 _PosSize);
-	virtual void Render(glm::mat4 CameraMatrix);
-	virtual	void RenderReset(glm::mat4& CameraMatrix);
+	virtual void Render(glm::vec2 _DrawPos);
+	virtual void RenderBuffer();
+
+	virtual void RenderStart();
+	virtual void RenderEnd();
 
 protected:
 	bool m_DrawMessage;

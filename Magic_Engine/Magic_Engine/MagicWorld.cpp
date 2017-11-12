@@ -13,9 +13,9 @@ MagicWorld::~MagicWorld()
 
 bool MagicWorld::Initialize()
 {
-	bool result;
+	//bool result;
 
-	glDisable(GL_CULL_FACE);
+	/*glDisable(GL_CULL_FACE);
 	//glEnable(GL_CULL_FACE);
 
 	glm::mat4 worldMatrix;
@@ -49,7 +49,7 @@ bool MagicWorld::Initialize()
 		return false;
 	worldMatrix = glm::rotate(-90.0f, 1.0f, 0.0f, 0.0f);
 	m_GroundModelObject.SetWorldMatrix(worldMatrix);
-	AddModelObject(&m_GroundModelObject);
+	AddModelObject(&m_GroundModelObject);*/
 
 /*
 	result = m_BallModelObject.CreateObject(1);
@@ -65,7 +65,6 @@ bool MagicWorld::Initialize()
 	AddModelObject(&m_BallModelObject);*/
 
 	m_DepthFBO.Initialize(1024, 1024, MagicFBOTextrue::DEPTH);
-	m_DepthFBO.CreateDepthStencil(GL_DEPTH24_STENCIL8);
 
 //	pLightShader = (*MagicEngineContext::pMagicEngineContext->GetPen())["Light"];
 //	pDepthShader = (*MagicEngineContext::pMagicEngineContext->GetPen())["Depth"];
@@ -125,8 +124,9 @@ void MagicWorld::Updata()
 {
 }
 
-void MagicWorld::Render(glm::mat4 CameraMatrix)
+void MagicWorld::Render(glm::vec2 _DrawPos)
 {
+/*
 	glEnable(GL_DEPTH_TEST);
 	//GL_LEQUAL小于等于 ，GL_LESS小鱼
 	glDepthFunc(GL_LEQUAL);
@@ -150,7 +150,7 @@ void MagicWorld::Render(glm::mat4 CameraMatrix)
 		RenderLightModel(pDepthShader, *_piterator);
 	}
 
-	m_DepthFBO.UnUse(1024, 768);
+	m_DepthFBO.UnUse();
 
 	pLightShader->Use();
 
@@ -179,7 +179,7 @@ void MagicWorld::Render(glm::mat4 CameraMatrix)
 
 	pLightShader->UnUse();
 
-	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_DEPTH_TEST);*/
 
 /*
 	MagicPen* pPen = MagicEngineContext::pMagicEngineContext->GetPen();

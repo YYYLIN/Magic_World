@@ -18,7 +18,7 @@ public:
 	void AddModelObject(MagicModelObject* _pMagicModelObject);
 protected:
 	virtual void Updata();
-	virtual	void Render(glm::mat4 CameraMatrix);
+	virtual	void Render(glm::vec2 _DrawPos);
 
 	void RenderLightModel(MagicShader* _pShader, MagicModelObject* _pMagicModelObject);
 private:

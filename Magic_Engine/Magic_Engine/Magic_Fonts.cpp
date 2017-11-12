@@ -151,7 +151,7 @@ int Magic_Fonts::GetTextAllWidth(const char* _text)
 {
 	int _width = 0;
 
-	for (int a = 0; a < strlen((char*)_text); a++)
+	for (unsigned int a = 0; a < strlen((char*)_text); a++)
 	{
 		_width += fontstexture[(unsigned char)_text[a] - 32].width;
 	}

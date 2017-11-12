@@ -26,10 +26,11 @@ public:
 	MagicCommon() = default;
 	virtual ~MagicCommon()
 	{}
-
+	virtual void OnUpdata() { this->Updata(); }
+	virtual void Render(glm::vec2 _DrawPos) { this->Draw(); }
 protected:
-	inline virtual void Updata() { return; }
-	virtual	void Render(glm::mat4 CameraMatrix) = 0;
+	inline virtual void Updata() {}
+	virtual	void Draw() {};
 };
 
 class MagicUICommon :public MagicCommon
@@ -46,12 +47,15 @@ class MagicScene :public MagicUICommon
 public:
 	MagicScene();
 	virtual ~MagicScene();
-	bool Initialize(glm::vec4 _PosSize, MagicScene* _scene);
-	bool Initialize(glm::vec4 _PosSize, MagicEngineContext* _engine);
+	bool Initialize(MagicScene* _scene, glm::vec4 _PosSize);
 
 	virtual void SetDisplayState(bool _state);
 
+	virtual glm::vec2 GetFrameBufferSize();
+
 	inline bool GetDisplayState() { return DisplayState; }
+
+	inline glm::vec2 GetDrawPos() { return m_DrawPos; }
 
 	virtual GLuint GetFBOTextrue() { return 0; }
 
@@ -62,8 +66,8 @@ public:
 
 protected:
 	virtual bool Initialize(glm::vec4 _PosSize);
-	virtual void Updata();
-	virtual	void Render(glm::mat4 CameraMatrix);
+	virtual void OnUpdata();
+	virtual	void Render(glm::vec2 _DrawPos);
 	virtual void RenderStart();
 	virtual void RenderEnd();
 
@@ -71,7 +75,8 @@ protected:
 	bool DisplayState;
 
 	glm::vec4 m_PosSize;
-	MagicScene* pUpperScene;
+	glm::vec2 m_DrawPos;
+	MagicScene* pParentScene;
 
 	std::vector<MagicCommon*> v_Common;
 };
@@ -115,6 +120,10 @@ public:
 
 	Magic::Pen_Common* GetPen(const char* _name);
 
+	virtual glm::vec2 GetFrameBufferSize();
+
+	inline Magic::Pen_Normal* GetPen_Normal() { return &m_Pen_Normal; }
+
 	float GetDiffTime() { return diffTime; }
 
 protected:
@@ -134,7 +143,7 @@ private:
 	std::map<std::string, Magic::Pen_Common*> Map_Pen_Common;
 	std::map<std::string, MagicTexture*> Map_Texture;
 
-	Magic::Pen_Basis m_Pen_Basis;
+	Magic::Pen_Normal m_Pen_Normal;
 
 	//Windows
 	HGLRC m_hRC;

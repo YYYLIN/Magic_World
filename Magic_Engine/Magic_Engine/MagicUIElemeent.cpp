@@ -19,8 +19,8 @@ MagicSceneEx::MagicSceneEx()
 
 void MagicSceneEx::DrawSpirit()
 {
-	if (pUpperScene)
-		pUpperScene->DrawSpirit();
+	if (pParentScene)
+		pParentScene->DrawSpirit();
 	m_DrawMessage = true;
 }
 
@@ -29,9 +29,14 @@ void MagicSceneEx::SetDisplayState(bool _state)
 	if (DisplayState != _state)
 	{
 		DisplayState = _state;
-		if (pUpperScene)
-			pUpperScene->DrawSpirit();
+		if (pParentScene)
+			pParentScene->DrawSpirit();
 	}
+}
+
+glm::vec2 MagicSceneEx::GetFrameBufferSize()
+{
+	return glm::vec2(m_FBOBuffer.GetWidth(), m_FBOBuffer.GetHeight());
 }
 
 bool MagicSceneEx::Initialize(glm::vec4 _PosSize)
@@ -51,37 +56,43 @@ bool MagicSceneEx::Initialize(glm::vec4 _PosSize)
 	return true;
 }
 
-void MagicSceneEx::Render(glm::mat4 CameraMatrix)
+void MagicSceneEx::Render(glm::vec2 _DrawPos)
 {
 	if (DisplayState)
 	{
-		MagicEngineContext* pEngine = MagicEngineContext::pMagicEngineContext;
-	//	Magic::Pen_Basis* pPen = pEngine->GetPen();
-		glm::mat4 Camera = CONST_CAMERA;
-
 		if (m_DrawMessage)
 		{
-			glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_FBOBuffer.GetFBOTextrue());
+			m_FBOBuffer.Use();
 			glClear(GL_COLOR_BUFFER_BIT);
-			this->RenderReset(Camera);
-			MagicScene::Render(Camera);
-			glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
+			MagicScene::Render(glm::vec2());
+			glBindFramebuffer(GL_FRAMEBUFFER, pParentScene->GetFBOTextrue());
 			m_DrawMessage = false;
 		}
-
-		if (pUpperScene)
-			glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, pUpperScene->GetFBOTextrue());
-		else
-			glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
-		Camera = CONST_CAMERA;
-		Camera[3].x = m_PosSize.x;
-		Camera[3].y = m_PosSize.y;
-/*
-		pPen->DrawPicture(Camera, glm::mat4(), m_FBOBuffer.GetTextrue(),
-			glm::vec2(0.0f), glm::vec2(m_FBOBuffer.GetWidth(), m_FBOBuffer.GetHeight()));*/
+		this->RenderBuffer();
 	}
 }
 
-void MagicSceneEx::RenderReset(glm::mat4& CameraMatrix)
+void MagicSceneEx::RenderBuffer()
 {
+
+	Magic::Pen_Normal* pPen_Normal = MagicEngineContext::pMagicEngineContext->GetPen_Normal();
+	pPen_Normal->BindPicture(&m_FBOBuffer);
+	pPen_Normal->BindPictureUVPosfault();
+	pPen_Normal->DrawPicture(m_PosSize.x, m_PosSize.y, m_PosSize.z, m_PosSize.w);
+}
+
+void MagicSceneEx::RenderStart()
+{
+	Magic::Pen_Normal* pPen_Normal = MagicEngineContext::pMagicEngineContext->GetPen_Normal();
+	pPen_Normal->RenderStart();
+	pPen_Normal->SetCameraMatrix(CONST_CAMERA);
+
+}
+
+void MagicSceneEx::RenderEnd()
+{
+	Magic::Pen_Normal* pPen_Normal = MagicEngineContext::pMagicEngineContext->GetPen_Normal();
+	glm::vec2 _WH = this->GetFrameBufferSize();
+	pPen_Normal->SetDrawWH(_WH.x, _WH.y);
+	pPen_Normal->RenderEnd();
 }

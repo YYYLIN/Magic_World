@@ -14,23 +14,21 @@ MagicScene::~MagicScene()
 	v_Common.clear();
 }
 
-bool MagicScene::Initialize(glm::vec4 _PosSize, MagicScene* _scene)
+bool MagicScene::Initialize(MagicScene* _scene, glm::vec4 _PosSize)
 {
-	pUpperScene = _scene;
-	pUpperScene->AddCommon(this);
-	return this->Initialize(_PosSize);
-}
-
-bool MagicScene::Initialize(glm::vec4 _PosSize, MagicEngineContext* _engine)
-{
-	pUpperScene = 0;
-	_engine->AddCommon(this);
+	pParentScene = _scene;
+	pParentScene->AddCommon(this);
 	return this->Initialize(_PosSize);
 }
 
 void MagicScene::SetDisplayState(bool _state)
 {
 	DisplayState = _state;
+}
+
+glm::vec2 MagicScene::GetFrameBufferSize()
+{
+	return pParentScene->GetFrameBufferSize();
 }
 
 void MagicScene::AddCommon(MagicCommon* _common)
@@ -69,34 +67,44 @@ bool MagicScene::Initialize(glm::vec4 _PosSize)
 	return true;
 }
 
-void MagicScene::Updata()
+void MagicScene::OnUpdata()
 {
 	if (DisplayState)
 	{
+		this->Updata();
 		for (unsigned int a = 0; a < v_Common.size(); a++)
-			v_Common[a]->Updata();
+			v_Common[a]->OnUpdata();
 	}
 }
 
-void MagicScene::Render(glm::mat4 CameraMatrix)
+void MagicScene::Render(glm::vec2 _DrawPos)
 {
 	if (DisplayState)
 	{
-		CameraMatrix[3].x += m_PosSize.x;
-		CameraMatrix[3].y += m_PosSize.y;
+		_DrawPos += glm::vec2(m_PosSize);
+		m_DrawPos = _DrawPos;
+		this->RenderStart();
 		for (unsigned int a = 0; a < v_Common.size(); a++)
-			v_Common[a]->Render(CameraMatrix);
+			v_Common[a]->Render(_DrawPos);
+		this->Draw();
+		this->RenderEnd();
 	}
 }
 
 void MagicScene::RenderStart()
 {
-
+	glm::mat4 _Camera = CONST_CAMERA;
+	_Camera[3].x = m_DrawPos.x;
+	_Camera[3].y = m_DrawPos.y;
+	MagicEngineContext::pMagicEngineContext->GetPen_Normal()->SetCameraMatrix(_Camera);
 }
 
 void MagicScene::RenderEnd()
 {
-
+	glm::mat4 _Camera = CONST_CAMERA;
+	_Camera[3].x = pParentScene->GetDrawPos().x;
+	_Camera[3].y = pParentScene->GetDrawPos().y;
+	MagicEngineContext::pMagicEngineContext->GetPen_Normal()->SetCameraMatrix(_Camera);
 }
 
 HGLRC CreateRCContxt(HDC _hdc)
@@ -193,7 +201,7 @@ bool MagicEngineContext::Initialize(HWND _hwnd, float _x, float _y, float _w, fl
 	//启用背面剔除
 	glEnable(GL_CULL_FACE);
 
-	result = m_Pen_Basis.Initialize();
+	result = m_Pen_Normal.Initialize();
 	if (!result)
 		return false;
 
@@ -207,15 +215,8 @@ void MagicEngineContext::Shutdown()
 
 void MagicEngineContext::Render(void)
 {
-	Updata();
-
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	this->RenderStart();
-	MagicScene::Render(CONST_CAMERA);
-	this->RenderEnd();
-
-	SwapBuffers(m_HDC);
+	this->OnUpdata();
+	MagicScene::Render(glm::vec2());
 }
 
 
@@ -273,7 +274,6 @@ void MagicEngineContext::SetBackColor(float r, float g, float b, float a)
 void MagicEngineContext::ResetDrawRECT(float _x, float _y, float _w, float _h)
 {
 	MagicScene::ResetDrawRECT(_x, _y, _w, _h);
-	glMatrixMode(GL_MODELVIEW);
 	glViewport(_x, _y, _w, _h); //设置视频口
 }
 
@@ -339,6 +339,11 @@ Magic::Pen_Common* MagicEngineContext::GetPen(const char* _name)
 		return 0;
 }
 
+glm::vec2 MagicEngineContext::GetFrameBufferSize()
+{
+	return glm::vec2(m_PosSize.z, m_PosSize.w);
+}
+
 void MagicEngineContext::Updata()
 {
 	double time = clock();
@@ -346,11 +351,7 @@ void MagicEngineContext::Updata()
 	lastTime = clock();
 
 	SetFPS();
-
-	for (unsigned int a = 0; a < v_Common.size(); a++)
-		v_Common[a]->Updata();
 }
-
 
 void MagicEngineContext::SetFPS()
 {
@@ -372,11 +373,16 @@ void MagicEngineContext::SetFPS()
 
 void MagicEngineContext::RenderStart()
 {
-	m_Pen_Basis.RenderStart();
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	m_Pen_Normal.RenderStart();
+	m_Pen_Normal.SetCameraMatrix(CONST_CAMERA);
 }
 
 void MagicEngineContext::RenderEnd()
 {
-	m_Pen_Basis.SetStartPosSize(m_PosSize.x, m_PosSize.y, m_PosSize.z, m_PosSize.w);
-	m_Pen_Basis.RenderEnd();
+	glm::vec2 _WH = this->GetFrameBufferSize();
+	m_Pen_Normal.SetDrawWH(_WH.x, _WH.y);
+	m_Pen_Normal.RenderEnd();
+
+	SwapBuffers(m_HDC);
 }

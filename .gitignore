@@ -13,6 +13,7 @@
 *.opendb
 *.db
 *.vs
+*.enc
 [Debug]
 [Release]
 

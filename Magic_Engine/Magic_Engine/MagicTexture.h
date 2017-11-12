@@ -66,6 +66,8 @@ class MagicFBOTextrue :public MagicTexture
 public:
 	enum MODE {
 		COLOR4,
+		COLOR4_DEPTH32,
+		COLOR4_DEPTH24_STENCIL8,
 		DEPTH
 	};
 
@@ -75,9 +77,7 @@ public:
 	virtual bool Initialize(const int& _w, const int& _h, const MODE _mode, unsigned char _MultisampleNumber = 0);
 	bool ResetSize(const int& _w, const int& _h, unsigned char _MultisampleNumber);
 
-	//参数;1.只创建深度数据      GL_DEPTH_COMPONENT32
-	//     2.创建深度和模板缓存  GL_DEPTH24_STENCIL8
-	bool CreateDepthStencil(GLenum _type);
+
 
 	inline unsigned char GetMultisampleNumber() { return m_MultisampleNumber; }
 
@@ -86,9 +86,13 @@ public:
 	inline GLuint GetDepth_Stencil() { return m_Depth_Stencil; }
 
 	void Use();
-	void UnUse(const int& _w, const int& _h);
+	void UnUse();
 
 protected:
+	//参数;1.只创建深度数据      GL_DEPTH_COMPONENT32
+	//     2.创建深度和模板缓存  GL_DEPTH24_STENCIL8
+	bool CreateDepthStencil(GLenum _type);
+
 	virtual void Shutdown();
 private:
 	GLuint m_Textrue;//颜色缓冲区

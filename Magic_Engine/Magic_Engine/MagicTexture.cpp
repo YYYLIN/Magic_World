@@ -423,11 +423,12 @@ bool MagicFBOTextrue::Initialize(const int& _w, const int& _h, const MODE _mode,
 		_textrue_mode = GL_TEXTURE_2D;
 	glBindTexture(_textrue_mode, texture);
 
-
 	//声明贴图大小及格式分配空间
 	switch (m_MODE)
 	{
 	case COLOR4:
+	case COLOR4_DEPTH32:
+	case COLOR4_DEPTH24_STENCIL8:
 		//设置过滤
 		glTexParameteri(_textrue_mode, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(_textrue_mode, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -463,6 +464,12 @@ bool MagicFBOTextrue::Initialize(const int& _w, const int& _h, const MODE _mode,
 	//framebuffer的RGBA贴图-绑定纹理与FBO
 	glFramebufferTexture2D(GL_FRAMEBUFFER, _attachment, _textrue_mode, texture, 0);
 
+	if (m_MODE == COLOR4_DEPTH32)
+		CreateDepthStencil(GL_DEPTH_COMPONENT32);
+	else if (m_MODE == COLOR4_DEPTH24_STENCIL8)
+		CreateDepthStencil(GL_DEPTH24_STENCIL8);
+
+
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	total_bytes = width * height * 4;
@@ -477,11 +484,19 @@ bool MagicFBOTextrue::ResetSize(const int& _w, const int& _h, unsigned char _Mul
 	return this->Initialize(_w, _h, m_MODE, _MultisampleNumber);
 }
 
+void MagicFBOTextrue::Use()
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, m_Textrue);
+}
+
+void MagicFBOTextrue::UnUse()
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
 bool MagicFBOTextrue::CreateDepthStencil(GLenum _type)
 {
 	//分配zbuffer给FBO 使用 
-	glBindFramebuffer(GL_RENDERBUFFER, m_Textrue);
-
 	glGenRenderbuffers(1, &m_Depth_Stencil);
 	//绑定
 	glBindRenderbuffer(GL_RENDERBUFFER, m_Depth_Stencil);
@@ -491,30 +506,19 @@ bool MagicFBOTextrue::CreateDepthStencil(GLenum _type)
 		glRenderbufferStorage(GL_RENDERBUFFER, _type, width, height);
 
 	//绑定到当前的FBO对象上
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_Depth_Stencil);
+
 	if (_type == GL_DEPTH24_STENCIL8)
 		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_Depth_Stencil);
+	else
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_Depth_Stencil);
 	GLenum status = glCheckFramebufferStatus(GL_RENDERBUFFER);
 	if (status != GL_FRAMEBUFFER_COMPLETE)
 	{
 		fprintf(stderr, "FBO #2 Error!\n");
 		return false;
 	}
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	return true;
-}
-
-void MagicFBOTextrue::Use()
-{
-	glViewport(0, 0, width, height);
-	glBindFramebuffer(GL_FRAMEBUFFER, m_Textrue);
-}
-
-void MagicFBOTextrue::UnUse(const int& _w, const int& _h)
-{
-	glViewport(0, 0, _w, _h);
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void MagicFBOTextrue::Shutdown()

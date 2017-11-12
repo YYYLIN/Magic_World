@@ -33,7 +33,7 @@ namespace Magic
 			Draw_DoubleFace
 		};
 	private:
-		struct PICTRUE_VERTEX
+		struct PICTURE_VERTEX
 		{
 			glm::vec3 Position;
 			glm::vec2 UV;
@@ -59,15 +59,15 @@ namespace Magic
 			MESSAGE_STATE();
 		};
 
-		struct PICTRUE_DRAW
+		struct PICTURE_DRAW
 		{
-			glm::vec2 m_PitrueUV[4];
+			glm::vec2 PitureUV[4];
 			Magic_Fonts* pFonts;
 			MagicTexture* pNowTexture;
-			std::vector<PICTRUE_VERTEX> V_Vertex;
+			std::vector<PICTURE_VERTEX> V_Vertex;
 			std::vector<unsigned int> V_Index;
 
-			PICTRUE_DRAW();
+			PICTURE_DRAW();
 
 			void Clear();
 		};
@@ -125,7 +125,7 @@ namespace Magic
 			std::vector<LINEPATIERN_MESSAGE> V_LinePattern_Message;
 			std::vector<VBO_VERTEX> V_VBO_VERTEX;
 			std::vector<glm::mat4> V_CameraMatrix;
-			PICTRUE_DRAW Pictrue_Draw;
+			PICTURE_DRAW Picture_Draw;
 			LINE_DRAW Line_Draw;
 
 			DRAW_BOX();
@@ -148,295 +148,373 @@ namespace Magic
 		bool Initialize();
 
 		/*
-		功能:
+		功能:渲染顶点
 		参数:
-		返回值:
+		_drawMode = (LINES | POINTS | LINE_STRIP | LINE_LOOP | TRIANGLES | TRIANGLE_STRIP | TRIANGLE_FAN);
+		_VertexBuffer = 顶点缓存区
+		排列格式:
+		{
+			float x,y;
+			float r,g,b,a;
+		}
+		_StartPos = 开始位置
+		_DrawNumber = 渲染数量
+		返回值:空
 		*/
-		void DrawVertex(Pen_Normal::DRAW_MODE _drawMode, Magic::VERTEX_BUFFER* _VertexVuffer, unsigned int _StartPos, unsigned int _DrawNumber);
+		void DrawVertex(Pen_Normal::DRAW_MODE _drawMode, Magic::VERTEX_BUFFER* _VertexBuffer, unsigned int _StartPos, unsigned int _DrawNumber);
 
 		/*
-		功能:
+		功能:渲染顶点
 		参数:
-		返回值:
+		_drawMode = (LINES | POINTS | LINE_STRIP | LINE_LOOP | TRIANGLES | TRIANGLE_STRIP | TRIANGLE_FAN);
+		_pPos = 指向起始位置的指针 (struct float x, y;)
+		_pColor = 每个点的颜色指针
+		_number = 点的数量
+		返回值:空
 		*/
 		void DrawVertex(Pen_Normal::DRAW_MODE _drawMode, const float* _pPos, const Magic::Color4* _pColor, unsigned int _Number);
 
 		/*
-		功能:
+		功能:渲染顶点
 		参数:
-		返回值:
+		_drawMode = (LINES | POINTS | LINE_STRIP | LINE_LOOP | TRIANGLES | TRIANGLE_STRIP | TRIANGLE_FAN);
+		_pPos = 指向起始位置的指针 (struct float x, y;)
+		_number = 位置点的数量
+		返回值:空
 		*/
 		void DrawVertex(Pen_Normal::DRAW_MODE _drawMode, const float* _pPos, unsigned int _Number);
 
 		/*
-		功能:
+		功能:渲染直线
 		参数:
-		返回值:
+		_x1 = 第一个点x
+		_y1 = 第一个点y
+		_x2 = 第二个点x
+		_y2 = 第二个点y
+		返回值:空
 		*/
 		void DrawLine(float _x1, float _y1, float _x2, float _y2);
 
 		/*
-		功能:
+		功能:以左下角为原点渲染图片
 		参数:
-		返回值:
+		_x = 左下角x
+		_y = 左下角y
+		_w = 宽度
+		_h = 高度
+		返回值:空
 		*/
 		void DrawPicture(float _x, float _y, float _w, float _h);
 
 		/*
-		功能:
+		功能:渲染文字
 		参数:
+		_x = 左下角x
+		_y = 左下角y
+		_text = 文本
+		_ArrayState = 排列模式 CHARATER_LEFT_ARRAY | CHARATER_RIGHT_ARRAY | CHARATER_MIDDLE_ARRAY
 		返回值:
+		字体的结尾位置
 		*/
-		void DrawTEXT(float _x, float _y, const char* _text, unsigned char _ArrayState = CHARATER_LEFT_ARRAY);
+		int DrawTEXT(float _x, float _y, const char* _text, unsigned char _ArrayState = CHARATER_LEFT_ARRAY);
 
 		/*
-		功能:
+		功能:以左下角为原点渲染矩形
 		参数:
+		_drawMode = POINTS | LINE_LOOP | LINES_STRIP | TRIANGLES
+		_x = 左下角x
+		_y = 左下角y
+		_w = 宽度
+		_h = 高度
 		返回值:
 		*/
 		void DrawRectangle(Pen_Normal::DRAW_MODE  _drawMode, float _x, float _y, float _w, float _h);
 
 		/*
-		功能:
+		功能:绑定字体
 		参数:
-		返回值:
+		_pFonts = 字体
+		返回值:空
 		*/
 		void BindFonts(Magic_Fonts* _pFonts);
 
 		/*
-		功能:
+		功能:绑定图片
 		参数:
-		返回值:
+		_pTextrue = 纹理指针
+		返回值:空
 		*/
 		void BindPicture(MagicTexture* _pTexture);
 
 		/*
-		功能:
+		功能:绑定图片的UV坐标截取部分区域
 		参数:
-		返回值:
+		_TictureWH = 图片宽高
+		_x = 左下角x
+		_y = 左下角y
+		_w = 要截取的宽
+		_h = 要截取的高
+		返回值:空
 		*/
 		void BindPictureUVPos(glm::vec2 _TictureWH, float _x, float _y, float _w, float _h);
 
 		/*
-		功能:
+		功能:绑定图片的UV坐标
 		参数:
-		返回值:
+		_Left = 左边的值
+		_Right = 右边的值
+		_Up = 上边的值
+		_Down = 下边的值
+		返回值:空
 		*/
 		void BindPictureUVPos(float _Left, float _Right, float _Up, float _Down);
 
 		/*
-		功能:
-		参数:
-		返回值:
+		功能:绑定图片的UV坐标为默认
+		参数:空
+		返回值:空
 		*/
 		void BindPictureUVPosfault();
 
 		/*
-		功能:
+		功能:设置一种颜色
 		参数:
-		返回值:
+		_color = 颜色
+		返回值:空
 		*/
 		void SetColor(const Magic::Color4& _color);
 
 		/*
-		功能:
+		功能:设置渲染宽高(此函数在RenderStart开始后必须设置一次)
 		参数:
+		_w = 宽
+		_h = 高
 		返回值:
 		*/
 		void SetDrawWH(float _w, float _h);
 
 		/*
-		功能:
-		参数:
-		返回值:
+		功能:启动屏蔽区域
+		(绘制的时候只绘制到指定区域)
+		参数:空
+		返回值:空
 		*/
 		void EnableScissor();
 
 		/*
-		功能:
+		功能:设置绘制区域
+		此函数会受到上一次的CameraMatrix影响
 		参数:
+		_x = 左下角x
+		_y = 左下角y
+		_width = 宽度
+		_height = 高度
 		返回值:
 		*/
-		void SetScissor(int _x, int _y, int _w, float _h, int _fboHeight);
+		void SetScissor(int _x, int _y, int _w, float _h);
 
 		/*
-		功能:
-		参数:
-		返回值:
+		功能:关闭屏蔽区域
+		参数:空
+		返回值:空
 		*/
 		void DisableScissor();
 
 		/*
-		功能:
+		功能:设置渲染点的大小(默认为1.0f)
 		参数:
-		返回值:
+		_size = 大小
+		返回值:空
 		*/
 		void SetPointSize(float _size);
 
 		/*
-		功能:
-		参数:
-		返回值:
+		功能:开启点渲染平滑
+		(注意启动此功能需要启动Alpha通道才有效)
+		参数:空
+		返回值:空
 		*/
 		void EnablePointSMOOTH();
 
 		/*
-		功能:
-		参数:
-		返回值:
+		功能:关闭点渲染平滑
+		参数:空
+		返回值:空
 		*/
 		void DisablePointSMOOTH();
 
 		/*
-		功能:
+		功能:设置线宽(默认为1.0f)
 		参数:
-		返回值:
+		_width = 宽度
+		返回值:空
 		*/
 		void SetLineWidth(float _width);
 
 		/*
-		功能:
-		参数:
-		返回值:
+		功能:启动线段类型
+		参数:空
+		返回值:空
 		*/
 		void EnableLinePattern();
 
 		/*
-		功能:
+		功能:设置线段类型
 		参数:
-		返回值:
+		factor = 重复次数(00111 如果等于1 就先画3个点不画2个.如果等于2 就先画6个再不画4个)
+		pattern = 每一位对应一个像素true为显示
+		返回值:空
 		*/
 		void SetLinePattern(int _factor, unsigned short _pattern);
 
 		/*
-		功能:
-		参数:
-		返回值:
+		功能:关闭线段类型
+		参数:空
+		返回值:空
 		*/
 		void DisableLinePattern();
 
 		/*
-		功能:
-		参数:
-		返回值:
+		功能:启动透明通道
+		参数:空
+		返回值:空
 		*/
 		void EnableAlpha();
 
 		/*
-		功能:
-		参数:
-		返回值:
+		功能:关闭透明通道
+		参数:空
+		返回值:空
 		*/
 		void DisableAlpha();
 
 		/*
-		功能:
-		参数:
-		返回值:
+		功能:启动三角面平滑
+		(注意启动此功能需要启动Alpha通道才有效)
+		警告:在绘制文字和图片时请关闭此功能
+		参数:空
+		返回值:空
 		*/
 		void EnablePolygonSMOOTH();
 
 		/*
-		功能:
-		参数:
-		返回值:
+		功能:关闭三角面平滑
+		参数:空
+		返回值:空
 		*/
 		void DisablePolygonSMOOTH();
 
 		/*
-		功能:
-		参数:
-		返回值:
+		功能:启动线平滑
+		(注意启动此功能需要启动Alpha通道才有效)
+		参数:空
+		返回值:空
 		*/
 		void EnableLineSMOOTH();
 
 		/*
-		功能:
-		参数:
-		返回值:
+		功能:关闭线平滑
+		参数:空
+		返回值:空
 		*/
 		void DisableLineSMOOTH();
 
 		/*
-		功能:
+		功能:设置相机坐标
+		(警告此功能会影响全局坐标请谨慎调用)
 		参数:
+		_matrix = 相机坐标矩阵
 		返回值:
 		*/
 		void SetCameraMatrix(const glm::mat4& _matrix);
 
 		/*
-		功能:
+		功能:设置世界坐标
+		(警告此功能会影响全局坐标请谨慎调用)
 		参数:
+		_matrix = 世界坐标矩阵
 		返回值:
 		*/
 		void SetWorldMatrix(const glm::mat4& _matrix);
 
 		/*
-		功能:
-		参数:
-		返回值:
+		功能:重置世界坐标
+		(警告此功能会影响全局坐标请谨慎调用)
+		参数:空
+		返回值:空
 		*/
 		void ResetWorldMatrix();
 
 		/*
-		功能:
+		功能:设置渲染面的模式
+		(该函数会在RenderEnd后对全局渲染进行影响)
 		参数:
-		返回值:
+		_mode = No_Draw_Face 错误值 | Draw_FrontFace 渲染正面 | Draw_BackFace 渲染背面 | Draw_DoubleFace 渲染双面
+		返回值:空
 		*/
 		void SetDrawFaceMode(Magic::Pen_Normal::DRAW_FACE_MODE _mode);
 
 		/*
-		功能:
-		参数:
-		返回值:
+		功能:开始渲染
+		(此函数和RenderEnd是对应的一对)
+		注意:可以使用RenderStart两次后再使用两次RenderEnd
+		参数:空
+		返回值:空
 		*/
 		virtual void RenderStart();
 
 		/*
-		功能:
-		参数:
-		返回值:
+		功能:结束渲染
+		(此函数和RenderStart是对应一对)
+		注意:可以使用RenderStart两次后再使用两次RenderEnd
+		参数:空
+		返回值:空
 		*/
 		virtual void RenderEnd();
 
 		/*
-		功能:
+		功能:设置渲染RenderStart到RenderEnd的区域
+		警告请谨慎使用此函数
+		此函数会对整个渲染队列造成影响
 		参数:
-		返回值:
+		_pos = 区域值
+		返回值:空
 		*/
 		void SetNowRenderArea(int _pos);
 
 		/*
-		功能:
-		参数:
+		功能:获取渲染RenderStart到RenderEnd的区域
+		参数:空
 		返回值:
+		int = 区域
 		*/
 		inline int GetNowRenderArea() { return m_NowDraw_Box; }
 
 		/*
-		功能:
-		参数:
+		功能:获取当前颜色
+		参数:空
 		返回值:
+		const Magic::Color4& = 颜色值
 		*/
 		inline const Magic::Color4& GetNowColor() { return pNowDRAW_BOX->NowColor; }
 
 		/*
-		功能:
-		参数:
+		功能:获取当前字体
+		参数:空
 		返回值:
+		Magic_Fonts* = 字体
 		*/
-		inline Magic_Fonts* GetNowFonts() { return pNowDRAW_BOX->Pictrue_Draw.pFonts; }
+		inline Magic_Fonts* GetNowFonts() { return pNowDRAW_BOX->Picture_Draw.pFonts; }
+	private:
+		void AddMessage();
+		void AddShaderMessage(unsigned int _shader, bool _add = false);
 
-		/*
-		功能:
-		参数:
-		返回值:
-		*/
-		unsigned int GetDrawMessageNumber() { return m_DrawMessageNumber; }
+		void ResetMessage();
+
 	private:
 		int m_Draw_Box_Number;
-		Magic::VERTEX_BUFFER m_Pitrue_VBO;
-		MagicShader m_PitrueShader;
+		Magic::VERTEX_BUFFER m_Picture_VBO;
+		MagicShader m_PictureShader;
 		unsigned int m_Picture2D_projectrionMatrix;
 		unsigned int m_Picture2D_CameraMatrix;
 
