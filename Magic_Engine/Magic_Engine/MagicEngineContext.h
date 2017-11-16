@@ -65,7 +65,7 @@ public:
 	virtual void ResetDrawRECT(float _x, float _y, float _w, float _h);
 
 protected:
-	virtual bool Initialize(glm::vec4 _PosSize);
+	virtual bool OnInitialize() { return true; }
 	virtual void OnUpdata();
 	virtual	void Render(glm::vec2 _DrawPos);
 	virtual void RenderStart();

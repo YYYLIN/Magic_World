@@ -51,6 +51,10 @@ bool MagicWindows::Initialize()
 		return false;
 	m_MagicEngineContext.AddCommon(&m_MagicWorld);
 
+	result = m_MagicScene.Initialize(&m_MagicEngineContext, glm::vec4(0, 0, 1024, 768));
+	if (!result)
+		return false;
+
 	/*
 		result = m_MagicSceneCircle.MagicScene::Initialize(glm::vec4(0, 0, 1024, 768), &m_MagicEngineContext);
 		if (!result)

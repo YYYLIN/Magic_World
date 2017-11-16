@@ -17,8 +17,11 @@ MagicScene::~MagicScene()
 bool MagicScene::Initialize(MagicScene* _scene, glm::vec4 _PosSize)
 {
 	pParentScene = _scene;
-	pParentScene->AddCommon(this);
-	return this->Initialize(_PosSize);
+	if (pParentScene)
+		pParentScene->AddCommon(this);
+	this->ResetDrawRECT(_PosSize.x, _PosSize.y, _PosSize.z, _PosSize.w);
+	DisplayState = true;
+	return this->OnInitialize();
 }
 
 void MagicScene::SetDisplayState(bool _state)
@@ -57,14 +60,6 @@ void MagicScene::ResetDrawRECT(float _x, float _y, float _w, float _h)
 	m_PosSize.y = _y;
 	m_PosSize.z = _w;
 	m_PosSize.w = _h;
-}
-
-bool MagicScene::Initialize(glm::vec4 _PosSize)
-{
-	this->ResetDrawRECT(_PosSize.x, _PosSize.y, _PosSize.z, _PosSize.w);
-	DisplayState = true;
-
-	return true;
 }
 
 void MagicScene::OnUpdata()
@@ -184,7 +179,7 @@ bool MagicEngineContext::Initialize(HWND _hwnd, float _x, float _y, float _w, fl
 	if (!m_hRC)
 		return false;
 
-	result = MagicScene::Initialize(glm::vec4(_x, _y, _w, _h));
+	result = MagicScene::Initialize(0, glm::vec4(_x, _y, _w, _h));
 	if (!result)
 		return false;
 

@@ -22,7 +22,7 @@ public:
 	inline virtual GLuint GetFBOTextrue() { return m_FBOBuffer.GetFBOTextrue(); }
 	inline virtual GLuint GetTextrue() { return m_FBOBuffer.GetTextrue(); }
 protected:
-	virtual bool Initialize(glm::vec4 _PosSize);
+	virtual bool Initialize(MagicScene* _scene, glm::vec4 _PosSize);
 	virtual void Render(glm::vec2 _DrawPos);
 	virtual void RenderBuffer();
 

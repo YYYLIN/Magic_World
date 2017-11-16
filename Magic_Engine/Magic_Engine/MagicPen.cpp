@@ -263,9 +263,9 @@ namespace Magic
 		m_Picture_VBO.SetBuffer(0, Magic::VERTEX_BUFFER::DYNAMIC_DRAW, 3, _Array_Size);
 		m_Picture_VBO.SetIndexBuffer(1);
 
-		m_Picture_VBO.CreateBuffer(1);
+		m_Line_VBO.CreateBuffer(1);
 		unsigned int _Line_Array_Size[] = { 2,4 };
-		m_Picture_VBO.SetBuffer(2, Magic::VERTEX_BUFFER::DYNAMIC_DRAW, 2, _Line_Array_Size);
+		m_Line_VBO.SetBuffer(0, Magic::VERTEX_BUFFER::DYNAMIC_DRAW, 2, _Line_Array_Size);
 
 		return true;
 	}
@@ -1034,9 +1034,9 @@ namespace Magic
 					switch (_Now_Draw_Type)
 					{
 					case DRAW_TYPE_PICTURE_TEXT:
-						if (_Now_Draw_Type != SHADER_PICTURE)
+						if (_Now_Shader != SHADER_PICTURE)
 						{
-							_Now_Draw_Type = SHADER_PICTURE;
+							_Now_Shader = SHADER_PICTURE;
 							m_PictureShader.Use();
 						}
 						break;
@@ -1047,9 +1047,9 @@ namespace Magic
 					case DRAW_TYPE_TRIANGLES:
 					case DRAW_TYPE_TRIANGLE_STRIP:
 					case DRAW_TYPE_TRIANGLE_FAN:
-						if (_Now_Draw_Type != SHADER_PURE_COLOR)
+						if (_Now_Shader != SHADER_PURE_COLOR)
 						{
-							_Now_Draw_Type = SHADER_PURE_COLOR;
+							_Now_Shader = SHADER_PURE_COLOR;
 							m_LineShader.Use();
 						}
 						break;

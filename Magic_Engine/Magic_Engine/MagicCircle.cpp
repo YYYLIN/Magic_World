@@ -11,19 +11,15 @@ MagicSceneCircle::~MagicSceneCircle()
 {
 }
 
-bool MagicSceneCircle::Initialize(glm::vec4 _PosSize)
+bool MagicSceneCircle::OnInitialize()
 {
 	bool result;
-
-	result = MagicSceneEx::Initialize(_PosSize);
-	if (!result)
-		return false;
 
 	result = m_MagicTextrue.Initialize("resources/pictrue/Ä§·¨Õó£ºöÎ_8.png", LOAD_PNG);
 	if (!result)
 		return false;
 
-	int w = _PosSize.z, h = _PosSize.w;
+	int w = m_PosSize.z, h = m_PosSize.w;
 	result = m_FEPBuffer.Initialize(w, h, MagicFBOTextrue::COLOR4);
 	if (!result)
 		return false;

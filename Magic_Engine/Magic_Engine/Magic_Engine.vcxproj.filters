@@ -80,6 +80,9 @@
     <ClCompile Include="Magic_Fonts.cpp">
       <Filter>MagicEngine</Filter>
     </ClCompile>
+    <ClCompile Include="MainScene.cpp">
+      <Filter>MagicWindows</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MagicWindows.h">
@@ -132,6 +135,9 @@
     </ClInclude>
     <ClInclude Include="Magic_Fonts.h">
       <Filter>MagicEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="MainScene.h">
+      <Filter>MagicWindows</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -39,10 +39,10 @@ glm::vec2 MagicSceneEx::GetFrameBufferSize()
 	return glm::vec2(m_FBOBuffer.GetWidth(), m_FBOBuffer.GetHeight());
 }
 
-bool MagicSceneEx::Initialize(glm::vec4 _PosSize)
+bool MagicSceneEx::Initialize(MagicScene* _scene, glm::vec4 _PosSize)
 {
 	bool result;
-	result = MagicScene::Initialize(_PosSize);
+	result = MagicScene::Initialize(_scene, _PosSize);
 	if (!result)
 		return false;
 

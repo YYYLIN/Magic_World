@@ -119,7 +119,7 @@ namespace Magic
 				_usage = GL_STATIC_DRAW;
 				break;
 			case STREAM_DRAW:
-				_usage = GL_STATIC_DRAW;
+				_usage = GL_STREAM_DRAW;
 				break;
 			}
 			glBufferData(_Type, _size, _data, _usage);

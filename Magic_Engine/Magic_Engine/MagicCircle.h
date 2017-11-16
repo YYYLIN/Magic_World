@@ -8,7 +8,7 @@ public:
 	~MagicSceneCircle();
 
 protected:
-	bool Initialize(glm::vec4 _PosSize);
+	bool OnInitialize();
 	void Updata();
 	void RenderReset(glm::mat4& CameraMatrix);
 

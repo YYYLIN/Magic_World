@@ -15,6 +15,7 @@
 #include "SpecialEffectsPanel.h"
 #include "MagicGratingAPI.h"
 #include "MagicWorld.h"
+#include "MainScene.h"
 
 #pragma comment(lib,"MagicGrating.lib")
 
@@ -43,6 +44,7 @@ private:
 	MagicEngineContext m_MagicEngineContext;
 	//	MagicSceneCircle m_MagicSceneCircle;
 	MagicWorld m_MagicWorld;
+	MainScene m_MagicScene;
 	SpecialEffectsPanel m_SpecialEffectsPanel;
 
 	/*
