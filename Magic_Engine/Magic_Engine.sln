@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Magic_Engine", "Magic_Engine\Magic_Engine.vcxproj", "{E724C4D6-2A2C-4742-99B5-9E021FEF6392}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -9,6 +9,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Magic_Engine", "Magic_Engin
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MagicGrating", "MagicGrating\MagicGrating.vcxproj", "{77087E63-1BA7-46AA-BE00-2C360638DDA8}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MagicUI", "MagicUI\MagicUI.vcxproj", "{9FE5B8B8-CA4F-4728-955C-9B0A69A0106E}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WaterMagic", "WaterMagic\WaterMagic.vcxproj", "{E95539CB-0DFD-4D20-AB2F-326135CC03D5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,6 +38,22 @@ Global
 		{77087E63-1BA7-46AA-BE00-2C360638DDA8}.Release|x64.Build.0 = Release|x64
 		{77087E63-1BA7-46AA-BE00-2C360638DDA8}.Release|x86.ActiveCfg = Release|Win32
 		{77087E63-1BA7-46AA-BE00-2C360638DDA8}.Release|x86.Build.0 = Release|Win32
+		{9FE5B8B8-CA4F-4728-955C-9B0A69A0106E}.Debug|x64.ActiveCfg = Debug|x64
+		{9FE5B8B8-CA4F-4728-955C-9B0A69A0106E}.Debug|x64.Build.0 = Debug|x64
+		{9FE5B8B8-CA4F-4728-955C-9B0A69A0106E}.Debug|x86.ActiveCfg = Debug|Win32
+		{9FE5B8B8-CA4F-4728-955C-9B0A69A0106E}.Debug|x86.Build.0 = Debug|Win32
+		{9FE5B8B8-CA4F-4728-955C-9B0A69A0106E}.Release|x64.ActiveCfg = Release|x64
+		{9FE5B8B8-CA4F-4728-955C-9B0A69A0106E}.Release|x64.Build.0 = Release|x64
+		{9FE5B8B8-CA4F-4728-955C-9B0A69A0106E}.Release|x86.ActiveCfg = Release|Win32
+		{9FE5B8B8-CA4F-4728-955C-9B0A69A0106E}.Release|x86.Build.0 = Release|Win32
+		{E95539CB-0DFD-4D20-AB2F-326135CC03D5}.Debug|x64.ActiveCfg = Debug|x64
+		{E95539CB-0DFD-4D20-AB2F-326135CC03D5}.Debug|x64.Build.0 = Debug|x64
+		{E95539CB-0DFD-4D20-AB2F-326135CC03D5}.Debug|x86.ActiveCfg = Debug|Win32
+		{E95539CB-0DFD-4D20-AB2F-326135CC03D5}.Debug|x86.Build.0 = Debug|Win32
+		{E95539CB-0DFD-4D20-AB2F-326135CC03D5}.Release|x64.ActiveCfg = Release|x64
+		{E95539CB-0DFD-4D20-AB2F-326135CC03D5}.Release|x64.Build.0 = Release|x64
+		{E95539CB-0DFD-4D20-AB2F-326135CC03D5}.Release|x86.ActiveCfg = Release|Win32
+		{E95539CB-0DFD-4D20-AB2F-326135CC03D5}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

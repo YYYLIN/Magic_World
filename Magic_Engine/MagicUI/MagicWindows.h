@@ -9,15 +9,12 @@
 
 //头文件声明:
 #include "windows.h"
-#include "MagicUIElemeent.h"
-#include "MagicCircle.h"
-#include "MagicAlphaWindow.h"
-#include "SpecialEffectsPanel.h"
-#include "MagicGratingAPI.h"
-#include "MagicWorld.h"
-#include "MainScene.h"
+/*#include "MagicAlphaWindow.h"*/
+/*#include "MagicGratingAPI.h"*/
+#include "MagicEngineContext.h"
+#include "MagicUIMacro.h"
 
-#pragma comment(lib,"MagicGrating.lib")
+/*#pragma comment(lib,"MagicGrating.lib")*/
 
 class MagicWindows
 {
@@ -29,23 +26,20 @@ public:
 	MagicWindows();
 	~MagicWindows();
 
-	bool Initialize();
+	bool Initialize(const char* _name, int _x, int _y, int _w, int _h);
 
 	LRESULT CALLBACK MessageHandler(HWND, UINT, WPARAM, LPARAM);  //消息处理函数
 
 	void Run();
 
 private:
-	bool CreateWindows(wchar_t* _Name, int _width, int _height);
+	bool CreateWindows(const char* _Name, int _x, int _y, int _width, int _height);
 	void Shutdown();
 
 private:
 	int m_ResultMessage;
 	MagicEngineContext m_MagicEngineContext;
 	//	MagicSceneCircle m_MagicSceneCircle;
-	MagicWorld m_MagicWorld;
-	MainScene m_MagicScene;
-	SpecialEffectsPanel m_SpecialEffectsPanel;
 
 	/*
 		MGContext m_MGContext;
@@ -57,8 +51,8 @@ private:
 		unsigned int m_Shaderprojection;
 		unsigned int m_Shaderworld;*/
 
-	SGDI m_SGDI;
-	wchar_t m_applicationName[256];
+		/*	SGDI m_SGDI;*/
+	char m_applicationName[256];
 	HINSTANCE m_hinstance;
 	HWND m_hwnd;
 };

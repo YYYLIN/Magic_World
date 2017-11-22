@@ -17,7 +17,7 @@ public:
 
 	void AddModelObject(MagicModelObject* _pMagicModelObject);
 protected:
-	virtual void Updata();
+	virtual void OnUpdata();
 	virtual	void Render(glm::vec2 _DrawPos);
 
 	void RenderLightModel(MagicShader* _pShader, MagicModelObject* _pMagicModelObject);

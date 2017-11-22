@@ -14,7 +14,6 @@
 
 extern const glm::mat4 CONST_CAMERA;
 
-
 class MagicScene;
 class MagicEngineContext;
 
@@ -26,10 +25,10 @@ public:
 	MagicCommon() = default;
 	virtual ~MagicCommon()
 	{}
-	virtual void OnUpdata() { this->Updata(); }
+	virtual void Updata() { this->OnUpdata(); }
 	virtual void Render(glm::vec2 _DrawPos) { this->Draw(); }
 protected:
-	inline virtual void Updata() {}
+	inline virtual void OnUpdata() {}
 	virtual	void Draw() {};
 };
 
@@ -66,7 +65,7 @@ public:
 
 protected:
 	virtual bool OnInitialize() { return true; }
-	virtual void OnUpdata();
+	virtual void Updata();
 	virtual	void Render(glm::vec2 _DrawPos);
 	virtual void RenderStart();
 	virtual void RenderEnd();
@@ -79,6 +78,33 @@ protected:
 	MagicScene* pParentScene;
 
 	std::vector<MagicCommon*> v_Common;
+};
+
+
+class MagicSceneEx :public MagicScene
+{
+public:
+	MagicSceneEx();
+
+	virtual void DrawSpirit();
+	virtual void SetDisplayState(bool);
+
+	virtual glm::vec2 GetFrameBufferSize();
+
+	inline virtual GLuint GetFBOTextrue() { return m_FBOBuffer.GetFBOTextrue(); }
+	inline virtual GLuint GetTextrue() { return m_FBOBuffer.GetTextrue(); }
+protected:
+	virtual bool Initialize(MagicScene* _scene, glm::vec4 _PosSize);
+	virtual void Render(glm::vec2 _DrawPos);
+	virtual void RenderBuffer();
+
+	virtual void RenderStart();
+	virtual void RenderEnd();
+
+protected:
+	bool m_DrawMessage;
+
+	MagicFBOTextrue m_FBOBuffer;
 };
 
 HGLRC CreateRCContxt(HDC _hdc);
@@ -127,7 +153,7 @@ public:
 	float GetDiffTime() { return diffTime; }
 
 protected:
-	void Updata();
+	void OnUpdata();
 
 private:
 	void SetFPS();

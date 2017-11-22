@@ -120,7 +120,7 @@ void MagicWorld::AddModelObject(MagicModelObject* _pMagicModelObject)
 	G_MagicModelObject.push_back(_pMagicModelObject);
 }
 
-void MagicWorld::Updata()
+void MagicWorld::OnUpdata()
 {
 }
 

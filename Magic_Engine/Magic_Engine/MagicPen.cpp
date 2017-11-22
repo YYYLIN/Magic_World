@@ -498,13 +498,19 @@ namespace Magic
 		_Vertex.Position.x = _x;
 		_Vertex.Position.y = _y;
 		_pV_VERTEX->push_back(_Vertex);
+		_Vertex.Position.x = _x + _w;
+		_Vertex.Position.y = _y;
+		_pV_VERTEX->push_back(_Vertex);
+		_Vertex.Position.x = _x + _w;
+		_Vertex.Position.y = _y + _h;
+		_pV_VERTEX->push_back(_Vertex);
+		_Vertex.Position.x = _x + _w;
+		_Vertex.Position.y = _y + _h;
+		_pV_VERTEX->push_back(_Vertex);
 		_Vertex.Position.x = _x;
 		_Vertex.Position.y = _y + _h;
 		_pV_VERTEX->push_back(_Vertex);
-		_Vertex.Position.x = _x + _w;
-		_Vertex.Position.y = _y + _h;
-		_pV_VERTEX->push_back(_Vertex);
-		_Vertex.Position.x = _x + _w;
+		_Vertex.Position.x = _x;
 		_Vertex.Position.y = _y;
 		_pV_VERTEX->push_back(_Vertex);
 
