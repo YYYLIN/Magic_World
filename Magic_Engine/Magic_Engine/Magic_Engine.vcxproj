@@ -164,19 +164,23 @@
     <ClCompile Include="Magic_Fonts.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MagicAlphaWindow.h" />
+    <ClInclude Include="Include\MagicAlphaWindow.h" />
+    <ClInclude Include="Include\MagicCamera.h" />
+    <ClInclude Include="Include\MagicEngineContext.h" />
+    <ClInclude Include="Include\MagicMath.h" />
+    <ClInclude Include="Include\MagicMessage.h" />
+    <ClInclude Include="Include\MagicModelObject.h" />
+    <ClInclude Include="Include\MagicPen.h" />
+    <ClInclude Include="Include\MagicShader.h" />
+    <ClInclude Include="Include\MagicTexture.h" />
+    <ClInclude Include="Include\MagicVertex.h" />
+    <ClInclude Include="Include\MagicWorld.h" />
+    <ClInclude Include="Include\Magic_Fonts.h" />
+    <ClInclude Include="Include\Magic_Macro.h" />
     <ClInclude Include="MagicMessage.h" />
     <ClInclude Include="MagicModelObject.h" />
     <ClInclude Include="MagicWorld.h" />
-    <ClInclude Include="Magic_Fonts.h" />
-    <ClInclude Include="Magic_Macro.h" />
-    <ClInclude Include="MagicCamera.h" />
-    <ClInclude Include="MagicEngineContext.h" />
-    <ClInclude Include="MagicMath.h" />
-    <ClInclude Include="MagicPen.h" />
     <ClInclude Include="MagicShader.h" />
-    <ClInclude Include="MagicTexture.h" />
-    <ClInclude Include="MagicVertex.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\Picture2D.fragshader" />

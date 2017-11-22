@@ -19,7 +19,7 @@
     <Filter Include="API">
       <UniqueIdentifier>{f9affa1d-1873-4462-89c2-6121b72a72dd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MagicWindows\Include">
+    <Filter Include="API\Include">
       <UniqueIdentifier>{427f1f9e-db5e-4d10-9598-0c839d135df0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -28,7 +28,7 @@
       <Filter>MagicWindows</Filter>
     </ClCompile>
     <ClCompile Include="MagicUIAPI.cpp">
-      <Filter>MagicWindows</Filter>
+      <Filter>API</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -36,10 +36,10 @@
       <Filter>MagicWindows</Filter>
     </ClInclude>
     <ClInclude Include="Include\MagicUIAPI.h">
-      <Filter>MagicWindows\Include</Filter>
+      <Filter>API\Include</Filter>
     </ClInclude>
     <ClInclude Include="Include\MagicUIMacro.h">
-      <Filter>MagicWindows\Include</Filter>
+      <Filter>API\Include</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

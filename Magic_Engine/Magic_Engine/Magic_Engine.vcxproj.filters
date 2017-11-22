@@ -60,30 +60,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MagicEngineContext.h">
-      <Filter>MagicEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="MagicTexture.h">
-      <Filter>MagicEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="MagicPen.h">
-      <Filter>MagicEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="MagicMath.h">
-      <Filter>MagicEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="MagicCamera.h">
-      <Filter>MagicEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="Magic_Macro.h">
-      <Filter>MagicEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="MagicAlphaWindow.h">
-      <Filter>MagicEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="MagicVertex.h">
-      <Filter>MagicEngine</Filter>
-    </ClInclude>
     <ClInclude Include="MagicModelObject.h">
       <Filter>MagicEngine\Object</Filter>
     </ClInclude>
@@ -96,7 +72,43 @@
     <ClInclude Include="MagicShader.h">
       <Filter>MagicEngine\Shader</Filter>
     </ClInclude>
-    <ClInclude Include="Magic_Fonts.h">
+    <ClInclude Include="Include\Magic_Fonts.h">
+      <Filter>MagicEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Magic_Macro.h">
+      <Filter>MagicEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MagicAlphaWindow.h">
+      <Filter>MagicEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MagicCamera.h">
+      <Filter>MagicEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MagicEngineContext.h">
+      <Filter>MagicEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MagicMath.h">
+      <Filter>MagicEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MagicMessage.h">
+      <Filter>MagicEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MagicModelObject.h">
+      <Filter>MagicEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MagicPen.h">
+      <Filter>MagicEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MagicShader.h">
+      <Filter>MagicEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MagicTexture.h">
+      <Filter>MagicEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MagicVertex.h">
+      <Filter>MagicEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MagicWorld.h">
       <Filter>MagicEngine</Filter>
     </ClInclude>
   </ItemGroup>
