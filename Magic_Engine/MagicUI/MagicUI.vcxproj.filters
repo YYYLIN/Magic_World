@@ -30,6 +30,18 @@
     <ClCompile Include="MagicUIAPI.cpp">
       <Filter>API</Filter>
     </ClCompile>
+    <ClCompile Include="UserScene.cpp">
+      <Filter>MagicWindows</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugScene.cpp">
+      <Filter>MagicWindows</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuScene.cpp">
+      <Filter>MagicWindows</Filter>
+    </ClCompile>
+    <ClCompile Include="ToolScene.cpp">
+      <Filter>MagicWindows</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MagicWindows.h">
@@ -40,6 +52,18 @@
     </ClInclude>
     <ClInclude Include="Include\MagicUIMacro.h">
       <Filter>API\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="UserScene.h">
+      <Filter>MagicWindows</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugScene.h">
+      <Filter>MagicWindows</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuScene.h">
+      <Filter>MagicWindows</Filter>
+    </ClInclude>
+    <ClInclude Include="ToolScene.h">
+      <Filter>MagicWindows</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
