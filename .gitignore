@@ -16,6 +16,7 @@
 *.enc
 *.suo
 *.opensdf
+clear.bat
 [Debug]
 [Release]
 
