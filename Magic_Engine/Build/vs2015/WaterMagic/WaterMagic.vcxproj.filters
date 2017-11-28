@@ -13,18 +13,18 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Windows">
-      <UniqueIdentifier>{e7178038-f563-4153-9498-faaf93332b36}</UniqueIdentifier>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{65088778-82b8-41a4-a718-10f475a66421}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="MainScene.cpp">
-      <Filter>Windows</Filter>
+    <ClCompile Include="..\..\..\Core\WaterMagic\MainScene.cpp">
+      <Filter>Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MainScene.h">
-      <Filter>Windows</Filter>
+    <ClInclude Include="..\..\..\Core\WaterMagic\MainScene.h">
+      <Filter>Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

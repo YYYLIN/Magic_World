@@ -9,43 +9,21 @@
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Debug|x64">
-      <Configuration>Debug</Configuration>
-      <Platform>x64</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="Release|x64">
-      <Configuration>Release</Configuration>
-      <Platform>x64</Platform>
-    </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{E724C4D6-2A2C-4742-99B5-9E021FEF6392}</ProjectGuid>
+    <ProjectGuid>{9DCBCC5A-7D10-4614-80E7-CFBEFC71C335}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Magic_Engine</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -54,32 +32,20 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
-  <ImportGroup Label="Shared">
-  </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LinkIncremental>true</LinkIncremental>
+    <OutDir>..\..\..\bin\Win32\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\..\..\bin\Win32\$(Configuration)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -87,28 +53,16 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;MAGIC_ENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>.\Include;..\Other Libraries\Structure;..\MagicGrating\MagicGrating;..\Other Libraries\freetype-2.6\include;..\Other Libraries\OpenGL-basis\H-files;..\Other Libraries\glew-1.9.0\include;..\Other Libraries\lpng1621;..\Other Libraries\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\Core\Magic_Engine\Include;..\..\..\Core\Magic_Engine\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>..\Debug;..\Other Libraries\lpng1621\projects\vstudio\Debug;..\Other Libraries\freetype-2.6\objs\vc2010\Win32;..\Other Libraries\glew-1.9.0\lib;..\Other Libraries\OpenGL-basis\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <ClCompile>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
-      <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <SDLCheck>true</SDLCheck>
-    </ClCompile>
-    <Link>
-      <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <OutputFile>..\..\..\lib\Win32\$(Configuration)\$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -119,74 +73,48 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;MAGIC_ENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>.\Include;..\Other Libraries\freetype-2.6\include;..\Other Libraries\OpenGL-basis\H-files;..\Other Libraries\glew-1.9.0\include;..\Other Libraries\lpng1621;..\Other Libraries\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\Core\Magic_Engine\Include;..\..\..\Core\Magic_Engine\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>..\Other Libraries\lpng1621\projects\vstudio\Release;..\Other Libraries\freetype-2.6\objs\vc2010\Win32;..\Other Libraries\glew-1.9.0\lib;..\Other Libraries\OpenGL-basis\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <Optimization>MaxSpeed</Optimization>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <SDLCheck>true</SDLCheck>
-    </ClCompile>
-    <Link>
-      <SubSystem>Windows</SubSystem>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <OutputFile>..\..\..\lib\Win32\$(Configuration)\$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="MagicAlphaWindow.cpp" />
-    <ClCompile Include="MagicCamera.cpp" />
-    <ClCompile Include="MagicEngineContext.cpp" />
-    <ClCompile Include="MagicMath.cpp" />
-    <ClCompile Include="MagicMessage.cpp" />
-    <ClCompile Include="MagicModelObject.cpp" />
-    <ClCompile Include="MagicPen.cpp" />
-    <ClCompile Include="MagicShader.cpp" />
-    <ClCompile Include="MagicTexture.cpp" />
-    <ClCompile Include="MagicVertex.cpp" />
-    <ClCompile Include="MagicWorld.cpp" />
-    <ClCompile Include="Magic_Fonts.cpp" />
+    <ClCompile Include="..\..\..\Core\Magic_Engine\MagicAlphaWindow.cpp" />
+    <ClCompile Include="..\..\..\Core\Magic_Engine\MagicCamera.cpp" />
+    <ClCompile Include="..\..\..\Core\Magic_Engine\MagicEngineContext.cpp" />
+    <ClCompile Include="..\..\..\Core\Magic_Engine\MagicMath.cpp" />
+    <ClCompile Include="..\..\..\Core\Magic_Engine\MagicMessage.cpp" />
+    <ClCompile Include="..\..\..\Core\Magic_Engine\MagicModelObject.cpp" />
+    <ClCompile Include="..\..\..\Core\Magic_Engine\MagicPen.cpp" />
+    <ClCompile Include="..\..\..\Core\Magic_Engine\MagicShader.cpp" />
+    <ClCompile Include="..\..\..\Core\Magic_Engine\MagicTexture.cpp" />
+    <ClCompile Include="..\..\..\Core\Magic_Engine\MagicVertex.cpp" />
+    <ClCompile Include="..\..\..\Core\Magic_Engine\MagicWorld.cpp" />
+    <ClCompile Include="..\..\..\Core\Magic_Engine\Magic_Fonts.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Include\MagicAlphaWindow.h" />
-    <ClInclude Include="Include\MagicCamera.h" />
-    <ClInclude Include="Include\MagicEngineContext.h" />
-    <ClInclude Include="Include\MagicMath.h" />
-    <ClInclude Include="Include\MagicMessage.h" />
-    <ClInclude Include="Include\MagicModelObject.h" />
-    <ClInclude Include="Include\MagicPen.h" />
-    <ClInclude Include="Include\MagicShader.h" />
-    <ClInclude Include="Include\MagicTexture.h" />
-    <ClInclude Include="Include\MagicVertex.h" />
-    <ClInclude Include="Include\MagicWorld.h" />
-    <ClInclude Include="Include\Magic_Fonts.h" />
-    <ClInclude Include="Include\Magic_Macro.h" />
-    <ClInclude Include="MagicMessage.h" />
-    <ClInclude Include="MagicModelObject.h" />
-    <ClInclude Include="MagicWorld.h" />
-    <ClInclude Include="MagicShader.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="shader\Picture2D.fragshader" />
-    <None Include="shader\Picture2D.vertshader" />
-    <None Include="shader\SelfLuminous.fragshader" />
-    <None Include="shader\SelfLuminous.vertshader" />
+    <ClInclude Include="..\..\..\Core\Magic_Engine\Include\MagicAlphaWindow.h" />
+    <ClInclude Include="..\..\..\Core\Magic_Engine\Include\MagicCamera.h" />
+    <ClInclude Include="..\..\..\Core\Magic_Engine\Include\MagicEngineContext.h" />
+    <ClInclude Include="..\..\..\Core\Magic_Engine\Include\MagicMath.h" />
+    <ClInclude Include="..\..\..\Core\Magic_Engine\Include\MagicMessage.h" />
+    <ClInclude Include="..\..\..\Core\Magic_Engine\Include\MagicModelObject.h" />
+    <ClInclude Include="..\..\..\Core\Magic_Engine\Include\MagicPen.h" />
+    <ClInclude Include="..\..\..\Core\Magic_Engine\Include\MagicShader.h" />
+    <ClInclude Include="..\..\..\Core\Magic_Engine\Include\MagicTexture.h" />
+    <ClInclude Include="..\..\..\Core\Magic_Engine\Include\MagicVertex.h" />
+    <ClInclude Include="..\..\..\Core\Magic_Engine\Include\MagicWorld.h" />
+    <ClInclude Include="..\..\..\Core\Magic_Engine\Include\Magic_Fonts.h" />
+    <ClInclude Include="..\..\..\Core\Magic_Engine\Include\Magic_Macro.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,129 +1,99 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
     <Filter Include="资源文件">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="MagicEngine">
-      <UniqueIdentifier>{09785b94-2300-4036-a284-2d1fca844701}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MagicEngine\Shader">
-      <UniqueIdentifier>{a4dfb46d-0883-4693-b066-29889c61d8b0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MagicEngine\Object">
-      <UniqueIdentifier>{bc11a9e0-28a0-4772-9d20-e2fbaecdafdd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MagicEngine\World">
-      <UniqueIdentifier>{6f949c48-9551-4431-b77d-27100fbf07d9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MagicEngine\Message">
-      <UniqueIdentifier>{966af791-a890-4202-aa63-ae202d0845de}</UniqueIdentifier>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{c142a943-6ca7-4be9-acd3-206e7da41cd3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="MagicEngineContext.cpp">
-      <Filter>MagicEngine</Filter>
+    <ClCompile Include="..\..\..\Core\Magic_Engine\Magic_Fonts.cpp">
+      <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="MagicTexture.cpp">
-      <Filter>MagicEngine</Filter>
+    <ClCompile Include="..\..\..\Core\Magic_Engine\MagicAlphaWindow.cpp">
+      <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="MagicPen.cpp">
-      <Filter>MagicEngine</Filter>
+    <ClCompile Include="..\..\..\Core\Magic_Engine\MagicCamera.cpp">
+      <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="MagicMath.cpp">
-      <Filter>MagicEngine</Filter>
+    <ClCompile Include="..\..\..\Core\Magic_Engine\MagicEngineContext.cpp">
+      <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="MagicCamera.cpp">
-      <Filter>MagicEngine</Filter>
+    <ClCompile Include="..\..\..\Core\Magic_Engine\MagicMath.cpp">
+      <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="MagicAlphaWindow.cpp">
-      <Filter>MagicEngine</Filter>
+    <ClCompile Include="..\..\..\Core\Magic_Engine\MagicMessage.cpp">
+      <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="MagicVertex.cpp">
-      <Filter>MagicEngine</Filter>
+    <ClCompile Include="..\..\..\Core\Magic_Engine\MagicModelObject.cpp">
+      <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="MagicModelObject.cpp">
-      <Filter>MagicEngine\Object</Filter>
+    <ClCompile Include="..\..\..\Core\Magic_Engine\MagicPen.cpp">
+      <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="MagicWorld.cpp">
-      <Filter>MagicEngine\World</Filter>
+    <ClCompile Include="..\..\..\Core\Magic_Engine\MagicShader.cpp">
+      <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="MagicMessage.cpp">
-      <Filter>MagicEngine\Message</Filter>
+    <ClCompile Include="..\..\..\Core\Magic_Engine\MagicTexture.cpp">
+      <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="MagicShader.cpp">
-      <Filter>MagicEngine\Shader</Filter>
+    <ClCompile Include="..\..\..\Core\Magic_Engine\MagicVertex.cpp">
+      <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="Magic_Fonts.cpp">
-      <Filter>MagicEngine</Filter>
+    <ClCompile Include="..\..\..\Core\Magic_Engine\MagicWorld.cpp">
+      <Filter>Engine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MagicModelObject.h">
-      <Filter>MagicEngine\Object</Filter>
+    <ClInclude Include="..\..\..\Core\Magic_Engine\Include\Magic_Fonts.h">
+      <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="MagicWorld.h">
-      <Filter>MagicEngine\World</Filter>
+    <ClInclude Include="..\..\..\Core\Magic_Engine\Include\Magic_Macro.h">
+      <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="MagicMessage.h">
-      <Filter>MagicEngine\Message</Filter>
+    <ClInclude Include="..\..\..\Core\Magic_Engine\Include\MagicAlphaWindow.h">
+      <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="MagicShader.h">
-      <Filter>MagicEngine\Shader</Filter>
+    <ClInclude Include="..\..\..\Core\Magic_Engine\Include\MagicCamera.h">
+      <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Magic_Fonts.h">
-      <Filter>MagicEngine</Filter>
+    <ClInclude Include="..\..\..\Core\Magic_Engine\Include\MagicEngineContext.h">
+      <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Magic_Macro.h">
-      <Filter>MagicEngine</Filter>
+    <ClInclude Include="..\..\..\Core\Magic_Engine\Include\MagicMath.h">
+      <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Include\MagicAlphaWindow.h">
-      <Filter>MagicEngine</Filter>
+    <ClInclude Include="..\..\..\Core\Magic_Engine\Include\MagicMessage.h">
+      <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Include\MagicCamera.h">
-      <Filter>MagicEngine</Filter>
+    <ClInclude Include="..\..\..\Core\Magic_Engine\Include\MagicModelObject.h">
+      <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Include\MagicEngineContext.h">
-      <Filter>MagicEngine</Filter>
+    <ClInclude Include="..\..\..\Core\Magic_Engine\Include\MagicPen.h">
+      <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Include\MagicMath.h">
-      <Filter>MagicEngine</Filter>
+    <ClInclude Include="..\..\..\Core\Magic_Engine\Include\MagicShader.h">
+      <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Include\MagicMessage.h">
-      <Filter>MagicEngine</Filter>
+    <ClInclude Include="..\..\..\Core\Magic_Engine\Include\MagicTexture.h">
+      <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Include\MagicModelObject.h">
-      <Filter>MagicEngine</Filter>
+    <ClInclude Include="..\..\..\Core\Magic_Engine\Include\MagicVertex.h">
+      <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Include\MagicPen.h">
-      <Filter>MagicEngine</Filter>
+    <ClInclude Include="..\..\..\Core\Magic_Engine\Include\MagicWorld.h">
+      <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Include\MagicShader.h">
-      <Filter>MagicEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\MagicTexture.h">
-      <Filter>MagicEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\MagicVertex.h">
-      <Filter>MagicEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\MagicWorld.h">
-      <Filter>MagicEngine</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="shader\Picture2D.fragshader">
-      <Filter>MagicEngine\Shader</Filter>
-    </None>
-    <None Include="shader\Picture2D.vertshader">
-      <Filter>MagicEngine\Shader</Filter>
-    </None>
-    <None Include="shader\SelfLuminous.fragshader">
-      <Filter>MagicEngine\Shader</Filter>
-    </None>
-    <None Include="shader\SelfLuminous.vertshader">
-      <Filter>MagicEngine\Shader</Filter>
-    </None>
   </ItemGroup>
 </Project>

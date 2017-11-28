@@ -5,65 +5,56 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="头文件">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
     <Filter Include="资源文件">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="MagicWindows">
-      <UniqueIdentifier>{9f40131f-feec-4612-b07c-d9b61fb6f287}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="API">
-      <UniqueIdentifier>{f9affa1d-1873-4462-89c2-6121b72a72dd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="API\Include">
-      <UniqueIdentifier>{427f1f9e-db5e-4d10-9598-0c839d135df0}</UniqueIdentifier>
+    <Filter Include="Include">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="MagicWindows.cpp">
-      <Filter>MagicWindows</Filter>
-    </ClCompile>
-    <ClCompile Include="MagicUIAPI.cpp">
-      <Filter>API</Filter>
-    </ClCompile>
-    <ClCompile Include="UserScene.cpp">
-      <Filter>MagicWindows</Filter>
-    </ClCompile>
-    <ClCompile Include="DebugScene.cpp">
-      <Filter>MagicWindows</Filter>
-    </ClCompile>
-    <ClCompile Include="MenuScene.cpp">
-      <Filter>MagicWindows</Filter>
-    </ClCompile>
-    <ClCompile Include="ToolScene.cpp">
-      <Filter>MagicWindows</Filter>
-    </ClCompile>
+    <ClInclude Include="..\..\..\Core\MagicUI\Include\MagicUIAPI.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Core\MagicUI\Include\MagicUIMacro.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Core\MagicUI\DebugScene.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Core\MagicUI\MagicWindows.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Core\MagicUI\MenuScene.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Core\MagicUI\ToolScene.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Core\MagicUI\UserScene.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MagicWindows.h">
-      <Filter>MagicWindows</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\MagicUIAPI.h">
-      <Filter>API\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\MagicUIMacro.h">
-      <Filter>API\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="UserScene.h">
-      <Filter>MagicWindows</Filter>
-    </ClInclude>
-    <ClInclude Include="DebugScene.h">
-      <Filter>MagicWindows</Filter>
-    </ClInclude>
-    <ClInclude Include="MenuScene.h">
-      <Filter>MagicWindows</Filter>
-    </ClInclude>
-    <ClInclude Include="ToolScene.h">
-      <Filter>MagicWindows</Filter>
-    </ClInclude>
+    <ClCompile Include="..\..\..\Core\MagicUI\DebugScene.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Core\MagicUI\MagicUIAPI.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Core\MagicUI\MagicWindows.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Core\MagicUI\MenuScene.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Core\MagicUI\ToolScene.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Core\MagicUI\UserScene.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

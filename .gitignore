@@ -27,7 +27,7 @@ clear.bat
 # Compiled Dynamic libraries
 *.so
 *.dylib
-*.dll
+!*.dll
 
 # Fortran module files
 *.mod
@@ -37,7 +37,7 @@ clear.bat
 *.lai
 *.la
 *.a
-*.lib
+!*.lib
 
 # Executables
 *.exe
