@@ -41,9 +41,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>..\..\..\bin\Win32\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\..\..\bin\Win32\$(Configuration)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -53,10 +55,14 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;MAGIC_ENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>..\..\..\Core\Magic_Engine\Include;..\..\..\Core\Magic_Engine\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <OutputFile>..\..\..\lib\Win32\$(Configuration)\$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -69,15 +75,46 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;MAGIC_ENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>..\..\..\Core\Magic_Engine\Include;..\..\..\Core\Magic_Engine\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <OutputFile>..\..\..\lib\Win32\$(Configuration)\$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\Core\Magic_Engine\MagicAlphaWindow.cpp" />
+    <ClCompile Include="..\..\..\Core\Magic_Engine\MagicCamera.cpp" />
+    <ClCompile Include="..\..\..\Core\Magic_Engine\MagicEngineContext.cpp" />
+    <ClCompile Include="..\..\..\Core\Magic_Engine\MagicMath.cpp" />
+    <ClCompile Include="..\..\..\Core\Magic_Engine\MagicMessage.cpp" />
+    <ClCompile Include="..\..\..\Core\Magic_Engine\MagicModelObject.cpp" />
+    <ClCompile Include="..\..\..\Core\Magic_Engine\MagicPen.cpp" />
+    <ClCompile Include="..\..\..\Core\Magic_Engine\MagicShader.cpp" />
+    <ClCompile Include="..\..\..\Core\Magic_Engine\MagicTexture.cpp" />
+    <ClCompile Include="..\..\..\Core\Magic_Engine\MagicVertex.cpp" />
+    <ClCompile Include="..\..\..\Core\Magic_Engine\MagicWorld.cpp" />
+    <ClCompile Include="..\..\..\Core\Magic_Engine\Magic_Fonts.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Core\Magic_Engine\Include\MagicAlphaWindow.h" />
+    <ClInclude Include="..\..\..\Core\Magic_Engine\Include\MagicCamera.h" />
+    <ClInclude Include="..\..\..\Core\Magic_Engine\Include\MagicEngineContext.h" />
+    <ClInclude Include="..\..\..\Core\Magic_Engine\Include\MagicMath.h" />
+    <ClInclude Include="..\..\..\Core\Magic_Engine\Include\MagicMessage.h" />
+    <ClInclude Include="..\..\..\Core\Magic_Engine\Include\MagicModelObject.h" />
+    <ClInclude Include="..\..\..\Core\Magic_Engine\Include\MagicPen.h" />
+    <ClInclude Include="..\..\..\Core\Magic_Engine\Include\MagicShader.h" />
+    <ClInclude Include="..\..\..\Core\Magic_Engine\Include\MagicTexture.h" />
+    <ClInclude Include="..\..\..\Core\Magic_Engine\Include\MagicVertex.h" />
+    <ClInclude Include="..\..\..\Core\Magic_Engine\Include\MagicWorld.h" />
+    <ClInclude Include="..\..\..\Core\Magic_Engine\Include\Magic_Fonts.h" />
+    <ClInclude Include="..\..\..\Core\Magic_Engine\Include\Magic_Macro.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

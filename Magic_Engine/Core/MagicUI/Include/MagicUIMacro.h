@@ -8,7 +8,7 @@ namespace Magic
 		USER_SCENES = 0,
 		MENU_SCENES,
 		SYSTEM_SCENES,
-		DEBUG_SCENES,
+		DEBUG_SCENES
 	};
 }
 
