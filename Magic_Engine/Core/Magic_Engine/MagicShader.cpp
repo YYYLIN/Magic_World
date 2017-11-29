@@ -1,6 +1,8 @@
 #include "MagicShader.h"
 
-
+#include <iostream>
+#pragma comment(lib,"glew32.lib")
+#include <GL/glew.h>  
 
 MagicShader::MagicShader()
 {
@@ -19,7 +21,7 @@ MagicShader::~MagicShader()
 	DeleteShaderProgram();
 }
 
-bool MagicShader::LoadFromFile(GLenum whichShader, const std::string& filename)
+bool MagicShader::LoadFromFile(unsigned int whichShader, const std::string& filename)
 {
 	std::ifstream fp;
 	fp.open(filename.c_str(), std::ios_base::in);
@@ -45,7 +47,7 @@ bool MagicShader::LoadFromFile(GLenum whichShader, const std::string& filename)
 }
 
 
-bool MagicShader::LoadFromString(GLenum type, const std::string& source)
+bool MagicShader::LoadFromString(unsigned int type, const std::string& source)
 {
 	//≤Ω÷Ë
 	//1. glCreateShader

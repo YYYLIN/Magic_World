@@ -1,12 +1,11 @@
-#pragma once
-#pragma comment(lib,"glew32.lib")
+#ifndef _MAGICVERTEX_H_
+#define _MAGICVERTEX_H_
 
-#include <gl/glew.h>
-#include "glut.h"
+#include "Magic_Macro.h"
 
 namespace Magic
 {
-	class VERTEX_BUFFER
+	class DLL_MAGIC_ENGINE_OUTPUT_INPUT VERTEX_BUFFER
 	{
 	public:
 		enum DRAW_USAGE
@@ -113,12 +112,12 @@ namespace Magic
 		char m_Buffer_Number;
 		char m_Max_CardSlot;
 		Buffer_Attribute* pBuffer_Attribute;
-		GLuint m_VAO;
-		GLuint* pVBO;
+		unsigned int m_VAO;
+		unsigned int* pVBO;
 	};
 }
 
-class MagicVertex
+class DLL_MAGIC_ENGINE_OUTPUT_INPUT MagicVertex
 {
 public:
 	MagicVertex();
@@ -134,13 +133,14 @@ public:
 	void* StartUpdataIndex();
 	void EndUpdataIndex();
 
-	GLuint GetVAO() { return vaoHandle; }
+	unsigned int GetVAO() { return vaoHandle; }
 	inline unsigned int GetVertexNumber() { return m_VertexNumber; }
 	inline unsigned int GetIndexNumber() { return m_IndexNumber; }
 private:
 	unsigned char m_vboNumber;
 	unsigned int m_VertexNumber, m_IndexNumber;
-	GLuint*vboHandles;
-	GLuint vaoHandle;//vertex array object 
+	unsigned int*vboHandles;
+	unsigned int vaoHandle;//vertex array object 
 };
 
+#endif

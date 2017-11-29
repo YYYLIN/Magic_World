@@ -44,11 +44,11 @@ namespace Magic
 
 	HWND GetWindowHWND()
 	{
-		MagicWindows::pMagicWindows->GetHWND();
+		return MagicWindows::pMagicWindows->GetHWND();
 	}
 
 	HINSTANCE GetWindowHINSTANCE()
 	{
-		MagicWindows::pMagicWindows->GetHINSTANCE();
+		return MagicWindows::pMagicWindows->GetHINSTANCE();
 	}
 }

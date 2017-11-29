@@ -1,13 +1,8 @@
-#pragma once
+#ifndef _MAGICTEXTURE_H_
+#define _MAGICTEXTURE_H_
 
-#include <iostream>
-#include <string.h>
-#include <gl/glew.h>
-#include <glut.h>
-#include <stdio.h>
-#include <png.h>
+#include "Magic_Macro.h"
 
-#pragma comment(lib,"libpng16.lib")
 #define LOAD_BMP  0x00
 #define LOAD_PNG  0x01
 
@@ -18,7 +13,7 @@
 
 namespace Magic
 {
-	struct Color4
+	struct DLL_MAGIC_ENGINE_OUTPUT_INPUT Color4
 	{
 		float R, G, B, A;
 		Color4();
@@ -27,7 +22,7 @@ namespace Magic
 	};
 }
 
-class MagicTexture
+class DLL_MAGIC_ENGINE_OUTPUT_INPUT MagicTexture
 {
 public:
 	MagicTexture();
@@ -38,12 +33,12 @@ public:
 	//加载自定义RGB4通道格式
 	virtual bool Initialize(const unsigned char*, int, int);
 	//加载外部格式（不会自动释放缓存需要外部自己释放）
-	virtual bool Initialize(GLuint _texture, int w, int h);
+	virtual bool Initialize(unsigned int _texture, int w, int h);
 	virtual void Shutdown();
 
 	virtual void SetParameteri(unsigned char _data);
 
-	inline virtual GLuint GetTextrue() { return texture; }
+	inline virtual unsigned int GetTextrue() { return texture; }
 
 	inline virtual int GetWidth() { return width; }
 
@@ -56,12 +51,12 @@ protected:
 protected:
 	bool External;
 
-	GLuint texture;
+	unsigned int texture;
 	int width, height, total_bytes;
 };
 
 
-class MagicFBOTextrue :public MagicTexture
+class DLL_MAGIC_ENGINE_OUTPUT_INPUT MagicFBOTextrue :public MagicTexture
 {
 public:
 	enum MODE {
@@ -81,9 +76,9 @@ public:
 
 	inline unsigned char GetMultisampleNumber() { return m_MultisampleNumber; }
 
-	inline GLuint GetFBOTextrue() { return m_Textrue; }
+	inline unsigned int GetFBOTextrue() { return m_Textrue; }
 
-	inline GLuint GetDepth_Stencil() { return m_Depth_Stencil; }
+	inline unsigned int GetDepth_Stencil() { return m_Depth_Stencil; }
 
 	void Use();
 	void UnUse();
@@ -91,13 +86,14 @@ public:
 protected:
 	//参数;1.只创建深度数据      GL_DEPTH_COMPONENT32
 	//     2.创建深度和模板缓存  GL_DEPTH24_STENCIL8
-	bool CreateDepthStencil(GLenum _type);
+	bool CreateDepthStencil(unsigned int _type);
 
 	virtual void Shutdown();
 private:
-	GLuint m_Textrue;//颜色缓冲区
-	GLuint m_Depth_Stencil;
+	unsigned int m_Textrue;//颜色缓冲区
+	unsigned int m_Depth_Stencil;
 	unsigned char m_MultisampleNumber;
 	MODE m_MODE;
 };
 
+#endif

@@ -1,21 +1,19 @@
-#pragma once
+#ifndef _MAGICSHADER_H_
+#define _MAGICSHADER_H_
 
-#include <iostream>
-#pragma comment(lib,"glew32.lib")
-#include <GL/glew.h>  
-
+#include "Magic_Macro.h"
 #include <map>
 #include <string>
 #include <fstream> 
 
-class MagicShader
+class DLL_MAGIC_ENGINE_OUTPUT_INPUT MagicShader
 {
 public:
 	MagicShader();
 	~MagicShader();
 
-	bool LoadFromFile(GLenum whichShader, const std::string& filename);
-	bool LoadFromString(GLenum whichShader, const std::string& source);
+	bool LoadFromFile(unsigned int whichShader, const std::string& filename);
+	bool LoadFromString(unsigned int whichShader, const std::string& source);
 	//创建链接到着色器对象上
 	bool CreateAndLinkProgram();
 	void Use();
@@ -24,20 +22,21 @@ public:
 	void AddAttribute(const std::string& attribute);
 	void AddUniform(const std::string& uniform);
 
-	GLuint operator[](const std::string& attribute);
-	GLuint operator()(const std::string& uniform);
+	unsigned int operator[](const std::string& attribute);
+	unsigned int operator()(const std::string& uniform);
 
 	void DeleteShaderProgram();
 
-	GLuint GetHandler();
+	unsigned int GetHandler();
 
 private:
 	enum ShaderType { VERTEX_SHADER, FRAGMENT_SHADER, GEOMETRY_SHADER };
 
 	int totalShaders;
-	GLuint programHandle; //着色器程序对象
-	GLuint Shaders[3];
-	std::map<std::string, GLuint> AttributeList;
-	std::map<std::string, GLuint> UniformLocationList;
+	unsigned int programHandle; //着色器程序对象
+	unsigned int Shaders[3];
+	std::map<std::string, unsigned int> AttributeList;
+	std::map<std::string, unsigned int> UniformLocationList;
 };
 
+#endif

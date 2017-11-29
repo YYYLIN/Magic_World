@@ -1,4 +1,9 @@
 #include "MagicTexture.h"
+#include <gl/glew.h>
+#include <glut.h>
+#include <png.h>
+
+#pragma comment(lib,"libpng16.lib")
 
 int power_of_two(int n)
 {
@@ -90,7 +95,7 @@ bool MagicTexture::Initialize(const unsigned char* Data, int _width, int _height
 	return true;
 }
 
-bool MagicTexture::Initialize(GLuint _texture, int w, int h)
+bool MagicTexture::Initialize(unsigned int _texture, int w, int h)
 {
 	texture = _texture;
 	External = true;
@@ -126,8 +131,9 @@ bool MagicTexture::LoadBMP(const char* file_name)
 	GLuint texture_ID = 0;
 
 	// 打开文件，如果失败，返回
-	FILE* pFile = fopen(file_name, "rb");
-	if (pFile == 0)
+	FILE* pFile = NULL;
+	errno_t _err = fopen_s(&pFile, file_name, "rb");
+	if (_err != 0)
 		return false;
 
 	// 读取文件中图象的宽度和高度
@@ -254,12 +260,10 @@ bool MagicTexture::LoadPNG(const char*file_name)
 	int row, col, pos;  //用于改变png像素排列的问题。
 	GLubyte *rgba;
 
-	FILE *fp = fopen(file_name, "rb");//以只读形式打开文件名为file_name的文件
-	if (!fp)//做出相应可能的错误处理
-	{
-		//		fclose(fp);//关闭打开的文件！给出默认贴图
-		return 0;//此处应该调用一个生成默认贴图返回ID的函数
-	}
+	FILE* fp = NULL;
+	errno_t _err = fopen_s(&fp, file_name, "rb");
+	if (_err != 0)
+		return false;
 	//读取文件头判断是否所png图片.不是则做出相应处理
 	fread(header, 1, 8, fp);
 	if (png_sig_cmp(header, 0, 8))
@@ -494,7 +498,7 @@ void MagicFBOTextrue::UnUse()
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-bool MagicFBOTextrue::CreateDepthStencil(GLenum _type)
+bool MagicFBOTextrue::CreateDepthStencil(unsigned int _type)
 {
 	//分配zbuffer给FBO 使用 
 	glGenRenderbuffers(1, &m_Depth_Stencil);

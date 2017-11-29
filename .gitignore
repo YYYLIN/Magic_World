@@ -17,8 +17,10 @@
 *.suo
 *.opensdf
 clear.bat
-[Debug]
-[Release]
+[Dd]ebug/
+[Rr]elease/
+[Bb]in/
+[Ll]ib/
 
 # Precompiled Headers
 *.gch

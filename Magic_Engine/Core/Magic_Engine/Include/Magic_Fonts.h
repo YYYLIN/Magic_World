@@ -6,16 +6,7 @@
 #ifndef _XY_FONTS_H_
 #define _XY_FONTS_H_
 
-//#include "ft2build.h"
-//#include  FT_FREETYPE_H
-#include <fstream>
-#include <glut.h>
-#include <png.h>
-using namespace std;
 
-
-#pragma comment(lib,"libpng16.lib")
-//#pragma comment(lib, "freetype26d.lib")
 
 typedef struct FontsTexture
 {
@@ -43,19 +34,16 @@ public:
 	void Shutdown();    //关闭 结束函数
 
 	inline FontsTexture& GetChar(const char Char){ return fontstexture[(unsigned char)Char - 32]; }
-	inline GLuint GetTextureID(){ return textureID; }
+	inline 	unsigned int GetTextureID(){ return textureID; }
 	inline int GetTextureWidth(){ return MapSize; }
 	int GetTextAllWidth(const char*);
-private:
-	bool GetFontsTexture(wstring ,float ,float);
-	bool LoadPNG(const char* );
 
 private:
 	//创建对象
  //   FT_Library library;	 // 库的句柄
 //    FT_Face face; // face对象的句柄
 	FontsTexture* fontstexture;
-	GLuint   textureID;
+	unsigned int textureID;
 	int MapSize;
 };
 

@@ -188,6 +188,7 @@ void MagicWorld::Render(glm::vec2 _DrawPos)
 
 void MagicWorld::RenderLightModel(MagicShader* _pShader, MagicModelObject* _pMagicModelObject)
 {
+/*
 	glUniformMatrix4fv((*_pShader)("worldMatrix"), 1, GL_FALSE, &_pMagicModelObject->GetWorldMatrix()[0][0]);
 
 	for (int a = 0; a < _pMagicModelObject->GetNumber(); a++)
@@ -195,5 +196,5 @@ void MagicWorld::RenderLightModel(MagicShader* _pShader, MagicModelObject* _pMag
 		glBindTexture(GL_TEXTURE_2D, _pMagicModelObject->GetTextrue(a));
 		glBindVertexArray(_pMagicModelObject->GetVAO(a));
 		glDrawElements(GL_TRIANGLES, _pMagicModelObject->GetIndexNumber(a), GL_UNSIGNED_SHORT, (GLvoid*)NULL);
-	}
+	}*/
 }

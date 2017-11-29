@@ -41,8 +41,8 @@ public:
 
 	inline int GetNumber() { return m_Number; }
 
-	inline GLuint GetVAO(int _pos) { return pModuleObject[_pos].m_Vertex.GetVAO(); }
-	inline GLuint GetTextrue(int _pos) { return pModuleObject[_pos].m_Textrue.GetTextrue(); }
+	inline unsigned int GetVAO(int _pos) { return pModuleObject[_pos].m_Vertex.GetVAO(); }
+	inline unsigned int GetTextrue(int _pos) { return pModuleObject[_pos].m_Textrue.GetTextrue(); }
 	inline unsigned int GetIndexNumber(int _pos) { return pModuleObject[_pos].m_Vertex.GetIndexNumber(); }
 	inline unsigned int GetVertexNumber(int _pos) { return pModuleObject[_pos].m_Vertex.GetVertexNumber(); }
 	inline const glm::mat4& GetWorldMatrix() { return m_WorldMatrix; }

@@ -1,7 +1,5 @@
 #pragma once
 
-#pragma comment(lib,"glew32.lib")
-#include <GL/glew.h>  
 #include <glm.hpp>
 #include <gtc/matrix_transform.hpp>
 #include <gtx/transform2.hpp>
@@ -41,7 +39,7 @@ public:
 	virtual void DrawSpirit() {}
 };
 
-class MagicScene :public MagicUICommon
+class DLL_MAGIC_ENGINE_OUTPUT_INPUT MagicScene :public MagicUICommon
 {
 public:
 	MagicScene();
@@ -56,7 +54,7 @@ public:
 
 	inline glm::vec2 GetDrawPos() { return m_DrawPos; }
 
-	virtual GLuint GetFBOTextrue() { return 0; }
+	virtual unsigned int GetFBOTextrue() { return 0; }
 
 	void AddCommon(MagicCommon*);
 	void RemoveCommon(MagicCommon*);
@@ -81,7 +79,7 @@ protected:
 };
 
 
-class MagicSceneEx :public MagicScene
+class DLL_MAGIC_ENGINE_OUTPUT_INPUT MagicSceneEx :public MagicScene
 {
 public:
 	MagicSceneEx();
@@ -91,8 +89,8 @@ public:
 
 	virtual glm::vec2 GetFrameBufferSize();
 
-	inline virtual GLuint GetFBOTextrue() { return m_FBOBuffer.GetFBOTextrue(); }
-	inline virtual GLuint GetTextrue() { return m_FBOBuffer.GetTextrue(); }
+	inline virtual unsigned int GetFBOTextrue() { return m_FBOBuffer.GetFBOTextrue(); }
+	inline virtual unsigned int GetTextrue() { return m_FBOBuffer.GetTextrue(); }
 protected:
 	virtual bool Initialize(MagicScene* _scene, glm::vec4 _PosSize);
 	virtual void Render(glm::vec2 _DrawPos);
@@ -109,7 +107,7 @@ protected:
 
 HGLRC CreateRCContxt(HDC _hdc);
 
-class MagicEngineContext :public MagicScene
+class DLL_MAGIC_ENGINE_OUTPUT_INPUT MagicEngineContext :public MagicScene
 {
 public:
 	MagicEngineContext();
@@ -131,17 +129,17 @@ public:
 	bool AddPen_Common(const char* _name, Magic::Pen_Common* _common);
 
 	//获得渲染器
-	const GLubyte* GetRenderer();
+	const unsigned char* GetRenderer();
 	//获得图形卡供应商
-	const GLubyte* GetVendor();
+	const unsigned char* GetVendor();
 	//版本号
-	const GLubyte* GetVersion();
+	const unsigned char* GetVersion();
 	//渲染器版本号
-	const GLubyte* GetGlSLVersion();
+	const unsigned char* GetGlSLVersion();
 	//大版本号
-	GLint Getmajor();
+	int Getmajor();
 	//小版本号
-	GLint Getminor();
+	int Getminor();
 	MagicTexture* GetTextrue(const char* _name);
 
 	Magic::Pen_Common* GetPen(const char* _name);
@@ -150,7 +148,7 @@ public:
 
 	inline Magic::Pen_Normal* GetPen_Normal() { return &m_Pen_Normal; }
 
-	float GetDiffTime() { return diffTime; }
+	double GetDiffTime() { return diffTime; }
 
 protected:
 	void OnUpdata();

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _MAGICPEN_H_
+#define _MAGICPEN_H_
 
 #include "glm.hpp"
 
@@ -22,7 +23,7 @@ namespace Magic
 		virtual void RenderEnd() = 0;
 	};
 
-	class Pen_Normal :public Pen_Common
+	class DLL_MAGIC_ENGINE_OUTPUT_INPUT Pen_Normal :public Pen_Common
 	{
 	public:
 		enum DRAW_FACE_MODE
@@ -534,3 +535,4 @@ namespace Magic
 
 }
 
+#endif

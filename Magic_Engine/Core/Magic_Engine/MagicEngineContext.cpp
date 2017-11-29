@@ -1,5 +1,8 @@
 #include "MagicEngineContext.h"
+#pragma comment(lib,"glew32.lib")
+#include <GL/glew.h>  
 
+#include <time.h>
 
 const glm::mat4 CONST_CAMERA = glm::lookAt(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
@@ -136,7 +139,7 @@ bool MagicSceneEx::Initialize(MagicScene* _scene, glm::vec4 _PosSize)
 	if (!result)
 		return false;
 
-	int w = _PosSize.z, h = _PosSize.w;
+	int w = (int)_PosSize.z, h = (int)_PosSize.w;
 	result = m_FBOBuffer.Initialize(w, h, MagicFBOTextrue::COLOR4);
 	if (!result)
 		return false;
@@ -355,7 +358,7 @@ void MagicEngineContext::SetBackColor(float r, float g, float b, float a)
 void MagicEngineContext::ResetDrawRECT(float _x, float _y, float _w, float _h)
 {
 	MagicScene::ResetDrawRECT(_x, _y, _w, _h);
-	glViewport(_x, _y, _w, _h); //设置视频口
+	glViewport((int)_x, (int)_y, (int)_w, (int)_h); //设置视频口
 }
 
 bool MagicEngineContext::AddPen_Common(const char* _name, Magic::Pen_Common* _common)

@@ -1,5 +1,10 @@
 #include "MagicVertex.h"
 
+#pragma comment(lib,"glew32.lib")
+
+#include <gl/glew.h>
+#include "glut.h"
+
 namespace Magic
 {
 	VERTEX_BUFFER::Buffer_Attribute::Buffer_Attribute()
