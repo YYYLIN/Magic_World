@@ -30,10 +30,10 @@
     <ClInclude Include="..\..\..\Core\MagicUI\MenuScene.h">
       <Filter>源文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Core\MagicUI\ToolScene.h">
+    <ClInclude Include="..\..\..\Core\MagicUI\UserScene.h">
       <Filter>源文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Core\MagicUI\UserScene.h">
+    <ClInclude Include="..\..\..\Core\MagicUI\SystemScene.h">
       <Filter>源文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -50,10 +50,10 @@
     <ClCompile Include="..\..\..\Core\MagicUI\MenuScene.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Core\MagicUI\ToolScene.cpp">
+    <ClCompile Include="..\..\..\Core\MagicUI\UserScene.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Core\MagicUI\UserScene.cpp">
+    <ClCompile Include="..\..\..\Core\MagicUI\SystemScene.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

@@ -11,8 +11,11 @@
 #include "windows.h"
 /*#include "MagicAlphaWindow.h"*/
 /*#include "MagicGratingAPI.h"*/
-#include "MagicEngineContext.h"
 #include "MagicUIMacro.h"
+#include "UserScene.h"
+#include "MenuScene.h"
+#include "DebugScene.h"
+#include "SystemScene.h"
 
 /*#pragma comment(lib,"MagicGrating.lib")*/
 
@@ -32,13 +35,24 @@ public:
 
 	void Run();
 
+	MagicScene* GetSystemScenes(Magic::SYSTEMSCENES _SYSTEMSCENES);
+
+	inline HWND GetHWND(){ return m_hwnd; }
+	inline HINSTANCE GetHINSTANCE(){ return m_hinstance; }
+
+	void SetCallbackMessage_WIN32(Magic::CallbackMessage_WIN32 _CallbackMessage_WIN32);
+	void RequestOuitSystem();
 private:
 	bool CreateWindows(const char* _Name, int _x, int _y, int _width, int _height);
 	void Shutdown();
 
 private:
-	int m_ResultMessage;
 	MagicEngineContext m_MagicEngineContext;
+	Magic::UI::UserScene m_UserScene;
+	Magic::UI::MenuScene m_MenuScene;
+	Magic::UI::DebugScene m_DebugScene;
+	Magic::UI::SystemScene m_SystemScene;
+	Magic::CallbackMessage_WIN32 m_CallbackMessage_WIN32;
 	//	MagicSceneCircle m_MagicSceneCircle;
 
 	/*
@@ -51,13 +65,12 @@ private:
 		unsigned int m_Shaderprojection;
 		unsigned int m_Shaderworld;*/
 
-		/*	SGDI m_SGDI;*/
+	/*	SGDI m_SGDI;*/
 	char m_applicationName[256];
 	HINSTANCE m_hinstance;
 	HWND m_hwnd;
+public:
+	static MagicWindows* pMagicWindows;
 };
 
 static LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
-
-//全局变量:
-static MagicWindows* ApplicationHandle = 0;

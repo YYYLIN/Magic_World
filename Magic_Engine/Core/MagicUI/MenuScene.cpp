@@ -1,12 +1,17 @@
 #include "MenuScene.h"
 
-
-
-MenuScene::MenuScene()
+namespace Magic
 {
-}
+	namespace UI
+	{
+
+		MenuScene::MenuScene()
+		{
+		}
 
 
-MenuScene::~MenuScene()
-{
+		MenuScene::~MenuScene()
+		{
+		}
+	}
 }

@@ -55,14 +55,13 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;MAGIC_ENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\..\Core\Magic_Engine\Include;..\..\..\Core\Magic_Engine\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\Plugins\Structure;..\..\..\Plugins\OpenGL\H-files;..\..\..\Plugins\lpng1621\Include;..\..\..\Plugins\glm;..\..\..\Plugins\glew-1.9.0\include;..\..\..\Plugins\freetype-2.6\include;..\..\..\Core\Magic_Engine\Include;..\..\..\Core\Magic_Engine\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <OutputFile>..\..\..\lib\Win32\$(Configuration)\$(TargetName)$(TargetExt)</OutputFile>
-      <AdditionalLibraryDirectories>
-      </AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\Plugins\OpenGL\lib;..\..\..\Plugins\lpng1621\lib;..\..\..\Plugins\glew-1.9.0\lib;..\..\..\Plugins\freetype-2.6\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -75,7 +74,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;MAGIC_ENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\..\Core\Magic_Engine\Include;..\..\..\Core\Magic_Engine\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\Plugins\Structure;..\..\..\Plugins\OpenGL\H-files;..\..\..\Plugins\lpng1621\Include;..\..\..\Plugins\glm;..\..\..\Plugins\glew-1.9.0\include;..\..\..\Plugins\freetype-2.6\include;..\..\..\Core\Magic_Engine\Include;..\..\..\Core\Magic_Engine\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -83,13 +82,13 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <OutputFile>..\..\..\lib\Win32\$(Configuration)\$(TargetName)$(TargetExt)</OutputFile>
-      <AdditionalLibraryDirectories>
-      </AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\Plugins\OpenGL\lib;..\..\..\Plugins\lpng1621\lib;..\..\..\Plugins\glew-1.9.0\lib;..\..\..\Plugins\freetype-2.6\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Core\Magic_Engine\MagicAlphaWindow.cpp" />
     <ClCompile Include="..\..\..\Core\Magic_Engine\MagicCamera.cpp" />
+    <ClCompile Include="..\..\..\Core\Magic_Engine\MagicEngineAPI.cpp" />
     <ClCompile Include="..\..\..\Core\Magic_Engine\MagicEngineContext.cpp" />
     <ClCompile Include="..\..\..\Core\Magic_Engine\MagicMath.cpp" />
     <ClCompile Include="..\..\..\Core\Magic_Engine\MagicMessage.cpp" />
@@ -104,6 +103,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\Core\Magic_Engine\Include\MagicAlphaWindow.h" />
     <ClInclude Include="..\..\..\Core\Magic_Engine\Include\MagicCamera.h" />
+    <ClInclude Include="..\..\..\Core\Magic_Engine\Include\MagicEngineAPI.h" />
     <ClInclude Include="..\..\..\Core\Magic_Engine\Include\MagicEngineContext.h" />
     <ClInclude Include="..\..\..\Core\Magic_Engine\Include\MagicMath.h" />
     <ClInclude Include="..\..\..\Core\Magic_Engine\Include\MagicMessage.h" />

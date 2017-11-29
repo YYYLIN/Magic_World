@@ -1,12 +1,17 @@
 #include "UserScene.h"
 
 
-
-UserScene::UserScene()
+namespace Magic
 {
-}
+	namespace UI
+	{
+		UserScene::UserScene()
+		{
+		}
 
 
-UserScene::~UserScene()
-{
+		UserScene::~UserScene()
+		{
+		}
+	}
 }

@@ -55,14 +55,13 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;MAGICUI_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\..\Core\Magic_Engine\Include;..\..\..\Core\MagicUI\Include;..\..\..\Core\MagicUI\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\Plugins\glm;..\..\..\Core\Magic_Engine\Include;..\..\..\Core\MagicUI\Include;..\..\..\Core\MagicUI\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <OutputFile>..\..\..\lib\Win32\$(Configuration)\$(TargetName)$(TargetExt)</OutputFile>
-      <AdditionalLibraryDirectories>
-      </AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\lib\Win32\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -75,7 +74,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;MAGICUI_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\..\Core\Magic_Engine\Include;..\..\..\Core\MagicUI\Include;..\..\..\Core\MagicUI\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\Plugins\glm;..\..\..\Core\Magic_Engine\Include;..\..\..\Core\MagicUI\Include;..\..\..\Core\MagicUI\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -93,7 +92,7 @@
     <ClInclude Include="..\..\..\Core\MagicUI\Include\MagicUIMacro.h" />
     <ClInclude Include="..\..\..\Core\MagicUI\MagicWindows.h" />
     <ClInclude Include="..\..\..\Core\MagicUI\MenuScene.h" />
-    <ClInclude Include="..\..\..\Core\MagicUI\ToolScene.h" />
+    <ClInclude Include="..\..\..\Core\MagicUI\SystemScene.h" />
     <ClInclude Include="..\..\..\Core\MagicUI\UserScene.h" />
   </ItemGroup>
   <ItemGroup>
@@ -101,7 +100,7 @@
     <ClCompile Include="..\..\..\Core\MagicUI\MagicUIAPI.cpp" />
     <ClCompile Include="..\..\..\Core\MagicUI\MagicWindows.cpp" />
     <ClCompile Include="..\..\..\Core\MagicUI\MenuScene.cpp" />
-    <ClCompile Include="..\..\..\Core\MagicUI\ToolScene.cpp" />
+    <ClCompile Include="..\..\..\Core\MagicUI\SystemScene.cpp" />
     <ClCompile Include="..\..\..\Core\MagicUI\UserScene.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

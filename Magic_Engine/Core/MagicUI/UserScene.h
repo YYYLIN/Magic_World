@@ -3,12 +3,18 @@
 
 #include "MagicEngineContext.h"
 
-class UserScene :
-	public MagicScene
+namespace Magic
 {
-public:
-	UserScene();
-	~UserScene();
-};
+	namespace UI
+	{
+		class UserScene :
+			public MagicScene
+		{
+		public:
+			UserScene();
+			~UserScene();
+		};
+	}
+}
 
 #endif

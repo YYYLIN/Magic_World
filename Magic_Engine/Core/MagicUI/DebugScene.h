@@ -4,13 +4,19 @@
 
 #include "MagicEngineContext.h"
 
-
-class DebugScene :
-	public MagicScene
+namespace Magic
 {
-public:
-	DebugScene();
-	~DebugScene();
-};
+	namespace UI
+	{
+
+		class DebugScene :
+			public MagicScene
+		{
+		public:
+			DebugScene();
+			~DebugScene();
+		};
+	}
+}
 
 #endif

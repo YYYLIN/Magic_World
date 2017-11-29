@@ -1,12 +1,18 @@
 #include "DebugScene.h"
 
-
-
-DebugScene::DebugScene()
+namespace Magic
 {
-}
+	namespace UI
+	{
+
+		DebugScene::DebugScene()
+		{
+		}
 
 
-DebugScene::~DebugScene()
-{
+		DebugScene::~DebugScene()
+		{
+		}
+
+	}
 }

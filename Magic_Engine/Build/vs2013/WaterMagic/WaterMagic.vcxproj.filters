@@ -21,6 +21,9 @@
     <ClCompile Include="..\..\..\Core\WaterMagic\MainScene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Core\WaterMagic\Main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Core\WaterMagic\MainScene.h">

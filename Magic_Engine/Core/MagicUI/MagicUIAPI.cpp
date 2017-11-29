@@ -4,28 +4,51 @@
 
 namespace Magic
 {
-	static MagicWindows* pMagicWindows = 0;
-
 	bool CreateSystemUI(const char* _name, int _x, int _y, int _w, int _h)
 	{
-		if (pMagicWindows)
+		if (MagicWindows::pMagicWindows)
 			return false;
-		pMagicWindows = new MagicWindows;
+		MagicWindows::pMagicWindows = new MagicWindows;
 
-		return pMagicWindows->Initialize(_name, _x, _y, _w, _h);
+		return MagicWindows::pMagicWindows->Initialize(_name, _x, _y, _w, _h);
 	}
 
 	void ShutdownSystemUI()
 	{
-		if (pMagicWindows)
+		if (MagicWindows::pMagicWindows)
 		{
-			delete pMagicWindows;
-			pMagicWindows = 0;
+			delete MagicWindows::pMagicWindows;
+			MagicWindows::pMagicWindows = 0;
 		}
 	}
 
 	void RunSystem()
 	{
-		pMagicWindows->Run();
+		MagicWindows::pMagicWindows->Run();
+	}
+
+	void RequestOuitSystem()
+	{
+		MagicWindows::pMagicWindows->RequestOuitSystem();
+	}
+
+	MagicScene* GetSystemScenes(SYSTEMSCENES _SYSTEMSCENES)
+	{
+		return MagicWindows::pMagicWindows->GetSystemScenes(_SYSTEMSCENES);
+	}
+
+	void SetCallbackMessage_WIN32(CallbackMessage_WIN32 _CallbackMessage_WIN32)
+	{
+		MagicWindows::pMagicWindows->SetCallbackMessage_WIN32(_CallbackMessage_WIN32);
+	}
+
+	HWND GetWindowHWND()
+	{
+		MagicWindows::pMagicWindows->GetHWND();
+	}
+
+	HINSTANCE GetWindowHINSTANCE()
+	{
+		MagicWindows::pMagicWindows->GetHINSTANCE();
 	}
 }

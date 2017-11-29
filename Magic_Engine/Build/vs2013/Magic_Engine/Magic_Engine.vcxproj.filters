@@ -54,6 +54,9 @@
     <ClCompile Include="..\..\..\Core\Magic_Engine\MagicWorld.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Core\Magic_Engine\MagicEngineAPI.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Core\Magic_Engine\Include\Magic_Fonts.h">
@@ -93,6 +96,9 @@
       <Filter>Engine</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Core\Magic_Engine\Include\MagicWorld.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Core\Magic_Engine\Include\MagicEngineAPI.h">
       <Filter>Engine</Filter>
     </ClInclude>
   </ItemGroup>
