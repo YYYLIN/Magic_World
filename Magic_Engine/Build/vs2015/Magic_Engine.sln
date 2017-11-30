@@ -4,13 +4,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Magic_Engine", "Magic_Engine\Magic_Engine.vcxproj", "{9DCBCC5A-7D10-4614-80E7-CFBEFC71C335}"
-	ProjectSection(ProjectDependencies) = postProject
-		{58C5C045-DFD9-4E29-BFA9-8A5A35790B80} = {58C5C045-DFD9-4E29-BFA9-8A5A35790B80}
-	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MagicGrating", "MagicGrating\MagicGrating.vcxproj", "{58C5C045-DFD9-4E29-BFA9-8A5A35790B80}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MagicUI", "MagicUI\MagicUI.vcxproj", "{2D687F45-2C23-4E19-B78E-29B432B139F8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9DCBCC5A-7D10-4614-80E7-CFBEFC71C335} = {9DCBCC5A-7D10-4614-80E7-CFBEFC71C335}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WaterMagic", "WaterMagic\WaterMagic.vcxproj", "{C64A58F4-AB71-4E2B-9670-D4E9B24658E4}"
 	ProjectSection(ProjectDependencies) = postProject

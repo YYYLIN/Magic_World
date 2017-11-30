@@ -20,5 +20,5 @@ void MainScene::Draw()
 {
 	Magic::Pen_Normal* pPen_Normal = MagicEngineContext::pMagicEngineContext->GetPen_Normal();
 	pPen_Normal->SetColor(Magic::Color4(1.0f, 0.0f, 0.0f, 1.0f));
-	pPen_Normal->DrawRectangle(Magic::Pen_Normal::TRIANGLES, 0, 0, 100, 100);
+	pPen_Normal->DrawRectangle(Magic::Pen_Normal::TRIANGLES, 30, 30, 100, 100);
 }
