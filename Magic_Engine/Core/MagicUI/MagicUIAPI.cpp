@@ -42,6 +42,11 @@ namespace Magic
 		MagicWindows::pMagicWindows->SetCallbackMessage_WIN32(_CallbackMessage_WIN32);
 	}
 
+	void SetWindowICO(HICON _ico)
+	{
+		::SendMessage(MagicWindows::pMagicWindows->GetHWND(),WM_SETICON,TRUE,(LPARAM)(_ico));
+	}
+
 	HWND GetWindowHWND()
 	{
 		return MagicWindows::pMagicWindows->GetHWND();

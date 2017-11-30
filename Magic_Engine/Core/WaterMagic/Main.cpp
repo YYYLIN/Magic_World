@@ -9,6 +9,9 @@ int CALLBACK _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevainstance, LPWSTR lpc
 	if (!result)
 		return false;
 
+	HICON _ico = (HICON)::LoadImageA(NULL, 0, IMAGE_ICON, 0, 0, LR_DEFAULTSIZE | LR_LOADFROMFILE);
+	Magic::SetWindowICO(_ico);
+
 	MainScene* pMainScene = new MainScene;
 
 	pMainScene->Initialize(Magic::GetSystemScenes(Magic::USER_SCENES), glm::vec4(0, 0, 1024, 768));

@@ -19,6 +19,8 @@ namespace Magic
 
 	DLL_MAGICUI_OUTPUT_INPUT void SetCallbackMessage_WIN32(CallbackMessage_WIN32 _CallbackMessage_WIN32);
 
+	DLL_MAGICUI_OUTPUT_INPUT void SetWindowICO(HICON _ico);
+
 	DLL_MAGICUI_OUTPUT_INPUT HWND GetWindowHWND();
 
 	DLL_MAGICUI_OUTPUT_INPUT HINSTANCE GetWindowHINSTANCE();
