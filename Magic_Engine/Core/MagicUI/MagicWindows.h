@@ -35,7 +35,7 @@ public:
 
 	void Run();
 
-	MagicScene* GetSystemScenes(Magic::SYSTEMSCENES _SYSTEMSCENES);
+	MagicScenes* GetSystemScenes(Magic::SYSTEMSCENES _SYSTEMSCENES);
 
 	inline HWND GetHWND(){ return m_hwnd; }
 	inline HINSTANCE GetHINSTANCE(){ return m_hinstance; }

@@ -32,7 +32,7 @@ namespace Magic
 		MagicWindows::pMagicWindows->RequestOuitSystem();
 	}
 
-	MagicScene* GetSystemScenes(SYSTEMSCENES _SYSTEMSCENES)
+	MagicScenes* GetSystemScenes(SYSTEMSCENES _SYSTEMSCENES)
 	{
 		return MagicWindows::pMagicWindows->GetSystemScenes(_SYSTEMSCENES);
 	}

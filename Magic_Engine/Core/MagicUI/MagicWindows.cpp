@@ -196,7 +196,7 @@ void MagicWindows::Run()     //过程处理函数
 
 }
 
-MagicScene* MagicWindows::GetSystemScenes(Magic::SYSTEMSCENES _SYSTEMSCENES)
+MagicScenes* MagicWindows::GetSystemScenes(Magic::SYSTEMSCENES _SYSTEMSCENES)
 {
 	switch (_SYSTEMSCENES)
 	{

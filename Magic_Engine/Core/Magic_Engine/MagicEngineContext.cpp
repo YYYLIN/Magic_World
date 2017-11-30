@@ -7,17 +7,17 @@
 const glm::mat4 CONST_CAMERA = glm::lookAt(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
 
-MagicScene::MagicScene()
+MagicScenes::MagicScenes()
 {
 	DisplayState = 0;
 }
 
-MagicScene::~MagicScene()
+MagicScenes::~MagicScenes()
 {
 	v_Common.clear();
 }
 
-bool MagicScene::Initialize(MagicScene* _scene, glm::vec4 _PosSize)
+bool MagicScenes::Initialize(MagicScenes* _scene, glm::vec4 _PosSize)
 {
 	pParentScene = _scene;
 	if (pParentScene)
@@ -27,22 +27,22 @@ bool MagicScene::Initialize(MagicScene* _scene, glm::vec4 _PosSize)
 	return this->OnInitialize();
 }
 
-void MagicScene::SetDisplayState(bool _state)
+void MagicScenes::SetDisplayState(bool _state)
 {
 	DisplayState = _state;
 }
 
-glm::vec2 MagicScene::GetFrameBufferSize()
+glm::vec2 MagicScenes::GetFrameBufferSize()
 {
 	return pParentScene->GetFrameBufferSize();
 }
 
-void MagicScene::AddCommon(MagicCommon* _common)
+void MagicScenes::AddCommon(MagicCommon* _common)
 {
 	v_Common.push_back(_common);
 }
 
-void MagicScene::RemoveCommon(MagicCommon* _common)
+void MagicScenes::RemoveCommon(MagicCommon* _common)
 {
 	if (v_Common.size())
 	{
@@ -57,7 +57,7 @@ void MagicScene::RemoveCommon(MagicCommon* _common)
 	}
 }
 
-void MagicScene::ResetDrawRECT(float _x, float _y, float _w, float _h)
+void MagicScenes::ResetDrawRECT(float _x, float _y, float _w, float _h)
 {
 	m_PosSize.x = _x;
 	m_PosSize.y = _y;
@@ -65,7 +65,7 @@ void MagicScene::ResetDrawRECT(float _x, float _y, float _w, float _h)
 	m_PosSize.w = _h;
 }
 
-void MagicScene::Updata()
+void MagicScenes::Updata()
 {
 	if (DisplayState)
 	{
@@ -75,7 +75,7 @@ void MagicScene::Updata()
 	}
 }
 
-void MagicScene::Render(glm::vec2 _DrawPos)
+void MagicScenes::Render(glm::vec2 _DrawPos)
 {
 	if (DisplayState)
 	{
@@ -89,7 +89,7 @@ void MagicScene::Render(glm::vec2 _DrawPos)
 	}
 }
 
-void MagicScene::RenderStart()
+void MagicScenes::RenderStart()
 {
 	glm::mat4 _Camera = CONST_CAMERA;
 	_Camera[3].x = m_DrawPos.x;
@@ -97,7 +97,7 @@ void MagicScene::RenderStart()
 	MagicEngineContext::pMagicEngineContext->GetPen_Normal()->SetCameraMatrix(_Camera);
 }
 
-void MagicScene::RenderEnd()
+void MagicScenes::RenderEnd()
 {
 	glm::mat4 _Camera = CONST_CAMERA;
 	_Camera[3].x = pParentScene->GetDrawPos().x;
@@ -105,19 +105,19 @@ void MagicScene::RenderEnd()
 	MagicEngineContext::pMagicEngineContext->GetPen_Normal()->SetCameraMatrix(_Camera);
 }
 
-MagicSceneEx::MagicSceneEx()
+MagicScenesEx::MagicScenesEx()
 {
 	m_DrawMessage = false;
 }
 
-void MagicSceneEx::DrawSpirit()
+void MagicScenesEx::DrawSpirit()
 {
 	if (pParentScene)
 		pParentScene->DrawSpirit();
 	m_DrawMessage = true;
 }
 
-void MagicSceneEx::SetDisplayState(bool _state)
+void MagicScenesEx::SetDisplayState(bool _state)
 {
 	if (DisplayState != _state)
 	{
@@ -127,15 +127,15 @@ void MagicSceneEx::SetDisplayState(bool _state)
 	}
 }
 
-glm::vec2 MagicSceneEx::GetFrameBufferSize()
+glm::vec2 MagicScenesEx::GetFrameBufferSize()
 {
 	return glm::vec2(m_FBOBuffer.GetWidth(), m_FBOBuffer.GetHeight());
 }
 
-bool MagicSceneEx::Initialize(MagicScene* _scene, glm::vec4 _PosSize)
+bool MagicScenesEx::Initialize(MagicScenes* _scene, glm::vec4 _PosSize)
 {
 	bool result;
-	result = MagicScene::Initialize(_scene, _PosSize);
+	result = MagicScenes::Initialize(_scene, _PosSize);
 	if (!result)
 		return false;
 
@@ -149,7 +149,7 @@ bool MagicSceneEx::Initialize(MagicScene* _scene, glm::vec4 _PosSize)
 	return true;
 }
 
-void MagicSceneEx::Render(glm::vec2 _DrawPos)
+void MagicScenesEx::Render(glm::vec2 _DrawPos)
 {
 	if (DisplayState)
 	{
@@ -157,7 +157,7 @@ void MagicSceneEx::Render(glm::vec2 _DrawPos)
 		{
 			m_FBOBuffer.Use();
 			glClear(GL_COLOR_BUFFER_BIT);
-			MagicScene::Render(glm::vec2());
+			MagicScenes::Render(glm::vec2());
 			glBindFramebuffer(GL_FRAMEBUFFER, pParentScene->GetFBOTextrue());
 			m_DrawMessage = false;
 		}
@@ -165,7 +165,7 @@ void MagicSceneEx::Render(glm::vec2 _DrawPos)
 	}
 }
 
-void MagicSceneEx::RenderBuffer()
+void MagicScenesEx::RenderBuffer()
 {
 
 	Magic::Pen_Normal* pPen_Normal = MagicEngineContext::pMagicEngineContext->GetPen_Normal();
@@ -174,7 +174,7 @@ void MagicSceneEx::RenderBuffer()
 	pPen_Normal->DrawPicture(m_PosSize.x, m_PosSize.y, m_PosSize.z, m_PosSize.w);
 }
 
-void MagicSceneEx::RenderStart()
+void MagicScenesEx::RenderStart()
 {
 	Magic::Pen_Normal* pPen_Normal = MagicEngineContext::pMagicEngineContext->GetPen_Normal();
 	pPen_Normal->RenderStart();
@@ -182,7 +182,7 @@ void MagicSceneEx::RenderStart()
 
 }
 
-void MagicSceneEx::RenderEnd()
+void MagicScenesEx::RenderEnd()
 {
 	Magic::Pen_Normal* pPen_Normal = MagicEngineContext::pMagicEngineContext->GetPen_Normal();
 	glm::vec2 _WH = this->GetFrameBufferSize();
@@ -268,7 +268,7 @@ bool MagicEngineContext::Initialize(HWND _hwnd, float _x, float _y, float _w, fl
 	if (!m_hRC)
 		return false;
 
-	result = MagicScene::Initialize(0, glm::vec4(_x, _y, _w, _h));
+	result = MagicScenes::Initialize(0, glm::vec4(_x, _y, _w, _h));
 	if (!result)
 		return false;
 
@@ -300,7 +300,7 @@ void MagicEngineContext::Shutdown()
 void MagicEngineContext::Render(void)
 {
 	this->Updata();
-	MagicScene::Render(glm::vec2());
+	MagicScenes::Render(glm::vec2());
 }
 
 
@@ -357,7 +357,7 @@ void MagicEngineContext::SetBackColor(float r, float g, float b, float a)
 
 void MagicEngineContext::ResetDrawRECT(float _x, float _y, float _w, float _h)
 {
-	MagicScene::ResetDrawRECT(_x, _y, _w, _h);
+	MagicScenes::ResetDrawRECT(_x, _y, _w, _h);
 	glViewport((int)_x, (int)_y, (int)_w, (int)_h); //…Ë÷√ ”∆µø⁄
 }
 

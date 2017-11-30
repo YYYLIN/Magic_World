@@ -15,7 +15,7 @@ namespace Magic
 
 	DLL_MAGICUI_OUTPUT_INPUT void RequestOuitSystem();
 
-	DLL_MAGICUI_OUTPUT_INPUT MagicScene* GetSystemScenes(SYSTEMSCENES _SYSTEMSCENES);
+	DLL_MAGICUI_OUTPUT_INPUT MagicScenes* GetSystemScenes(SYSTEMSCENES _SYSTEMSCENES);
 
 	DLL_MAGICUI_OUTPUT_INPUT void SetCallbackMessage_WIN32(CallbackMessage_WIN32 _CallbackMessage_WIN32);
 

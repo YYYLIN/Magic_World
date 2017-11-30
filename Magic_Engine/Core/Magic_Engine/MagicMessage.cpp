@@ -10,7 +10,7 @@ void MagicMessageCommon::Send_Message(unsigned int _MessageType, unsigned int _M
 
 int MagicMessageScenes::MessageHandle(unsigned int _MessageType, unsigned int _Message)
 {
-	MagicScene* _pMagicScene = dynamic_cast<MagicScene*>(this);
+	MagicScenes* _pMagicScene = dynamic_cast<MagicScenes*>(this);
 	if (_pMagicScene)
 	{
 		bool _RETURN_FINISH = false;

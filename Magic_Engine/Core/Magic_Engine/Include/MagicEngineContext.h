@@ -16,12 +16,12 @@
 
 extern const glm::mat4 CONST_CAMERA;
 
-class MagicScene;
+class MagicScenes;
 class MagicEngineContext;
 
 class DLL_MAGIC_ENGINE_OUTPUT_INPUT MagicCommon
 {
-	friend MagicScene;
+	friend MagicScenes;
 	friend MagicEngineContext;
 public:
 	MagicCommon() = default;
@@ -43,13 +43,13 @@ public:
 	virtual void DrawSpirit() {}
 };
 
-class DLL_MAGIC_ENGINE_OUTPUT_INPUT MagicScene :public MagicUICommon
+class DLL_MAGIC_ENGINE_OUTPUT_INPUT MagicScenes :public MagicUICommon
 {
 	friend class MagicMessageScenes;
 public:
-	MagicScene();
-	virtual ~MagicScene();
-	bool Initialize(MagicScene* _scene, glm::vec4 _PosSize);
+	MagicScenes();
+	virtual ~MagicScenes();
+	bool Initialize(MagicScenes* _scene, glm::vec4 _PosSize);
 
 	virtual void SetDisplayState(bool _state);
 
@@ -78,16 +78,16 @@ protected:
 
 	glm::vec4 m_PosSize;
 	glm::vec2 m_DrawPos;
-	MagicScene* pParentScene;
+	MagicScenes* pParentScene;
 
 	std::vector<MagicCommon*> v_Common;
 };
 
 
-class DLL_MAGIC_ENGINE_OUTPUT_INPUT MagicSceneEx :public MagicScene
+class DLL_MAGIC_ENGINE_OUTPUT_INPUT MagicScenesEx :public MagicScenes
 {
 public:
-	MagicSceneEx();
+	MagicScenesEx();
 
 	virtual void DrawSpirit();
 	virtual void SetDisplayState(bool);
@@ -97,7 +97,7 @@ public:
 	inline virtual unsigned int GetFBOTextrue() { return m_FBOBuffer.GetFBOTextrue(); }
 	inline virtual unsigned int GetTextrue() { return m_FBOBuffer.GetTextrue(); }
 protected:
-	virtual bool Initialize(MagicScene* _scene, glm::vec4 _PosSize);
+	virtual bool Initialize(MagicScenes* _scene, glm::vec4 _PosSize);
 	virtual void Render(glm::vec2 _DrawPos);
 	virtual void RenderBuffer();
 
@@ -112,7 +112,7 @@ protected:
 
 HGLRC CreateRCContxt(HDC _hdc);
 
-class DLL_MAGIC_ENGINE_OUTPUT_INPUT MagicEngineContext :public MagicScene
+class DLL_MAGIC_ENGINE_OUTPUT_INPUT MagicEngineContext :public MagicScenes
 {
 public:
 	MagicEngineContext();

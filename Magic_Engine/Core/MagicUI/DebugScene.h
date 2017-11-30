@@ -10,7 +10,7 @@ namespace Magic
 	{
 
 		class DebugScene :
-			public MagicScene
+			public MagicScenes
 		{
 		public:
 			DebugScene();

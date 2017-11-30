@@ -4,7 +4,7 @@
 #include "MagicEngineContext.h"
 
 
-class MainScene :public MagicScene
+class MainScene :public MagicScenes
 {
 public:
 	MainScene();

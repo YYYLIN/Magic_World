@@ -8,7 +8,7 @@ namespace Magic
 	namespace UI
 	{
 		class MenuScene :
-			public MagicScene
+			public MagicScenes
 		{
 		public:
 			MenuScene();
