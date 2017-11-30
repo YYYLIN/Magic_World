@@ -29,7 +29,7 @@ public:
 	MagicWindows();
 	~MagicWindows();
 
-	bool Initialize(const char* _name, int _x, int _y, int _w, int _h);
+	bool Initialize(const wchar_t* _name, int _x, int _y, int _w, int _h);
 
 	LRESULT CALLBACK MessageHandler(HWND, UINT, WPARAM, LPARAM);  //消息处理函数
 
@@ -43,7 +43,7 @@ public:
 	void SetCallbackMessage_WIN32(Magic::CallbackMessage_WIN32 _CallbackMessage_WIN32);
 	void RequestOuitSystem();
 private:
-	bool CreateWindows(const char* _Name, int _x, int _y, int _width, int _height);
+	bool CreateWindows(const wchar_t* _Name, int _x, int _y, int _width, int _height);
 	void Shutdown();
 
 private:
@@ -66,7 +66,7 @@ private:
 		unsigned int m_Shaderworld;*/
 
 	/*	SGDI m_SGDI;*/
-	char m_applicationName[256];
+	wchar_t m_applicationName[256];
 	HINSTANCE m_hinstance;
 	HWND m_hwnd;
 public:

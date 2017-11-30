@@ -7,7 +7,7 @@
 
 namespace Magic
 {
-	DLL_MAGICUI_OUTPUT_INPUT bool CreateSystemUI(const char* _name, int _x, int _y, int _w, int _h);
+	DLL_MAGICUI_OUTPUT_INPUT bool CreateSystemUI(const wchar_t* _name, int _x, int _y, int _w, int _h);
 
 	DLL_MAGICUI_OUTPUT_INPUT void ShutdownSystemUI();
 

@@ -31,7 +31,7 @@ MagicWindows::~MagicWindows()
 	Shutdown();
 }
 
-bool MagicWindows::Initialize(const char* _name, int _x, int _y, int _w, int _h)
+bool MagicWindows::Initialize(const wchar_t* _name, int _x, int _y, int _w, int _h)
 {
 	bool result;
 	result = CreateWindows(_name, _x, _y, _w, _h);
@@ -72,56 +72,56 @@ bool MagicWindows::Initialize(const char* _name, int _x, int _y, int _w, int _h)
 		return false;
 		m_MagicEngineContext.AddCommon(&m_MagicWorld);*/
 
-		/*
-			result = m_MagicScene.Initialize(&m_MagicEngineContext, glm::vec4(0, 0, 1024, 768));
-			if (!result)
-			return false;*/
+	/*
+		result = m_MagicScene.Initialize(&m_MagicEngineContext, glm::vec4(0, 0, 1024, 768));
+		if (!result)
+		return false;*/
 
 
-			//--------------------------------------------
-			/*
-				result = CreateMagicGratingContext(&m_MGContext);
-				if (!result)
-				return false;
-				result = InitMagicGratingContext(m_MGContext);
-				if (!result)
-				return false;
-				BindMagicGratingContext(m_MGContext);
-				BindMGDisplayContext(m_MGContext, m_SGDI.m_pBackBuffer, 1024, 768, MG_BGRA, MG_UCHAR);
-				//--------------------------------------------
-				MG_CreateFrameBufferObject(&m_MGFrameBuffer);
-				MG_BindFrameBuffer(m_MGFrameBuffer);
-				result = MG_InitFrameBuffer(1024, 768);
-				if (!result)
-				return false;
-				MG_ClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-				//-------------Shader-------------------------
-				CreateMagicShaderObject(&m_Shader);
-				BindMagicShaderObject(m_Shader);
-				m_ShaderCamera = MGAddShaderVariate(sizeof(Magic::Matrix4));
-				m_Shaderprojection = MGAddShaderVariate(sizeof(Magic::Matrix4));
-				m_Shaderworld = MGAddShaderVariate(sizeof(Magic::Matrix4));
-				InitMagicShaderObject(Shader_VertexShader, Shader_PixelShader);
+	//--------------------------------------------
+	/*
+		result = CreateMagicGratingContext(&m_MGContext);
+		if (!result)
+		return false;
+		result = InitMagicGratingContext(m_MGContext);
+		if (!result)
+		return false;
+		BindMagicGratingContext(m_MGContext);
+		BindMGDisplayContext(m_MGContext, m_SGDI.m_pBackBuffer, 1024, 768, MG_BGRA, MG_UCHAR);
+		//--------------------------------------------
+		MG_CreateFrameBufferObject(&m_MGFrameBuffer);
+		MG_BindFrameBuffer(m_MGFrameBuffer);
+		result = MG_InitFrameBuffer(1024, 768);
+		if (!result)
+		return false;
+		MG_ClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		//-------------Shader-------------------------
+		CreateMagicShaderObject(&m_Shader);
+		BindMagicShaderObject(m_Shader);
+		m_ShaderCamera = MGAddShaderVariate(sizeof(Magic::Matrix4));
+		m_Shaderprojection = MGAddShaderVariate(sizeof(Magic::Matrix4));
+		m_Shaderworld = MGAddShaderVariate(sizeof(Magic::Matrix4));
+		InitMagicShaderObject(Shader_VertexShader, Shader_PixelShader);
 
-				MG_SetShaderVariate(m_ShaderCamera, &Magic::Matrix4());
-				MG_SetShaderVariate(m_Shaderprojection, &Magic::Matrix4());
-				MG_SetShaderVariate(m_Shaderworld, &Magic::Matrix4());
-				//--------------------------------------------
-				MG_CreateVertexArrays(&m_VertexArrays);
-				MG_BindVertexArrays(m_VertexArrays);
-				MG_EnableVertexAttribArray(1);
+		MG_SetShaderVariate(m_ShaderCamera, &Magic::Matrix4());
+		MG_SetShaderVariate(m_Shaderprojection, &Magic::Matrix4());
+		MG_SetShaderVariate(m_Shaderworld, &Magic::Matrix4());
+		//--------------------------------------------
+		MG_CreateVertexArrays(&m_VertexArrays);
+		MG_BindVertexArrays(m_VertexArrays);
+		MG_EnableVertexAttribArray(1);
 
-				float pVertex[] =
-				{
-				0.5f,0.0f,0.0f,
-				0.0f,0.5f,0.0f,
-				-0.5f,0.0f,0.0f
-				};
+		float pVertex[] =
+		{
+		0.5f,0.0f,0.0f,
+		0.0f,0.5f,0.0f,
+		-0.5f,0.0f,0.0f
+		};
 
-				MG_CreateBuffer(&m_VertexBuffer);
-				MG_BindBuffer(MG_ARRAY_BUFFER, m_VertexBuffer);
-				MG_BufferData(MG_ARRAY_BUFFER, sizeof(float) * 3 * 3, pVertex);
-				MG_VertexAttribPointer(0, 3, MG_FLOAT);*/
+		MG_CreateBuffer(&m_VertexBuffer);
+		MG_BindBuffer(MG_ARRAY_BUFFER, m_VertexBuffer);
+		MG_BufferData(MG_ARRAY_BUFFER, sizeof(float) * 3 * 3, pVertex);
+		MG_VertexAttribPointer(0, 3, MG_FLOAT);*/
 
 	return true;
 }
@@ -181,14 +181,14 @@ void MagicWindows::Run()     //过程处理函数
 						glReadPixels(0, 0, m_SGDI.m_Width, m_SGDI.m_Height, GL_BGRA_EXT, GL_UNSIGNED_BYTE, m_SGDI.m_pBackBuffer);
 						glBindTexture(GL_TEXTURE_2D, m_MagicSceneCircle.GetTextrue());
 						glGetTexImage(GL_TEXTURE_2D, 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, m_SGDI.m_pBackBuffer);*/
-						/*
-									MG_Clear(MG_COLOR_BUFFER);
+			/*
+						MG_Clear(MG_COLOR_BUFFER);
 
-									MGDrawArrays(MG_DrawPoints, 0, 3);
+						MGDrawArrays(MG_DrawPoints, 0, 3);
 
-									MG_WaitSwapFrame();
+						MG_WaitSwapFrame();
 
-									UpdataAlphaWindow(&m_SGDI);*/
+						UpdataAlphaWindow(&m_SGDI);*/
 		}
 	}
 
@@ -223,10 +223,10 @@ void MagicWindows::RequestOuitSystem()
 	PostQuitMessage(0);
 }
 
-bool MagicWindows::CreateWindows(const char* _Name, int _x, int _y, int _width, int _height)
+bool MagicWindows::CreateWindows(const wchar_t* _Name, int _x, int _y, int _width, int _height)
 {
-	WNDCLASSEXA wc;
-	strcpy_s(m_applicationName, 256, _Name);
+	WNDCLASSEX wc;
+	wcscpy_s(m_applicationName, 256, _Name);
 
 	// 得到这个应用程序的实例。
 	m_hinstance = GetModuleHandle(NULL);
@@ -237,23 +237,24 @@ bool MagicWindows::CreateWindows(const char* _Name, int _x, int _y, int _width, 
 	wc.cbClsExtra = 0;
 	wc.cbWndExtra = 0;
 	wc.hInstance = m_hinstance;
-	wc.hIcon = (HICON)::LoadImage(NULL, L"魔法阵：鑫.ico", IMAGE_ICON, 0, 0, LR_DEFAULTSIZE | LR_LOADFROMFILE);  //本地加载自定义ico图标
+	//wc.hIcon = (HICON)::LoadImage(NULL, L"魔法阵：鑫.ico", IMAGE_ICON, 0, 0, LR_DEFAULTSIZE | LR_LOADFROMFILE);  //本地加载自定义ico图标
+	wc.hIcon = NULL;
 	wc.hIconSm = wc.hIcon;
 	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
 	wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
-	wc.lpszMenuName = NULL;
+	wc.lpszMenuName = m_applicationName;
 	wc.lpszClassName = m_applicationName;
 	wc.cbSize = sizeof(WNDCLASSEX);
 
 	// 注册窗口类。
-	RegisterClassExA(&wc);
+	RegisterClassEx(&wc);
 
 	/*
 	posX = (GetSystemMetrics(SM_CXSCREEN) - _width) / 2;
 	posY = (GetSystemMetrics(SM_CYSCREEN) - _height) / 2;*/
 
 	// 在屏幕上设置创建窗口并掌握它。
-	m_hwnd = CreateWindowExA(WS_EX_APPWINDOW, m_applicationName, m_applicationName,
+	m_hwnd = CreateWindowEx(WS_EX_APPWINDOW, m_applicationName, m_applicationName,
 		WS_POPUP | WS_MINIMIZEBOX | WS_SYSMENU,
 		_x, _y, _width, _height, NULL, NULL, m_hinstance, NULL);
 
@@ -274,13 +275,13 @@ void MagicWindows::Shutdown()
 		MG_DeleteFrameBufferObject(&m_MGFrameBuffer);
 		DeleteMagicGratingContext(&m_MGContext);*/
 
-		/*	DisableAlphaWindow(&m_SGDI);*/
-		// 删除窗口。
+	/*	DisableAlphaWindow(&m_SGDI);*/
+	// 删除窗口。
 	DestroyWindow(m_hwnd);
 	m_hwnd = NULL;
 
 	// 删除应用实例。
-	UnregisterClassA(m_applicationName, m_hinstance);
+	UnregisterClass(m_applicationName, m_hinstance);
 	m_hinstance = NULL;
 }
 

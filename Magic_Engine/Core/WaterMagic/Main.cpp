@@ -5,7 +5,7 @@
 
 int CALLBACK _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevainstance, LPWSTR lpcmdline, int iCmdshow)
 {
-	bool result = Magic::CreateSystemUI("WaterMagic", 0, 0, 1024, 768);
+	bool result = Magic::CreateSystemUI(L"WaterMagic", 0, 0, 1024, 768);
 	if (!result)
 		return false;
 

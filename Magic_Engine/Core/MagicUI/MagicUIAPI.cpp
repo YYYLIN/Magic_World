@@ -4,7 +4,7 @@
 
 namespace Magic
 {
-	bool CreateSystemUI(const char* _name, int _x, int _y, int _w, int _h)
+	bool CreateSystemUI(const wchar_t* _name, int _x, int _y, int _w, int _h)
 	{
 		if (MagicWindows::pMagicWindows)
 			return false;

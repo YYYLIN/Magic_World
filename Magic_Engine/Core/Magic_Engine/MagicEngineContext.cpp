@@ -371,34 +371,34 @@ bool MagicEngineContext::AddPen_Common(const char* _name, Magic::Pen_Common* _co
 }
 
 
-const GLubyte* MagicEngineContext::GetRenderer()
+const unsigned char* MagicEngineContext::GetRenderer()
 {
 	return glGetString(GL_RENDERER);
 }
 
-const GLubyte* MagicEngineContext::GetVendor()
+const unsigned char* MagicEngineContext::GetVendor()
 {
 	return glGetString(GL_VENDOR);
 }
 
-const GLubyte* MagicEngineContext::GetVersion()
+const unsigned char* MagicEngineContext::GetVersion()
 {
 	return glGetString(GL_VERSION);
 }
 
-const GLubyte* MagicEngineContext::GetGlSLVersion()
+const unsigned char* MagicEngineContext::GetGlSLVersion()
 {
 	return glGetString(GL_SHADING_LANGUAGE_VERSION);
 }
 
-GLint MagicEngineContext::Getmajor()
+int MagicEngineContext::Getmajor()
 {
 	GLint major;
 	glGetIntegerv(GL_MAJOR_VERSION, &major);
 	return major;
 }
 
-GLint MagicEngineContext::Getminor()
+int MagicEngineContext::Getminor()
 {
 	GLint minor;
 	glGetIntegerv(GL_MINOR_VERSION, &minor);
