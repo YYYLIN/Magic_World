@@ -135,11 +135,11 @@ bool LoodFileOBJ(const char* _filename, FILE_OBG_TYPE* _pFILE_OBG_TYPE)
 		if (wChar[0] == 'v' && wChar[1] == 0x00)
 		{
 			file >> wChar;
-			_pPosition[a].x = atof(wChar);
+			_pPosition[a].x = (float)atof(wChar);
 			file >> wChar;
-			_pPosition[a].y = atof(wChar);
+			_pPosition[a].y = (float)atof(wChar);
 			file >> wChar;
-			_pPosition[a].z = atof(wChar);
+			_pPosition[a].z = (float)atof(wChar);
 			a++;
 		}
 	}
@@ -154,9 +154,9 @@ bool LoodFileOBJ(const char* _filename, FILE_OBG_TYPE* _pFILE_OBG_TYPE)
 		if (wChar[0] == 'v' && wChar[1] == 't' && wChar[2] == 0x00)
 		{
 			file >> wChar;
-			_pTexture[a].x = atof(wChar);
+			_pTexture[a].x = (float)atof(wChar);
 			file >> wChar;
-			_pTexture[a].y = atof(wChar);
+			_pTexture[a].y = (float)atof(wChar);
 			a++;
 		}
 	}
@@ -171,11 +171,11 @@ bool LoodFileOBJ(const char* _filename, FILE_OBG_TYPE* _pFILE_OBG_TYPE)
 		if (wChar[0] == 'v' && wChar[1] == 'n' && wChar[2] == 0x00)
 		{
 			file >> wChar;
-			_pNormal[a].x = atof(wChar);
+			_pNormal[a].x = (float)atof(wChar);
 			file >> wChar;
-			_pNormal[a].y = atof(wChar);
+			_pNormal[a].y = (float)atof(wChar);
 			file >> wChar;
-			_pNormal[a].z = atof(wChar);
+			_pNormal[a].z = (float)atof(wChar);
 			a++;
 		}
 	}

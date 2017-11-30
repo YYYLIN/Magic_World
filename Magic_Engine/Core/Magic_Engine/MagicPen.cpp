@@ -1000,8 +1000,8 @@ namespace Magic
 							glDisable(GL_SCISSOR_TEST);
 					}
 					if (_SCISSOR_MESSAGE.ScissorPosWH != _pSCISSOR_MESSAGE->ScissorPosWH)
-						glScissor(_pSCISSOR_MESSAGE->ScissorPosWH.x, _pSCISSOR_MESSAGE->ScissorPosWH.y,
-							_pSCISSOR_MESSAGE->ScissorPosWH.z, _pSCISSOR_MESSAGE->ScissorPosWH.w);
+						glScissor((int)_pSCISSOR_MESSAGE->ScissorPosWH.x, (int)_pSCISSOR_MESSAGE->ScissorPosWH.y,
+						(int)_pSCISSOR_MESSAGE->ScissorPosWH.z, (int)_pSCISSOR_MESSAGE->ScissorPosWH.w);
 
 					_SCISSOR_MESSAGE = *_pSCISSOR_MESSAGE;
 				}

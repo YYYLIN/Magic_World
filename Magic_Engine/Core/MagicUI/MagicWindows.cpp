@@ -209,7 +209,7 @@ MagicScene* MagicWindows::GetSystemScenes(Magic::SYSTEMSCENES _SYSTEMSCENES)
 	case Magic::SYSTEM_SCENES:
 		return &m_SystemScene;
 	default:
-		break;
+		return 0;
 	}
 }
 

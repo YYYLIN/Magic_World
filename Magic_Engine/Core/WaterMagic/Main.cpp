@@ -1,5 +1,6 @@
 #include "MagicUIAPI.h"
 #include "MainScene.h"
+#include <tchar.h>
 
 
 int CALLBACK _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevainstance, LPWSTR lpcmdline, int iCmdshow)

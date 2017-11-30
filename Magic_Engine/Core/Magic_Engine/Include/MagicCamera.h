@@ -4,6 +4,9 @@
 #include <gtx/transform2.hpp>
 #include <glm.hpp>
 
+#pragma warning(push)
+#pragma warning(disable:4251)
+
 class MagicCamera
 {
 public:
@@ -57,3 +60,4 @@ private:
 
 };
 
+#pragma warning(pop)

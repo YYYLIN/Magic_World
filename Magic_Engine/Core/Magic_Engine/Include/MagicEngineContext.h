@@ -10,12 +10,15 @@
 #include "MagicTexture.h"
 #include "MagicPen.h"
 
+#pragma warning(push)
+#pragma warning(disable:4251)
+
 extern const glm::mat4 CONST_CAMERA;
 
 class MagicScene;
 class MagicEngineContext;
 
-class MagicCommon
+class DLL_MAGIC_ENGINE_OUTPUT_INPUT MagicCommon
 {
 	friend MagicScene;
 	friend MagicEngineContext;
@@ -30,7 +33,7 @@ protected:
 	virtual	void Draw() {};
 };
 
-class MagicUICommon :public MagicCommon
+class DLL_MAGIC_ENGINE_OUTPUT_INPUT MagicUICommon :public MagicCommon
 {
 public:
 	MagicUICommon() = default;
@@ -178,3 +181,4 @@ public:
 	static MagicEngineContext* pMagicEngineContext;
 };
 
+#pragma warning(pop)

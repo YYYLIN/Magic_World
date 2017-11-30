@@ -13,6 +13,8 @@
 
 #include "vector"
 
+#pragma warning(push)
+#pragma warning(disable:4251)
 
 namespace Magic
 {
@@ -534,5 +536,6 @@ namespace Magic
 	};
 
 }
+#pragma warning(pop)
 
 #endif

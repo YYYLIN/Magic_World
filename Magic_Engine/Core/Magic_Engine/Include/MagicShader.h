@@ -6,6 +6,9 @@
 #include <string>
 #include <fstream> 
 
+#pragma warning(push)
+#pragma warning(disable:4251)
+
 class DLL_MAGIC_ENGINE_OUTPUT_INPUT MagicShader
 {
 public:
@@ -38,5 +41,7 @@ private:
 	std::map<std::string, unsigned int> AttributeList;
 	std::map<std::string, unsigned int> UniformLocationList;
 };
+
+#pragma warning(pop)
 
 #endif

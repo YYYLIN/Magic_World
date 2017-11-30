@@ -9,6 +9,8 @@ Create time:2017 04 01
 */
 
 #include <wchar.h>
+#include <stdio.h>
+
 
 namespace Magic
 {
