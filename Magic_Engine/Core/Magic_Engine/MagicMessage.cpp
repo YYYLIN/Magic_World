@@ -11,7 +11,7 @@ void MagicMessageCommon::Send_Message(unsigned int _MessageType, unsigned int _M
 int MagicMessageScenes::MessageHandle(unsigned int _MessageType, unsigned int _Message)
 {
 	MagicScenes* _pMagicScene = dynamic_cast<MagicScenes*>(this);
-	if (_pMagicScene)
+	if (_pMagicScene && _pMagicScene->GetDisplayState())
 	{
 		bool _RETURN_FINISH = false;
 		for (std::vector<MagicCommon*>::reverse_iterator _iterator = _pMagicScene->v_Common.rbegin();
