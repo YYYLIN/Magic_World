@@ -1,16 +1,21 @@
 #ifndef _MAGICMESSAGE_H_
 #define _MAGICMESSAGE_H_
 
+class MagicMessageScenes;
 
-
-class MagicMessage
+class MagicMessageCommon
 {
+	friend class MagicMessageScenes;
 public:
-/*
-	MagicMessage();
-	~MagicMessage();*/
+	void Send_Message(unsigned int _MessageType, unsigned int _Message);
+protected:
+	virtual int MessageHandle(unsigned int _MessageType, unsigned int _Message) = 0;
+};
 
-	virtual void MessageHandle(unsigned int _MessageType, unsigned int _Message) = 0;
+class MagicMessageScenes :public MagicMessageCommon
+{
+protected:
+	virtual int MessageHandle(unsigned int _MessageType, unsigned int _Message);
 };
 
 

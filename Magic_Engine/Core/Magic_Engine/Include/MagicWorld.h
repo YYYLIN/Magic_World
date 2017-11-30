@@ -4,7 +4,7 @@
 #include "MagicModelObject.h"
 #include "MagicMessage.h"
 
-class MagicWorld :public MagicCommon, public MagicMessage
+class MagicWorld :public MagicCommon, public MagicMessageCommon
 {
 public:
 	MagicWorld();
@@ -13,7 +13,7 @@ public:
 	bool Initialize();
 	void Shutdown();
 
-	virtual void MessageHandle(unsigned int _MessageType, unsigned int _Message);
+	virtual int MessageHandle(unsigned int _MessageType, unsigned int _Message);
 
 	void AddModelObject(MagicModelObject* _pMagicModelObject);
 protected:

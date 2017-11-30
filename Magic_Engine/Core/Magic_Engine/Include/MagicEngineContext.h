@@ -9,6 +9,7 @@
 #include "windows.h"
 #include "MagicTexture.h"
 #include "MagicPen.h"
+#include "MagicMessage.h"
 
 #pragma warning(push)
 #pragma warning(disable:4251)
@@ -44,6 +45,7 @@ public:
 
 class DLL_MAGIC_ENGINE_OUTPUT_INPUT MagicScene :public MagicUICommon
 {
+	friend class MagicMessageScenes;
 public:
 	MagicScene();
 	virtual ~MagicScene();
