@@ -59,7 +59,7 @@ namespace Magic
 		glGenVertexArrays(1, &m_VAO);
 	}
 
-	void VERTEX_BUFFER::SetBuffer(unsigned int _BufferPos, DRAW_USAGE _usage, unsigned int _number, unsigned int* _4byteSize)
+	void VERTEX_BUFFER::SetBuffer(unsigned int _BufferPos, DRAW_USAGE _usage, unsigned int _number, unsigned int* _4byteSize, unsigned int _divisor)
 	{
 		glBindVertexArray(m_VAO);
 
@@ -74,6 +74,8 @@ namespace Magic
 			unsigned int _pos = a - m_Max_CardSlot;
 			glEnableVertexAttribArray(_pos);
 			glVertexAttribPointer(_pos, _4byteSize[_pos], GL_FLOAT, GL_FALSE, _Always_Size * sizeof(float), (GLvoid*)(_start_pos * sizeof(float)));
+			//每个对象对应几个图元
+			glVertexAttribDivisor(_pos, _divisor);
 			_start_pos += _4byteSize[_pos];
 		}
 
