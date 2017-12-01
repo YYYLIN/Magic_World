@@ -13,6 +13,9 @@ public:
 protected:
 	bool OnInitialize();
 	void Draw();
+
+private:
+	MagicTexture pMagicTexture;
 };
 
 

@@ -45,7 +45,7 @@ namespace Magic
 
 		struct LINE_VERTEX
 		{
-			glm::vec2 Position;
+			glm::vec3 Position;
 			Magic::Color4 Color;
 		};
 

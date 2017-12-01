@@ -5,8 +5,8 @@
 
 int CALLBACK _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevainstance, LPWSTR lpcmdline, int iCmdshow)
 {
-	bool result = Magic::CreateSystemUI(L"WaterMagic", 0, 0, 1024, 768);
-	if (!result)
+	bool _result = Magic::CreateSystemUI(L"WaterMagic", 0, 0, 1024, 768);
+	if (!_result)
 		return false;
 
 	HICON _ico = (HICON)::LoadImageA(NULL, 0, IMAGE_ICON, 0, 0, LR_DEFAULTSIZE | LR_LOADFROMFILE);
@@ -14,7 +14,9 @@ int CALLBACK _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevainstance, LPWSTR lpc
 
 	MainScene* pMainScene = new MainScene;
 
-	pMainScene->Initialize(Magic::GetSystemScenes(Magic::USER_SCENES), glm::vec4(0, 0, 1024, 768));
+	_result = pMainScene->Initialize(Magic::GetSystemScenes(Magic::USER_SCENES), glm::vec4(0, 0, 1024, 768));
+	if (!_result)
+		return false;
 
 	Magic::RunSystem();
 

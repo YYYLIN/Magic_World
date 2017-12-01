@@ -259,12 +259,17 @@ namespace Magic
 		m_Line_PointSize = m_LineShader("PointSize");
 
 		m_Picture_VBO.CreateBuffer(2);
-		unsigned int _Array_Size[] = { 2,2,4 };
+		unsigned int _Array_Size[] = { 
+			sizeof(PICTURE_VERTEX::Position) / sizeof(float),
+			sizeof(PICTURE_VERTEX::UV) / sizeof(float),
+			sizeof(PICTURE_VERTEX::Color) / sizeof(float) };
 		m_Picture_VBO.SetBuffer(0, Magic::VERTEX_BUFFER::DYNAMIC_DRAW, 3, _Array_Size);
 		m_Picture_VBO.SetIndexBuffer(1);
 
 		m_Line_VBO.CreateBuffer(1);
-		unsigned int _Line_Array_Size[] = { 2,4 };
+		unsigned int _Line_Array_Size[] = {
+			sizeof(PICTURE_VERTEX::Position) / sizeof(float),
+			sizeof(PICTURE_VERTEX::Color) / sizeof(float) };
 		m_Line_VBO.SetBuffer(0, Magic::VERTEX_BUFFER::DYNAMIC_DRAW, 2, _Line_Array_Size);
 
 		return true;
@@ -428,8 +433,8 @@ namespace Magic
 		_Vertex.UV.x = _pPICTURE_DRAW->PitureUV[0].x;
 		_Vertex.UV.y = _pPICTURE_DRAW->PitureUV[0].y;
 		_pV_VERTEX->push_back(_Vertex);
-		_Vertex.Position.x = _x;
-		_Vertex.Position.y = _y + _h;
+		_Vertex.Position.x = _x + _w;
+		_Vertex.Position.y = _y;
 		_Vertex.UV.x = _pPICTURE_DRAW->PitureUV[1].x;
 		_Vertex.UV.y = _pPICTURE_DRAW->PitureUV[1].y;
 		_pV_VERTEX->push_back(_Vertex);
@@ -438,8 +443,8 @@ namespace Magic
 		_Vertex.UV.x = _pPICTURE_DRAW->PitureUV[2].x;
 		_Vertex.UV.y = _pPICTURE_DRAW->PitureUV[2].y;
 		_pV_VERTEX->push_back(_Vertex);
-		_Vertex.Position.x = _x + _w;
-		_Vertex.Position.y = _y;
+		_Vertex.Position.x = _x;
+		_Vertex.Position.y = _y + _h;
 		_Vertex.UV.x = _pPICTURE_DRAW->PitureUV[3].x;
 		_Vertex.UV.y = _pPICTURE_DRAW->PitureUV[3].y;
 		_pV_VERTEX->push_back(_Vertex);
