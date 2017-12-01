@@ -84,12 +84,12 @@ namespace Magic
 		pNowTexture = 0;
 		PitureUV[0].x = 0.0f;
 		PitureUV[0].y = 0.0f;
-		PitureUV[1].x = 0.0f;
-		PitureUV[1].y = 1.0f;
+		PitureUV[1].x = 1.0f;
+		PitureUV[1].y = 0.0f;
 		PitureUV[2].x = 1.0f;
 		PitureUV[2].y = 1.0f;
-		PitureUV[3].x = 1.0f;
-		PitureUV[3].y = 0.0f;
+		PitureUV[3].x = 0.0f;
+		PitureUV[3].y = 1.0f;
 	}
 
 	void Pen_Normal::PICTURE_DRAW::Clear()
@@ -98,12 +98,12 @@ namespace Magic
 		pNowTexture = 0;
 		PitureUV[0].x = 0.0f;
 		PitureUV[0].y = 0.0f;
-		PitureUV[1].x = 0.0f;
-		PitureUV[1].y = 1.0f;
+		PitureUV[1].x = 1.0f;
+		PitureUV[1].y = 0.0f;
 		PitureUV[2].x = 1.0f;
 		PitureUV[2].y = 1.0f;
-		PitureUV[3].x = 1.0f;
-		PitureUV[3].y = 0.0f;
+		PitureUV[3].x = 0.0f;
+		PitureUV[3].y = 1.0f;
 		V_Vertex.clear();
 		V_Index.clear();
 	}
@@ -548,12 +548,12 @@ namespace Magic
 		glm::vec2* _pUV = pNowDRAW_BOX->Picture_Draw.PitureUV;
 		_pUV[0].x = _Left;
 		_pUV[0].y = _Down;
-		_pUV[1].x = _Left;
-		_pUV[1].y = _Up;
+		_pUV[1].x = _Right;
+		_pUV[1].y = _Down;
 		_pUV[2].x = _Right;
 		_pUV[2].y = _Up;
-		_pUV[3].x = _Right;
-		_pUV[3].y = _Down;
+		_pUV[3].x = _Left;
+		_pUV[3].y = _Up;
 	}
 
 	void Pen_Normal::BindPictureUVPosfault()
@@ -561,12 +561,12 @@ namespace Magic
 		glm::vec2* _pUV = pNowDRAW_BOX->Picture_Draw.PitureUV;
 		_pUV[0].x = 0.0f;
 		_pUV[0].y = 0.0f;
-		_pUV[1].x = 0.0f;
-		_pUV[1].y = 1.0f;
+		_pUV[1].x = 1.0f;
+		_pUV[1].y = 0.0f;
 		_pUV[2].x = 1.0f;
 		_pUV[2].y = 1.0f;
-		_pUV[3].x = 1.0f;
-		_pUV[3].y = 0.0f;
+		_pUV[3].x = 0.0f;
+		_pUV[3].y = 1.0f;
 	}
 
 	void Pen_Normal::SetColor(const Magic::Color4 & _color)

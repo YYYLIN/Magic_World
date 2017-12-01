@@ -27,6 +27,7 @@ void MainScene::Draw()
 	pPen_Normal->DrawRectangle(Magic::Pen_Normal::TRIANGLES, 30, 30, 100, 100);
 
 	pPen_Normal->EnableAlpha();
+	pPen_Normal->SetColor(Magic::Color4());
 	pPen_Normal->BindPicture(&pMagicTexture);
-	pPen_Normal->DrawPicture(300, 200, (int)pMagicTexture.GetHeight() * 0.2f, (int)pMagicTexture.GetWidth() * 0.2f);
+	pPen_Normal->DrawPicture(150, 150, (int)pMagicTexture.GetWidth() * 0.2f, (int)pMagicTexture.GetHeight() * 0.2f);
 }
