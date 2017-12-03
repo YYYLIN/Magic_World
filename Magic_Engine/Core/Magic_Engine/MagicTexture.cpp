@@ -392,19 +392,19 @@ bool MagicTexture::LoadPNG(const char*file_name)
 }
 
 
-MagicFBOTextrue::MagicFBOTextrue()
+MagicFBOTexture::MagicFBOTexture()
 {
 	m_Textrue = 0;
 	m_Depth_Stencil = 0;
 	m_MultisampleNumber = 0;
 }
 
-MagicFBOTextrue::~MagicFBOTextrue()
+MagicFBOTexture::~MagicFBOTexture()
 {
 	Shutdown();
 }
 
-bool MagicFBOTextrue::Initialize(const int& _w, const int& _h, const MODE _mode, unsigned char _MultisampleNumber)
+bool MagicFBOTexture::Initialize(const int& _w, const int& _h, const MODE _mode, unsigned char _MultisampleNumber)
 {
 	width = _w;
 	height = _h;
@@ -481,24 +481,47 @@ bool MagicFBOTextrue::Initialize(const int& _w, const int& _h, const MODE _mode,
 	return true;
 }
 
-bool MagicFBOTextrue::ResetSize(const int& _w, const int& _h, unsigned char _MultisampleNumber)
+bool MagicFBOTexture::ResetSize(const int& _w, const int& _h, unsigned char _MultisampleNumber)
 {
 	this->Shutdown();
 	MagicTexture::Shutdown();
 	return this->Initialize(_w, _h, m_MODE, _MultisampleNumber);
 }
 
-void MagicFBOTextrue::Use()
+void MagicFBOTexture::CopyFBOTO(MagicFBOTexture* _pTagetFBO, int _tagetX, int _tagetY, int _tagetW, int _tagetH,
+	int _sourceX, int _sourceY, int _sourceW, int _sourceH)
+{
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, this->GetFBOTexture());
+	if (_pTagetFBO)
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, _pTagetFBO->GetFBOTexture());
+	else
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+	glBlitFramebuffer(_sourceX, _sourceY, _sourceW, _sourceH, _tagetX, _tagetY, _tagetW, _tagetH, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+}
+
+void MagicFBOTexture::Clear(unsigned int _b_mode)
+{
+	unsigned int _mode = 0;
+	if (_b_mode & BUFFER_MODE::B_COLOR)
+		_mode |= GL_COLOR_BUFFER_BIT;
+	if (_b_mode & BUFFER_MODE::B_DEPTH)
+		_mode |= GL_DEPTH_BUFFER_BIT;
+	if (_b_mode & BUFFER_MODE::B_STENCIL)
+		_mode |= GL_STENCIL_BUFFER_BIT;
+	glClear(_mode);
+}
+
+void MagicFBOTexture::Use()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, m_Textrue);
 }
 
-void MagicFBOTextrue::UnUse()
+void MagicFBOTexture::UnUse()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-bool MagicFBOTextrue::CreateDepthStencil(unsigned int _type)
+bool MagicFBOTexture::CreateDepthStencil(unsigned int _type)
 {
 	//分配zbuffer给FBO 使用 
 	glGenRenderbuffers(1, &m_Depth_Stencil);
@@ -525,7 +548,7 @@ bool MagicFBOTextrue::CreateDepthStencil(unsigned int _type)
 	return true;
 }
 
-void MagicFBOTextrue::Shutdown()
+void MagicFBOTexture::Shutdown()
 {
 	if (m_Textrue)
 	{

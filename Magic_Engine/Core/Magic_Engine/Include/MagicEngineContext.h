@@ -59,7 +59,7 @@ public:
 
 	inline glm::vec2 GetDrawPos() { return m_DrawPos; }
 
-	virtual unsigned int GetFBOTextrue() { return 0; }
+	virtual MagicFBOTexture* GetFBOTexture() { return 0; }
 
 	void AddCommon(MagicCommon*);
 	void RemoveCommon(MagicCommon*);
@@ -94,10 +94,10 @@ public:
 
 	virtual glm::vec2 GetFrameBufferSize();
 
-	inline virtual unsigned int GetFBOTextrue() { return m_FBOBuffer.GetFBOTextrue(); }
-	inline virtual unsigned int GetTextrue() { return m_FBOBuffer.GetTextrue(); }
-protected:
+	inline virtual MagicFBOTexture* GetFBOTexture() { return &m_FBOBuffer; }
+
 	virtual bool Initialize(MagicScenes* _scene, glm::vec4 _PosSize);
+protected:
 	virtual void Render(glm::vec2 _DrawPos);
 	virtual void RenderBuffer();
 
@@ -107,7 +107,7 @@ protected:
 protected:
 	bool m_DrawMessage;
 
-	MagicFBOTextrue m_FBOBuffer;
+	MagicFBOTexture m_FBOBuffer;
 };
 
 HGLRC CreateRCContxt(HDC _hdc);

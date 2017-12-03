@@ -56,7 +56,7 @@ protected:
 };
 
 
-class DLL_MAGIC_ENGINE_OUTPUT_INPUT MagicFBOTextrue :public MagicTexture
+class DLL_MAGIC_ENGINE_OUTPUT_INPUT MagicFBOTexture :public MagicTexture
 {
 public:
 	enum MODE {
@@ -65,20 +65,28 @@ public:
 		COLOR4_DEPTH24_STENCIL8,
 		DEPTH
 	};
+	enum BUFFER_MODE {
+		B_COLOR = 1,
+		B_DEPTH = 1 << 1,
+		B_STENCIL = 1 << 2
+	};
 
-	MagicFBOTextrue();
-	virtual ~MagicFBOTextrue();
+	MagicFBOTexture();
+	virtual ~MagicFBOTexture();
 
 	virtual bool Initialize(const int& _w, const int& _h, const MODE _mode, unsigned char _MultisampleNumber = 0);
 	bool ResetSize(const int& _w, const int& _h, unsigned char _MultisampleNumber);
 
-
-
 	inline unsigned char GetMultisampleNumber() { return m_MultisampleNumber; }
 
-	inline unsigned int GetFBOTextrue() { return m_Textrue; }
+	inline unsigned int GetFBOTexture() { return m_Textrue; }
 
 	inline unsigned int GetDepth_Stencil() { return m_Depth_Stencil; }
+
+	void CopyFBOTO(MagicFBOTexture* _pTagetFBO, int _tagetX, int _tagetY, int _tagetW, int _tagetH,
+		int _sourceX, int _sourceY, int _sourceW, int _sourceH);
+
+	void Clear(unsigned int _b_mode);
 
 	void Use();
 	void UnUse();

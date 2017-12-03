@@ -140,7 +140,7 @@ bool MagicScenesEx::Initialize(MagicScenes* _scene, glm::vec4 _PosSize)
 		return false;
 
 	int w = (int)_PosSize.z, h = (int)_PosSize.w;
-	result = m_FBOBuffer.Initialize(w, h, MagicFBOTextrue::COLOR4);
+	result = m_FBOBuffer.Initialize(w, h, MagicFBOTexture::COLOR4);
 	if (!result)
 		return false;
 
@@ -156,9 +156,12 @@ void MagicScenesEx::Render(glm::vec2 _DrawPos)
 		if (m_DrawMessage)
 		{
 			m_FBOBuffer.Use();
-			glClear(GL_COLOR_BUFFER_BIT);
+			m_FBOBuffer.Clear(MagicFBOTexture::B_COLOR);
 			MagicScenes::Render(glm::vec2());
-			glBindFramebuffer(GL_FRAMEBUFFER, pParentScene->GetFBOTextrue());
+			if (pParentScene->GetFBOTexture())
+				pParentScene->GetFBOTexture()->Use();
+			else
+				m_FBOBuffer.UnUse();
 			m_DrawMessage = false;
 		}
 		this->RenderBuffer();
@@ -167,7 +170,6 @@ void MagicScenesEx::Render(glm::vec2 _DrawPos)
 
 void MagicScenesEx::RenderBuffer()
 {
-
 	Magic::Pen_Normal* pPen_Normal = MagicEngineContext::pMagicEngineContext->GetPen_Normal();
 	pPen_Normal->BindPicture(&m_FBOBuffer);
 	pPen_Normal->BindPictureUVPosfault();

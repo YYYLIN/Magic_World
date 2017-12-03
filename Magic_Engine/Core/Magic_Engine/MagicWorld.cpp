@@ -64,7 +64,7 @@ bool MagicWorld::Initialize()
 		m_BallModelObject.SetWorldMatrix(worldMatrix);
 		AddModelObject(&m_BallModelObject);*/
 
-	m_DepthFBO.Initialize(1024, 1024, MagicFBOTextrue::DEPTH);
+	m_DepthFBO.Initialize(1024, 1024, MagicFBOTexture::DEPTH);
 
 	//	pLightShader = (*MagicEngineContext::pMagicEngineContext->GetPen())["Light"];
 	//	pDepthShader = (*MagicEngineContext::pMagicEngineContext->GetPen())["Depth"];
