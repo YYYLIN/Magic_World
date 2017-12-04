@@ -74,7 +74,7 @@ namespace Magic
 			unsigned int _pos = a - m_Max_CardSlot;
 			glEnableVertexAttribArray(_pos);
 			glVertexAttribPointer(_pos, _4byteSize[_pos], GL_FLOAT, GL_FALSE, _Always_Size * sizeof(float), (GLvoid*)(_start_pos * sizeof(float)));
-			//每个对象对应几个图元
+			//每个对象对应几个实例
 			glVertexAttribDivisor(_pos, _divisor);
 			_start_pos += _4byteSize[_pos];
 		}

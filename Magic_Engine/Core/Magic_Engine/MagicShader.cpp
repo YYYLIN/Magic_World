@@ -1,4 +1,5 @@
 #include "MagicShader.h"
+#include "MagicEngineAPI.h"
 
 #include <iostream>
 #pragma comment(lib,"glew32.lib")
@@ -60,8 +61,8 @@ bool MagicShader::LoadFromString(unsigned int type, const std::string& source)
 	//错误检测  
 	if (0 == shader)
 	{
-		std::cerr << "错误：创建着色器失败" << std::endl;
-		exit(1);
+		Magic::SetEngineErrorMessage("error：Create shader Failed");
+		return false;
 	}
 	const char * ptmp = source.c_str();
 	//2.载入内存
@@ -84,8 +85,8 @@ bool MagicShader::LoadFromString(unsigned int type, const std::string& source)
 			GLsizei written;
 			//得到日志信息并输出  
 			glGetShaderInfoLog(shader, logLen, &written, log);
-			std::cerr << "vertex shader compile log : " << std::endl;
-			std::cerr << log << std::endl;
+			Magic::SetEngineErrorMessage("vertex shader compile log : ");
+			Magic::AddEngineErrorMessage(log);
 			free(log);//释放空间  
 			return false;
 		}
@@ -103,8 +104,8 @@ bool MagicShader::CreateAndLinkProgram()
 	programHandle = glCreateProgram();
 	if (!programHandle)
 	{
-		std::cerr << "ERROR : create program failed" << std::endl;
-		exit(1);
+		Magic::SetEngineErrorMessage("ERROR : create program failed");
+		return false;
 	}
 	if (Shaders[VERTEX_SHADER] != 0) {
 		glAttachShader(programHandle, Shaders[VERTEX_SHADER]);
@@ -122,7 +123,6 @@ bool MagicShader::CreateAndLinkProgram()
 	glGetProgramiv(programHandle, GL_LINK_STATUS, &linkStatus);
 	if (GL_FALSE == linkStatus)
 	{
-		std::cerr << "错误 : 链接着色器程序对象" << std::endl;
 		GLint logLen;
 		glGetProgramiv(programHandle, GL_INFO_LOG_LENGTH,
 			&logLen);
@@ -132,8 +132,11 @@ bool MagicShader::CreateAndLinkProgram()
 			GLsizei written;
 			glGetProgramInfoLog(programHandle, logLen,
 				&written, log);
-			std::cerr << "Program log : " << std::endl;
-			std::cerr << log << std::endl;
+			Magic::SetEngineErrorMessage("Program log : ");
+			Magic::AddEngineErrorMessage(log);
+			free(log);
+
+			return false;
 		}
 	}
 

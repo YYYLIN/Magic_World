@@ -43,7 +43,7 @@ namespace Magic
 		_usage = DRAW_USAGE(渲染属性)
 		_number = 排列对象数量
 		_byteSize = 每个对象占的多少个Float(4字节)
-		_divisor = 每个对象所对应的几个图元使用(0为每个顶点对应一个对象)
+		_divisor = 开始渲染一个新的实例的时候更新顶点属性的内容(0为每个顶点对应一个对象)
 		返回值:空
 		*/
 		void SetBuffer(unsigned int _BufferPos, DRAW_USAGE _usage, unsigned int _number, unsigned int* _4byteSize, unsigned int _divisor = 0);
