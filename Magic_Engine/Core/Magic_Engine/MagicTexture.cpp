@@ -496,7 +496,8 @@ void MagicFBOTexture::CopyFBOTO(MagicFBOTexture* _pTagetFBO, int _tagetX, int _t
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, _pTagetFBO->GetFBOTexture());
 	else
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-	glBlitFramebuffer(_sourceX, _sourceY, _sourceW, _sourceH, _tagetX, _tagetY, _tagetW, _tagetH, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+	glBlitFramebuffer(_sourceX, _sourceY, _sourceX + _sourceW, _sourceY + _sourceH, 
+	_tagetX, _tagetY, _tagetX + _tagetW, _tagetY + _tagetH, GL_COLOR_BUFFER_BIT, GL_NEAREST);
 }
 
 void MagicFBOTexture::Clear(unsigned int _b_mode)
