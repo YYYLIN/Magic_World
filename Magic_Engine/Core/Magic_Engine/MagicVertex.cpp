@@ -107,15 +107,6 @@ namespace Magic
 		glBindVertexArray(0);
 	}
 
-	void VERTEX_BUFFER::SetInstancedArray(unsigned char _BufferPos, unsigned int _divisor)
-	{
-		glBindVertexArray(m_VAO);
-
-		glVertexAttribDivisor(_BufferPos, _divisor);
-
-		glBindVertexArray(0);
-	}
-
 	void VERTEX_BUFFER::DynamicWrite(unsigned int _BufferPos, unsigned int _size, void* _data)
 	{
 		GLenum _Type = 0;
