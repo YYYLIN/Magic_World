@@ -18,6 +18,7 @@ namespace Magic
 		m_VAO = 0;
 		pVBO = 0;
 		pBuffer_Attribute = 0;
+		m_Draw_Indirect = 0;
 		m_Max_CardSlot = 0;
 		m_Index_Pos = -1;
 	}
@@ -85,11 +86,22 @@ namespace Magic
 		glBindVertexArray(0);
 	}
 
-	void VERTEX_BUFFER::SetIndexBuffer(unsigned char _BufferPos)
+	void VERTEX_BUFFER::SetDrawIndirectBuffer(unsigned int _BufferPos, DRAW_USAGE _usage)
+	{
+		glBindVertexArray(m_VAO);
+
+		glBindBuffer(GL_DRAW_INDIRECT_BUFFER, pVBO[_BufferPos]);
+		pBuffer_Attribute[_BufferPos].usage = _usage;
+		m_Draw_Indirect = _BufferPos;
+		glBindVertexArray(0);
+	}
+
+	void VERTEX_BUFFER::SetIndexBuffer(unsigned char _BufferPos, DRAW_USAGE _usage)
 	{
 		glBindVertexArray(m_VAO);
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, pVBO[_BufferPos]);
+		pBuffer_Attribute[_BufferPos].usage = _usage;
 		m_Index_Pos = _BufferPos;
 
 		glBindVertexArray(0);
@@ -109,6 +121,8 @@ namespace Magic
 		GLenum _Type = 0;
 		if (m_Index_Pos == _BufferPos)
 			_Type = GL_ELEMENT_ARRAY_BUFFER;
+		else if (m_Draw_Indirect == _BufferPos)
+			_Type = GL_DRAW_INDIRECT_BUFFER;
 		else
 			_Type = GL_ARRAY_BUFFER;
 
@@ -140,15 +154,24 @@ namespace Magic
 		GLenum _Type = 0;
 		if (m_Index_Pos == _BufferPos)
 			_Type = GL_ELEMENT_ARRAY_BUFFER;
+		else if (m_Draw_Indirect == _BufferPos)
+			_Type = GL_DRAW_INDIRECT_BUFFER;
 		else
 			_Type = GL_ARRAY_BUFFER;
 		glBindBuffer(_Type, pVBO[_BufferPos]);
 		return glMapBuffer(_Type, GL_MAP_WRITE_BIT);
 	}
 
-	void VERTEX_BUFFER::EndUpdataVertex()
+	void VERTEX_BUFFER::EndUpdataVertex(unsigned char _BufferPos)
 	{
-		glUnmapBuffer(GL_ARRAY_BUFFER);
+		GLenum _Type = 0;
+		if (m_Index_Pos == _BufferPos)
+			_Type = GL_ELEMENT_ARRAY_BUFFER;
+		else if (m_Draw_Indirect == _BufferPos)
+			_Type = GL_DRAW_INDIRECT_BUFFER;
+		else
+			_Type = GL_ARRAY_BUFFER;
+		glUnmapBuffer(_Type);
 	}
 
 	void VERTEX_BUFFER::Bind()

@@ -1,7 +1,10 @@
 #include "MagicTexture.h"
+#include <wchar.h>
+#include <stdio.h>
 #include <gl/glew.h>
 #include <glut.h>
 #include <png.h>
+
 
 #pragma comment(lib,"libpng16.lib")
 
@@ -248,17 +251,12 @@ bool MagicTexture::LoadBMP(const char* file_name)
 bool MagicTexture::LoadPNG(const char*file_name)
 {
 	unsigned char header[8];     //8
-	int k;   //用于循环
 	GLuint textureID; //贴图名字
 	png_byte color_type; //图片到类型（可能会用在是否是开启来通道）
 	png_byte bit_depth; //字节深度
 
 	png_structp png_ptr; //图片
 	png_infop info_ptr; //图片的信息
-	int number_of_passes; //隔行扫描
-	png_bytep * row_pointers;//图片的数据内容
-	int row, col, pos;  //用于改变png像素排列的问题。
-	GLubyte *rgba;
 
 	FILE* fp = NULL;
 	errno_t _err = fopen_s(&fp, file_name, "rb");
@@ -281,27 +279,23 @@ bool MagicTexture::LoadPNG(const char*file_name)
 	}
 	//根据初始化的png_ptr初始化png_infop
 	info_ptr = png_create_info_struct(png_ptr);
-
 	if (!info_ptr)
 	{
 		//初始化失败以后销毁png_structp
-		png_destroy_read_struct(&png_ptr, (png_infopp)NULL, (png_infopp)NULL);
+		png_destroy_read_struct(&png_ptr, &info_ptr, &info_ptr);
 		fclose(fp);
 		return 0;
 	}
 
-
-	//老老实实按照libpng给到的说明稳定步骤来  错误处理！
+	//错误处理！
 	if (setjmp(png_jmpbuf(png_ptr)))
 
 	{
 		//释放占用的内存！然后关闭文件返回一个贴图ID此处应该调用一个生成默认贴图返回ID的函数
-
-		png_destroy_read_struct(&png_ptr, (png_infopp)NULL, (png_infopp)NULL);
-
+		png_destroy_info_struct(png_ptr, &info_ptr);
+		png_destroy_read_struct(&png_ptr, &info_ptr, &info_ptr);
 		fclose(fp);
-
-		return 0;
+		return false;
 
 	}
 	//你需要确保是通过2进制打开的文件。通过i/o定制函数png_init_io
@@ -319,46 +313,32 @@ bool MagicTexture::LoadPNG(const char*file_name)
 	png_set_swap_alpha(png_ptr);*/
 
 	bit_depth = png_get_bit_depth(png_ptr, info_ptr);
-	//隔行扫描图片  这个必须要调用才能进行
-	number_of_passes = png_set_interlace_handling(png_ptr);
-	//将读取到的信息更新到info_ptr
-	png_read_update_info(png_ptr, info_ptr);
+	/*
+		//隔行扫描图片  这个必须要调用才能进行
+		int number_of_passes = png_set_interlace_handling(png_ptr);
+		//将读取到的信息更新到info_ptr
+		png_read_update_info(png_ptr, info_ptr);*/
+		/*
+			if (setjmp(png_jmpbuf(png_ptr)))
+			{
+				fclose(fp);
+				return false;
+			}*/
 
-	//读文件
-	if (setjmp(png_jmpbuf(png_ptr))) {
-		fclose(fp);
-		return 0;
-	}
-	rgba = new GLubyte[width * height * 4];
-	//	rgba = (GLubyte*)malloc(width * height * 4);
 	total_bytes = width * height * 4;
-	//使用动态数组  设置长度
-	row_pointers = new png_bytep[sizeof(png_bytep)* height];
-	//	row_pointers = (png_bytep*)malloc(sizeof(png_bytep)* height);
+	GLubyte *rgba = new GLubyte[total_bytes];
 
-	for (k = 0; k < height; k++)
-		row_pointers[k] = NULL;
-
-	//通过扫描流里面的每一行将得到的数据赋值给动态数组       
-	for (k = 0; k < height; k++)
-		//row_pointers[k] = (png_byte*) malloc(png_get_rowbytes(png_ptr,info_ptr));
-		row_pointers[k] = (png_bytep)png_malloc(png_ptr, png_get_rowbytes(png_ptr,
-			info_ptr));
-	//由于png他的像素是由 左-右-从顶到底 而贴图需要的像素都是从左-右-底到顶的所以在这里需要把像素内容进行一个从新排列
-	//读图片
-	png_read_image(png_ptr, row_pointers);
-	pos = (width * height * 4) - (4 * width);
-	for (row = 0; row < height; row++)
+	int pos = total_bytes - (4 * width);
+	for (int row = 0; row < height; row++)
 	{
-		for (col = 0; col < (4 * width); col += 4)
-		{
-			rgba[pos++] = row_pointers[row][col];        // red
-			rgba[pos++] = row_pointers[row][col + 1];    // green
-			rgba[pos++] = row_pointers[row][col + 2];    // blue
-			rgba[pos++] = row_pointers[row][col + 3];    // alpha
-		}
-		pos = (pos - (width * 4) * 2);
+		png_bytep row_pointers = &rgba[pos];
+		png_read_rows(png_ptr, (png_bytepp)&row_pointers, NULL, 1);
+		pos -= 4 * width;
 	}
+
+	png_destroy_info_struct(png_ptr, &info_ptr);
+	png_destroy_read_struct(&png_ptr, &info_ptr, &info_ptr);
+	fclose(fp);
 
 	//开启纹理贴图特效
 	glEnable(GL_TEXTURE_2D);
@@ -368,9 +348,9 @@ bool MagicTexture::LoadPNG(const char*file_name)
 	//绑定纹理
 	glBindTexture(GL_TEXTURE_2D, textureID); //将纹理绑定到名字
 
-											 //GL_LINEAR线性插值， S T == U V ， GL_REPEAT复制，GL_NEAREST最接近的进行像素采样
-											 //	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-											 //	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	//GL_LINEAR线性插值， S T == U V ， GL_REPEAT复制，GL_NEAREST最接近的进行像素采样
+	//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	//	glTexParameteri(GL_TEXTURE_2D, GL_LINEAR_MIPMAP_LINEAR, GL_REPEAT);
@@ -382,11 +362,10 @@ bool MagicTexture::LoadPNG(const char*file_name)
 	//设置纹理所用到图片数据
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, rgba);
 
-	delete[]row_pointers;
-	//	free(row_pointers);
-	fclose(fp);
+	delete[] rgba;
+	rgba = 0;
+
 	texture = textureID;
-	delete rgba;
 
 	return true;
 }
@@ -496,8 +475,8 @@ void MagicFBOTexture::CopyFBOTO(MagicFBOTexture* _pTagetFBO, int _tagetX, int _t
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, _pTagetFBO->GetFBOTexture());
 	else
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-	glBlitFramebuffer(_sourceX, _sourceY, _sourceX + _sourceW, _sourceY + _sourceH, 
-	_tagetX, _tagetY, _tagetX + _tagetW, _tagetY + _tagetH, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+	glBlitFramebuffer(_sourceX, _sourceY, _sourceX + _sourceW, _sourceY + _sourceH,
+		_tagetX, _tagetY, _tagetX + _tagetW, _tagetY + _tagetH, GL_COLOR_BUFFER_BIT, GL_NEAREST);
 }
 
 void MagicFBOTexture::Clear(unsigned int _b_mode)

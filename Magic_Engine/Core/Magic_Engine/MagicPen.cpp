@@ -264,7 +264,7 @@ namespace Magic
 			sizeof(PICTURE_VERTEX::UV) / sizeof(float),
 			sizeof(PICTURE_VERTEX::Color) / sizeof(float) };
 		m_Picture_VBO.SetBuffer(0, Magic::VERTEX_BUFFER::DYNAMIC_DRAW, 3, _Array_Size);
-		m_Picture_VBO.SetIndexBuffer(1);
+		m_Picture_VBO.SetIndexBuffer(1, Magic::VERTEX_BUFFER::DYNAMIC_DRAW);
 
 		m_Line_VBO.CreateBuffer(1);
 		unsigned int _Line_Array_Size[] = {
@@ -1184,6 +1184,7 @@ namespace Magic
 						_DrawNumber = _iterator->DrawNumber - _Line_Now_DrawNumber;
 						if (_DrawNumber)
 						{
+							//glMultiDrawArraysIndirect(_Color_DrawMode,);
 							glDrawArrays(_Color_DrawMode, _Line_Now_DrawNumber, _DrawNumber);
 							_Line_Now_DrawNumber = _iterator->DrawNumber;
 						}

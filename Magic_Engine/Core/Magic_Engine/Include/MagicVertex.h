@@ -49,12 +49,22 @@ namespace Magic
 		void SetBuffer(unsigned int _BufferPos, DRAW_USAGE _usage, unsigned int _number, unsigned int* _4byteSize, unsigned int _divisor = 0);
 
 		/*
+		功能:设置间接渲染那缓存区
+		参数:
+		_BufferPos = 设置第几个缓存区域
+		_usage = DRAW_USAGE(渲染属性)
+		返回值:空
+		*/
+		void SetDrawIndirectBuffer(unsigned int _BufferPos, DRAW_USAGE _usage);
+
+		/*
 		功能:设置索引缓存区
 		参数:
 		_BufferPos = 设置第几个缓存区域
+		_usage = DRAW_USAGE(渲染属性)
 		返回值:空
 		*/
-		void SetIndexBuffer(unsigned char _BufferPos);
+		void SetIndexBuffer(unsigned char _BufferPos, DRAW_USAGE _usage);
 
 		/*
 		功能:设置索引缓存区
@@ -89,10 +99,11 @@ namespace Magic
 
 		/*
 		功能:关闭映射缓存区
-		参数:空
+		参数:
+		_BufferPos = 第几个缓存区域
 		返回值:空
 		*/
-		void EndUpdataVertex();
+		void EndUpdataVertex(unsigned char _BufferPos);
 
 		/*
 		功能:绑定主缓存区
@@ -110,6 +121,7 @@ namespace Magic
 
 	private:
 		char m_Index_Pos;
+		char m_Draw_Indirect;
 		char m_Buffer_Number;
 		char m_Max_CardSlot;
 		Buffer_Attribute* pBuffer_Attribute;
