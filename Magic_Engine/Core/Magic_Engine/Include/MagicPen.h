@@ -40,6 +40,10 @@ namespace Magic
 		{
 			glm::vec3 Position;
 			glm::vec2 UV;
+		};
+
+		struct PICTURE_INSTANCE
+		{
 			Magic::Color4 Color;
 		};
 
@@ -68,6 +72,7 @@ namespace Magic
 			Magic_Fonts* pFonts;
 			MagicTexture* pNowTexture;
 			std::vector<PICTURE_VERTEX> V_Vertex;
+			std::vector<PICTURE_INSTANCE> V_Instance;
 			std::vector<unsigned int> V_Index;
 
 			PICTURE_DRAW();

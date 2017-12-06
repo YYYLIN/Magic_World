@@ -251,7 +251,6 @@ bool MagicTexture::LoadBMP(const char* file_name)
 bool MagicTexture::LoadPNG(const char*file_name)
 {
 	unsigned char header[8];     //8
-	GLuint textureID; //贴图名字
 	png_byte color_type; //图片到类型（可能会用在是否是开启来通道）
 	png_byte bit_depth; //字节深度
 
@@ -332,7 +331,7 @@ bool MagicTexture::LoadPNG(const char*file_name)
 	for (int row = 0; row < height; row++)
 	{
 		png_bytep row_pointers = &rgba[pos];
-		png_read_rows(png_ptr, (png_bytepp)&row_pointers, NULL, 1);
+		png_read_rows(png_ptr, &row_pointers, NULL, 1);
 		pos -= 4 * width;
 	}
 
@@ -344,9 +343,9 @@ bool MagicTexture::LoadPNG(const char*file_name)
 	glEnable(GL_TEXTURE_2D);
 
 	//创建纹理 
-	glGenTextures(1, &textureID);
+	glGenTextures(1, &texture);
 	//绑定纹理
-	glBindTexture(GL_TEXTURE_2D, textureID); //将纹理绑定到名字
+	glBindTexture(GL_TEXTURE_2D, texture); //将纹理绑定到名字
 
 	//GL_LINEAR线性插值， S T == U V ， GL_REPEAT复制，GL_NEAREST最接近的进行像素采样
 	//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -364,8 +363,6 @@ bool MagicTexture::LoadPNG(const char*file_name)
 
 	delete[] rgba;
 	rgba = 0;
-
-	texture = textureID;
 
 	return true;
 }

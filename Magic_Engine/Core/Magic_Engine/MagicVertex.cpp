@@ -72,7 +72,7 @@ namespace Magic
 			_Always_Size += _4byteSize[a];
 		for (int a = m_Max_CardSlot, b = m_Max_CardSlot + _number; a < b; a++)
 		{
-			unsigned int _pos = a - m_Max_CardSlot;
+			unsigned int _pos = a;
 			glEnableVertexAttribArray(_pos);
 			glVertexAttribPointer(_pos, _4byteSize[_pos], GL_FLOAT, GL_FALSE, _Always_Size * sizeof(float), (GLvoid*)(_start_pos * sizeof(float)));
 			//每个对象对应几个实例
@@ -216,7 +216,7 @@ void MagicVertex::BindCreate(const unsigned char &_number, unsigned char _size, 
 
 		glBindBuffer(GL_ARRAY_BUFFER, vboHandles[_number]);
 		//加载数据到VBO  
-		glBufferData(GL_ARRAY_BUFFER, _size * sizeof(float) * m_VertexNumber, _data, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, _size * sizeof(float)* m_VertexNumber, _data, GL_STATIC_DRAW);
 
 		glEnableVertexAttribArray(_number);
 		glVertexAttribPointer(_number, _size, GL_FLOAT, GL_FALSE, 0, (GLubyte *)0);

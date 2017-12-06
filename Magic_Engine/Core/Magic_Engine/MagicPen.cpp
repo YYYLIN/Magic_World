@@ -258,18 +258,19 @@ namespace Magic
 		m_Line_projectionMatrix = m_LineShader("projectionMatrix");
 		m_Line_PointSize = m_LineShader("PointSize");
 
-		m_Picture_VBO.CreateBuffer(2);
+		m_Picture_VBO.CreateBuffer(3);
 		unsigned int _Array_Size[] = {
 			sizeof(PICTURE_VERTEX::Position) / sizeof(float),
 			sizeof(PICTURE_VERTEX::UV) / sizeof(float),
-			sizeof(PICTURE_VERTEX::Color) / sizeof(float) };
-		m_Picture_VBO.SetBuffer(0, Magic::VERTEX_BUFFER::DYNAMIC_DRAW, 3, _Array_Size);
-		m_Picture_VBO.SetIndexBuffer(1, Magic::VERTEX_BUFFER::DYNAMIC_DRAW);
+			sizeof(PICTURE_INSTANCE::Color) / sizeof(float) };
+		m_Picture_VBO.SetBuffer(0, Magic::VERTEX_BUFFER::DYNAMIC_DRAW, 2, _Array_Size);
+		m_Picture_VBO.SetBuffer(1, Magic::VERTEX_BUFFER::DYNAMIC_DRAW, 1, &_Array_Size[2], 1);
+		m_Picture_VBO.SetIndexBuffer(2, Magic::VERTEX_BUFFER::DYNAMIC_DRAW);
 
 		m_Line_VBO.CreateBuffer(1);
 		unsigned int _Line_Array_Size[] = {
-			sizeof(PICTURE_VERTEX::Position) / sizeof(float),
-			sizeof(PICTURE_VERTEX::Color) / sizeof(float) };
+			sizeof(LINE_VERTEX::Position) / sizeof(float),
+			sizeof(LINE_VERTEX::Color) / sizeof(float) };
 		m_Line_VBO.SetBuffer(0, Magic::VERTEX_BUFFER::DYNAMIC_DRAW, 2, _Line_Array_Size);
 
 		return true;
@@ -417,6 +418,7 @@ namespace Magic
 		AddShaderMessage(DRAW_TYPE_PICTURE_TEXT);
 
 		PICTURE_VERTEX _Vertex;
+		PICTURE_INSTANCE _Instance;
 
 		PICTURE_DRAW* _pPICTURE_DRAW = &pNowDRAW_BOX->Picture_Draw;
 		std::vector<PICTURE_VERTEX>* _pV_VERTEX = &_pPICTURE_DRAW->V_Vertex;
@@ -426,7 +428,8 @@ namespace Magic
 		if (pNowDRAW_BOX->V_Message.back().pTexture != _pPICTURE_DRAW->pNowTexture)
 			BindPicture(_pPICTURE_DRAW->pNowTexture);
 
-		_Vertex.Color = pNowDRAW_BOX->NowColor;
+		_Instance.Color = pNowDRAW_BOX->NowColor;
+		_pPICTURE_DRAW->V_Instance.push_back(_Instance);
 
 		_Vertex.Position.x = _x;
 		_Vertex.Position.y = _y;
@@ -878,7 +881,8 @@ namespace Magic
 
 				PICTURE_DRAW* _pPICTURE_DRAW_BOX = &pNowDRAW_BOX->Picture_Draw;
 				m_Picture_VBO.DynamicWrite(0, _pPICTURE_DRAW_BOX->V_Vertex.size() * sizeof(PICTURE_VERTEX), &_pPICTURE_DRAW_BOX->V_Vertex[0]);
-				m_Picture_VBO.DynamicWrite(1, _pPICTURE_DRAW_BOX->V_Index.size() * sizeof(unsigned int), &_pPICTURE_DRAW_BOX->V_Index[0]);
+				m_Picture_VBO.DynamicWrite(1, _pPICTURE_DRAW_BOX->V_Vertex.size() * sizeof(PICTURE_INSTANCE), &_pPICTURE_DRAW_BOX->V_Vertex[0]);
+				m_Picture_VBO.DynamicWrite(2, _pPICTURE_DRAW_BOX->V_Index.size() * sizeof(unsigned int), &_pPICTURE_DRAW_BOX->V_Index[0]);
 			}
 
 			m_LineShader.Use();
@@ -1166,6 +1170,7 @@ namespace Magic
 						_DrawNumber = _iterator->DrawNumber - _Picture_Now_DrawNumber;
 						if (_DrawNumber)
 						{
+							glMultiDrawElementsIndirect(_Color_DrawMode, GL_ELEMENT_ARRAY_BUFFER, 0, 10, 0);
 							glDrawElements(GL_TRIANGLES, _DrawNumber, GL_UNSIGNED_INT, (GLvoid*)(sizeof(unsigned int)* _Picture_Now_DrawNumber));
 							_Picture_Now_DrawNumber = _iterator->DrawNumber;
 							DEBUG_AddDrawMessageNumber(1);
@@ -1186,7 +1191,6 @@ namespace Magic
 						_DrawNumber = _iterator->DrawNumber - _Line_Now_DrawNumber;
 						if (_DrawNumber)
 						{
-							//glMultiDrawArraysIndirect(_Color_DrawMode,);
 							glDrawArrays(_Color_DrawMode, _Line_Now_DrawNumber, _DrawNumber);
 							_Line_Now_DrawNumber = _iterator->DrawNumber;
 							DEBUG_AddDrawMessageNumber(1);
