@@ -133,6 +133,8 @@ public:
 
 	bool AddPen_Common(const char* _name, Magic::Pen_Common* _common);
 
+	void AddDrawMessageNumber(unsigned int _number);
+
 	//获得渲染器
 	const unsigned char* GetRenderer();
 	//获得图形卡供应商
@@ -174,6 +176,8 @@ private:
 
 	Magic::Pen_Normal m_Pen_Normal;
 
+	unsigned int m_DrawMessageNumber;
+
 	//Windows
 	HGLRC m_hRC;
 	HDC m_HDC;
@@ -182,5 +186,11 @@ private:
 public:
 	static MagicEngineContext* pMagicEngineContext;
 };
+
+#ifdef _DEBUG 
+#define DEBUG_AddDrawMessageNumber(a)			MagicEngineContext::pMagicEngineContext->AddDrawMessageNumber(a) 
+#else
+#define DEBUG_AddDrawMessageNumber(a)
+#endif
 
 #pragma warning(pop)

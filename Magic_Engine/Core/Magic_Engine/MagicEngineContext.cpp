@@ -250,7 +250,7 @@ MagicEngineContext* MagicEngineContext::pMagicEngineContext = 0;
 
 MagicEngineContext::MagicEngineContext()
 {
-	Map_Texture.clear();
+	m_DrawMessageNumber = 0;
 }
 
 
@@ -372,6 +372,10 @@ bool MagicEngineContext::AddPen_Common(const char* _name, Magic::Pen_Common* _co
 		return false;
 }
 
+void MagicEngineContext::AddDrawMessageNumber(unsigned int _number)
+{
+	m_DrawMessageNumber += _number;
+}
 
 const unsigned char* MagicEngineContext::GetRenderer()
 {
@@ -448,7 +452,7 @@ void MagicEngineContext::SetFPS()
 	frameCount++;//每调用一次Get_FPS()函数，帧数自增1
 	currentTime = clock()*0.001f;//获取系统时间，其中timeGetTime函数返回的是以毫秒为单位的系统时间，所以需要乘以0.001，得到单位为秒的时间
 
-								 //如果当前时间减去持续时间大于了1秒钟，就进行一次FPS的计算和持续时间的更新，并将帧数值清零
+	//如果当前时间减去持续时间大于了1秒钟，就进行一次FPS的计算和持续时间的更新，并将帧数值清零
 	if (currentTime - lastTime > FPSTime) //将时间控制在1秒钟
 	{
 		FPS = (float)frameCount / (currentTime - lastTime);//计算这1秒钟的FPS值
@@ -459,6 +463,7 @@ void MagicEngineContext::SetFPS()
 
 void MagicEngineContext::RenderStart()
 {
+	m_DrawMessageNumber = 0;
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	m_Pen_Normal.RenderStart();
 	m_Pen_Normal.SetCameraMatrix(CONST_CAMERA);

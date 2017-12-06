@@ -259,7 +259,7 @@ namespace Magic
 		m_Line_PointSize = m_LineShader("PointSize");
 
 		m_Picture_VBO.CreateBuffer(2);
-		unsigned int _Array_Size[] = { 
+		unsigned int _Array_Size[] = {
 			sizeof(PICTURE_VERTEX::Position) / sizeof(float),
 			sizeof(PICTURE_VERTEX::UV) / sizeof(float),
 			sizeof(PICTURE_VERTEX::Color) / sizeof(float) };
@@ -592,7 +592,7 @@ namespace Magic
 				pNowDRAW_BOX->V_Scissor_Message.push_back(SCISSOR_MESSAGE(
 					true,
 					pNowDRAW_BOX->V_Scissor_Message.size() ? pNowDRAW_BOX->V_Scissor_Message.back().ScissorPosWH : glm::vec4()
-				));
+					));
 				pNowDRAW_BOX->Create_Scissor_Message = true;
 			}
 			else
@@ -612,7 +612,7 @@ namespace Magic
 			pNowDRAW_BOX->V_Scissor_Message.push_back(SCISSOR_MESSAGE(
 				pNowDRAW_BOX->V_Scissor_Message.size() ? pNowDRAW_BOX->V_Scissor_Message.back().state : false,
 				_poswh
-			));
+				));
 		}
 		else
 			pNowDRAW_BOX->V_Scissor_Message.back().ScissorPosWH = _poswh;
@@ -1151,6 +1151,7 @@ namespace Magic
 					}
 
 					glDrawArrays(_Color_DrawMode, _pVBO_VERTEX->StartPos, _pVBO_VERTEX->DrawNumber);
+					DEBUG_AddDrawMessageNumber(1);
 				}
 				else
 				{
@@ -1165,8 +1166,9 @@ namespace Magic
 						_DrawNumber = _iterator->DrawNumber - _Picture_Now_DrawNumber;
 						if (_DrawNumber)
 						{
-							glDrawElements(GL_TRIANGLES, _DrawNumber, GL_UNSIGNED_INT, (GLvoid*)(sizeof(unsigned int) * _Picture_Now_DrawNumber));
+							glDrawElements(GL_TRIANGLES, _DrawNumber, GL_UNSIGNED_INT, (GLvoid*)(sizeof(unsigned int)* _Picture_Now_DrawNumber));
 							_Picture_Now_DrawNumber = _iterator->DrawNumber;
+							DEBUG_AddDrawMessageNumber(1);
 						}
 						break;
 					case DRAW_TYPE_POINTS:
@@ -1187,6 +1189,7 @@ namespace Magic
 							//glMultiDrawArraysIndirect(_Color_DrawMode,);
 							glDrawArrays(_Color_DrawMode, _Line_Now_DrawNumber, _DrawNumber);
 							_Line_Now_DrawNumber = _iterator->DrawNumber;
+							DEBUG_AddDrawMessageNumber(1);
 						}
 						break;
 					}
