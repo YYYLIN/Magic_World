@@ -72,11 +72,11 @@ namespace Magic
 			_Always_Size += _4byteSize[a];
 		for (int a = m_Max_CardSlot, b = m_Max_CardSlot + _number; a < b; a++)
 		{
-			unsigned int _pos = a;
-			glEnableVertexAttribArray(_pos);
-			glVertexAttribPointer(_pos, _4byteSize[_pos], GL_FLOAT, GL_FALSE, _Always_Size * sizeof(float), (GLvoid*)(_start_pos * sizeof(float)));
+			unsigned int _pos = a - m_Max_CardSlot;
+			glEnableVertexAttribArray(a);
+			glVertexAttribPointer(a, _4byteSize[_pos], GL_FLOAT, GL_FALSE, _Always_Size * sizeof(float), (GLvoid*)(_start_pos * sizeof(float)));
 			//每个对象对应几个实例
-			glVertexAttribDivisor(_pos, _divisor);
+			glVertexAttribDivisor(a, _divisor);
 			_start_pos += _4byteSize[_pos];
 		}
 

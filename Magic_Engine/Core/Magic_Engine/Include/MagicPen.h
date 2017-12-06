@@ -18,6 +18,14 @@
 
 namespace Magic
 {
+	typedef struct {
+		unsigned int count;
+		unsigned int instanceCount;
+		unsigned int firstIndex;
+		unsigned int baseVertex;
+		unsigned int baseInstance;
+	} DrawElementsIndirectCommand;
+
 	class Pen_Common
 	{
 	public:
@@ -73,6 +81,7 @@ namespace Magic
 			MagicTexture* pNowTexture;
 			std::vector<PICTURE_VERTEX> V_Vertex;
 			std::vector<PICTURE_INSTANCE> V_Instance;
+			std::vector<DrawElementsIndirectCommand> V_DEICommand;
 			std::vector<unsigned int> V_Index;
 
 			PICTURE_DRAW();

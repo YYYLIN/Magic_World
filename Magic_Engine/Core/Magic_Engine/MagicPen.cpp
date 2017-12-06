@@ -7,7 +7,7 @@ namespace Magic
 {
 	static const char* S_Picture_Vertex =
 		"#version 400\r\n"
-		"layout(location = 0) in vec2 Position;"
+		"layout(location = 0) in vec3 Position;"
 		"layout(location = 1) in vec2 UV;"
 		"layout(location = 2) in vec4 Color;"
 		"out vec2 TexCoord;"
@@ -39,7 +39,7 @@ namespace Magic
 
 	static const char* S_Pure_Color_Vertex =
 		"#version 400\r\n"
-		"layout(location = 0) in vec2 Position;"
+		"layout(location = 0) in vec3 Position;"
 		"layout(location = 1) in vec4 Color;"
 
 		"out vec4 Out_Color;"
@@ -105,6 +105,8 @@ namespace Magic
 		PitureUV[3].x = 0.0f;
 		PitureUV[3].y = 1.0f;
 		V_Vertex.clear();
+		V_Instance.clear();
+		V_DEICommand.clear();
 		V_Index.clear();
 	}
 
@@ -265,6 +267,7 @@ namespace Magic
 			sizeof(PICTURE_INSTANCE::Color) / sizeof(float) };
 		m_Picture_VBO.SetBuffer(0, Magic::VERTEX_BUFFER::DYNAMIC_DRAW, 2, _Array_Size);
 		m_Picture_VBO.SetBuffer(1, Magic::VERTEX_BUFFER::DYNAMIC_DRAW, 1, &_Array_Size[2], 1);
+		//m_Picture_VBO.SetDrawIndirectBuffer(2, Magic::VERTEX_BUFFER::DYNAMIC_DRAW);
 		m_Picture_VBO.SetIndexBuffer(2, Magic::VERTEX_BUFFER::DYNAMIC_DRAW);
 
 		m_Line_VBO.CreateBuffer(1);
@@ -419,14 +422,27 @@ namespace Magic
 
 		PICTURE_VERTEX _Vertex;
 		PICTURE_INSTANCE _Instance;
+		DrawElementsIndirectCommand _DEICommand;
 
 		PICTURE_DRAW* _pPICTURE_DRAW = &pNowDRAW_BOX->Picture_Draw;
 		std::vector<PICTURE_VERTEX>* _pV_VERTEX = &_pPICTURE_DRAW->V_Vertex;
 		std::vector<unsigned int>* _pV_Index = &_pPICTURE_DRAW->V_Index;
+
 		unsigned int _Vertex_Number = _pV_VERTEX->size();
 
 		if (pNowDRAW_BOX->V_Message.back().pTexture != _pPICTURE_DRAW->pNowTexture)
 			BindPicture(_pPICTURE_DRAW->pNowTexture);
+
+		_DEICommand.count = 6;
+		_DEICommand.instanceCount = 1;
+		_DEICommand.firstIndex = _Vertex_Number;
+		_DEICommand.baseVertex = 0;
+		if (_pPICTURE_DRAW->V_DEICommand.size())
+			_DEICommand.baseInstance = _pPICTURE_DRAW->V_DEICommand.back().baseInstance + 1;
+		else
+			_DEICommand.baseInstance = 0;
+
+		_pPICTURE_DRAW->V_DEICommand.push_back(_DEICommand);
 
 		_Instance.Color = pNowDRAW_BOX->NowColor;
 		_pPICTURE_DRAW->V_Instance.push_back(_Instance);
@@ -595,7 +611,7 @@ namespace Magic
 				pNowDRAW_BOX->V_Scissor_Message.push_back(SCISSOR_MESSAGE(
 					true,
 					pNowDRAW_BOX->V_Scissor_Message.size() ? pNowDRAW_BOX->V_Scissor_Message.back().ScissorPosWH : glm::vec4()
-					));
+				));
 				pNowDRAW_BOX->Create_Scissor_Message = true;
 			}
 			else
@@ -615,7 +631,7 @@ namespace Magic
 			pNowDRAW_BOX->V_Scissor_Message.push_back(SCISSOR_MESSAGE(
 				pNowDRAW_BOX->V_Scissor_Message.size() ? pNowDRAW_BOX->V_Scissor_Message.back().state : false,
 				_poswh
-				));
+			));
 		}
 		else
 			pNowDRAW_BOX->V_Scissor_Message.back().ScissorPosWH = _poswh;
@@ -878,10 +894,10 @@ namespace Magic
 			{
 				m_PictureShader.Use();
 				glUniformMatrix4fv(m_Picture2D_projectrionMatrix, 1, GL_FALSE, &pNowDRAW_BOX->projectionMatrix[0][0]);
-
 				PICTURE_DRAW* _pPICTURE_DRAW_BOX = &pNowDRAW_BOX->Picture_Draw;
 				m_Picture_VBO.DynamicWrite(0, _pPICTURE_DRAW_BOX->V_Vertex.size() * sizeof(PICTURE_VERTEX), &_pPICTURE_DRAW_BOX->V_Vertex[0]);
-				m_Picture_VBO.DynamicWrite(1, _pPICTURE_DRAW_BOX->V_Vertex.size() * sizeof(PICTURE_INSTANCE), &_pPICTURE_DRAW_BOX->V_Vertex[0]);
+				m_Picture_VBO.DynamicWrite(1, _pPICTURE_DRAW_BOX->V_Instance.size() * sizeof(PICTURE_INSTANCE), &_pPICTURE_DRAW_BOX->V_Instance[0]);
+				//m_Picture_VBO.DynamicWrite(2, _pPICTURE_DRAW_BOX->V_DEICommand.size() * sizeof(DrawElementsIndirectCommand), &_pPICTURE_DRAW_BOX->V_DEICommand[0]);
 				m_Picture_VBO.DynamicWrite(2, _pPICTURE_DRAW_BOX->V_Index.size() * sizeof(unsigned int), &_pPICTURE_DRAW_BOX->V_Index[0]);
 			}
 
@@ -1170,8 +1186,11 @@ namespace Magic
 						_DrawNumber = _iterator->DrawNumber - _Picture_Now_DrawNumber;
 						if (_DrawNumber)
 						{
-							glMultiDrawElementsIndirect(_Color_DrawMode, GL_ELEMENT_ARRAY_BUFFER, 0, 10, 0);
-							glDrawElements(GL_TRIANGLES, _DrawNumber, GL_UNSIGNED_INT, (GLvoid*)(sizeof(unsigned int)* _Picture_Now_DrawNumber));
+							glDrawElementsInstanced(GL_TRIANGLES, _DrawNumber, GL_UNSIGNED_INT, (GLvoid*)(sizeof(unsigned int)* _Picture_Now_DrawNumber), 1);
+							/*
+														glMultiDrawElementsIndirect(GL_TRIANGLES, GL_UNSIGNED_INT,
+															(GLvoid*)(_Picture_Now_DrawNumber / 6), _DrawNumber / 6, 0);*/
+															//glDrawElements(GL_TRIANGLES, _DrawNumber, GL_UNSIGNED_INT, (GLvoid*)(sizeof(unsigned int)* _Picture_Now_DrawNumber));
 							_Picture_Now_DrawNumber = _iterator->DrawNumber;
 							DEBUG_AddDrawMessageNumber(1);
 						}
