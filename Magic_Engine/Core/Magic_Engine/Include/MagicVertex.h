@@ -95,6 +95,22 @@ namespace Magic
 		void EndUpdataVertex(unsigned char _BufferPos);
 
 		/*
+		功能:绑定缓存区
+		参数:
+		_BufferPos = 第几个缓存区域
+		返回值:空
+		*/
+		void BindBuffer(unsigned char _BufferPos);
+
+		/*
+		功能:关闭绑定缓存区
+		参数:
+		_BufferPos = 第几个缓存区域
+		返回值:空
+		*/
+		void UnBindBuffer(unsigned char _BufferPos);
+
+		/*
 		功能:绑定主缓存区
 		参数:空
 		返回值:空
@@ -102,7 +118,7 @@ namespace Magic
 		void Bind();
 
 		/*
-		功能:关闭绑定缓存区
+		功能:关闭绑定主缓存区
 		参数:空
 		返回值:空
 		*/
