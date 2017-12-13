@@ -40,7 +40,6 @@ void MainScene::Draw()
 	pPen_Normal->SetColor(Magic::Color4(1.0f, 0.0f, 0.0f, 1.0f));
 	pPen_Normal->DrawRectangle(Magic::Pen_Normal::TRIANGLES, 30, 30, 100, 100);
 
-/*
 	pPen_Normal->EnableAlpha();
 	pPen_Normal->SetColor(Magic::Color4());
 	glm::mat4 _worldMatrix = glm::rotate(m_MagicRotate, glm::vec3(0.0f, 0.0f, 1.0f));
@@ -50,7 +49,7 @@ void MainScene::Draw()
 	pPen_Normal->BindPicture(&pMagicTexture);
 	float _w = pMagicTexture.GetWidth() * 0.2f;
 	float _h = pMagicTexture.GetHeight() * 0.2f;
-	pPen_Normal->DrawPicture(-_w * 0.5f, -_h * 0.5f, _w, _h);*/
+	pPen_Normal->DrawPicture(-_w * 0.5f, -_h * 0.5f, _w, _h);
 }
 
 void MainScene::RenderStart()

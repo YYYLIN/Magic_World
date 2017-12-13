@@ -260,15 +260,15 @@ namespace Magic
 		m_Line_projectionMatrix = m_LineShader("projectionMatrix");
 		m_Line_PointSize = m_LineShader("PointSize");
 
-		m_Picture_VBO.CreateBuffer(3);
+		m_Picture_VBO.CreateBuffer(4);
 		unsigned int _Array_Size[] = {
 			sizeof(PICTURE_VERTEX::Position) / sizeof(float),
 			sizeof(PICTURE_VERTEX::UV) / sizeof(float),
 			sizeof(PICTURE_INSTANCE::Color) / sizeof(float) };
 		m_Picture_VBO.SetBuffer(0, Magic::VERTEX_BUFFER::DYNAMIC_DRAW, 2, _Array_Size);
 		m_Picture_VBO.SetBuffer(1, Magic::VERTEX_BUFFER::DYNAMIC_DRAW, 1, &_Array_Size[2], 1);
-		//m_Picture_VBO.SetDrawIndirectBuffer(2, Magic::VERTEX_BUFFER::DYNAMIC_DRAW);
 		m_Picture_VBO.SetIndexBuffer(2, Magic::VERTEX_BUFFER::DYNAMIC_DRAW);
+		m_Picture_VBO.SetDrawIndirectBuffer(3, Magic::VERTEX_BUFFER::DYNAMIC_DRAW);
 
 		m_Line_VBO.CreateBuffer(1);
 		unsigned int _Line_Array_Size[] = {
@@ -897,8 +897,8 @@ namespace Magic
 				PICTURE_DRAW* _pPICTURE_DRAW_BOX = &pNowDRAW_BOX->Picture_Draw;
 				m_Picture_VBO.DynamicWrite(0, _pPICTURE_DRAW_BOX->V_Vertex.size() * sizeof(PICTURE_VERTEX), &_pPICTURE_DRAW_BOX->V_Vertex[0]);
 				m_Picture_VBO.DynamicWrite(1, _pPICTURE_DRAW_BOX->V_Instance.size() * sizeof(PICTURE_INSTANCE), &_pPICTURE_DRAW_BOX->V_Instance[0]);
-				//m_Picture_VBO.DynamicWrite(2, _pPICTURE_DRAW_BOX->V_DEICommand.size() * sizeof(DrawElementsIndirectCommand), &_pPICTURE_DRAW_BOX->V_DEICommand[0]);
 				m_Picture_VBO.DynamicWrite(2, _pPICTURE_DRAW_BOX->V_Index.size() * sizeof(unsigned int), &_pPICTURE_DRAW_BOX->V_Index[0]);
+				m_Picture_VBO.DynamicWrite(3, _pPICTURE_DRAW_BOX->V_DEICommand.size() * sizeof(DrawElementsIndirectCommand), &_pPICTURE_DRAW_BOX->V_DEICommand[0]);
 			}
 
 			m_LineShader.Use();
@@ -914,13 +914,14 @@ namespace Magic
 				glUniform1f(m_Line_PointSize, 1.0f);
 			}
 
+			m_Picture_VBO.BindBuffer(3);
+
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 			glEnable(GL_TEXTURE_2D);
 			glActiveTexture(GL_TEXTURE0);
 
 			MESSAGE_STATE _MESSAGE_STATEBuffer;
-			if (glIsEnabled(GL_BLEND))
-				glDisable(GL_BLEND);
+			glDisable(GL_BLEND);
 			glBindTexture(GL_TEXTURE_2D, 0);
 
 			unsigned int _Picture_Now_DrawNumber = 0, _Line_Now_DrawNumber = 0;
@@ -1186,11 +1187,7 @@ namespace Magic
 						_DrawNumber = _iterator->DrawNumber - _Picture_Now_DrawNumber;
 						if (_DrawNumber)
 						{
-							glDrawElementsInstanced(GL_TRIANGLES, _DrawNumber, GL_UNSIGNED_INT, (GLvoid*)(sizeof(unsigned int)* _Picture_Now_DrawNumber), 1);
-							/*
-														glMultiDrawElementsIndirect(GL_TRIANGLES, GL_UNSIGNED_INT,
-															(GLvoid*)(_Picture_Now_DrawNumber / 6), _DrawNumber / 6, 0);*/
-															//glDrawElements(GL_TRIANGLES, _DrawNumber, GL_UNSIGNED_INT, (GLvoid*)(sizeof(unsigned int)* _Picture_Now_DrawNumber));
+							glMultiDrawElementsIndirect(GL_TRIANGLES, GL_UNSIGNED_INT, (GLvoid*)(_Picture_Now_DrawNumber / 6), _DrawNumber / 6, 0);
 							_Picture_Now_DrawNumber = _iterator->DrawNumber;
 							DEBUG_AddDrawMessageNumber(1);
 						}
@@ -1219,6 +1216,7 @@ namespace Magic
 				}
 			}
 
+			m_Picture_VBO.UnBindBuffer(3);
 			m_Picture_VBO.UnBind();
 			glDisable(GL_TEXTURE_2D);
 			m_PictureShader.UnUse();

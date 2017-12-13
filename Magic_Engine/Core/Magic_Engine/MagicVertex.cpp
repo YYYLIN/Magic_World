@@ -162,7 +162,32 @@ namespace Magic
 			_Type = GL_DRAW_INDIRECT_BUFFER;
 		else
 			_Type = GL_ARRAY_BUFFER;
+		glBindBuffer(_Type, pVBO[_BufferPos]);
 		glUnmapBuffer(_Type);
+	}
+
+	void VERTEX_BUFFER::BindBuffer(unsigned char _BufferPos)
+	{
+		GLenum _Type = 0;
+		if (m_Index_Pos == _BufferPos)
+			_Type = GL_ELEMENT_ARRAY_BUFFER;
+		else if (m_Draw_Indirect == _BufferPos)
+			_Type = GL_DRAW_INDIRECT_BUFFER;
+		else
+			_Type = GL_ARRAY_BUFFER;
+		glBindBuffer(_Type, pVBO[_BufferPos]);
+	}
+
+	void VERTEX_BUFFER::UnBindBuffer(unsigned char _BufferPos)
+	{
+		GLenum _Type = 0;
+		if (m_Index_Pos == _BufferPos)
+			_Type = GL_ELEMENT_ARRAY_BUFFER;
+		else if (m_Draw_Indirect == _BufferPos)
+			_Type = GL_DRAW_INDIRECT_BUFFER;
+		else
+			_Type = GL_ARRAY_BUFFER;
+		glBindBuffer(_Type, 0);
 	}
 
 	void VERTEX_BUFFER::Bind()
