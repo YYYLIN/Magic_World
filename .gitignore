@@ -18,6 +18,7 @@
 *.opensdf
 clear.bat
 Magic_Engine/Media
+Magic_Engine/Build
 [Dd]ebug/
 [Rr]elease/
 [Bb]in/
