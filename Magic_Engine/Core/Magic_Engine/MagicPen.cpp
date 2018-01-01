@@ -10,10 +10,10 @@ namespace Magic
 		"layout(location = 0) in vec3 Position;"
 		"layout(location = 1) in vec2 UV;"
 		"layout(location = 2) in vec4 Color;"
+		"layout(location = 3) in mat4 CameraMatrix;"
 		"out vec2 TexCoord;"
 		"out vec4 Out_Color;"
 
-		"uniform mat4 CameraMatrix;"
 		"uniform mat4 projectionMatrix;"
 
 		"void main()"
@@ -226,7 +226,6 @@ namespace Magic
 
 		m_PictureShader.Use();
 
-		m_PictureShader.AddUniform("CameraMatrix");
 		m_PictureShader.AddUniform("projectionMatrix");
 
 		m_PictureShader.AddUniform("sampler0");
@@ -235,7 +234,6 @@ namespace Magic
 
 		m_PictureShader.UnUse();
 
-		m_Picture2D_CameraMatrix = m_PictureShader("CameraMatrix");
 		m_Picture2D_projectrionMatrix = m_PictureShader("projectionMatrix");
 
 		result = m_LineShader.LoadFromString(GL_VERTEX_SHADER, S_Pure_Color_Vertex);
@@ -262,18 +260,22 @@ namespace Magic
 
 		m_Picture_VBO.CreateBuffer(4);
 		unsigned int _Array_Size[] = {
-			sizeof(PICTURE_VERTEX::Position) / sizeof(float),
-			sizeof(PICTURE_VERTEX::UV) / sizeof(float),
-			sizeof(PICTURE_INSTANCE::Color) / sizeof(float) };
+			sizeof(glm::vec3) / sizeof(float),
+			sizeof(glm::vec2) / sizeof(float),
+			sizeof(Magic::Color4) / sizeof(float),
+			sizeof(glm::vec4) / sizeof(float),
+			sizeof(glm::vec4) / sizeof(float),
+			sizeof(glm::vec4) / sizeof(float),
+			sizeof(glm::vec4) / sizeof(float) };
 		m_Picture_VBO.SetBuffer(0, Magic::VERTEX_BUFFER::DYNAMIC_DRAW, 2, _Array_Size);
-		m_Picture_VBO.SetBuffer(1, Magic::VERTEX_BUFFER::DYNAMIC_DRAW, 1, &_Array_Size[2], 1);
+		m_Picture_VBO.SetBuffer(1, Magic::VERTEX_BUFFER::DYNAMIC_DRAW, 5, &_Array_Size[2], 1);
 		m_Picture_VBO.SetIndexBuffer(2, Magic::VERTEX_BUFFER::DYNAMIC_DRAW);
 		m_Picture_VBO.SetDrawIndirectBuffer(3, Magic::VERTEX_BUFFER::DYNAMIC_DRAW);
 
 		m_Line_VBO.CreateBuffer(1);
 		unsigned int _Line_Array_Size[] = {
-			sizeof(LINE_VERTEX::Position) / sizeof(float),
-			sizeof(LINE_VERTEX::Color) / sizeof(float) };
+			sizeof(glm::vec3) / sizeof(float),
+			sizeof(Magic::Color4) / sizeof(float) };
 		m_Line_VBO.SetBuffer(0, Magic::VERTEX_BUFFER::DYNAMIC_DRAW, 2, _Line_Array_Size);
 
 		return true;
@@ -445,6 +447,7 @@ namespace Magic
 		_pPICTURE_DRAW->V_DEICommand.push_back(_DEICommand);
 
 		_Instance.Color = pNowDRAW_BOX->NowColor;
+		_Instance.WorldMatrix = pNowDRAW_BOX->V_CameraMatrix.back();
 		_pPICTURE_DRAW->V_Instance.push_back(_Instance);
 
 		_Vertex.Position.x = _x;
@@ -540,6 +543,17 @@ namespace Magic
 
 		pNowDRAW_BOX->V_Message.back().DrawNumber = _pV_VERTEX->size();
 		pNowDRAW_BOX->Draw_Number++;
+	}
+
+	void Pen_Normal::RepeatDraw()
+	{
+		PICTURE_INSTANCE _Instance;
+
+		_Instance.Color = pNowDRAW_BOX->NowColor;
+		_Instance.WorldMatrix = pNowDRAW_BOX->V_CameraMatrix.back();
+		pNowDRAW_BOX->Picture_Draw.V_Instance.push_back(_Instance);
+
+		pNowDRAW_BOX->Picture_Draw.V_DEICommand.back().instanceCount++;
 	}
 
 	void Pen_Normal::BindFonts(Magic_Fonts * _pFonts)
@@ -933,7 +947,7 @@ namespace Magic
 
 			std::vector<MESSAGE_STATE>* _pV_MESSAGE_STATE = &pNowDRAW_BOX->V_Message;
 			glm::mat4 _bufferMatrix;
-			bool _SetPictureCameraMatrix = false, _SetLineCameraMatrix = false;
+			bool _SetLineCameraMatrix = false;
 			for (std::vector<MESSAGE_STATE>::iterator _iterator = _pV_MESSAGE_STATE->begin(); _iterator != _pV_MESSAGE_STATE->end(); _iterator++)
 			{
 				if (_iterator->AlphaState != _MESSAGE_STATEBuffer.AlphaState)
@@ -1056,7 +1070,6 @@ namespace Magic
 				if (_iterator->OverallMessage & MESSAGE_CAMERAMATRIX)
 				{
 					_bufferMatrix = pNowDRAW_BOX->V_CameraMatrix[_CameraMatrixMessage++];
-					_SetPictureCameraMatrix = true;
 					_SetLineCameraMatrix = true;
 				}
 
@@ -1097,13 +1110,6 @@ namespace Magic
 				GLenum _Color_DrawMode = GL_POINTS;
 				switch (_Now_Draw_Type)
 				{
-				case DRAW_TYPE_PICTURE_TEXT:
-					if (_SetPictureCameraMatrix)
-					{
-						_SetPictureCameraMatrix = false;
-						glUniformMatrix4fv(m_Picture2D_CameraMatrix, 1, GL_FALSE, &_bufferMatrix[0][0]);
-					}
-					break;
 				case DRAW_TYPE_POINTS:
 					_Color_DrawMode = GL_POINTS;
 					if (_SetLineCameraMatrix)

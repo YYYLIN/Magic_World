@@ -53,6 +53,7 @@ namespace Magic
 		struct PICTURE_INSTANCE
 		{
 			Magic::Color4 Color;
+			glm::mat4 WorldMatrix;
 		};
 
 		struct LINE_VERTEX
@@ -246,6 +247,15 @@ namespace Magic
 		返回值:
 		*/
 		void DrawRectangle(Pen_Normal::DRAW_MODE  _drawMode, float _x, float _y, float _w, float _h);
+
+		/*
+		功能:重复上一次的渲染参数渲染
+		(注意此功能:只能受世界矩阵和颜色影响
+		其他属性和上一次环境相同)
+		参数:空
+		返回值:空
+		*/
+		void RepeatDraw();
 
 		/*
 		功能:绑定字体
@@ -533,7 +543,6 @@ namespace Magic
 		Magic::VERTEX_BUFFER m_Picture_VBO;
 		MagicShader m_PictureShader;
 		unsigned int m_Picture2D_projectrionMatrix;
-		unsigned int m_Picture2D_CameraMatrix;
 
 		Magic::VERTEX_BUFFER m_Line_VBO;
 		MagicShader m_LineShader;
