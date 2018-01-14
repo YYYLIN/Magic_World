@@ -41,10 +41,10 @@ namespace Magic
 		"#version 400\r\n"
 		"layout(location = 0) in vec3 Position;"
 		"layout(location = 1) in vec4 Color;"
+		"layout(location = 2) in mat4 CameraMatrix;"
 
 		"out vec4 Out_Color;"
 
-		"uniform mat4 CameraMatrix;"
 		"uniform mat4 projectionMatrix;"
 		"uniform float PointSize;"
 
@@ -113,6 +113,8 @@ namespace Magic
 	void Pen_Normal::LINE_DRAW::Clear()
 	{
 		V_Vertex.clear();
+		V_Instance.clear();
+		V_DEICommand.clear();
 	}
 
 	Pen_Normal::SCISSOR_MESSAGE::SCISSOR_MESSAGE()
@@ -132,20 +134,12 @@ namespace Magic
 		pattern = 0;
 	}
 
-	Pen_Normal::VBO_VERTEX::VBO_VERTEX()
-	{
-		VertexBuffer = 0;
-		StartPos = 0;
-		DrawNumber = 0;
-	}
-
 	Pen_Normal::DRAW_BOX::DRAW_BOX()
 	{
 		Create_Scissor_Message = false;
 		Create_LineWitdh_Message = false;
 		Create_LinePattern_Message = false;
 		Create_PointSize_Message = false;
-		Create_CameraMatrix_Message = false;
 		Draw_Number = 0;
 		Draw_Number_Bk = 0;
 		NowShader = 0;
@@ -157,9 +151,8 @@ namespace Magic
 		Create_LineWitdh_Message = false;
 		Create_LinePattern_Message = false;
 		Create_PointSize_Message = false;
-		Create_CameraMatrix_Message = false;
 
-		projectionMatrix = CameraMatrix = glm::mat4();
+		projectionMatrix = CameraMatrix = WorldMatrix = glm::mat4();
 		LinePattern_Message.state = false;
 		LinePattern_Message.factor = 0;
 		LinePattern_Message.pattern = 0;
@@ -174,8 +167,6 @@ namespace Magic
 		V_LineWitdh_Message.clear();
 		V_LinePattern_Message.clear();
 		V_PointSize_Message.clear();
-		V_VBO_VERTEX.clear();
-		V_CameraMatrix.clear();
 	}
 
 #define DRAW_TYPE_PICTURE_TEXT					0x01
@@ -195,8 +186,6 @@ namespace Magic
 #define MESSAGE_LINEWIDTH						1 << 2
 #define MESSAGE_LINEPATTERN						1 << 3
 #define MESSAGE_POINTSSIZE						1 << 4
-#define MESSAGE_VAO								1 << 5
-#define MESSAGE_CAMERAMATRIX					1 << 6
 
 	Pen_Normal::Pen_Normal()
 	{
@@ -254,7 +243,6 @@ namespace Magic
 
 		m_LineShader.UnUse();
 
-		m_Line_CameraMatrix = m_LineShader("CameraMatrix");
 		m_Line_projectionMatrix = m_LineShader("projectionMatrix");
 		m_Line_PointSize = m_LineShader("PointSize");
 
@@ -262,6 +250,7 @@ namespace Magic
 		unsigned int _Array_Size[] = {
 			sizeof(glm::vec3) / sizeof(float),
 			sizeof(glm::vec2) / sizeof(float),
+
 			sizeof(Magic::Color4) / sizeof(float),
 			sizeof(glm::vec4) / sizeof(float),
 			sizeof(glm::vec4) / sizeof(float),
@@ -272,52 +261,22 @@ namespace Magic
 		m_Picture_VBO.SetIndexBuffer(2, Magic::VERTEX_BUFFER::DYNAMIC_DRAW);
 		m_Picture_VBO.SetDrawIndirectBuffer(3, Magic::VERTEX_BUFFER::DYNAMIC_DRAW);
 
-		m_Line_VBO.CreateBuffer(1);
+		m_Line_VBO.CreateBuffer(3);
 		unsigned int _Line_Array_Size[] = {
 			sizeof(glm::vec3) / sizeof(float),
-			sizeof(Magic::Color4) / sizeof(float) };
-		m_Line_VBO.SetBuffer(0, Magic::VERTEX_BUFFER::DYNAMIC_DRAW, 2, _Line_Array_Size);
+
+			sizeof(Magic::Color4) / sizeof(float),
+			sizeof(glm::vec4) / sizeof(float),
+			sizeof(glm::vec4) / sizeof(float),
+			sizeof(glm::vec4) / sizeof(float),
+			sizeof(glm::vec4) / sizeof(float) };
+		m_Line_VBO.SetBuffer(0, Magic::VERTEX_BUFFER::DYNAMIC_DRAW, 1, _Line_Array_Size);
+		m_Line_VBO.SetBuffer(1, Magic::VERTEX_BUFFER::DYNAMIC_DRAW, 5, &_Line_Array_Size[1], 1);
+		m_Line_VBO.SetDrawIndirectBuffer(2, Magic::VERTEX_BUFFER::DYNAMIC_DRAW);
 
 		return true;
 	}
-	void Pen_Normal::DrawVertex(Pen_Normal::DRAW_MODE _drawMode, Magic::VERTEX_BUFFER * _VertexBuffer, unsigned int _StartPos, unsigned int _DrawNumber)
-	{
-		switch (_drawMode)
-		{
-		case Magic::Pen_Normal::POINTS:
-			AddShaderMessage(DRAW_TYPE_POINTS, true);
-			break;
-		case Magic::Pen_Normal::LINES:
-			AddShaderMessage(DRAW_TYPE_LINES, true);
-			break;
-		case Magic::Pen_Normal::LINE_STRIP:
-			AddShaderMessage(DRAW_TYPE_LINE_STRIP, true);
-			break;
-		case Magic::Pen_Normal::LINE_LOOP:
-			AddShaderMessage(DRAW_TYPE_LINE_LOOP, true);
-			break;
-		case Magic::Pen_Normal::TRIANGLES:
-			AddShaderMessage(DRAW_TYPE_TRIANGLES, true);
-			break;
-		case Magic::Pen_Normal::TRIANGLE_STRIP:
-			AddShaderMessage(DRAW_TYPE_TRIANGLE_STRIP, true);
-			break;
-		case Magic::Pen_Normal::TRIANGLE_FAN:
-			AddShaderMessage(DRAW_TYPE_TRIANGLE_FAN, true);
-			break;
-		}
 
-		VBO_VERTEX _VBO_VERTEX;
-
-		_VBO_VERTEX.VertexBuffer = _VertexBuffer;
-		_VBO_VERTEX.StartPos = _StartPos;
-		_VBO_VERTEX.DrawNumber = _DrawNumber;
-
-		pNowDRAW_BOX->V_VBO_VERTEX.push_back(_VBO_VERTEX);
-		pNowDRAW_BOX->V_Message.back().OverallMessage |= MESSAGE_VAO;
-		pNowDRAW_BOX->V_Message.back().DrawNumber = pNowDRAW_BOX->Line_Draw.V_Vertex.size();
-		pNowDRAW_BOX->Draw_Number++;
-	}
 	void Pen_Normal::DrawVertex(Pen_Normal::DRAW_MODE _drawMode, const float * _pPos, const Magic::Color4 * _pColor, unsigned int _Number)
 	{
 		switch (_drawMode)
@@ -350,7 +309,7 @@ namespace Magic
 		_Number *= 2;
 		for (unsigned int a = 0, b = 0; a < _Number;)
 		{
-			_Vertex.Color = _pColor[b++];
+			//_Vertex.Color = _pColor[b++];
 			_Vertex.Position.x = _pPos[a++];
 			_Vertex.Position.y = _pPos[a++];
 			pNowDRAW_BOX->Line_Draw.V_Vertex.push_back(_Vertex);
@@ -388,7 +347,6 @@ namespace Magic
 
 		LINE_VERTEX _Vertex;
 
-		_Vertex.Color = pNowDRAW_BOX->NowColor;
 		_Number *= 2;
 		for (unsigned int a = 0, b = 0; a < _Number;)
 		{
@@ -405,8 +363,6 @@ namespace Magic
 		AddShaderMessage(DRAW_TYPE_LINES);
 
 		LINE_VERTEX _Vertex;
-
-		_Vertex.Color = pNowDRAW_BOX->NowColor;
 
 		_Vertex.Position.x = _x1;
 		_Vertex.Position.y = _y1;
@@ -447,7 +403,7 @@ namespace Magic
 		_pPICTURE_DRAW->V_DEICommand.push_back(_DEICommand);
 
 		_Instance.Color = pNowDRAW_BOX->NowColor;
-		_Instance.WorldMatrix = pNowDRAW_BOX->V_CameraMatrix.back();
+		_Instance.WorldMatrix = pNowDRAW_BOX->WorldMatrix;
 		_pPICTURE_DRAW->V_Instance.push_back(_Instance);
 
 		_Vertex.Position.x = _x;
@@ -517,10 +473,25 @@ namespace Magic
 		}
 
 		LINE_VERTEX _Vertex;
+		LINE_INSTANCE _Instance;
+		DrawElementsIndirectCommand _DEICommand;
 
 		std::vector<LINE_VERTEX>* _pV_VERTEX = &pNowDRAW_BOX->Line_Draw.V_Vertex;
 
-		_Vertex.Color = pNowDRAW_BOX->NowColor;
+		_DEICommand.count = 6;
+		_DEICommand.instanceCount = 1;
+		_DEICommand.firstIndex = _pV_VERTEX->size();
+		_DEICommand.baseVertex = 0;
+		if (pNowDRAW_BOX->Line_Draw.V_DEICommand.size())
+			_DEICommand.baseInstance = pNowDRAW_BOX->Line_Draw.V_DEICommand.back().baseInstance + 1;
+		else
+			_DEICommand.baseInstance = 0;
+
+		pNowDRAW_BOX->Line_Draw.V_DEICommand.push_back(_DEICommand);
+
+		_Instance.Color = pNowDRAW_BOX->NowColor;
+		_Instance.WorldMatrix = pNowDRAW_BOX->WorldMatrix;
+		pNowDRAW_BOX->Line_Draw.V_Instance.push_back(_Instance);
 
 		_Vertex.Position.x = _x;
 		_Vertex.Position.y = _y;
@@ -541,7 +512,7 @@ namespace Magic
 		_Vertex.Position.y = _y;
 		_pV_VERTEX->push_back(_Vertex);
 
-		pNowDRAW_BOX->V_Message.back().DrawNumber = _pV_VERTEX->size();
+		pNowDRAW_BOX->V_Message.back().DrawNumber++;
 		pNowDRAW_BOX->Draw_Number++;
 	}
 
@@ -550,7 +521,7 @@ namespace Magic
 		PICTURE_INSTANCE _Instance;
 
 		_Instance.Color = pNowDRAW_BOX->NowColor;
-		_Instance.WorldMatrix = pNowDRAW_BOX->V_CameraMatrix.back();
+		_Instance.WorldMatrix = pNowDRAW_BOX->WorldMatrix;
 		pNowDRAW_BOX->Picture_Draw.V_Instance.push_back(_Instance);
 
 		pNowDRAW_BOX->Picture_Draw.V_DEICommand.back().instanceCount++;
@@ -835,36 +806,12 @@ namespace Magic
 
 	void Pen_Normal::SetCameraMatrix(const glm::mat4 & _matrix)
 	{
-		if (!pNowDRAW_BOX->V_CameraMatrix.size() || pNowDRAW_BOX->V_CameraMatrix.back() != _matrix)
-		{
-			AddMessage();
-			pNowDRAW_BOX->V_Message.back().OverallMessage |= MESSAGE_CAMERAMATRIX;
-			if (!pNowDRAW_BOX->Create_CameraMatrix_Message)
-			{
-				pNowDRAW_BOX->V_CameraMatrix.push_back(_matrix);
-				pNowDRAW_BOX->Create_CameraMatrix_Message = true;
-			}
-			else
-				pNowDRAW_BOX->V_CameraMatrix.back() = _matrix;
-			pNowDRAW_BOX->CameraMatrix = _matrix;
-		}
+		pNowDRAW_BOX->CameraMatrix = pNowDRAW_BOX->WorldMatrix = _matrix;
 	}
 
 	void Pen_Normal::SetWorldMatrix(const glm::mat4 & _matrix)
 	{
-		glm::mat4 _BufferMatrix = pNowDRAW_BOX->CameraMatrix * _matrix;
-		if (!pNowDRAW_BOX->V_CameraMatrix.size() || pNowDRAW_BOX->V_CameraMatrix.back() != _matrix)
-		{
-			AddMessage();
-			pNowDRAW_BOX->V_Message.back().OverallMessage |= MESSAGE_CAMERAMATRIX;
-			if (!pNowDRAW_BOX->Create_CameraMatrix_Message)
-			{
-				pNowDRAW_BOX->V_CameraMatrix.push_back(_BufferMatrix);
-				pNowDRAW_BOX->Create_CameraMatrix_Message = true;
-			}
-			else
-				pNowDRAW_BOX->V_CameraMatrix.back() = _BufferMatrix;
-		}
+		pNowDRAW_BOX->WorldMatrix = pNowDRAW_BOX->CameraMatrix * _matrix;
 	}
 
 	void Pen_Normal::ResetWorldMatrix()
@@ -901,8 +848,7 @@ namespace Magic
 
 		if (pNowDRAW_BOX->Draw_Number)
 		{
-			unsigned int _OverallMessage = 0, _ShaderMessage = 0, _LineWidthMessage = 0, _PointsSizeMessage = 0, _LinePatternMessageNumber = 0,
-				_VBO_VERTEX_Message = 0, _CameraMatrixMessage = 0;
+			unsigned int _OverallMessage = 0, _ShaderMessage = 0, _LineWidthMessage = 0, _PointsSizeMessage = 0, _LinePatternMessageNumber = 0;
 
 			if (pNowDRAW_BOX->Picture_Draw.V_Index.size())
 			{
@@ -915,20 +861,20 @@ namespace Magic
 				m_Picture_VBO.DynamicWrite(3, _pPICTURE_DRAW_BOX->V_DEICommand.size() * sizeof(DrawElementsIndirectCommand), &_pPICTURE_DRAW_BOX->V_DEICommand[0]);
 			}
 
-			m_LineShader.Use();
-			glUniformMatrix4fv(m_Line_projectionMatrix, 1, GL_FALSE, &pNowDRAW_BOX->projectionMatrix[0][0]);
-
 			if (pNowDRAW_BOX->Line_Draw.V_Vertex.size())
 			{
+				m_LineShader.Use();
+				glUniformMatrix4fv(m_Line_projectionMatrix, 1, GL_FALSE, &pNowDRAW_BOX->projectionMatrix[0][0]);
+
 				LINE_DRAW* _pLINE_DRAW = &pNowDRAW_BOX->Line_Draw;
 				m_Line_VBO.DynamicWrite(0, _pLINE_DRAW->V_Vertex.size() * sizeof(LINE_VERTEX), &_pLINE_DRAW->V_Vertex[0]);
+				m_Line_VBO.DynamicWrite(1, _pLINE_DRAW->V_Instance.size() * sizeof(LINE_INSTANCE), &_pLINE_DRAW->V_Instance[0]);
+				m_Line_VBO.DynamicWrite(2, _pLINE_DRAW->V_DEICommand.size() * sizeof(DrawElementsIndirectCommand), &_pLINE_DRAW->V_DEICommand[0]);
 
 				glLineWidth(1.0f);
 				//glPointSize(1.0f);
 				glUniform1f(m_Line_PointSize, 1.0f);
 			}
-
-			m_Picture_VBO.BindBuffer(3);
 
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 			glEnable(GL_TEXTURE_2D);
@@ -946,8 +892,7 @@ namespace Magic
 			SCISSOR_MESSAGE _SCISSOR_MESSAGE;
 
 			std::vector<MESSAGE_STATE>* _pV_MESSAGE_STATE = &pNowDRAW_BOX->V_Message;
-			glm::mat4 _bufferMatrix;
-			bool _SetLineCameraMatrix = false;
+
 			for (std::vector<MESSAGE_STATE>::iterator _iterator = _pV_MESSAGE_STATE->begin(); _iterator != _pV_MESSAGE_STATE->end(); _iterator++)
 			{
 				if (_iterator->AlphaState != _MESSAGE_STATEBuffer.AlphaState)
@@ -1067,12 +1012,6 @@ namespace Magic
 					}
 				}
 
-				if (_iterator->OverallMessage & MESSAGE_CAMERAMATRIX)
-				{
-					_bufferMatrix = pNowDRAW_BOX->V_CameraMatrix[_CameraMatrixMessage++];
-					_SetLineCameraMatrix = true;
-				}
-
 				if (_iterator->OverallMessage & MESSAGE_SHADER)
 				{
 					_Now_Draw_Type = pNowDRAW_BOX->V_Shader_Message[_ShaderMessage++];
@@ -1112,113 +1051,65 @@ namespace Magic
 				{
 				case DRAW_TYPE_POINTS:
 					_Color_DrawMode = GL_POINTS;
-					if (_SetLineCameraMatrix)
-					{
-						_SetLineCameraMatrix = false;
-						glUniformMatrix4fv(m_Line_CameraMatrix, 1, GL_FALSE, &_bufferMatrix[0][0]);
-					}
 					break;
 				case DRAW_TYPE_LINE_STRIP:
 					_Color_DrawMode = GL_LINE_STRIP;
-					if (_SetLineCameraMatrix)
-					{
-						_SetLineCameraMatrix = false;
-						glUniformMatrix4fv(m_Line_CameraMatrix, 1, GL_FALSE, &_bufferMatrix[0][0]);
-					}
 					break;
 				case DRAW_TYPE_LINE_LOOP:
 					_Color_DrawMode = GL_LINE_LOOP;
-					if (_SetLineCameraMatrix)
-					{
-						_SetLineCameraMatrix = false;
-						glUniformMatrix4fv(m_Line_CameraMatrix, 1, GL_FALSE, &_bufferMatrix[0][0]);
-					}
 					break;
 				case DRAW_TYPE_TRIANGLES:
 					_Color_DrawMode = GL_TRIANGLES;
-					if (_SetLineCameraMatrix)
-					{
-						_SetLineCameraMatrix = false;
-						glUniformMatrix4fv(m_Line_CameraMatrix, 1, GL_FALSE, &_bufferMatrix[0][0]);
-					}
 					break;
 				case DRAW_TYPE_TRIANGLE_STRIP:
 					_Color_DrawMode = GL_TRIANGLE_STRIP;
-					if (_SetLineCameraMatrix)
-					{
-						_SetLineCameraMatrix = false;
-						glUniformMatrix4fv(m_Line_CameraMatrix, 1, GL_FALSE, &_bufferMatrix[0][0]);
-					}
 					break;
 				case DRAW_TYPE_TRIANGLE_FAN:
 					_Color_DrawMode = GL_TRIANGLE_FAN;
-					if (_SetLineCameraMatrix)
-					{
-						_SetLineCameraMatrix = false;
-						glUniformMatrix4fv(m_Line_CameraMatrix, 1, GL_FALSE, &_bufferMatrix[0][0]);
-					}
 					break;
 				case DRAW_TYPE_LINES:
 					_Color_DrawMode = GL_LINES;
-					if (_SetLineCameraMatrix)
-					{
-						_SetLineCameraMatrix = false;
-						glUniformMatrix4fv(m_Line_CameraMatrix, 1, GL_FALSE, &_bufferMatrix[0][0]);
-					}
 					break;
 				}
 
-				if (_iterator->OverallMessage & MESSAGE_VAO)
+				switch (_Now_Draw_Type)
 				{
-					VBO_VERTEX* _pVBO_VERTEX = &pNowDRAW_BOX->V_VBO_VERTEX[_VBO_VERTEX_Message++];
-					if (_pVBO_VERTEX->VertexBuffer != _LastVertex)
+				case DRAW_TYPE_PICTURE_TEXT:
+					if (_LastVertex != &m_Picture_VBO)
 					{
-						_LastVertex = _pVBO_VERTEX->VertexBuffer;
-						_LastVertex->Bind();
+						_LastVertex = &m_Picture_VBO;
+						m_Picture_VBO.BindBuffer(3);
+						m_Picture_VBO.Bind();
 					}
-
-					glDrawArrays(_Color_DrawMode, _pVBO_VERTEX->StartPos, _pVBO_VERTEX->DrawNumber);
-					DEBUG_AddDrawMessageNumber(1);
-				}
-				else
-				{
-					switch (_Now_Draw_Type)
+					_DrawNumber = _iterator->DrawNumber - _Picture_Now_DrawNumber;
+					if (_DrawNumber)
 					{
-					case DRAW_TYPE_PICTURE_TEXT:
-						if (_LastVertex != &m_Picture_VBO)
-						{
-							_LastVertex = &m_Picture_VBO;
-							m_Picture_VBO.Bind();
-						}
-						_DrawNumber = _iterator->DrawNumber - _Picture_Now_DrawNumber;
-						if (_DrawNumber)
-						{
-							glMultiDrawElementsIndirect(GL_TRIANGLES, GL_UNSIGNED_INT, (GLvoid*)(_Picture_Now_DrawNumber / 6), _DrawNumber / 6, 0);
-							_Picture_Now_DrawNumber = _iterator->DrawNumber;
-							DEBUG_AddDrawMessageNumber(1);
-						}
-						break;
-					case DRAW_TYPE_POINTS:
-					case DRAW_TYPE_LINE_STRIP:
-					case DRAW_TYPE_LINE_LOOP:
-					case DRAW_TYPE_TRIANGLES:
-					case DRAW_TYPE_TRIANGLE_STRIP:
-					case DRAW_TYPE_TRIANGLE_FAN:
-					case DRAW_TYPE_LINES:
-						if (_LastVertex != &m_Line_VBO)
-						{
-							_LastVertex = &m_Line_VBO;
-							m_Line_VBO.Bind();
-						}
-						_DrawNumber = _iterator->DrawNumber - _Line_Now_DrawNumber;
-						if (_DrawNumber)
-						{
-							glDrawArrays(_Color_DrawMode, _Line_Now_DrawNumber, _DrawNumber);
-							_Line_Now_DrawNumber = _iterator->DrawNumber;
-							DEBUG_AddDrawMessageNumber(1);
-						}
-						break;
+						glMultiDrawElementsIndirect(GL_TRIANGLES, GL_UNSIGNED_INT, (GLvoid*)(_Picture_Now_DrawNumber / 6), _DrawNumber / 6, 0);
+						_Picture_Now_DrawNumber = _iterator->DrawNumber;
+						DEBUG_AddDrawMessageNumber(1);
 					}
+					break;
+				case DRAW_TYPE_POINTS:
+				case DRAW_TYPE_LINE_STRIP:
+				case DRAW_TYPE_LINE_LOOP:
+				case DRAW_TYPE_TRIANGLES:
+				case DRAW_TYPE_TRIANGLE_STRIP:
+				case DRAW_TYPE_TRIANGLE_FAN:
+				case DRAW_TYPE_LINES:
+					if (_LastVertex != &m_Line_VBO)
+					{
+						_LastVertex = &m_Line_VBO;
+						m_Line_VBO.BindBuffer(2);
+						m_Line_VBO.Bind();
+					}
+					_DrawNumber = _iterator->DrawNumber - _Line_Now_DrawNumber;
+					if (_DrawNumber)
+					{
+						glMultiDrawArraysIndirect(_Color_DrawMode, (GLvoid*)(_Line_Now_DrawNumber), _DrawNumber, 0);
+						_Line_Now_DrawNumber = _iterator->DrawNumber;
+						DEBUG_AddDrawMessageNumber(1);
+					}
+					break;
 				}
 			}
 
@@ -1295,6 +1186,5 @@ namespace Magic
 		pNowDRAW_BOX->Create_LineWitdh_Message = false;
 		pNowDRAW_BOX->Create_Scissor_Message = false;
 		pNowDRAW_BOX->Create_PointSize_Message = false;
-		pNowDRAW_BOX->Create_CameraMatrix_Message = false;
 	}
 }

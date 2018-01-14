@@ -59,7 +59,12 @@ namespace Magic
 		struct LINE_VERTEX
 		{
 			glm::vec3 Position;
+		};
+
+		struct LINE_INSTANCE
+		{
 			Magic::Color4 Color;
+			glm::mat4 WorldMatrix;
 		};
 
 		struct MESSAGE_STATE
@@ -93,6 +98,8 @@ namespace Magic
 		struct LINE_DRAW
 		{
 			std::vector<LINE_VERTEX> V_Vertex;
+			std::vector<LINE_INSTANCE> V_Instance;
+			std::vector<DrawElementsIndirectCommand> V_DEICommand;
 			void Clear();
 		};
 
@@ -112,18 +119,11 @@ namespace Magic
 			LINEPATIERN_MESSAGE();
 		};
 
-		struct VBO_VERTEX
-		{
-			Magic::VERTEX_BUFFER* VertexBuffer;
-			unsigned int StartPos;
-			unsigned int DrawNumber;
-			VBO_VERTEX();
-		};
-
 		struct DRAW_BOX
 		{
 			unsigned int Draw_Number, Draw_Number_Bk;
 			glm::mat4 projectionMatrix;
+			glm::mat4 WorldMatrix;
 			glm::mat4 CameraMatrix;
 			Magic::Color4 NowColor;
 			unsigned char NowShader;
@@ -132,7 +132,6 @@ namespace Magic
 			bool Create_LineWitdh_Message;
 			bool Create_PointSize_Message;
 			bool Create_LinePattern_Message;
-			bool Create_CameraMatrix_Message;
 
 			LINEPATIERN_MESSAGE LinePattern_Message;
 			std::vector<MESSAGE_STATE> V_Message;
@@ -141,8 +140,6 @@ namespace Magic
 			std::vector<float> V_LineWitdh_Message;
 			std::vector<float> V_PointSize_Message;
 			std::vector<LINEPATIERN_MESSAGE> V_LinePattern_Message;
-			std::vector<VBO_VERTEX> V_VBO_VERTEX;
-			std::vector<glm::mat4> V_CameraMatrix;
 			PICTURE_DRAW Picture_Draw;
 			LINE_DRAW Line_Draw;
 
@@ -164,22 +161,6 @@ namespace Magic
 		virtual ~Pen_Normal();
 
 		bool Initialize();
-
-		/*
-		功能:渲染顶点
-		参数:
-		_drawMode = (LINES | POINTS | LINE_STRIP | LINE_LOOP | TRIANGLES | TRIANGLE_STRIP | TRIANGLE_FAN);
-		_VertexBuffer = 顶点缓存区
-		排列格式:
-		{
-			float x,y;
-			float r,g,b,a;
-		}
-		_StartPos = 开始位置
-		_DrawNumber = 渲染数量
-		返回值:空
-		*/
-		void DrawVertex(Pen_Normal::DRAW_MODE _drawMode, Magic::VERTEX_BUFFER* _VertexBuffer, unsigned int _StartPos, unsigned int _DrawNumber);
 
 		/*
 		功能:渲染顶点
@@ -449,6 +430,7 @@ namespace Magic
 		/*
 		功能:设置相机坐标
 		(警告此功能会影响全局坐标请谨慎调用)
+		(设置此属性会初始化WorldMatrix)
 		参数:
 		_matrix = 相机坐标矩阵
 		返回值:
@@ -547,7 +529,6 @@ namespace Magic
 		Magic::VERTEX_BUFFER m_Line_VBO;
 		MagicShader m_LineShader;
 		unsigned int m_Line_projectionMatrix;
-		unsigned int m_Line_CameraMatrix;
 		unsigned int m_Line_PointSize;
 
 
