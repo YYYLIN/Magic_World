@@ -83,8 +83,8 @@ public:
 
 	inline unsigned int GetDepth_Stencil() { return m_Depth_Stencil; }
 
-	void CopyFBOTO(MagicFBOTexture* _pTagetFBO, int _tagetX, int _tagetY, int _tagetW, int _tagetH,
-		int _sourceX, int _sourceY, int _sourceW, int _sourceH);
+	static void CopyFBOTO(MagicFBOTexture* _pTagetFBO, int _tagetX, int _tagetY, int _tagetW, int _tagetH,
+		MagicFBOTexture* _pSourceFBO, int _sourceX, int _sourceY, int _sourceW, int _sourceH);
 
 	void Clear(unsigned int _b_mode);
 

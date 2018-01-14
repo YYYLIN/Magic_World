@@ -85,6 +85,7 @@ namespace Magic
 			glm::vec2 PitureUV[4];
 			Magic_Fonts* pFonts;
 			MagicTexture* pNowTexture;
+			bool NewInstanceState;
 			std::vector<PICTURE_VERTEX> V_Vertex;
 			std::vector<PICTURE_INSTANCE> V_Instance;
 			std::vector<DrawElementsIndirectCommand> V_DEICommand;
@@ -97,9 +98,12 @@ namespace Magic
 
 		struct LINE_DRAW
 		{
+			bool NewInstanceState;
 			std::vector<LINE_VERTEX> V_Vertex;
 			std::vector<LINE_INSTANCE> V_Instance;
 			std::vector<DrawElementsIndirectCommand> V_DEICommand;
+
+			LINE_DRAW();
 			void Clear();
 		};
 
@@ -127,6 +131,7 @@ namespace Magic
 			glm::mat4 CameraMatrix;
 			Magic::Color4 NowColor;
 			unsigned char NowShader;
+			unsigned int LastCount, LastFirstIndex, Last_Draw_Type;
 
 			bool Create_Scissor_Message;
 			bool Create_LineWitdh_Message;
@@ -231,8 +236,6 @@ namespace Magic
 
 		/*
 		功能:重复上一次的渲染参数渲染
-		(注意此功能:只能受世界矩阵和颜色影响
-		其他属性和上一次环境相同)
 		参数:空
 		返回值:空
 		*/

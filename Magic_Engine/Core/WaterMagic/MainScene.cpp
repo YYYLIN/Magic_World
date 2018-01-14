@@ -36,13 +36,25 @@ void MainScene::OnUpdata()
 
 void MainScene::Draw()
 {
+	glm::mat4 _worldMatrix;
+
 	Magic::Pen_Normal* pPen_Normal = MagicEngineContext::pMagicEngineContext->GetPen_Normal();
 	pPen_Normal->SetColor(Magic::Color4(1.0f, 0.0f, 0.0f, 1.0f));
 	pPen_Normal->DrawRectangle(Magic::Pen_Normal::TRIANGLES, 30, 30, 100, 100);
 
+	pPen_Normal->DrawRectangle(Magic::Pen_Normal::TRIANGLES, 30, 160, 100, 100);
+
+	pPen_Normal->SetColor(Magic::Color4(0.0f, 1.0f, 0.0f, 1.0f));
+/*
+	_worldMatrix[3].x = 200.0f;
+	_worldMatrix[3].y = 0.0f;
+	pPen_Normal->SetWorldMatrix(_worldMatrix);*/
+	//pPen_Normal->RepeatDraw();
+	pPen_Normal->DrawRectangle(Magic::Pen_Normal::TRIANGLES, 200, 160, 100, 100);
+
 	pPen_Normal->EnableAlpha();
 	pPen_Normal->SetColor(Magic::Color4());
-	glm::mat4 _worldMatrix = glm::rotate(m_MagicRotate, glm::vec3(0.0f, 0.0f, 1.0f));
+	_worldMatrix = glm::rotate(m_MagicRotate, glm::vec3(0.0f, 0.0f, 1.0f));
 	_worldMatrix[3].x = m_PosSize.z * 0.5f;
 	_worldMatrix[3].y = m_PosSize.w * 0.5f;
 	pPen_Normal->SetWorldMatrix(_worldMatrix);
@@ -68,5 +80,5 @@ void MainScene::RenderStart()
 void MainScene::RenderEnd()
 {
 	MagicScenesEx::RenderEnd();
-	m_MSAA_FBOBuffer.CopyFBOTO(&m_FBOBuffer, 0, 0, (int)m_PosSize.z, (int)m_PosSize.w, 0, 0, (int)m_PosSize.z, (int)m_PosSize.w);
+	MagicFBOTexture::CopyFBOTO(&m_FBOBuffer, 0, 0, (int)m_PosSize.z, (int)m_PosSize.w, &m_MSAA_FBOBuffer, 0, 0, (int)m_PosSize.z, (int)m_PosSize.w);
 }

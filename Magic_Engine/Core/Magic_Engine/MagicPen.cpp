@@ -82,6 +82,7 @@ namespace Magic
 	{
 		pFonts = 0;
 		pNowTexture = 0;
+		NewInstanceState = false;
 		PitureUV[0].x = 0.0f;
 		PitureUV[0].y = 0.0f;
 		PitureUV[1].x = 1.0f;
@@ -96,6 +97,7 @@ namespace Magic
 	{
 		pFonts = 0;
 		pNowTexture = 0;
+		NewInstanceState = false;
 		PitureUV[0].x = 0.0f;
 		PitureUV[0].y = 0.0f;
 		PitureUV[1].x = 1.0f;
@@ -110,8 +112,14 @@ namespace Magic
 		V_Index.clear();
 	}
 
+	Pen_Normal::LINE_DRAW::LINE_DRAW()
+	{
+		NewInstanceState = false;
+	}
+
 	void Pen_Normal::LINE_DRAW::Clear()
 	{
+		NewInstanceState = false;
 		V_Vertex.clear();
 		V_Instance.clear();
 		V_DEICommand.clear();
@@ -140,6 +148,7 @@ namespace Magic
 		Create_LineWitdh_Message = false;
 		Create_LinePattern_Message = false;
 		Create_PointSize_Message = false;
+		LastCount = LastFirstIndex = Last_Draw_Type = 0;
 		Draw_Number = 0;
 		Draw_Number_Bk = 0;
 		NowShader = 0;
@@ -151,6 +160,7 @@ namespace Magic
 		Create_LineWitdh_Message = false;
 		Create_LinePattern_Message = false;
 		Create_PointSize_Message = false;
+		LastCount = LastFirstIndex = Last_Draw_Type = 0;
 
 		projectionMatrix = CameraMatrix = WorldMatrix = glm::mat4();
 		LinePattern_Message.state = false;
@@ -379,7 +389,7 @@ namespace Magic
 		AddShaderMessage(DRAW_TYPE_PICTURE_TEXT);
 
 		PICTURE_VERTEX _Vertex;
-		PICTURE_INSTANCE _Instance;
+
 		DrawElementsIndirectCommand _DEICommand;
 
 		PICTURE_DRAW* _pPICTURE_DRAW = &pNowDRAW_BOX->Picture_Draw;
@@ -391,20 +401,29 @@ namespace Magic
 		if (pNowDRAW_BOX->V_Message.back().pTexture != _pPICTURE_DRAW->pNowTexture)
 			BindPicture(_pPICTURE_DRAW->pNowTexture);
 
-		_DEICommand.count = 6;
-		_DEICommand.instanceCount = 1;
-		_DEICommand.firstIndex = _Vertex_Number;
-		_DEICommand.baseVertex = 0;
-		if (_pPICTURE_DRAW->V_DEICommand.size())
-			_DEICommand.baseInstance = _pPICTURE_DRAW->V_DEICommand.back().baseInstance + 1;
+		if (pNowDRAW_BOX->Picture_Draw.NewInstanceState)
+		{
+			PICTURE_INSTANCE _Instance;
+			_Instance.Color = pNowDRAW_BOX->NowColor;
+			_Instance.WorldMatrix = pNowDRAW_BOX->WorldMatrix;
+			_pPICTURE_DRAW->V_Instance.push_back(_Instance);
+		}
+
+		if (!pNowDRAW_BOX->V_Message.back().DrawNumber || pNowDRAW_BOX->Picture_Draw.NewInstanceState)
+		{
+			_DEICommand.count = 6;
+			_DEICommand.instanceCount = 1;
+			_DEICommand.firstIndex = _Vertex_Number;
+			_DEICommand.baseVertex = 0;
+			_DEICommand.baseInstance = _pPICTURE_DRAW->V_Instance.size() - 1;
+
+			_pPICTURE_DRAW->V_DEICommand.push_back(_DEICommand);
+			pNowDRAW_BOX->V_Message.back().DrawNumber++;
+
+			pNowDRAW_BOX->Picture_Draw.NewInstanceState = false;
+		}
 		else
-			_DEICommand.baseInstance = 0;
-
-		_pPICTURE_DRAW->V_DEICommand.push_back(_DEICommand);
-
-		_Instance.Color = pNowDRAW_BOX->NowColor;
-		_Instance.WorldMatrix = pNowDRAW_BOX->WorldMatrix;
-		_pPICTURE_DRAW->V_Instance.push_back(_Instance);
+			pNowDRAW_BOX->Picture_Draw.V_DEICommand.back().count += 6;
 
 		_Vertex.Position.x = _x;
 		_Vertex.Position.y = _y;
@@ -434,8 +453,9 @@ namespace Magic
 		_pV_Index->push_back(_Vertex_Number + 2);
 		_pV_Index->push_back(_Vertex_Number + 3);
 
-		pNowDRAW_BOX->V_Message.back().DrawNumber = _pV_Index->size();
-
+		pNowDRAW_BOX->LastCount = 6;
+		pNowDRAW_BOX->LastFirstIndex = pNowDRAW_BOX->Picture_Draw.V_DEICommand.back().count - pNowDRAW_BOX->LastCount;
+		pNowDRAW_BOX->Last_Draw_Type = SHADER_PICTURE;
 		pNowDRAW_BOX->Draw_Number++;
 	}
 
@@ -473,25 +493,34 @@ namespace Magic
 		}
 
 		LINE_VERTEX _Vertex;
-		LINE_INSTANCE _Instance;
-		DrawElementsIndirectCommand _DEICommand;
+
+		if (pNowDRAW_BOX->Line_Draw.NewInstanceState)
+		{
+			LINE_INSTANCE _Instance;
+			_Instance.Color = pNowDRAW_BOX->NowColor;
+			_Instance.WorldMatrix = pNowDRAW_BOX->WorldMatrix;
+			pNowDRAW_BOX->Line_Draw.V_Instance.push_back(_Instance);
+		}
 
 		std::vector<LINE_VERTEX>* _pV_VERTEX = &pNowDRAW_BOX->Line_Draw.V_Vertex;
 
-		_DEICommand.count = 6;
-		_DEICommand.instanceCount = 1;
-		_DEICommand.firstIndex = _pV_VERTEX->size();
-		_DEICommand.baseVertex = 0;
-		if (pNowDRAW_BOX->Line_Draw.V_DEICommand.size())
-			_DEICommand.baseInstance = pNowDRAW_BOX->Line_Draw.V_DEICommand.back().baseInstance + 1;
+		if (!pNowDRAW_BOX->V_Message.back().DrawNumber || pNowDRAW_BOX->Line_Draw.NewInstanceState)
+		{
+			DrawElementsIndirectCommand _DEICommand;
+
+			_DEICommand.count = 6;
+			_DEICommand.instanceCount = 1;
+			_DEICommand.firstIndex = _pV_VERTEX->size();
+			_DEICommand.baseVertex = 0;
+			_DEICommand.baseInstance = pNowDRAW_BOX->Line_Draw.V_Instance.size() - 1;
+
+			pNowDRAW_BOX->Line_Draw.V_DEICommand.push_back(_DEICommand);
+			pNowDRAW_BOX->V_Message.back().DrawNumber++;
+
+			pNowDRAW_BOX->Line_Draw.NewInstanceState = false;
+		}
 		else
-			_DEICommand.baseInstance = 0;
-
-		pNowDRAW_BOX->Line_Draw.V_DEICommand.push_back(_DEICommand);
-
-		_Instance.Color = pNowDRAW_BOX->NowColor;
-		_Instance.WorldMatrix = pNowDRAW_BOX->WorldMatrix;
-		pNowDRAW_BOX->Line_Draw.V_Instance.push_back(_Instance);
+			pNowDRAW_BOX->Line_Draw.V_DEICommand.back().count += 6;
 
 		_Vertex.Position.x = _x;
 		_Vertex.Position.y = _y;
@@ -512,19 +541,63 @@ namespace Magic
 		_Vertex.Position.y = _y;
 		_pV_VERTEX->push_back(_Vertex);
 
-		pNowDRAW_BOX->V_Message.back().DrawNumber++;
+		pNowDRAW_BOX->LastCount = 6;
+		pNowDRAW_BOX->LastFirstIndex = pNowDRAW_BOX->Line_Draw.V_DEICommand.back().count - pNowDRAW_BOX->LastCount;
+		pNowDRAW_BOX->Last_Draw_Type = SHADER_PURE_COLOR;
 		pNowDRAW_BOX->Draw_Number++;
 	}
 
 	void Pen_Normal::RepeatDraw()
 	{
-		PICTURE_INSTANCE _Instance;
+		if (pNowDRAW_BOX->LastCount)
+		{
+			if (pNowDRAW_BOX->Last_Draw_Type == SHADER_PICTURE)
+			{
+				if (pNowDRAW_BOX->Picture_Draw.NewInstanceState)
+				{
+					PICTURE_INSTANCE _Instance;
+					_Instance.Color = pNowDRAW_BOX->NowColor;
+					_Instance.WorldMatrix = pNowDRAW_BOX->WorldMatrix;
+					pNowDRAW_BOX->Picture_Draw.V_Instance.push_back(_Instance);
+					pNowDRAW_BOX->Picture_Draw.NewInstanceState = false;
+				}
 
-		_Instance.Color = pNowDRAW_BOX->NowColor;
-		_Instance.WorldMatrix = pNowDRAW_BOX->WorldMatrix;
-		pNowDRAW_BOX->Picture_Draw.V_Instance.push_back(_Instance);
+				DrawElementsIndirectCommand _DEICommand;
 
-		pNowDRAW_BOX->Picture_Draw.V_DEICommand.back().instanceCount++;
+				_DEICommand.count = pNowDRAW_BOX->LastCount;
+				_DEICommand.instanceCount = 1;
+				_DEICommand.firstIndex = pNowDRAW_BOX->LastFirstIndex;
+				_DEICommand.baseVertex = 0;
+				_DEICommand.baseInstance = pNowDRAW_BOX->Picture_Draw.V_Instance.size() - 1;
+
+				pNowDRAW_BOX->Picture_Draw.V_DEICommand.push_back(_DEICommand);
+				pNowDRAW_BOX->V_Message.back().DrawNumber++;
+			}
+			else if (pNowDRAW_BOX->Last_Draw_Type == SHADER_PURE_COLOR)
+			{
+				if (pNowDRAW_BOX->Line_Draw.NewInstanceState)
+				{
+					LINE_INSTANCE _Instance;
+					_Instance.Color = pNowDRAW_BOX->NowColor;
+					_Instance.WorldMatrix = pNowDRAW_BOX->WorldMatrix;
+					pNowDRAW_BOX->Line_Draw.V_Instance.push_back(_Instance);
+					pNowDRAW_BOX->Line_Draw.NewInstanceState = false;
+				}
+
+				DrawElementsIndirectCommand _DEICommand;
+
+				_DEICommand.count = pNowDRAW_BOX->LastCount;
+				_DEICommand.instanceCount = 1;
+				_DEICommand.firstIndex = pNowDRAW_BOX->LastFirstIndex;
+				_DEICommand.baseVertex = 0;
+				_DEICommand.baseInstance = pNowDRAW_BOX->Line_Draw.V_Instance.size() - 1;
+
+				pNowDRAW_BOX->Line_Draw.V_DEICommand.push_back(_DEICommand);
+				pNowDRAW_BOX->V_Message.back().DrawNumber++;
+			}
+
+			pNowDRAW_BOX->Draw_Number++;
+		}
 	}
 
 	void Pen_Normal::BindFonts(Magic_Fonts * _pFonts)
@@ -576,6 +649,8 @@ namespace Magic
 	void Pen_Normal::SetColor(const Magic::Color4 & _color)
 	{
 		pNowDRAW_BOX->NowColor = _color;
+		pNowDRAW_BOX->Line_Draw.NewInstanceState = true;
+		pNowDRAW_BOX->Picture_Draw.NewInstanceState = true;
 	}
 
 	void Pen_Normal::SetDrawWH(float _w, float _h)
@@ -807,11 +882,15 @@ namespace Magic
 	void Pen_Normal::SetCameraMatrix(const glm::mat4 & _matrix)
 	{
 		pNowDRAW_BOX->CameraMatrix = pNowDRAW_BOX->WorldMatrix = _matrix;
+		pNowDRAW_BOX->Line_Draw.NewInstanceState = true;
+		pNowDRAW_BOX->Picture_Draw.NewInstanceState = true;
 	}
 
 	void Pen_Normal::SetWorldMatrix(const glm::mat4 & _matrix)
 	{
 		pNowDRAW_BOX->WorldMatrix = pNowDRAW_BOX->CameraMatrix * _matrix;
+		pNowDRAW_BOX->Line_Draw.NewInstanceState = true;
+		pNowDRAW_BOX->Picture_Draw.NewInstanceState = true;
 	}
 
 	void Pen_Normal::ResetWorldMatrix()
@@ -1045,7 +1124,6 @@ namespace Magic
 					glUniform1f(m_Line_PointSize, pNowDRAW_BOX->V_PointSize_Message[_PointsSizeMessage++]);
 				}
 
-				unsigned int _DrawNumber;
 				GLenum _Color_DrawMode = GL_POINTS;
 				switch (_Now_Draw_Type)
 				{
@@ -1081,11 +1159,10 @@ namespace Magic
 						m_Picture_VBO.BindBuffer(3);
 						m_Picture_VBO.Bind();
 					}
-					_DrawNumber = _iterator->DrawNumber - _Picture_Now_DrawNumber;
-					if (_DrawNumber)
+					if (_iterator->DrawNumber)
 					{
-						glMultiDrawElementsIndirect(GL_TRIANGLES, GL_UNSIGNED_INT, (GLvoid*)(_Picture_Now_DrawNumber / 6), _DrawNumber / 6, 0);
-						_Picture_Now_DrawNumber = _iterator->DrawNumber;
+						glMultiDrawElementsIndirect(GL_TRIANGLES, GL_UNSIGNED_INT, (GLvoid*)(_Picture_Now_DrawNumber), _iterator->DrawNumber, 0);
+						_Picture_Now_DrawNumber += _iterator->DrawNumber;
 						DEBUG_AddDrawMessageNumber(1);
 					}
 					break;
@@ -1102,11 +1179,10 @@ namespace Magic
 						m_Line_VBO.BindBuffer(2);
 						m_Line_VBO.Bind();
 					}
-					_DrawNumber = _iterator->DrawNumber - _Line_Now_DrawNumber;
-					if (_DrawNumber)
+					if (_iterator->DrawNumber)
 					{
-						glMultiDrawArraysIndirect(_Color_DrawMode, (GLvoid*)(_Line_Now_DrawNumber), _DrawNumber, 0);
-						_Line_Now_DrawNumber = _iterator->DrawNumber;
+						glMultiDrawArraysIndirect(_Color_DrawMode, (GLvoid*)(_Line_Now_DrawNumber), _iterator->DrawNumber, 0);
+						_Line_Now_DrawNumber += _iterator->DrawNumber;
 						DEBUG_AddDrawMessageNumber(1);
 					}
 					break;
@@ -1162,9 +1238,7 @@ namespace Magic
 		if (pNowDRAW_BOX->Draw_Number_Bk != pNowDRAW_BOX->Draw_Number)
 		{
 			pNowDRAW_BOX->Draw_Number_Bk = pNowDRAW_BOX->Draw_Number;
-			MESSAGE_STATE _MESSAGE_STATE = pNowDRAW_BOX->V_Message.back();
-			_MESSAGE_STATE.OverallMessage = 0;
-			pNowDRAW_BOX->V_Message.push_back(_MESSAGE_STATE);
+			pNowDRAW_BOX->V_Message.push_back(MESSAGE_STATE());
 		}
 	}
 

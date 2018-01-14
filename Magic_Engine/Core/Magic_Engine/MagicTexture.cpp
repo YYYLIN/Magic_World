@@ -465,9 +465,9 @@ bool MagicFBOTexture::ResetSize(const int& _w, const int& _h, unsigned char _Mul
 }
 
 void MagicFBOTexture::CopyFBOTO(MagicFBOTexture* _pTagetFBO, int _tagetX, int _tagetY, int _tagetW, int _tagetH,
-	int _sourceX, int _sourceY, int _sourceW, int _sourceH)
+	MagicFBOTexture* _pSourceFBO, int _sourceX, int _sourceY, int _sourceW, int _sourceH)
 {
-	glBindFramebuffer(GL_READ_FRAMEBUFFER, this->GetFBOTexture());
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, _pSourceFBO->GetFBOTexture());
 	if (_pTagetFBO)
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, _pTagetFBO->GetFBOTexture());
 	else
