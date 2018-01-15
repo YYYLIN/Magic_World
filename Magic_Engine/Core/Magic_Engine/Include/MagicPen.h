@@ -18,6 +18,13 @@
 
 namespace Magic
 {
+	typedef  struct {
+		unsigned int count;
+		unsigned int instanceCount;
+		unsigned int first;
+		unsigned int baseInstance;
+	} DrawArraysIndirectCommand;
+
 	typedef struct {
 		unsigned int count;
 		unsigned int instanceCount;
@@ -101,7 +108,7 @@ namespace Magic
 			bool NewInstanceState;
 			std::vector<LINE_VERTEX> V_Vertex;
 			std::vector<LINE_INSTANCE> V_Instance;
-			std::vector<DrawElementsIndirectCommand> V_DEICommand;
+			std::vector<DrawArraysIndirectCommand> V_DEICommand;
 
 			LINE_DRAW();
 			void Clear();

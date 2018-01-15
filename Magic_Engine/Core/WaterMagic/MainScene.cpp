@@ -45,12 +45,11 @@ void MainScene::Draw()
 	pPen_Normal->DrawRectangle(Magic::Pen_Normal::TRIANGLES, 30, 160, 100, 100);
 
 	pPen_Normal->SetColor(Magic::Color4(0.0f, 1.0f, 0.0f, 1.0f));
-/*
+
 	_worldMatrix[3].x = 200.0f;
 	_worldMatrix[3].y = 0.0f;
-	pPen_Normal->SetWorldMatrix(_worldMatrix);*/
-	//pPen_Normal->RepeatDraw();
-	pPen_Normal->DrawRectangle(Magic::Pen_Normal::TRIANGLES, 200, 160, 100, 100);
+	pPen_Normal->SetWorldMatrix(_worldMatrix);
+	pPen_Normal->RepeatDraw();
 
 	pPen_Normal->EnableAlpha();
 	pPen_Normal->SetColor(Magic::Color4());
@@ -63,11 +62,13 @@ void MainScene::Draw()
 	float _h = pMagicTexture.GetHeight() * 0.2f;
 	pPen_Normal->DrawPicture(-_w * 0.5f, -_h * 0.5f, _w, _h);
 
-	pPen_Normal->SetColor(Magic::Color4(0.0f, 1.0f, 0.0f, 1.0f));
+	pPen_Normal->SetColor(Magic::Color4(0.0f, 0.0f, 1.0f, 1.0f));
 	_worldMatrix[3].x = m_PosSize.z * 0.5f - 100.0f;
 	_worldMatrix[3].y = m_PosSize.w * 0.5f - 100.0f;
 	pPen_Normal->SetWorldMatrix(_worldMatrix);
 	pPen_Normal->RepeatDraw();
+
+	pPen_Normal->DrawRectangle(Magic::Pen_Normal::TRIANGLES, 0, 0, 100, 100);
 }
 
 void MainScene::RenderStart()

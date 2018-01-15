@@ -506,12 +506,11 @@ namespace Magic
 
 		if (!pNowDRAW_BOX->V_Message.back().DrawNumber || pNowDRAW_BOX->Line_Draw.NewInstanceState)
 		{
-			DrawElementsIndirectCommand _DEICommand;
+			DrawArraysIndirectCommand _DEICommand;
 
 			_DEICommand.count = 6;
 			_DEICommand.instanceCount = 1;
-			_DEICommand.firstIndex = _pV_VERTEX->size();
-			_DEICommand.baseVertex = 0;
+			_DEICommand.first = _pV_VERTEX->size();
 			_DEICommand.baseInstance = pNowDRAW_BOX->Line_Draw.V_Instance.size() - 1;
 
 			pNowDRAW_BOX->Line_Draw.V_DEICommand.push_back(_DEICommand);
@@ -584,12 +583,11 @@ namespace Magic
 					pNowDRAW_BOX->Line_Draw.NewInstanceState = false;
 				}
 
-				DrawElementsIndirectCommand _DEICommand;
+				DrawArraysIndirectCommand _DEICommand;
 
 				_DEICommand.count = pNowDRAW_BOX->LastCount;
 				_DEICommand.instanceCount = 1;
-				_DEICommand.firstIndex = pNowDRAW_BOX->LastFirstIndex;
-				_DEICommand.baseVertex = 0;
+				_DEICommand.first = pNowDRAW_BOX->LastFirstIndex;
 				_DEICommand.baseInstance = pNowDRAW_BOX->Line_Draw.V_Instance.size() - 1;
 
 				pNowDRAW_BOX->Line_Draw.V_DEICommand.push_back(_DEICommand);
@@ -948,7 +946,7 @@ namespace Magic
 				LINE_DRAW* _pLINE_DRAW = &pNowDRAW_BOX->Line_Draw;
 				m_Line_VBO.DynamicWrite(0, _pLINE_DRAW->V_Vertex.size() * sizeof(LINE_VERTEX), &_pLINE_DRAW->V_Vertex[0]);
 				m_Line_VBO.DynamicWrite(1, _pLINE_DRAW->V_Instance.size() * sizeof(LINE_INSTANCE), &_pLINE_DRAW->V_Instance[0]);
-				m_Line_VBO.DynamicWrite(2, _pLINE_DRAW->V_DEICommand.size() * sizeof(DrawElementsIndirectCommand), &_pLINE_DRAW->V_DEICommand[0]);
+				m_Line_VBO.DynamicWrite(2, _pLINE_DRAW->V_DEICommand.size() * sizeof(DrawArraysIndirectCommand), &_pLINE_DRAW->V_DEICommand[0]);
 
 				glLineWidth(1.0f);
 				//glPointSize(1.0f);
@@ -1050,7 +1048,10 @@ namespace Magic
 				if (_iterator->pTexture != _MESSAGE_STATEBuffer.pTexture)
 				{
 					_MESSAGE_STATEBuffer.pTexture = _iterator->pTexture;
-					glBindTexture(GL_TEXTURE_2D, _MESSAGE_STATEBuffer.pTexture->GetTextrue());
+					if (_MESSAGE_STATEBuffer.pTexture)
+						glBindTexture(GL_TEXTURE_2D, _MESSAGE_STATEBuffer.pTexture->GetTextrue());
+					else
+						glBindTexture(GL_TEXTURE_2D, NULL);
 				}
 
 				if (_iterator->OverallMessage & MESSAGE_SCISSOR)
@@ -1161,7 +1162,7 @@ namespace Magic
 					}
 					if (_iterator->DrawNumber)
 					{
-						glMultiDrawElementsIndirect(GL_TRIANGLES, GL_UNSIGNED_INT, (GLvoid*)(_Picture_Now_DrawNumber), _iterator->DrawNumber, 0);
+						glMultiDrawElementsIndirect(GL_TRIANGLES, GL_UNSIGNED_INT, (GLvoid*)(sizeof(DrawElementsIndirectCommand) * _Picture_Now_DrawNumber), _iterator->DrawNumber, 0);
 						_Picture_Now_DrawNumber += _iterator->DrawNumber;
 						DEBUG_AddDrawMessageNumber(1);
 					}
@@ -1181,7 +1182,7 @@ namespace Magic
 					}
 					if (_iterator->DrawNumber)
 					{
-						glMultiDrawArraysIndirect(_Color_DrawMode, (GLvoid*)(_Line_Now_DrawNumber), _iterator->DrawNumber, 0);
+						glMultiDrawArraysIndirect(_Color_DrawMode, (GLvoid*)(sizeof(DrawArraysIndirectCommand) * _Line_Now_DrawNumber), _iterator->DrawNumber, 0);
 						_Line_Now_DrawNumber += _iterator->DrawNumber;
 						DEBUG_AddDrawMessageNumber(1);
 					}
