@@ -42,7 +42,7 @@ void MainScene::Draw()
 	pPen_Normal->SetColor(Magic::Color4(1.0f, 0.0f, 0.0f, 1.0f));
 	pPen_Normal->DrawRectangle(Magic::Pen_Normal::TRIANGLES, 30, 30, 100, 100);
 
-	pPen_Normal->DrawRectangle(Magic::Pen_Normal::TRIANGLES, 30, 160, 100, 100);
+	pPen_Normal->DrawRectangle(Magic::Pen_Normal::LINE_STRIP, 30, 160, 100, 100);
 
 	pPen_Normal->SetColor(Magic::Color4(0.0f, 1.0f, 0.0f, 1.0f));
 
@@ -69,6 +69,11 @@ void MainScene::Draw()
 	pPen_Normal->RepeatDraw();
 
 	pPen_Normal->DrawRectangle(Magic::Pen_Normal::TRIANGLES, 0, 0, 100, 100);
+
+	pPen_Normal->DrawLine(150.0f, 20.0f, 300.0f, 20.0f);
+
+	pPen_Normal->ResetWorldMatrix();
+	pPen_Normal->RepeatDraw();
 }
 
 void MainScene::RenderStart()
