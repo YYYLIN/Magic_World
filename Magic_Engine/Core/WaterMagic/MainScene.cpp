@@ -19,7 +19,7 @@ bool MainScene::OnInitialize()
 		return false;
 
 	int _w = (int)m_PosSize.z, _h = (int)m_PosSize.w;
-	_result = m_MSAA_FBOBuffer.Initialize(_w, _h, MagicFBOTexture::COLOR4, 16);
+	_result = m_FBOBuffer.ResetSize(_w, _h, 16);
 	if (!_result)
 		return false;
 
@@ -74,17 +74,4 @@ void MainScene::Draw()
 
 	pPen_Normal->ResetWorldMatrix();
 	pPen_Normal->RepeatDraw();
-}
-
-void MainScene::RenderStart()
-{
-	m_MSAA_FBOBuffer.Use();
-	m_MSAA_FBOBuffer.Clear(MagicFBOTexture::B_COLOR);
-	MagicScenesEx::RenderStart();
-}
-
-void MainScene::RenderEnd()
-{
-	MagicScenesEx::RenderEnd();
-	MagicFBOTexture::CopyFBOTO(&m_FBOBuffer, 0, 0, (int)m_PosSize.z, (int)m_PosSize.w, &m_MSAA_FBOBuffer, 0, 0, (int)m_PosSize.z, (int)m_PosSize.w);
 }

@@ -105,6 +105,12 @@ void MagicScenes::RenderEnd()
 	MagicEngineContext::pMagicEngineContext->GetPen_Normal()->SetCameraMatrix(_Camera);
 }
 
+//拷贝缓冲区消息回掉
+void ScenesExCopyFBOBufferMessage(void *_data)
+{
+	((MagicScenesEx*)_data)->CopyFBOBuffer();
+}
+
 MagicScenesEx::MagicScenesEx()
 {
 	m_DrawMessage = false;
@@ -135,18 +141,26 @@ glm::vec2 MagicScenesEx::GetFrameBufferSize()
 bool MagicScenesEx::Initialize(MagicScenes* _scene, glm::vec4 _PosSize)
 {
 	bool result;
-	result = MagicScenes::Initialize(_scene, _PosSize);
-	if (!result)
-		return false;
 
 	int w = (int)_PosSize.z, h = (int)_PosSize.w;
 	result = m_FBOBuffer.Initialize(w, h, MagicFBOTexture::COLOR4);
 	if (!result)
 		return false;
 
+	result = MagicScenes::Initialize(_scene, _PosSize);
+	if (!result)
+		return false;
+
 	this->DrawSpirit();
 
 	return true;
+}
+
+void MagicScenesEx::CopyFBOBuffer()
+{
+	MagicFBOTexture::CopyFBOTO(pParentScene->GetFBOTexture(), 0, 0,
+		(int)m_PosSize.z, (int)m_PosSize.w, &m_FBOBuffer, 0, 0,
+		(int)m_PosSize.z, (int)m_PosSize.w);
 }
 
 void MagicScenesEx::Render(glm::vec2 _DrawPos)
@@ -170,10 +184,7 @@ void MagicScenesEx::Render(glm::vec2 _DrawPos)
 
 void MagicScenesEx::RenderBuffer()
 {
-	Magic::Pen_Normal* pPen_Normal = MagicEngineContext::pMagicEngineContext->GetPen_Normal();
-	pPen_Normal->BindPicture(&m_FBOBuffer);
-	pPen_Normal->BindPictureUVPosfault();
-	pPen_Normal->DrawPicture(m_PosSize.x, m_PosSize.y, m_PosSize.z, m_PosSize.w);
+	MagicEngineContext::pMagicEngineContext->GetPen_Normal()->AddCallBackMessage({ ScenesExCopyFBOBufferMessage ,this });
 }
 
 void MagicScenesEx::RenderStart()

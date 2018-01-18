@@ -1,53 +1,68 @@
 #include "MagicMessage.h"
 #include "MagicEngineContext.h"
 
-
-
-void MagicMessageCommon::Send_Message(unsigned int _MessageType, unsigned int _Message)
+namespace Magic
 {
-	this->MessageHandle(_MessageType, _Message);
-}
+	CALLBACK_COMMON::CALLBACK_COMMON() :pCallBack_Common(NULL), m_Data(0)
+	{}
 
-int MagicMessageScenes::MessageHandle(unsigned int _MessageType, unsigned int _Message)
-{
-	MagicScenes* _pMagicScene = dynamic_cast<MagicScenes*>(this);
-	if (_pMagicScene && _pMagicScene->GetDisplayState())
+	CALLBACK_COMMON::CALLBACK_COMMON(CallBack_Common _pCallBack, void* _data) : pCallBack_Common(_pCallBack), m_Data(_data)
+	{}
+
+	CALLBACK_COMMON::CALLBACK_COMMON(CallBack_Common _pCallBack) : pCallBack_Common(_pCallBack), m_Data(0)
+	{}
+
+	void CALLBACK_COMMON::operator()()
 	{
-		bool _RETURN_FINISH = false;
-		for (std::vector<MagicCommon*>::reverse_iterator _iterator = _pMagicScene->v_Common.rbegin();
-			_iterator != _pMagicScene->v_Common.rend();)
+		pCallBack_Common(m_Data);
+	}
+
+	void MessageCommon::Send_Message(unsigned int _MessageType, unsigned int _Message)
+	{
+		this->MessageHandle(_MessageType, _Message);
+	}
+
+	int MessageScenes::MessageHandle(unsigned int _MessageType, unsigned int _Message)
+	{
+		MagicScenes* _pMagicScene = dynamic_cast<MagicScenes*>(this);
+		if (_pMagicScene && _pMagicScene->GetDisplayState())
 		{
-			MagicMessageCommon* _pMagicMessageCommon = dynamic_cast<MagicMessageCommon*>(*_iterator);
-			if (_pMagicMessageCommon)
+			bool _RETURN_FINISH = false;
+			for (std::vector<MagicCommon*>::reverse_iterator _iterator = _pMagicScene->v_Common.rbegin();
+				_iterator != _pMagicScene->v_Common.rend();)
 			{
-				switch (_pMagicMessageCommon->MessageHandle(_MessageType, _Message))
+				MessageCommon* _pMagicMessageCommon = dynamic_cast<MessageCommon*>(*_iterator);
+				if (_pMagicMessageCommon)
 				{
-				case MAGIC_MESSAGE_RETURN_OK:
-					_iterator++;
-					break;
-				case MAGIC_MESSAGE_RETURN_RESET:
-					break;
-				case MAGIC_MESSAGE_RETURN_EXIT:
-					return MAGIC_MESSAGE_RETURN_EXIT;
-				case MAGIC_MESSAGE_RETURN_FINISH:
-					_MessageType = MAGIC_UI_MESSAGE_RETURN_FINISH;
-					_Message = 0;
-					_RETURN_FINISH = true;
-					_iterator++;
-					break;
-				default:
-					_iterator++;
-					break;
+					switch (_pMagicMessageCommon->MessageHandle(_MessageType, _Message))
+					{
+					case MAGIC_MESSAGE_RETURN_OK:
+						_iterator++;
+						break;
+					case MAGIC_MESSAGE_RETURN_RESET:
+						break;
+					case MAGIC_MESSAGE_RETURN_EXIT:
+						return MAGIC_MESSAGE_RETURN_EXIT;
+					case MAGIC_MESSAGE_RETURN_FINISH:
+						_MessageType = MAGIC_UI_MESSAGE_RETURN_FINISH;
+						_Message = 0;
+						_RETURN_FINISH = true;
+						_iterator++;
+						break;
+					default:
+						_iterator++;
+						break;
+					}
 				}
+				else
+					_iterator++;
 			}
+			if (_RETURN_FINISH)
+				return MAGIC_MESSAGE_RETURN_FINISH;
 			else
-				_iterator++;
+				return MAGIC_MESSAGE_RETURN_OK;
 		}
-		if (_RETURN_FINISH)
-			return MAGIC_MESSAGE_RETURN_FINISH;
 		else
 			return MAGIC_MESSAGE_RETURN_OK;
 	}
-	else
-		return MAGIC_MESSAGE_RETURN_OK;
 }

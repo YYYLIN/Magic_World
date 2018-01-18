@@ -177,8 +177,10 @@ namespace Magic
 		V_LineWitdh_Message.clear();
 		V_LinePattern_Message.clear();
 		V_PointSize_Message.clear();
+		V_CallBack_Message.clear();
 	}
 
+#define DRAW_TYPE_RESET							0x00
 #define DRAW_TYPE_PICTURE_TEXT					0x01
 #define DRAW_TYPE_POINTS						0x02
 #define DRAW_TYPE_LINES							0x03
@@ -196,6 +198,7 @@ namespace Magic
 #define MESSAGE_LINEWIDTH						1 << 2
 #define MESSAGE_LINEPATTERN						1 << 3
 #define MESSAGE_POINTSSIZE						1 << 4
+#define MESSAGE_CALLBACK						1 << 5
 
 	Pen_Normal::Pen_Normal()
 	{
@@ -425,10 +428,10 @@ namespace Magic
 		std::vector<PICTURE_VERTEX>* _pV_VERTEX = &_pPICTURE_DRAW->V_Vertex;
 		std::vector<unsigned int>* _pV_Index = &_pPICTURE_DRAW->V_Index;
 
-		unsigned int _Vertex_Number = _pV_VERTEX->size();
-
 		if (pNowDRAW_BOX->V_Message.back().pTexture != _pPICTURE_DRAW->pNowTexture)
 			BindPicture(_pPICTURE_DRAW->pNowTexture);
+
+		unsigned int _Vertex_Number = _pV_VERTEX->size();
 
 		if (pNowDRAW_BOX->Picture_Draw.NewInstanceState)
 		{
@@ -442,7 +445,7 @@ namespace Magic
 		{
 			_DEICommand.count = 6;
 			_DEICommand.instanceCount = 1;
-			_DEICommand.firstIndex = _Vertex_Number;
+			_DEICommand.firstIndex = _pV_Index->size();
 			_DEICommand.baseVertex = 0;
 			_DEICommand.baseInstance = _pPICTURE_DRAW->V_Instance.size() - 1;
 
@@ -934,6 +937,22 @@ namespace Magic
 		}
 	}
 
+	void Pen_Normal::AddCallBackMessage(const CALLBACK_COMMON& _CallBack)
+	{
+		if (!(pNowDRAW_BOX->V_Message.back().OverallMessage & MESSAGE_CALLBACK))
+		{
+			AddMessage();
+			ResetMessage();
+
+			pNowDRAW_BOX->NowShader = DRAW_TYPE_RESET;
+			pNowDRAW_BOX->V_Message.back().OverallMessage |= MESSAGE_CALLBACK;
+			pNowDRAW_BOX->Draw_Number++;
+		}
+
+		pNowDRAW_BOX->V_CallBack_Message.push_back(_CallBack);
+		pNowDRAW_BOX->V_Message.back().DrawNumber++;
+	}
+
 	void Pen_Normal::RenderStart()
 	{
 		m_Draw_Box_Number++;
@@ -990,7 +1009,7 @@ namespace Magic
 			glDisable(GL_BLEND);
 			glBindTexture(GL_TEXTURE_2D, 0);
 
-			unsigned int _Picture_Now_DrawNumber = 0, _Line_Now_DrawNumber = 0;
+			unsigned int _Picture_Now_DrawNumber = 0, _Line_Now_DrawNumber = 0, _CallBack_Now_DrawNumber = 0;
 			unsigned int _Now_Shader = 0, _Now_Draw_Type = 0;
 
 			Magic::VERTEX_BUFFER* _LastVertex = 0;
@@ -1154,68 +1173,78 @@ namespace Magic
 					glUniform1f(m_Line_PointSize, pNowDRAW_BOX->V_PointSize_Message[_PointsSizeMessage++]);
 				}
 
-				GLenum _Color_DrawMode = GL_POINTS;
-				switch (_Now_Draw_Type)
+				if (_iterator->OverallMessage & MESSAGE_CALLBACK)
 				{
-				case DRAW_TYPE_POINTS:
-					_Color_DrawMode = GL_POINTS;
-					break;
-				case DRAW_TYPE_LINE_STRIP:
-					_Color_DrawMode = GL_LINE_STRIP;
-					break;
-				case DRAW_TYPE_LINE_LOOP:
-					_Color_DrawMode = GL_LINE_LOOP;
-					break;
-				case DRAW_TYPE_TRIANGLES:
-					_Color_DrawMode = GL_TRIANGLES;
-					break;
-				case DRAW_TYPE_TRIANGLE_STRIP:
-					_Color_DrawMode = GL_TRIANGLE_STRIP;
-					break;
-				case DRAW_TYPE_TRIANGLE_FAN:
-					_Color_DrawMode = GL_TRIANGLE_FAN;
-					break;
-				case DRAW_TYPE_LINES:
-					_Color_DrawMode = GL_LINES;
-					break;
+					for (int c = _CallBack_Now_DrawNumber,
+						r = _CallBack_Now_DrawNumber += _iterator->DrawNumber;
+						c < r; c++)
+						pNowDRAW_BOX->V_CallBack_Message[c]();
 				}
-
-				switch (_Now_Draw_Type)
+				else
 				{
-				case DRAW_TYPE_PICTURE_TEXT:
-					if (_LastVertex != &m_Picture_VBO)
+					GLenum _Color_DrawMode = GL_POINTS;
+					switch (_Now_Draw_Type)
 					{
-						_LastVertex = &m_Picture_VBO;
-						m_Picture_VBO.BindBuffer(3);
-						m_Picture_VBO.Bind();
+					case DRAW_TYPE_POINTS:
+						_Color_DrawMode = GL_POINTS;
+						break;
+					case DRAW_TYPE_LINE_STRIP:
+						_Color_DrawMode = GL_LINE_STRIP;
+						break;
+					case DRAW_TYPE_LINE_LOOP:
+						_Color_DrawMode = GL_LINE_LOOP;
+						break;
+					case DRAW_TYPE_TRIANGLES:
+						_Color_DrawMode = GL_TRIANGLES;
+						break;
+					case DRAW_TYPE_TRIANGLE_STRIP:
+						_Color_DrawMode = GL_TRIANGLE_STRIP;
+						break;
+					case DRAW_TYPE_TRIANGLE_FAN:
+						_Color_DrawMode = GL_TRIANGLE_FAN;
+						break;
+					case DRAW_TYPE_LINES:
+						_Color_DrawMode = GL_LINES;
+						break;
 					}
-					if (_iterator->DrawNumber)
+
+					switch (_Now_Draw_Type)
 					{
-						glMultiDrawElementsIndirect(GL_TRIANGLES, GL_UNSIGNED_INT, (GLvoid*)(sizeof(DrawElementsIndirectCommand) * _Picture_Now_DrawNumber), _iterator->DrawNumber, 0);
-						_Picture_Now_DrawNumber += _iterator->DrawNumber;
-						DEBUG_AddDrawMessageNumber(1);
+					case DRAW_TYPE_PICTURE_TEXT:
+						if (_LastVertex != &m_Picture_VBO)
+						{
+							_LastVertex = &m_Picture_VBO;
+							m_Picture_VBO.BindBuffer(3);
+							m_Picture_VBO.Bind();
+						}
+						if (_iterator->DrawNumber)
+						{
+							glMultiDrawElementsIndirect(GL_TRIANGLES, GL_UNSIGNED_INT, (GLvoid*)(sizeof(DrawElementsIndirectCommand) * _Picture_Now_DrawNumber), _iterator->DrawNumber, 0);
+							_Picture_Now_DrawNumber += _iterator->DrawNumber;
+							DEBUG_AddDrawMessageNumber(1);
+						}
+						break;
+					case DRAW_TYPE_POINTS:
+					case DRAW_TYPE_LINE_STRIP:
+					case DRAW_TYPE_LINE_LOOP:
+					case DRAW_TYPE_TRIANGLES:
+					case DRAW_TYPE_TRIANGLE_STRIP:
+					case DRAW_TYPE_TRIANGLE_FAN:
+					case DRAW_TYPE_LINES:
+						if (_LastVertex != &m_Line_VBO)
+						{
+							_LastVertex = &m_Line_VBO;
+							m_Line_VBO.BindBuffer(2);
+							m_Line_VBO.Bind();
+						}
+						if (_iterator->DrawNumber)
+						{
+							glMultiDrawArraysIndirect(_Color_DrawMode, (GLvoid*)(sizeof(DrawArraysIndirectCommand) * _Line_Now_DrawNumber), _iterator->DrawNumber, 0);
+							_Line_Now_DrawNumber += _iterator->DrawNumber;
+							DEBUG_AddDrawMessageNumber(1);
+						}
+						break;
 					}
-					break;
-				case DRAW_TYPE_POINTS:
-				case DRAW_TYPE_LINE_STRIP:
-				case DRAW_TYPE_LINE_LOOP:
-				case DRAW_TYPE_TRIANGLES:
-				case DRAW_TYPE_TRIANGLE_STRIP:
-				case DRAW_TYPE_TRIANGLE_FAN:
-				case DRAW_TYPE_LINES:
-					if (_LastVertex != &m_Line_VBO)
-					{
-						_LastVertex = &m_Line_VBO;
-						m_Line_VBO.BindBuffer(2);
-						m_Line_VBO.Bind();
-					}
-					if (_iterator->DrawNumber)
-					{
-						glMultiDrawArraysIndirect(_Color_DrawMode, (GLvoid*)(sizeof(DrawArraysIndirectCommand) * _Line_Now_DrawNumber), _iterator->DrawNumber, 0);
-						_Line_Now_DrawNumber += _iterator->DrawNumber;
-						DEBUG_AddDrawMessageNumber(1);
-					}
-					break;
 				}
 			}
 
@@ -1268,7 +1297,10 @@ namespace Magic
 		if (pNowDRAW_BOX->Draw_Number_Bk != pNowDRAW_BOX->Draw_Number)
 		{
 			pNowDRAW_BOX->Draw_Number_Bk = pNowDRAW_BOX->Draw_Number;
-			pNowDRAW_BOX->V_Message.push_back(MESSAGE_STATE());
+			MESSAGE_STATE _MESSAGE_STATE = pNowDRAW_BOX->V_Message.back();
+			_MESSAGE_STATE.OverallMessage = 0;
+			_MESSAGE_STATE.DrawNumber = 0;
+			pNowDRAW_BOX->V_Message.push_back(_MESSAGE_STATE);
 		}
 	}
 

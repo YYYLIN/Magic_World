@@ -15,10 +15,7 @@ protected:
 	void OnUpdata();
 	void Draw();
 
-	virtual void RenderStart();
-	virtual void RenderEnd();
 private:
-	MagicFBOTexture m_MSAA_FBOBuffer;
 	MagicTexture pMagicTexture;
 	float m_MagicRotate;
 };

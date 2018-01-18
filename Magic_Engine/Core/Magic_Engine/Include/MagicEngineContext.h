@@ -9,7 +9,6 @@
 #include "windows.h"
 #include "MagicTexture.h"
 #include "MagicPen.h"
-#include "MagicMessage.h"
 
 #pragma warning(push)
 #pragma warning(disable:4251)
@@ -45,7 +44,7 @@ public:
 
 class DLL_MAGIC_ENGINE_OUTPUT_INPUT MagicScenes :public MagicUICommon
 {
-	friend class MagicMessageScenes;
+	friend class Magic::MessageScenes;
 public:
 	MagicScenes();
 	virtual ~MagicScenes();
@@ -97,6 +96,8 @@ public:
 	inline virtual MagicFBOTexture* GetFBOTexture() { return &m_FBOBuffer; }
 
 	virtual bool Initialize(MagicScenes* _scene, glm::vec4 _PosSize);
+
+	virtual void CopyFBOBuffer();
 protected:
 	virtual void Render(glm::vec2 _DrawPos);
 	virtual void RenderBuffer();

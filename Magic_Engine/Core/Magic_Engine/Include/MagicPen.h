@@ -10,6 +10,7 @@
 #include "MagicVertex.h"
 #include "Magic_Macro.h"
 #include "Magic_Fonts.h"
+#include "MagicMessage.h"
 
 #include "vector"
 
@@ -152,6 +153,7 @@ namespace Magic
 			std::vector<float> V_LineWitdh_Message;
 			std::vector<float> V_PointSize_Message;
 			std::vector<LINEPATIERN_MESSAGE> V_LinePattern_Message;
+			std::vector<CALLBACK_COMMON> V_CallBack_Message;
 			PICTURE_DRAW Picture_Draw;
 			LINE_DRAW Line_Draw;
 
@@ -472,6 +474,15 @@ namespace Magic
 		返回值:空
 		*/
 		void SetDrawFaceMode(Magic::Pen_Normal::DRAW_FACE_MODE _mode);
+
+		/*
+		功能:增加回调消息,此消息会在实际渲染的时候调用
+		(调用顺序由渲染顺序决定)
+		参数:
+		_CallBack = 回调函数类型
+		返回值:空
+		*/
+		void AddCallBackMessage(const CALLBACK_COMMON& _CallBack);
 
 		/*
 		功能:开始渲染

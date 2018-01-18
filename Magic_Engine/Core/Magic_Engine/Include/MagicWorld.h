@@ -4,7 +4,7 @@
 #include "MagicModelObject.h"
 #include "MagicMessage.h"
 
-class MagicWorld :public MagicCommon, public MagicMessageCommon
+class MagicWorld :public MagicCommon, public Magic::MessageCommon
 {
 public:
 	MagicWorld();
