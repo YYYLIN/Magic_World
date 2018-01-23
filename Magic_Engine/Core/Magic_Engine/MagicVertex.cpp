@@ -140,6 +140,20 @@ namespace Magic
 			glBufferSubData(_Type, 0, _size, _data);
 	}
 
+	void VERTEX_BUFFER::StaticWrite(unsigned int _BufferPos, unsigned int _Offset, unsigned int _size, void* _data)
+	{
+		GLenum _Type = 0;
+		if (m_Index_Pos == _BufferPos)
+			_Type = GL_ELEMENT_ARRAY_BUFFER;
+		else if (m_Draw_Indirect == _BufferPos)
+			_Type = GL_DRAW_INDIRECT_BUFFER;
+		else
+			_Type = GL_ARRAY_BUFFER;
+
+		glBindBuffer(_Type, pVBO[_BufferPos]);
+		glBufferSubData(_Type, _Offset, _size, _data);
+	}
+
 	void* VERTEX_BUFFER::StartUpdataVertex(unsigned char _BufferPos)
 	{
 		GLenum _Type = 0;

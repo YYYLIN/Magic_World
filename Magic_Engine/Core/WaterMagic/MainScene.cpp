@@ -74,4 +74,12 @@ void MainScene::Draw()
 
 	pPen_Normal->ResetWorldMatrix();
 	pPen_Normal->RepeatDraw();
+
+	pPen_Normal->SetColor(Magic::Color4(0.0f, 1.0f, 1.0f, 1.0f));
+	static float _S_Vertex[] = {
+		300.0f,300.0f,
+		400.0f,300.0f,
+		350.0f,400.0f
+	};
+	pPen_Normal->DrawVertex(Magic::Pen_Normal::TRIANGLES, _S_Vertex, 3);
 }

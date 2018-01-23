@@ -68,7 +68,7 @@ namespace Magic
 
 		/*
 		功能:动态写入数据
-		(写入GPU的数据大小将缓存最大的一次数据为准)
+		(写入GPU的数据大小将自动缓存最大的一次大小)
 		参数:
 		_BufferPos = 第几个缓存区域
 		_size = 写入大小
@@ -76,6 +76,18 @@ namespace Magic
 		返回值:空
 		*/
 		void DynamicWrite(unsigned int _BufferPos, unsigned int _size, void* _data);
+
+		/*
+		功能:静态写入数据
+		(写入GPU的缓存大小不会发生改变所以尽量避免,不超过GPU的最大缓存数据)
+		参数:
+		_BufferPos = 第几个缓存区域
+		_Offset = 写入的偏移地址
+		_size = 写入大小
+		_data = 需要写入的数据
+		返回值:空
+		*/
+		void StaticWrite(unsigned int _BufferPos, unsigned int _Offset, unsigned int _size, void* _data);
 
 		/*
 		功能:映射缓存区

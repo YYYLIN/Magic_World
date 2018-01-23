@@ -360,16 +360,45 @@ namespace Magic
 
 		LINE_VERTEX _Vertex;
 
-		_Number *= 2;
-		for (unsigned int a = 0, b = 0; a < _Number;)
+		if (pNowDRAW_BOX->Line_Draw.NewInstanceState)
+		{
+			LINE_INSTANCE _Instance;
+			_Instance.Color = pNowDRAW_BOX->NowColor;
+			_Instance.WorldMatrix = pNowDRAW_BOX->WorldMatrix;
+			pNowDRAW_BOX->Line_Draw.V_Instance.push_back(_Instance);
+		}
+
+		std::vector<LINE_VERTEX>* _pV_VERTEX = &pNowDRAW_BOX->Line_Draw.V_Vertex;
+
+		if (!pNowDRAW_BOX->V_Message.back().DrawNumber || pNowDRAW_BOX->Line_Draw.NewInstanceState)
+		{
+			DrawArraysIndirectCommand _DEICommand;
+
+			_DEICommand.count = _Number;
+			_DEICommand.instanceCount = 1;
+			_DEICommand.first = _pV_VERTEX->size();
+			_DEICommand.baseInstance = pNowDRAW_BOX->Line_Draw.V_Instance.size() - 1;
+
+			pNowDRAW_BOX->Line_Draw.V_DEICommand.push_back(_DEICommand);
+			pNowDRAW_BOX->V_Message.back().DrawNumber++;
+
+			pNowDRAW_BOX->Line_Draw.NewInstanceState = false;
+		}
+		else
+			pNowDRAW_BOX->Line_Draw.V_DEICommand.back().count += _Number;
+
+		pNowDRAW_BOX->LastCount = _Number;
+		pNowDRAW_BOX->LastFirstIndex = _pV_VERTEX->size();
+		pNowDRAW_BOX->Last_Draw_Type = SHADER_PURE_COLOR;
+		pNowDRAW_BOX->Draw_Number++;
+
+		pNowDRAW_BOX->Line_Draw.V_Vertex.reserve(_Number + pNowDRAW_BOX->Line_Draw.V_Vertex.size());
+		for (unsigned int a = 0, b = _Number << 1; a < b;)
 		{
 			_Vertex.Position.x = _pPos[a++];
 			_Vertex.Position.y = _pPos[a++];
 			pNowDRAW_BOX->Line_Draw.V_Vertex.push_back(_Vertex);
 		}
-
-		pNowDRAW_BOX->V_Message.back().DrawNumber = pNowDRAW_BOX->Line_Draw.V_Vertex.size();
-		pNowDRAW_BOX->Draw_Number++;
 	}
 	void Pen_Normal::DrawLine(float _x1, float _y1, float _x2, float _y2)
 	{
@@ -462,6 +491,7 @@ namespace Magic
 		pNowDRAW_BOX->Last_Draw_Type = SHADER_PICTURE;
 		pNowDRAW_BOX->Draw_Number++;
 
+		_pV_VERTEX->reserve(4 + _pV_VERTEX->size());
 		_Vertex.Position.x = _x;
 		_Vertex.Position.y = _y;
 		_Vertex.UV.x = _pPICTURE_DRAW->PitureUV[0].x;
@@ -483,6 +513,7 @@ namespace Magic
 		_Vertex.UV.y = _pPICTURE_DRAW->PitureUV[3].y;
 		_pV_VERTEX->push_back(_Vertex);
 
+		_pV_Index->reserve(6 + _pV_Index->size());
 		_pV_Index->push_back(_Vertex_Number);
 		_pV_Index->push_back(_Vertex_Number + 1);
 		_pV_Index->push_back(_Vertex_Number + 2);
@@ -557,6 +588,8 @@ namespace Magic
 		pNowDRAW_BOX->LastFirstIndex = _pV_VERTEX->size();
 		pNowDRAW_BOX->Last_Draw_Type = SHADER_PURE_COLOR;
 		pNowDRAW_BOX->Draw_Number++;
+
+		pNowDRAW_BOX->Line_Draw.V_Vertex.reserve(6 + pNowDRAW_BOX->Line_Draw.V_Vertex.size());
 
 		_Vertex.Position.x = _x;
 		_Vertex.Position.y = _y;
