@@ -277,14 +277,14 @@ namespace Magic
 		m_Line_VBO.CreateBuffer(3);
 		unsigned int _Line_Array_Size[] = {
 			sizeof(glm::vec3) / sizeof(float),
-
 			sizeof(Magic::Color4) / sizeof(float),
+
 			sizeof(glm::vec4) / sizeof(float),
 			sizeof(glm::vec4) / sizeof(float),
 			sizeof(glm::vec4) / sizeof(float),
 			sizeof(glm::vec4) / sizeof(float) };
-		m_Line_VBO.SetBuffer(0, Magic::VERTEX_BUFFER::DYNAMIC_DRAW, 1, _Line_Array_Size);
-		m_Line_VBO.SetBuffer(1, Magic::VERTEX_BUFFER::DYNAMIC_DRAW, 5, &_Line_Array_Size[1], 1);
+		m_Line_VBO.SetBuffer(0, Magic::VERTEX_BUFFER::DYNAMIC_DRAW, 2, _Line_Array_Size);
+		m_Line_VBO.SetBuffer(1, Magic::VERTEX_BUFFER::DYNAMIC_DRAW, 4, &_Line_Array_Size[1], 1);
 		m_Line_VBO.SetDrawIndirectBuffer(2, Magic::VERTEX_BUFFER::DYNAMIC_DRAW);
 
 		return true;
@@ -319,17 +319,47 @@ namespace Magic
 
 		LINE_VERTEX _Vertex;
 
+		if (pNowDRAW_BOX->Line_Draw.NewInstanceState)
+		{
+			LINE_INSTANCE _Instance;
+			_Instance.WorldMatrix = pNowDRAW_BOX->WorldMatrix;
+			pNowDRAW_BOX->Line_Draw.V_Instance.push_back(_Instance);
+		}
+
+		std::vector<LINE_VERTEX>* _pV_VERTEX = &pNowDRAW_BOX->Line_Draw.V_Vertex;
+
+		if (!pNowDRAW_BOX->V_Message.back().DrawNumber || pNowDRAW_BOX->Line_Draw.NewInstanceState)
+		{
+			DrawArraysIndirectCommand _DEICommand;
+
+			_DEICommand.count = _Number;
+			_DEICommand.instanceCount = 1;
+			_DEICommand.first = _pV_VERTEX->size();
+			_DEICommand.baseInstance = pNowDRAW_BOX->Line_Draw.V_Instance.size() - 1;
+
+			pNowDRAW_BOX->Line_Draw.V_DEICommand.push_back(_DEICommand);
+			pNowDRAW_BOX->V_Message.back().DrawNumber++;
+
+			pNowDRAW_BOX->Line_Draw.NewInstanceState = false;
+		}
+		else
+			pNowDRAW_BOX->Line_Draw.V_DEICommand.back().count += _Number;
+
+		pNowDRAW_BOX->LastCount = _Number;
+		pNowDRAW_BOX->LastFirstIndex = _pV_VERTEX->size();
+		pNowDRAW_BOX->Last_Draw_Type = SHADER_PURE_COLOR;
+		pNowDRAW_BOX->Draw_Number++;
+
+		pNowDRAW_BOX->Line_Draw.V_Vertex.reserve(_Number + pNowDRAW_BOX->Line_Draw.V_Vertex.size());
+
 		_Number *= 2;
 		for (unsigned int a = 0, b = 0; a < _Number;)
 		{
-			//_Vertex.Color = _pColor[b++];
+			_Vertex.Color = _pColor[b++];
 			_Vertex.Position.x = _pPos[a++];
 			_Vertex.Position.y = _pPos[a++];
 			pNowDRAW_BOX->Line_Draw.V_Vertex.push_back(_Vertex);
 		}
-
-		pNowDRAW_BOX->V_Message.back().DrawNumber = pNowDRAW_BOX->Line_Draw.V_Vertex.size();
-		pNowDRAW_BOX->Draw_Number++;
 	}
 	void Pen_Normal::DrawVertex(Pen_Normal::DRAW_MODE _drawMode, const float * _pPos, unsigned int _Number)
 	{
@@ -363,7 +393,6 @@ namespace Magic
 		if (pNowDRAW_BOX->Line_Draw.NewInstanceState)
 		{
 			LINE_INSTANCE _Instance;
-			_Instance.Color = pNowDRAW_BOX->NowColor;
 			_Instance.WorldMatrix = pNowDRAW_BOX->WorldMatrix;
 			pNowDRAW_BOX->Line_Draw.V_Instance.push_back(_Instance);
 		}
@@ -393,6 +422,7 @@ namespace Magic
 		pNowDRAW_BOX->Draw_Number++;
 
 		pNowDRAW_BOX->Line_Draw.V_Vertex.reserve(_Number + pNowDRAW_BOX->Line_Draw.V_Vertex.size());
+		_Vertex.Color = pNowDRAW_BOX->NowColor;
 		for (unsigned int a = 0, b = _Number << 1; a < b;)
 		{
 			_Vertex.Position.x = _pPos[a++];
@@ -409,7 +439,6 @@ namespace Magic
 		if (pNowDRAW_BOX->Line_Draw.NewInstanceState)
 		{
 			LINE_INSTANCE _Instance;
-			_Instance.Color = pNowDRAW_BOX->NowColor;
 			_Instance.WorldMatrix = pNowDRAW_BOX->WorldMatrix;
 			pNowDRAW_BOX->Line_Draw.V_Instance.push_back(_Instance);
 		}
@@ -437,6 +466,8 @@ namespace Magic
 		pNowDRAW_BOX->LastFirstIndex = pNowDRAW_BOX->Line_Draw.V_Vertex.size();
 		pNowDRAW_BOX->Last_Draw_Type = SHADER_PURE_COLOR;
 		pNowDRAW_BOX->Draw_Number++;
+
+		_Vertex.Color = pNowDRAW_BOX->NowColor;;
 
 		_Vertex.Position.x = _x1;
 		_Vertex.Position.y = _y1;
@@ -560,7 +591,6 @@ namespace Magic
 		if (pNowDRAW_BOX->Line_Draw.NewInstanceState)
 		{
 			LINE_INSTANCE _Instance;
-			_Instance.Color = pNowDRAW_BOX->NowColor;
 			_Instance.WorldMatrix = pNowDRAW_BOX->WorldMatrix;
 			pNowDRAW_BOX->Line_Draw.V_Instance.push_back(_Instance);
 		}
@@ -590,6 +620,8 @@ namespace Magic
 		pNowDRAW_BOX->Draw_Number++;
 
 		pNowDRAW_BOX->Line_Draw.V_Vertex.reserve(6 + pNowDRAW_BOX->Line_Draw.V_Vertex.size());
+
+		_Vertex.Color = pNowDRAW_BOX->NowColor;
 
 		_Vertex.Position.x = _x;
 		_Vertex.Position.y = _y;
@@ -642,7 +674,6 @@ namespace Magic
 				if (pNowDRAW_BOX->Line_Draw.NewInstanceState)
 				{
 					LINE_INSTANCE _Instance;
-					_Instance.Color = pNowDRAW_BOX->NowColor;
 					_Instance.WorldMatrix = pNowDRAW_BOX->WorldMatrix;
 					pNowDRAW_BOX->Line_Draw.V_Instance.push_back(_Instance);
 					pNowDRAW_BOX->Line_Draw.NewInstanceState = false;

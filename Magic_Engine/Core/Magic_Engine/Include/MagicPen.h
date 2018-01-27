@@ -67,11 +67,11 @@ namespace Magic
 		struct LINE_VERTEX
 		{
 			glm::vec3 Position;
+			Magic::Color4 Color;
 		};
 
 		struct LINE_INSTANCE
 		{
-			Magic::Color4 Color;
 			glm::mat4 WorldMatrix;
 		};
 
@@ -245,6 +245,8 @@ namespace Magic
 
 		/*
 		功能:重复上一次的渲染参数渲染
+		(可修改内容DrawPicture  DrawTEXT 颜色 和 矩阵
+		DrawRectangle DrawLine DrawVertex 矩阵)
 		参数:空
 		返回值:空
 		*/

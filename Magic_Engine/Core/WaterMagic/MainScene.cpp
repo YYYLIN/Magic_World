@@ -18,10 +18,11 @@ bool MainScene::OnInitialize()
 	if (!_result)
 		return false;
 
+/*
 	int _w = (int)m_PosSize.z, _h = (int)m_PosSize.w;
 	_result = m_FBOBuffer.ResetSize(_w, _h, 16);
 	if (!_result)
-		return false;
+		return false;*/
 
 	return true;
 }
@@ -43,8 +44,6 @@ void MainScene::Draw()
 	pPen_Normal->DrawRectangle(Magic::Pen_Normal::TRIANGLES, 30, 30, 100, 100);
 
 	pPen_Normal->DrawRectangle(Magic::Pen_Normal::LINE_STRIP, 30, 160, 100, 100);
-
-	pPen_Normal->SetColor(Magic::Color4(0.0f, 1.0f, 0.0f, 1.0f));
 
 	_worldMatrix[3].x = 200.0f;
 	_worldMatrix[3].y = 0.0f;
@@ -82,4 +81,19 @@ void MainScene::Draw()
 		350.0f,400.0f
 	};
 	pPen_Normal->DrawVertex(Magic::Pen_Normal::TRIANGLES, _S_Vertex, 3);
+
+	static Magic::Color4 _S_Color[] = {
+		{1.0f,1.0f,1.0f,1.0f},
+		{1.0f,0.0f,1.0f,1.0f},
+		{1.0f,1.0f,0.0f,1.0f}
+	};
+	_worldMatrix[3].x = m_PosSize.z * 0.5f - 50.0f;
+	_worldMatrix[3].y = m_PosSize.w * 0.5f - 50.0f;
+	pPen_Normal->SetWorldMatrix(_worldMatrix);
+	pPen_Normal->DrawVertex(Magic::Pen_Normal::TRIANGLES, _S_Vertex, _S_Color, 3);
+
+	_worldMatrix[3].x = m_PosSize.z * 0.5f;
+	_worldMatrix[3].y = m_PosSize.w * 0.5f;
+	pPen_Normal->SetWorldMatrix(_worldMatrix);
+	pPen_Normal->RepeatDraw();
 }
