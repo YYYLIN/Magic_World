@@ -2,6 +2,7 @@
 #define _MAINSCENE_H_
 
 #include "MagicEngineContext.h"
+#include "Magic_Fonts.h"
 
 
 class MainScene :public MagicScenesEx
@@ -17,6 +18,7 @@ protected:
 
 private:
 	MagicTexture pMagicTexture;
+	Magic::Fonts m_Magic_Fonts;
 	float m_MagicRotate;
 };
 

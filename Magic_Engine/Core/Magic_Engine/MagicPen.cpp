@@ -694,7 +694,7 @@ namespace Magic
 		}
 	}
 
-	void Pen_Normal::BindFonts(Magic_Fonts * _pFonts)
+	void Pen_Normal::BindFonts(Magic::Fonts * _pFonts)
 	{
 		/*		if(pNowDRAW_BOX->V_Message.back().pTexture != _pFonts->GetTextureID())*/
 	}

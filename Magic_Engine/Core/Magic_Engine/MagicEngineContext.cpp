@@ -339,7 +339,7 @@ MagicTexture* MagicEngineContext::LoadTextrue(const unsigned char* Data, int _wi
 	pTextrue = new MagicTexture;
 	if (!pTextrue)
 		return 0;
-	result = pTextrue->Initialize(Data, _width, _height);
+	result = pTextrue->Initialize(Data, _width, _height, MagicTexture::RGBA, MagicTexture::UNSIGNED_BYTE);
 	if (!result)
 		return 0;
 	Map_Texture.insert(std::map<std::string, MagicTexture*>::value_type(_name, pTextrue));

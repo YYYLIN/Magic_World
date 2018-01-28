@@ -91,7 +91,7 @@ namespace Magic
 		struct PICTURE_DRAW
 		{
 			glm::vec2 PitureUV[4];
-			Magic_Fonts* pFonts;
+			Magic::Fonts* pFonts;
 			MagicTexture* pNowTexture;
 			bool NewInstanceState;
 			std::vector<PICTURE_VERTEX> V_Vertex;
@@ -258,7 +258,7 @@ namespace Magic
 		_pFonts = 字体
 		返回值:空
 		*/
-		void BindFonts(Magic_Fonts* _pFonts);
+		void BindFonts(Magic::Fonts* _pFonts);
 
 		/*
 		功能:绑定图片
@@ -534,9 +534,9 @@ namespace Magic
 		功能:获取当前字体
 		参数:空
 		返回值:
-		Magic_Fonts* = 字体
+		Magic::Fonts* = 字体
 		*/
-		inline Magic_Fonts* GetNowFonts() { return pNowDRAW_BOX->Picture_Draw.pFonts; }
+		inline Magic::Fonts* GetNowFonts() { return pNowDRAW_BOX->Picture_Draw.pFonts; }
 	private:
 		void AddMessage();
 		void AddShaderMessage(unsigned int _shader, bool _add = false);

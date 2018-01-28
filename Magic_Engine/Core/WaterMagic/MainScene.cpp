@@ -18,11 +18,16 @@ bool MainScene::OnInitialize()
 	if (!_result)
 		return false;
 
-/*
-	int _w = (int)m_PosSize.z, _h = (int)m_PosSize.w;
-	_result = m_FBOBuffer.ResetSize(_w, _h, 16);
+	_result = m_Magic_Fonts.Initialize("resources/fonts/Fonts1.maigcfonts");
 	if (!_result)
-		return false;*/
+		return false;
+
+
+	/*
+		int _w = (int)m_PosSize.z, _h = (int)m_PosSize.w;
+		_result = m_FBOBuffer.ResetSize(_w, _h, 16);
+		if (!_result)
+			return false;*/
 
 	return true;
 }

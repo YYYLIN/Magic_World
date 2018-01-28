@@ -25,13 +25,25 @@ namespace Magic
 class DLL_MAGIC_ENGINE_OUTPUT_INPUT MagicTexture
 {
 public:
+	enum MODE {
+		RGBA,
+		RED,
+		ALPHA
+	};
+
+	enum FORMAT
+	{
+		UNSIGNED_BYTE,
+		BYTE
+	};
+public:
 	MagicTexture();
 	~MagicTexture();
 
 	//加载PNG ,BMP图片
 	virtual bool Initialize(const char* file_name, char);
 	//加载自定义RGB4通道格式
-	virtual bool Initialize(const unsigned char*, int, int);
+	virtual bool Initialize(const unsigned char*, int, int, MODE _mode, FORMAT _format);
 	//加载外部格式（不会自动释放缓存需要外部自己释放）
 	virtual bool Initialize(unsigned int _texture, int w, int h);
 	virtual void Shutdown();

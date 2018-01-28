@@ -66,7 +66,7 @@ bool MagicTexture::Initialize(const char* file_name, char format)
 	return true;
 }
 
-bool MagicTexture::Initialize(const unsigned char* Data, int _width, int _height)
+bool MagicTexture::Initialize(const unsigned char* Data, int _width, int _height, MODE _mode, FORMAT _format)
 {
 	width = _width;
 	height = _height;
@@ -88,8 +88,31 @@ bool MagicTexture::Initialize(const unsigned char* Data, int _width, int _height
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_LINEAR_MIPMAP_LINEAR, GL_REPEAT);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0,
-		GL_RGBA, GL_UNSIGNED_BYTE, Data);
+	GLint _internalformat;
+	switch (_mode)
+	{
+	case MagicTexture::RGBA:
+		_internalformat = GL_RGBA;
+		break;
+	case MagicTexture::RED:
+		_internalformat = GL_RED;
+		break;
+	case MagicTexture::ALPHA:
+		_internalformat = GL_ALPHA;
+		break;
+	}
+	GLenum _type;
+	switch (_format)
+	{
+	case MagicTexture::UNSIGNED_BYTE:
+		_type = GL_UNSIGNED_BYTE;
+		break;
+	case MagicTexture::BYTE:
+		_type = GL_BYTE;
+		break;
+	}
+	glTexImage2D(GL_TEXTURE_2D, 0, _internalformat, width, height, 0,
+		_internalformat, _type, Data);
 	//	glBindTexture(GL_TEXTURE_2D, last_texture_ID);
 
 	// 之前为pixels分配的内存可在使用glTexImage2D以后释放
