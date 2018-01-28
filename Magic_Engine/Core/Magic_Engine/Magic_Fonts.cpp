@@ -83,6 +83,7 @@ namespace Magic
 		return _width;
 	}
 
+	// 更新纹理，使用LRU算法
 	void Fonts::UpdataTexture(const wchar_t* _text)
 	{
 		++m_Tick;
