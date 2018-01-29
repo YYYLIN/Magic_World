@@ -37,6 +37,21 @@ namespace Magic
 		"	gl_FragColor = texture2D(sampler0, TexCoord) * Out_Color;"
 		"}";
 
+
+	static const char* S_DistanceText_Frag =
+		"#version 400\r\n"
+
+		"in vec2 TexCoord;"
+		"in vec4 Out_Color;"
+		"out vec4 gl_FragColor;"
+
+		"uniform sampler2D sampler0;"
+
+		"void main()"
+		"{"
+		"	gl_FragColor = (texture2D(sampler0, TexCoord).a - 0.66) * 32.0 * Out_Color;"
+		"}";
+
 	static const char* S_Pure_Color_Vertex =
 		"#version 400\r\n"
 		"layout(location = 0) in vec3 Position;"
@@ -189,9 +204,11 @@ namespace Magic
 #define DRAW_TYPE_TRIANGLES						0x06
 #define DRAW_TYPE_TRIANGLE_STRIP				0x07
 #define DRAW_TYPE_TRIANGLE_FAN					0x08
+#define DRAW_TYPE_DISTANCE_TEXT					0x09
 
 #define SHADER_PICTURE							0x01
 #define SHADER_PURE_COLOR						0x02
+#define SHADER_DISTANCE_TEXT					0x03
 
 #define MESSAGE_SCISSOR							1
 #define MESSAGE_SHADER							1 << 1
@@ -237,7 +254,29 @@ namespace Magic
 		m_PictureShader.UnUse();
 
 		m_Picture2D_projectrionMatrix = m_PictureShader("projectionMatrix");
+		//---------------------------------------------------------------------------
+		result = m_TextShader.LoadFromString(GL_VERTEX_SHADER, S_Picture_Vertex);
+		if (!result)
+			return false;
+		result = m_TextShader.LoadFromString(GL_FRAGMENT_SHADER, S_DistanceText_Frag);
+		if (!result)
+			return false;
+		result = m_TextShader.CreateAndLinkProgram();
+		if (!result)
+			return false;
 
+		m_TextShader.Use();
+
+		m_TextShader.AddUniform("projectionMatrix");
+
+		m_TextShader.AddUniform("sampler0");
+
+		glUniform1i(m_TextShader("sampler0"), 0);
+
+		m_TextShader.UnUse();
+
+		m_Text_projectrionMatrix = m_TextShader("projectionMatrix");
+		//-------------------------------------------------------------------------------
 		result = m_LineShader.LoadFromString(GL_VERTEX_SHADER, S_Pure_Color_Vertex);
 		if (!result)
 			return false;
@@ -553,19 +592,118 @@ namespace Magic
 		_pV_Index->push_back(_Vertex_Number + 3);
 	}
 
-	int Pen_Normal::DrawTEXT(float _x, float _y, const char * _text, unsigned char _ArrayState)
+	float Pen_Normal::DrawTEXT(float _x, float _y, const wchar_t * _text, float _fontsize, unsigned char _ArrayState)
 	{
-		int Textsize = std::strlen(_text);
-		if (_text&& Textsize&& pNowDRAW_BOX->Picture_Draw.pFonts)
+		int _textsize = wcslen(_text);
+		Magic::Fonts* _pFonts = pNowDRAW_BOX->Picture_Draw.pFonts;
+		if (_text && _textsize && _pFonts)
 		{
-			AddShaderMessage(DRAW_TYPE_PICTURE_TEXT);
+			AddShaderMessage(DRAW_TYPE_DISTANCE_TEXT);
 
-			float X = _x, Y = _y, ResultPos = 0.0f;
+			PICTURE_VERTEX _Vertex;
 
-			//FontsTexture fontstexture;
+			DrawElementsIndirectCommand _DEICommand;
+
+			PICTURE_DRAW* _pPICTURE_DRAW = &pNowDRAW_BOX->Picture_Draw;
+			std::vector<PICTURE_VERTEX>* _pV_VERTEX = &_pPICTURE_DRAW->V_Vertex;
+			std::vector<unsigned int>* _pV_Index = &_pPICTURE_DRAW->V_Index;
+
+			if (pNowDRAW_BOX->V_Message.back().pTexture != _pFonts->GetTexture())
+				BindFonts(_pFonts);
+
+			_pFonts->UpdataTexture(_text);
+
+			unsigned int _Vertex_Number = _pV_VERTEX->size();
+
+			if (pNowDRAW_BOX->Picture_Draw.NewInstanceState)
+			{
+				PICTURE_INSTANCE _Instance;
+				_Instance.Color = pNowDRAW_BOX->NowColor;
+				_Instance.WorldMatrix = pNowDRAW_BOX->WorldMatrix;
+				_pPICTURE_DRAW->V_Instance.push_back(_Instance);
+			}
+			unsigned int* _pCount = 0;
+			if (!pNowDRAW_BOX->V_Message.back().DrawNumber || pNowDRAW_BOX->Picture_Draw.NewInstanceState)
+			{
+				_DEICommand.count = 0;
+				_DEICommand.instanceCount = 1;
+				_DEICommand.firstIndex = _pV_Index->size();
+				_DEICommand.baseVertex = 0;
+				_DEICommand.baseInstance = _pPICTURE_DRAW->V_Instance.size() - 1;
+
+				_pPICTURE_DRAW->V_DEICommand.push_back(_DEICommand);
+				_pCount = &pNowDRAW_BOX->Picture_Draw.V_DEICommand.back().count;
+				pNowDRAW_BOX->V_Message.back().DrawNumber++;
+
+				pNowDRAW_BOX->Picture_Draw.NewInstanceState = false;
+			}
+			else
+				_pCount = &pNowDRAW_BOX->Picture_Draw.V_DEICommand.back().count;
+
+			pNowDRAW_BOX->LastCount = 0;
+			pNowDRAW_BOX->LastFirstIndex = _pV_Index->size();
+			pNowDRAW_BOX->Last_Draw_Type = SHADER_DISTANCE_TEXT;
+			pNowDRAW_BOX->Draw_Number++;
+
+			float _X = _x, _Y = _y;
+			float const _rel_size = _fontsize / _pFonts->GetCharSize();
+			for (int a = 0; a < _textsize; a++)
+			{
+				auto _char_index_advance = _pFonts->GetCharIndexAdvance(_text[a]);
+
+				if (_char_index_advance.first != -1)
+				{
+					auto _font_info = _pFonts->GetFONT_INFO(_char_index_advance.first);
+					float _left = _font_info.left * _rel_size;
+					float _top = _font_info.top * _rel_size;
+					float _width = _font_info.width * _rel_size;
+					float _height = _font_info.height * _rel_size;
+
+					auto _char_info = _pFonts->GetCHARINFO(_text[a]);
+
+					_pV_VERTEX->reserve(4 + _pV_VERTEX->size());
+					_Vertex.Position.x = _X + _left;
+					_Vertex.Position.y = _Y + _top;
+					_Vertex.UV.x = _char_info.left;
+					_Vertex.UV.y = _char_info.bottom;
+					_pV_VERTEX->push_back(_Vertex);
+					_Vertex.Position.x = _X + _left + _width;
+					_Vertex.Position.y = _Y + _top;
+					_Vertex.UV.x = _char_info.right;
+					_Vertex.UV.y = _char_info.bottom;
+					_pV_VERTEX->push_back(_Vertex);
+					_Vertex.Position.x = _X + _left + _width;
+					_Vertex.Position.y = _Y + _top + _height;
+					_Vertex.UV.x = _char_info.right;
+					_Vertex.UV.y = _char_info.top;
+					_pV_VERTEX->push_back(_Vertex);
+					_Vertex.Position.x = _X + _left;
+					_Vertex.Position.y = _Y + _top + _height;
+					_Vertex.UV.x = _char_info.left;
+					_Vertex.UV.y = _char_info.top;
+					_pV_VERTEX->push_back(_Vertex);
+
+					_pV_Index->reserve(6 + _pV_Index->size());
+					_pV_Index->push_back(_Vertex_Number);
+					_pV_Index->push_back(_Vertex_Number + 1);
+					_pV_Index->push_back(_Vertex_Number + 2);
+					_pV_Index->push_back(_Vertex_Number);
+					_pV_Index->push_back(_Vertex_Number + 2);
+					_pV_Index->push_back(_Vertex_Number + 3);
+
+					_Vertex_Number += 4;
+					pNowDRAW_BOX->LastCount += 6;
+					*_pCount += 6;
+				}
+
+				_X += (_char_index_advance.second & 0xFFFF) * _rel_size;
+				_Y += (_char_index_advance.second >> 16) * _rel_size;
+			}
+
+			return _X;
 		}
-
-		return 0;
+		else
+			return 0.0f;
 	}
 
 	void Pen_Normal::DrawRectangle(Pen_Normal::DRAW_MODE _drawMode, float _x, float _y, float _w, float _h)
@@ -647,7 +785,7 @@ namespace Magic
 	{
 		if (pNowDRAW_BOX->LastCount)
 		{
-			if (pNowDRAW_BOX->Last_Draw_Type == SHADER_PICTURE)
+			if (pNowDRAW_BOX->Last_Draw_Type == SHADER_PICTURE || pNowDRAW_BOX->Last_Draw_Type == SHADER_DISTANCE_TEXT)
 			{
 				if (pNowDRAW_BOX->Picture_Draw.NewInstanceState)
 				{
@@ -696,7 +834,12 @@ namespace Magic
 
 	void Pen_Normal::BindFonts(Magic::Fonts * _pFonts)
 	{
-		/*		if(pNowDRAW_BOX->V_Message.back().pTexture != _pFonts->GetTextureID())*/
+		if (pNowDRAW_BOX->V_Message.back().pTexture != _pFonts->GetTexture())
+		{
+			AddMessage();
+			pNowDRAW_BOX->V_Message.back().pTexture = _pFonts->GetTexture();
+			pNowDRAW_BOX->Picture_Draw.pFonts = _pFonts;
+		}
 	}
 
 	void Pen_Normal::BindPicture(MagicTexture * _pTexture)
@@ -1043,6 +1186,9 @@ namespace Magic
 			{
 				m_PictureShader.Use();
 				glUniformMatrix4fv(m_Picture2D_projectrionMatrix, 1, GL_FALSE, &pNowDRAW_BOX->projectionMatrix[0][0]);
+				m_TextShader.Use();
+				glUniformMatrix4fv(m_Text_projectrionMatrix, 1, GL_FALSE, &pNowDRAW_BOX->projectionMatrix[0][0]);
+
 				PICTURE_DRAW* _pPICTURE_DRAW_BOX = &pNowDRAW_BOX->Picture_Draw;
 				m_Picture_VBO.DynamicWrite(0, _pPICTURE_DRAW_BOX->V_Vertex.size() * sizeof(PICTURE_VERTEX), &_pPICTURE_DRAW_BOX->V_Vertex[0]);
 				m_Picture_VBO.DynamicWrite(1, _pPICTURE_DRAW_BOX->V_Instance.size() * sizeof(PICTURE_INSTANCE), &_pPICTURE_DRAW_BOX->V_Instance[0]);
@@ -1216,6 +1362,13 @@ namespace Magic
 							m_PictureShader.Use();
 						}
 						break;
+					case DRAW_TYPE_DISTANCE_TEXT:
+						if (_Now_Shader != SHADER_DISTANCE_TEXT)
+						{
+							_Now_Shader = SHADER_DISTANCE_TEXT;
+							m_TextShader.Use();
+						}
+						break;
 					case DRAW_TYPE_POINTS:
 					case DRAW_TYPE_LINES:
 					case DRAW_TYPE_LINE_STRIP:
@@ -1275,6 +1428,7 @@ namespace Magic
 					switch (_Now_Draw_Type)
 					{
 					case DRAW_TYPE_PICTURE_TEXT:
+					case DRAW_TYPE_DISTANCE_TEXT:
 						if (_LastVertex != &m_Picture_VBO)
 						{
 							_LastVertex = &m_Picture_VBO;

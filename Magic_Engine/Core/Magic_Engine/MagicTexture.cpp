@@ -89,10 +89,14 @@ bool MagicTexture::Initialize(const unsigned char* Data, int _width, int _height
 	glTexParameteri(GL_TEXTURE_2D, GL_LINEAR_MIPMAP_LINEAR, GL_REPEAT);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 	GLint _internalformat;
-	switch (_mode)
+	m_MODE = _mode;
+	switch (m_MODE)
 	{
 	case MagicTexture::RGBA:
 		_internalformat = GL_RGBA;
+		break;
+	case MagicTexture::RGB:
+		_internalformat = GL_RGB;
 		break;
 	case MagicTexture::RED:
 		_internalformat = GL_RED;
@@ -102,7 +106,8 @@ bool MagicTexture::Initialize(const unsigned char* Data, int _width, int _height
 		break;
 	}
 	GLenum _type;
-	switch (_format)
+	m_FORMAT = _format;
+	switch (m_FORMAT)
 	{
 	case MagicTexture::UNSIGNED_BYTE:
 		_type = GL_UNSIGNED_BYTE;
@@ -148,6 +153,38 @@ void MagicTexture::SetParameteri(unsigned char _data)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	}
+}
+
+void MagicTexture::UpdataData(int _xoffset, int _yoffset, unsigned int _width, unsigned int _hegiht, void* _pdata)
+{
+	glBindTexture(GL_TEXTURE_2D, texture); //将纹理绑定到名字
+	GLint _internalformat;
+	switch (m_MODE)
+	{
+	case MagicTexture::RGBA:
+		_internalformat = GL_RGBA;
+		break;
+	case MagicTexture::RGB:
+		_internalformat = GL_RGB;
+		break;
+	case MagicTexture::RED:
+		_internalformat = GL_RED;
+		break;
+	case MagicTexture::ALPHA:
+		_internalformat = GL_ALPHA;
+		break;
+	}
+	GLenum _type;
+	switch (m_FORMAT)
+	{
+	case MagicTexture::UNSIGNED_BYTE:
+		_type = GL_UNSIGNED_BYTE;
+		break;
+	case MagicTexture::BYTE:
+		_type = GL_BYTE;
+		break;
+	}
+	glTexSubImage2D(GL_TEXTURE_2D, 0, _xoffset, _yoffset, _width, _hegiht, _internalformat, _type, _pdata);
 }
 
 bool MagicTexture::LoadBMP(const char* file_name)
@@ -257,6 +294,8 @@ bool MagicTexture::LoadBMP(const char* file_name)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_LINEAR_MIPMAP_LINEAR, GL_REPEAT);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+	m_MODE = RGB;
+	m_FORMAT = UNSIGNED_BYTE;
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0,
 		GL_BGR_EXT, GL_UNSIGNED_BYTE, pixels);
 	//	glBindTexture(GL_TEXTURE_2D, last_texture_ID);
@@ -380,7 +419,8 @@ bool MagicTexture::LoadPNG(const char*file_name)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	//设置贴图和纹理的混合效果这里是默认只用纹理
 	//	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-
+	m_MODE = RGBA;
+	m_FORMAT = UNSIGNED_BYTE;
 	//设置纹理所用到图片数据
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, rgba);
 

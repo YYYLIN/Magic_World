@@ -50,15 +50,16 @@ namespace Magic
 		uint16_t height;
 	};
 
+	struct CHARINFO
+	{
+		float top, left, right, bottom;
+		uint64_t tick;
+	};
+
 #define  XY_FONTS_CharNumber  99
 
 	class DLL_MAGIC_ENGINE_OUTPUT_INPUT Fonts
 	{
-		struct CHARINFO
-		{
-			float top, left, right, bottom;
-			uint64_t tick;
-		};
 	public:
 		Fonts();
 		~Fonts();
@@ -68,6 +69,13 @@ namespace Magic
 		void Shutdown();    //¹Ø±Õ ½áÊøº¯Êý
 
 		int GetTextAllWidth(const char*);
+
+		uint32_t GetCharSize() { return m_header.char_size; }
+
+		MagicTexture* GetTexture() { return &m_MagicTexture; }
+		const std::pair<int32_t, uint32_t>& GetCharIndexAdvance(const int32_t& _index) { return V_char_index_advance[_index]; }
+		FONT_INFO GetFONT_INFO(const int32_t& _offset) { return V_char_info[_offset]; }
+		const CHARINFO& GetCHARINFO(const wchar_t& _char) { return U_Char_Info_Map[_char]; }
 
 		void UpdataTexture(const wchar_t* _text);
 	private:
@@ -79,6 +87,7 @@ namespace Magic
 		std::unordered_map<int32_t, std::pair<int32_t, uint32_t>> V_char_index_advance;
 		std::vector<FONT_INFO> V_char_info;
 		std::unordered_map<wchar_t, CHARINFO> U_Char_Info_Map;
+
 		std::list<std::pair<uint32_t, uint32_t>> L_Char_free;
 
 		std::vector<uint8_t> V_Char_data;

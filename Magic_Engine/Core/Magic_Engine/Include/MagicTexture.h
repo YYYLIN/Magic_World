@@ -27,6 +27,7 @@ class DLL_MAGIC_ENGINE_OUTPUT_INPUT MagicTexture
 public:
 	enum MODE {
 		RGBA,
+		RGB,
 		RED,
 		ALPHA
 	};
@@ -57,12 +58,15 @@ public:
 	inline virtual int GetHeight() { return height; }
 
 	inline virtual int GetTotal_bytes() { return total_bytes; }
+
+	void UpdataData(int _xoffset, int _yoffset, unsigned int _width, unsigned int _hegiht, void* _pdata);
 protected:
 	virtual bool LoadBMP(const char* file_name);
 	virtual bool LoadPNG(const char* file_name);
 protected:
 	bool External;
-
+	MODE m_MODE;
+	FORMAT m_FORMAT;
 	unsigned int texture;
 	int width, height, total_bytes;
 };

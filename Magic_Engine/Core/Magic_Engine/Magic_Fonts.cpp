@@ -62,7 +62,7 @@ namespace Magic
 
 		V_Char_data.resize(m_header.char_size * m_header.char_size);
 
-		_err = m_MagicTexture.Initialize(0, 2048, 2048, MagicTexture::ALPHA, MagicTexture::BYTE);
+		_err = m_MagicTexture.Initialize(0, 2048, 2048, MagicTexture::ALPHA, MagicTexture::UNSIGNED_BYTE);
 		if (!_err)
 			return false;
 
@@ -207,9 +207,8 @@ namespace Magic
 					_charInfo.tick = m_Tick;
 
 					GetCharDistanceData(&V_Char_data[0], offset);
-					/*
-										dist_texture_->UpdateSubresource2D(0, 0, char_pos.x(), char_pos.y(), kfont_char_size, kfont_char_size,
-											&a_char_data_[0], kfont_char_size);*/
+
+					m_MagicTexture.UpdataData(_char_pos.x, _char_pos.y, kfont_char_size, kfont_char_size, &V_Char_data[0]);
 
 					U_Char_Info_Map.emplace(_char, _charInfo);
 				}

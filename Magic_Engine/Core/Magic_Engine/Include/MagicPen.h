@@ -229,7 +229,7 @@ namespace Magic
 		返回值:
 		字体的结尾位置
 		*/
-		int DrawTEXT(float _x, float _y, const char* _text, unsigned char _ArrayState = CHARATER_LEFT_ARRAY);
+		float DrawTEXT(float _x, float _y, const wchar_t* _text, float _fontsize, unsigned char _ArrayState = CHARATER_LEFT_ARRAY);
 
 		/*
 		功能:以左下角为原点渲染矩形
@@ -548,6 +548,10 @@ namespace Magic
 		Magic::VERTEX_BUFFER m_Picture_VBO;
 		MagicShader m_PictureShader;
 		unsigned int m_Picture2D_projectrionMatrix;
+
+		Magic::VERTEX_BUFFER m_Text_VBO;
+		MagicShader m_TextShader;
+		unsigned int m_Text_projectrionMatrix;
 
 		Magic::VERTEX_BUFFER m_Line_VBO;
 		MagicShader m_LineShader;

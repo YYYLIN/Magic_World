@@ -101,4 +101,8 @@ void MainScene::Draw()
 	_worldMatrix[3].y = m_PosSize.w * 0.5f;
 	pPen_Normal->SetWorldMatrix(_worldMatrix);
 	pPen_Normal->RepeatDraw();
+
+	pPen_Normal->ResetWorldMatrix();
+	pPen_Normal->BindFonts(&m_Magic_Fonts);
+	pPen_Normal->DrawTEXT(100, 100, L"Ä§·¨ÐÇÔÂ£ºÐÇÉ« ¿Õ2333", 16);
 }
