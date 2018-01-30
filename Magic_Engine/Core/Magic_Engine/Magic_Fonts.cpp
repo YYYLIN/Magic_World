@@ -32,6 +32,8 @@ namespace Magic
 
 		fread(&m_header, sizeof(FONT_HEADER), 1, pFile);
 
+		m_Base = m_header.base / 32768.0f * 32 + 1;
+		m_Scale = (m_header.scale / 32768.0f + 1.0f) * 32;
 		std::vector<std::pair<int32_t, int32_t>> temp_char_index(m_header.non_empty_chars);
 		fread(&temp_char_index[0], sizeof(std::pair<int32_t, int32_t>), temp_char_index.size(), pFile);
 

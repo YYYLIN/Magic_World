@@ -1399,9 +1399,7 @@ namespace Magic
 				if (_iterator->OverallMessage & MESSAGE_FONTS)
 				{
 					Magic::Fonts* _pFonts = pNowDRAW_BOX->V_Fonts_Message[_Fonts_Now_DrawNumber++];
-					glUniform2f(m_Text_distance_base_scale,
-						_pFonts->GetBase() / 32768.0f * 32 + 1,
-						(_pFonts->GetScale() / 32768.0f + 1.0f) * 32);
+					glUniform2f(m_Text_distance_base_scale, _pFonts->GetBase(), _pFonts->GetScale());
 				}
 
 				if (_iterator->OverallMessage & MESSAGE_POINTSSIZE)

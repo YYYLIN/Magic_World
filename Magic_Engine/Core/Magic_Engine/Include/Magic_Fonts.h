@@ -78,8 +78,8 @@ namespace Magic
 		FONT_INFO GetFONT_INFO(const int32_t& _offset) { return V_char_info[_offset]; }
 		const CHARINFO& GetCHARINFO(const wchar_t& _char) { return U_Char_Info_Map[_char]; }
 
-		int16_t GetBase() { return m_header.base; }
-		int16_t GetScale() { return m_header.scale; }
+		inline float GetBase() { return m_Base; }
+		inline float GetScale() { return m_Scale; }
 
 		void UpdataTexture(const wchar_t* _text);
 	private:
@@ -99,6 +99,8 @@ namespace Magic
 		int64_t m_Data_Start_Pos;
 		uint64_t m_Tick;
 
+		float m_Base;
+		float m_Scale;
 		FONT_HEADER m_header;
 		MagicTexture m_MagicTexture;
 	};
