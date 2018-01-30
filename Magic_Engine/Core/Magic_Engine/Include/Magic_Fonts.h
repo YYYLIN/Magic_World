@@ -12,6 +12,7 @@
 #include "Magic_Macro.h"
 #include <vector>
 #include <unordered_map>
+#include <stdint.h>
 
 #pragma warning(push)
 #pragma warning(disable:4251)
