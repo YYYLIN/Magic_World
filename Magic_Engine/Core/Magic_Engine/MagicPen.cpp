@@ -654,31 +654,31 @@ namespace Magic
 				if (_char_index_advance.first != -1)
 				{
 					auto _font_info = _pFonts->GetFONT_INFO(_char_index_advance.first);
-					float _left = _font_info.left * _rel_size;
-					float _top = _font_info.top * _rel_size;
+					float _left = _X + _font_info.left * _rel_size;
+					float _top = _Y + _font_info.top * _rel_size;
 					float _width = _font_info.width * _rel_size;
 					float _height = _font_info.height * _rel_size;
 
 					auto _char_info = _pFonts->GetCHARINFO(_text[a]);
 
 					_pV_VERTEX->reserve(4 + _pV_VERTEX->size());
-					_Vertex.Position.x = _X + _left;
-					_Vertex.Position.y = _Y + _top;
+					_Vertex.Position.x = _left;
+					_Vertex.Position.y = _top;
 					_Vertex.UV.x = _char_info.left;
 					_Vertex.UV.y = _char_info.bottom;
 					_pV_VERTEX->push_back(_Vertex);
-					_Vertex.Position.x = _X + _left + _width;
-					_Vertex.Position.y = _Y + _top;
+					_Vertex.Position.x = _left + _width;
+					_Vertex.Position.y = _top;
 					_Vertex.UV.x = _char_info.right;
 					_Vertex.UV.y = _char_info.bottom;
 					_pV_VERTEX->push_back(_Vertex);
-					_Vertex.Position.x = _X + _left + _width;
-					_Vertex.Position.y = _Y + _top + _height;
+					_Vertex.Position.x = _left + _width;
+					_Vertex.Position.y = _top + _height;
 					_Vertex.UV.x = _char_info.right;
 					_Vertex.UV.y = _char_info.top;
 					_pV_VERTEX->push_back(_Vertex);
-					_Vertex.Position.x = _X + _left;
-					_Vertex.Position.y = _Y + _top + _height;
+					_Vertex.Position.x = _left;
+					_Vertex.Position.y = _top + _height;
 					_Vertex.UV.x = _char_info.left;
 					_Vertex.UV.y = _char_info.top;
 					_pV_VERTEX->push_back(_Vertex);
@@ -908,7 +908,7 @@ namespace Magic
 				pNowDRAW_BOX->V_Scissor_Message.push_back(SCISSOR_MESSAGE(
 					true,
 					pNowDRAW_BOX->V_Scissor_Message.size() ? pNowDRAW_BOX->V_Scissor_Message.back().ScissorPosWH : glm::vec4()
-				));
+					));
 				pNowDRAW_BOX->Create_Scissor_Message = true;
 			}
 			else
@@ -928,7 +928,7 @@ namespace Magic
 			pNowDRAW_BOX->V_Scissor_Message.push_back(SCISSOR_MESSAGE(
 				pNowDRAW_BOX->V_Scissor_Message.size() ? pNowDRAW_BOX->V_Scissor_Message.back().state : false,
 				_poswh
-			));
+				));
 		}
 		else
 			pNowDRAW_BOX->V_Scissor_Message.back().ScissorPosWH = _poswh;
@@ -1437,7 +1437,7 @@ namespace Magic
 						}
 						if (_iterator->DrawNumber)
 						{
-							glMultiDrawElementsIndirect(GL_TRIANGLES, GL_UNSIGNED_INT, (GLvoid*)(sizeof(DrawElementsIndirectCommand) * _Picture_Now_DrawNumber), _iterator->DrawNumber, 0);
+							glMultiDrawElementsIndirect(GL_TRIANGLES, GL_UNSIGNED_INT, (GLvoid*)(sizeof(DrawElementsIndirectCommand)* _Picture_Now_DrawNumber), _iterator->DrawNumber, 0);
 							_Picture_Now_DrawNumber += _iterator->DrawNumber;
 							DEBUG_AddDrawMessageNumber(1);
 						}
@@ -1457,7 +1457,7 @@ namespace Magic
 						}
 						if (_iterator->DrawNumber)
 						{
-							glMultiDrawArraysIndirect(_Color_DrawMode, (GLvoid*)(sizeof(DrawArraysIndirectCommand) * _Line_Now_DrawNumber), _iterator->DrawNumber, 0);
+							glMultiDrawArraysIndirect(_Color_DrawMode, (GLvoid*)(sizeof(DrawArraysIndirectCommand)* _Line_Now_DrawNumber), _iterator->DrawNumber, 0);
 							_Line_Now_DrawNumber += _iterator->DrawNumber;
 							DEBUG_AddDrawMessageNumber(1);
 						}
