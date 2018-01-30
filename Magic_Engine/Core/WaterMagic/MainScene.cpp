@@ -104,5 +104,5 @@ void MainScene::Draw()
 
 	pPen_Normal->ResetWorldMatrix();
 	pPen_Normal->BindFonts(&m_Magic_Fonts);
-	pPen_Normal->DrawTEXT(100, 100, L"魔法星月：星色 空2333", 16);
+	pPen_Normal->DrawTEXT(0, 200, L"FFF魔法星月：星色 空2333FFFF", 16);
 }

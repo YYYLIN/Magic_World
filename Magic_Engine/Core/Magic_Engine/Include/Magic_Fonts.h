@@ -78,6 +78,9 @@ namespace Magic
 		FONT_INFO GetFONT_INFO(const int32_t& _offset) { return V_char_info[_offset]; }
 		const CHARINFO& GetCHARINFO(const wchar_t& _char) { return U_Char_Info_Map[_char]; }
 
+		int16_t GetBase() { return m_header.base; }
+		int16_t GetScale() { return m_header.scale; }
+
 		void UpdataTexture(const wchar_t* _text);
 	private:
 		void GetCharDistanceData(uint8_t* _pdata, int32_t _index) const;

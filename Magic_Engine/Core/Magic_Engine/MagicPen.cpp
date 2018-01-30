@@ -46,10 +46,11 @@ namespace Magic
 		"out vec4 gl_FragColor;"
 
 		"uniform sampler2D sampler0;"
+		"uniform vec2 distance_base_scale;"
 
 		"void main()"
 		"{"
-		"	gl_FragColor = (texture2D(sampler0, TexCoord).a - 0.66) * 32.0 * Out_Color;"
+		"	gl_FragColor = vec4(Out_Color.rgb ,(texture2D(sampler0, TexCoord).a * distance_base_scale.y + distance_base_scale.x) * Out_Color.a);"
 		"}";
 
 	static const char* S_Pure_Color_Vertex =
@@ -193,6 +194,7 @@ namespace Magic
 		V_LinePattern_Message.clear();
 		V_PointSize_Message.clear();
 		V_CallBack_Message.clear();
+		V_Fonts_Message.clear();
 	}
 
 #define DRAW_TYPE_RESET							0x00
@@ -216,6 +218,7 @@ namespace Magic
 #define MESSAGE_LINEPATTERN						1 << 3
 #define MESSAGE_POINTSSIZE						1 << 4
 #define MESSAGE_CALLBACK						1 << 5
+#define MESSAGE_FONTS							1 << 6
 
 	Pen_Normal::Pen_Normal()
 	{
@@ -270,11 +273,13 @@ namespace Magic
 		m_TextShader.AddUniform("projectionMatrix");
 
 		m_TextShader.AddUniform("sampler0");
+		m_TextShader.AddUniform("distance_base_scale");
 
 		glUniform1i(m_TextShader("sampler0"), 0);
 
 		m_TextShader.UnUse();
 
+		m_Text_distance_base_scale = m_TextShader("distance_base_scale");
 		m_Text_projectrionMatrix = m_TextShader("projectionMatrix");
 		//-------------------------------------------------------------------------------
 		result = m_LineShader.LoadFromString(GL_VERTEX_SHADER, S_Pure_Color_Vertex);
@@ -655,9 +660,10 @@ namespace Magic
 				{
 					auto _font_info = _pFonts->GetFONT_INFO(_char_index_advance.first);
 					float _left = _X + _font_info.left * _rel_size;
-					float _top = _Y + _font_info.top * _rel_size;
-					float _width = _font_info.width * _rel_size;
 					float _height = _font_info.height * _rel_size;
+					float _top = _Y - _font_info.top * _rel_size - _height;
+					float _width = _font_info.width * _rel_size;
+
 
 					auto _char_info = _pFonts->GetCHARINFO(_text[a]);
 
@@ -838,7 +844,12 @@ namespace Magic
 		{
 			AddMessage();
 			pNowDRAW_BOX->V_Message.back().pTexture = _pFonts->GetTexture();
-			pNowDRAW_BOX->Picture_Draw.pFonts = _pFonts;
+			if (pNowDRAW_BOX->Picture_Draw.pFonts != _pFonts)
+			{
+				pNowDRAW_BOX->Picture_Draw.pFonts = _pFonts;
+				pNowDRAW_BOX->V_Message.back().OverallMessage |= MESSAGE_FONTS;
+				pNowDRAW_BOX->V_Fonts_Message.push_back(_pFonts);
+			}
 		}
 	}
 
@@ -908,7 +919,7 @@ namespace Magic
 				pNowDRAW_BOX->V_Scissor_Message.push_back(SCISSOR_MESSAGE(
 					true,
 					pNowDRAW_BOX->V_Scissor_Message.size() ? pNowDRAW_BOX->V_Scissor_Message.back().ScissorPosWH : glm::vec4()
-					));
+				));
 				pNowDRAW_BOX->Create_Scissor_Message = true;
 			}
 			else
@@ -928,7 +939,7 @@ namespace Magic
 			pNowDRAW_BOX->V_Scissor_Message.push_back(SCISSOR_MESSAGE(
 				pNowDRAW_BOX->V_Scissor_Message.size() ? pNowDRAW_BOX->V_Scissor_Message.back().state : false,
 				_poswh
-				));
+			));
 		}
 		else
 			pNowDRAW_BOX->V_Scissor_Message.back().ScissorPosWH = _poswh;
@@ -1219,7 +1230,7 @@ namespace Magic
 			glDisable(GL_BLEND);
 			glBindTexture(GL_TEXTURE_2D, 0);
 
-			unsigned int _Picture_Now_DrawNumber = 0, _Line_Now_DrawNumber = 0, _CallBack_Now_DrawNumber = 0;
+			unsigned int _Picture_Now_DrawNumber = 0, _Line_Now_DrawNumber = 0, _CallBack_Now_DrawNumber = 0, _Fonts_Now_DrawNumber = 0;
 			unsigned int _Now_Shader = 0, _Now_Draw_Type = 0;
 
 			Magic::VERTEX_BUFFER* _LastVertex = 0;
@@ -1383,6 +1394,14 @@ namespace Magic
 						}
 						break;
 					}
+				}
+
+				if (_iterator->OverallMessage & MESSAGE_FONTS)
+				{
+					Magic::Fonts* _pFonts = pNowDRAW_BOX->V_Fonts_Message[_Fonts_Now_DrawNumber++];
+					glUniform2f(m_Text_distance_base_scale,
+						_pFonts->GetBase() / 32768.0f * 32 + 1,
+						(_pFonts->GetScale() / 32768.0f + 1.0f) * 32);
 				}
 
 				if (_iterator->OverallMessage & MESSAGE_POINTSSIZE)

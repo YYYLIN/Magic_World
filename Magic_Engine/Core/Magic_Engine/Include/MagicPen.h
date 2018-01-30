@@ -154,6 +154,7 @@ namespace Magic
 			std::vector<float> V_PointSize_Message;
 			std::vector<LINEPATIERN_MESSAGE> V_LinePattern_Message;
 			std::vector<CALLBACK_COMMON> V_CallBack_Message;
+			std::vector<Magic::Fonts*> V_Fonts_Message;
 			PICTURE_DRAW Picture_Draw;
 			LINE_DRAW Line_Draw;
 
@@ -551,6 +552,7 @@ namespace Magic
 
 		Magic::VERTEX_BUFFER m_Text_VBO;
 		MagicShader m_TextShader;
+		unsigned int m_Text_distance_base_scale;
 		unsigned int m_Text_projectrionMatrix;
 
 		Magic::VERTEX_BUFFER m_Line_VBO;
