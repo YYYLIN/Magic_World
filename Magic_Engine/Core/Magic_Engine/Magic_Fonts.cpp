@@ -67,6 +67,7 @@ namespace Magic
 		_err = m_MagicTexture.Initialize(0, 2048, 2048, MagicTexture::ALPHA, MagicTexture::UNSIGNED_BYTE);
 		if (!_err)
 			return false;
+		m_MagicTexture.SetParameteri(MagicTexture::LINEAR);
 
 		L_Char_free.emplace_back(0, m_MagicTexture.GetWidth() * m_MagicTexture.GetHeight() / m_header.char_size / m_header.char_size);
 

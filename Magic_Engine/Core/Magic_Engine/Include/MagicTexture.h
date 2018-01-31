@@ -8,9 +8,6 @@
 
 #define BMP_Header_Length 54
 
-#define MagicTextrue_LINEAR 0x01  //线性插值
-
-
 namespace Magic
 {
 	struct DLL_MAGIC_ENGINE_OUTPUT_INPUT Color4
@@ -37,6 +34,12 @@ public:
 		UNSIGNED_BYTE,
 		BYTE
 	};
+
+	enum SAMPLING_MODE
+	{
+		LINEAR,//线性插值
+		NEAREST
+	};
 public:
 	MagicTexture();
 	~MagicTexture();
@@ -49,7 +52,7 @@ public:
 	virtual bool Initialize(unsigned int _texture, int w, int h);
 	virtual void Shutdown();
 
-	virtual void SetParameteri(unsigned char _data);
+	virtual void SetParameteri(SAMPLING_MODE _mode);
 
 	inline virtual unsigned int GetTextrue() { return texture; }
 
