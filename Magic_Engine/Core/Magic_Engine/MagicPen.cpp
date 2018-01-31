@@ -1232,6 +1232,7 @@ namespace Magic
 
 			unsigned int _Picture_Now_DrawNumber = 0, _Line_Now_DrawNumber = 0, _CallBack_Now_DrawNumber = 0, _Fonts_Now_DrawNumber = 0;
 			unsigned int _Now_Shader = 0, _Now_Draw_Type = 0;
+			Magic::Fonts* _pBufferFonts = NULL;
 
 			Magic::VERTEX_BUFFER* _LastVertex = 0;
 			LINEPATIERN_MESSAGE _LinePattern_Message;
@@ -1361,6 +1362,11 @@ namespace Magic
 					}
 				}
 
+				if (_iterator->OverallMessage & MESSAGE_FONTS)
+				{
+					_pBufferFonts = pNowDRAW_BOX->V_Fonts_Message[_Fonts_Now_DrawNumber++];
+				}
+
 				if (_iterator->OverallMessage & MESSAGE_SHADER)
 				{
 					_Now_Draw_Type = pNowDRAW_BOX->V_Shader_Message[_ShaderMessage++];
@@ -1396,12 +1402,6 @@ namespace Magic
 					}
 				}
 
-				if (_iterator->OverallMessage & MESSAGE_FONTS)
-				{
-					Magic::Fonts* _pFonts = pNowDRAW_BOX->V_Fonts_Message[_Fonts_Now_DrawNumber++];
-					glUniform2f(m_Text_distance_base_scale, _pFonts->GetBase(), _pFonts->GetScale());
-				}
-
 				if (_iterator->OverallMessage & MESSAGE_POINTSSIZE)
 				{
 					glUniform1f(m_Line_PointSize, pNowDRAW_BOX->V_PointSize_Message[_PointsSizeMessage++]);
@@ -1419,6 +1419,13 @@ namespace Magic
 					GLenum _Color_DrawMode = GL_POINTS;
 					switch (_Now_Draw_Type)
 					{
+					case DRAW_TYPE_DISTANCE_TEXT:
+						if (_pBufferFonts)
+						{
+							glUniform2f(m_Text_distance_base_scale, _pBufferFonts->GetBase(), _pBufferFonts->GetScale());
+							_pBufferFonts = NULL;
+						}
+						break;
 					case DRAW_TYPE_POINTS:
 						_Color_DrawMode = GL_POINTS;
 						break;
