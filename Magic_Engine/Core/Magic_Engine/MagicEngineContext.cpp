@@ -69,6 +69,10 @@ void MagicScenes::Updata()
 {
 	if (DisplayState)
 	{
+		Magic::MessageScenes* _pMessageScenes = dynamic_cast<Magic::MessageScenes*>(this);
+		if (_pMessageScenes)
+			_pMessageScenes->ProcessMessage();
+
 		this->OnUpdata();
 		for (unsigned int a = 0; a < v_Common.size(); a++)
 			v_Common[a]->Updata();

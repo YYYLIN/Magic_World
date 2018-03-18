@@ -180,8 +180,8 @@ void MagicCamera::RotationRightVec(float fAngle)
 {
 	glm::mat4 R;
 	R = glm::rotate(fAngle, m_XYVector);
-	m_vUpVector = WVec3TransformCoord(m_vUpVector, R);//让m_vUpVector向量绕m_vRightVector旋转fAngle个角度
-	m_vLookVector = WVec3TransformCoord(m_vLookVector, R);//让m_vLookVector向量绕m_vRightVector旋转fAngle个角度
+	m_vUpVector = Magic::WVec3TransformCoord(m_vUpVector, R);//让m_vUpVector向量绕m_vRightVector旋转fAngle个角度
+	m_vLookVector = Magic::WVec3TransformCoord(m_vLookVector, R);//让m_vLookVector向量绕m_vRightVector旋转fAngle个角度
 
 	m_vTargetPosition = m_vLookVector * glm::length(m_vCameraPosition);//更新一下观察点的新位置（方向乘以模=向量）
 }
@@ -195,9 +195,9 @@ void MagicCamera::RotationUpVec(float fAngle)
 	glm::mat4 R;
 	//	R = glm::rotate(fAngle, m_vUpVector);//创建出绕m_vUpVector旋转fAngle个角度的R矩阵
 	R = glm::rotate(fAngle, glm::vec3(0.0f, 0.0f, 1.0f));
-	m_XYVector = WVec3TransformCoord(m_XYVector, R);
-	m_vRightVector = WVec3TransformCoord(m_vRightVector, R);//让m_vRightVector向量绕m_vUpVector旋转fAngle个角度
-	m_vLookVector = WVec3TransformCoord(m_vLookVector, R);//让m_vLookVector向量绕m_vUpVector旋转fAngle个角度
+	m_XYVector = Magic::WVec3TransformCoord(m_XYVector, R);
+	m_vRightVector = Magic::WVec3TransformCoord(m_vRightVector, R);//让m_vRightVector向量绕m_vUpVector旋转fAngle个角度
+	m_vLookVector = Magic::WVec3TransformCoord(m_vLookVector, R);//让m_vLookVector向量绕m_vUpVector旋转fAngle个角度
 
 	m_vTargetPosition = m_vLookVector * glm::length(m_vCameraPosition);//更新一下观察点的新位置（方向乘以模=向量）
 }
@@ -210,8 +210,8 @@ void MagicCamera::RotationLookVec(float fAngle)
 {
 	glm::mat4 R;
 	R = glm::rotate(fAngle, m_vLookVector);//创建出绕m_vLookVector旋转fAngle个角度的R矩阵
-	m_vRightVector = WVec3TransformCoord(m_vRightVector, R);//让m_vRightVector向量绕m_vLookVector旋转fAngle个角度
-	m_vUpVector = WVec3TransformCoord(m_vUpVector, R);//让m_vUpVector向量绕m_vLookVector旋转fAngle个角度
+	m_vRightVector = Magic::WVec3TransformCoord(m_vRightVector, R);//让m_vRightVector向量绕m_vLookVector旋转fAngle个角度
+	m_vUpVector = Magic::WVec3TransformCoord(m_vUpVector, R);//让m_vUpVector向量绕m_vLookVector旋转fAngle个角度
 
 	m_vTargetPosition = m_vLookVector * glm::length(m_vCameraPosition);//更新一下观察点的新位置（方向乘以模=向量）
 }
@@ -224,9 +224,9 @@ void MagicCamera::SetRotation(float _Right, float _Look, float _Up)
 	RLook = glm::rotate(_Look, glm::vec3(0.0f, 1.0f, 0.0f));
 	RUp = glm::rotate(_Up, glm::vec3(0.0f, 0.0f, 1.0f));
 	R = RRight * RLook * RUp;
-	m_vLookVector = WVec3TransformCoord(glm::vec3(0.0f, 1.0f, 0.0f), R);
-	m_vRightVector = WVec3TransformCoord(glm::vec3(1.0f, 0.0f, 0.0f), R);
-	m_vUpVector = WVec3TransformCoord(glm::vec3(0.0f, 0.0f, 1.0f), R);
+	m_vLookVector = Magic::WVec3TransformCoord(glm::vec3(0.0f, 1.0f, 0.0f), R);
+	m_vRightVector = Magic::WVec3TransformCoord(glm::vec3(1.0f, 0.0f, 0.0f), R);
+	m_vUpVector = Magic::WVec3TransformCoord(glm::vec3(0.0f, 0.0f, 1.0f), R);
 
 	m_vTargetPosition = m_vLookVector * glm::length(m_vCameraPosition);//更新一下观察点的新位置（方向乘以模=向量）
 }

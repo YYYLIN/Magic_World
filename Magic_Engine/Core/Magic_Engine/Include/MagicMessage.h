@@ -2,10 +2,23 @@
 #define _MAGICMESSAGE_H_
 
 #include "Magic_Macro.h"
+#include <stdint.h>
+#include <vector>
+
+#pragma warning(push)
+#pragma warning(disable:4251)
 
 namespace Magic
 {
 	typedef void(*CallBack_Common)(void* _data);
+
+	struct MESSAGE
+	{
+		MESSAGE() :MessageType(0), Message(0) {}
+		MESSAGE(uint32_t _MessageType, uint64_t _Message) :MessageType(_MessageType), Message(_Message) {}
+		uint32_t MessageType;
+		uint64_t Message;
+	};
 
 	typedef struct DLL_MAGIC_ENGINE_OUTPUT_INPUT CALLBACK_COMMON
 	{
@@ -23,16 +36,24 @@ namespace Magic
 	{
 		friend class MessageScenes;
 	public:
-		void Send_Message(unsigned int _MessageType, unsigned int _Message);
+		virtual void Send_Message(uint32_t _MessageType, uint64_t _Message);
 	protected:
-		virtual int MessageHandle(unsigned int _MessageType, unsigned int _Message) = 0;
+		virtual int MessageHandle(uint32_t _MessageType, uint64_t _Message) = 0;
 	};
 
+	//消息分发
 	class DLL_MAGIC_ENGINE_OUTPUT_INPUT MessageScenes :public MessageCommon
 	{
+	public:
+		virtual void Send_Message(uint32_t _MessageType, uint64_t _Message);
+		void ProcessMessage();
 	protected:
-		virtual int MessageHandle(unsigned int _MessageType, unsigned int _Message);
+		virtual int MessageHandle(uint32_t _MessageType, uint64_t _Message);
+	protected:
+		std::vector<MESSAGE> V_Message;
 	};
 }
+
+#pragma warning(pop)
 
 #endif

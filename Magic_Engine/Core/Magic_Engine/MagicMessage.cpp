@@ -17,12 +17,26 @@ namespace Magic
 		pCallBack_Common(m_Data);
 	}
 
-	void MessageCommon::Send_Message(unsigned int _MessageType, unsigned int _Message)
+	void MessageCommon::Send_Message(uint32_t _MessageType, uint64_t _Message)
 	{
 		this->MessageHandle(_MessageType, _Message);
 	}
 
-	int MessageScenes::MessageHandle(unsigned int _MessageType, unsigned int _Message)
+	void MessageScenes::Send_Message(uint32_t _MessageType, uint64_t _Message)
+	{
+		V_Message.push_back(MESSAGE(_MessageType, _Message));
+	}
+
+	void MessageScenes::ProcessMessage()
+	{
+		for (auto _message : V_Message)
+		{
+			this->MessageHandle(_message.MessageType, _message.Message);
+		}
+		V_Message.clear();
+	}
+
+	int MessageScenes::MessageHandle(uint32_t _MessageType, uint64_t _Message)
 	{
 		MagicScenes* _pMagicScene = dynamic_cast<MagicScenes*>(this);
 		if (_pMagicScene && _pMagicScene->GetDisplayState())

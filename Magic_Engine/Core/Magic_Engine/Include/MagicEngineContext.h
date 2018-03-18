@@ -9,6 +9,7 @@
 #include "windows.h"
 #include "MagicTexture.h"
 #include "MagicPen.h"
+#include "MagicMessage.h"
 
 #pragma warning(push)
 #pragma warning(disable:4251)
@@ -30,7 +31,7 @@ public:
 	virtual void Render(glm::vec2 _DrawPos) { this->Draw(); }
 protected:
 	inline virtual void OnUpdata() {}
-	virtual	void Draw() {};
+	virtual	void Draw() {}
 };
 
 class DLL_MAGIC_ENGINE_OUTPUT_INPUT MagicUICommon :public MagicCommon
