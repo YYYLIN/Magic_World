@@ -14,7 +14,7 @@ namespace EntityX
 	BaseComponent::Family Component<C>::family()
 	{
 		static Family family = family_counter_++;
-		assert(family < EntityX::MAX_COMPONENTS);
+		assert(family < MAX_COMPONENTS);
 		return family;
 	}
 

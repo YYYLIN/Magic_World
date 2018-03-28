@@ -37,13 +37,15 @@ namespace Magic
 			Call_Updata m_Call_Updata;
 		};
 
-		class ObjectUpdataSystem : EntityX::System<ObjectUpdataSystem>
+		class ObjectUpdataSystem :public EntityX::System<ObjectUpdataSystem>
 		{
+		public:
 			virtual void Update(EntityX::EntityManager &_es, EntityX::EventManager &_events, EntityX::TimeDelta _time) override;
 		};
 
-		class ObjectRenderSystem : EntityX::System<ObjectRenderSystem>
+		class ObjectRenderSystem :public EntityX::System<ObjectRenderSystem>
 		{
+		public:
 			virtual void Update(EntityX::EntityManager &_es, EntityX::EventManager &_events, EntityX::TimeDelta _time) override;
 		};
 

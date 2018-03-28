@@ -179,7 +179,7 @@ namespace EntityX
 		 //删除这个实体
 		void destroy();
 
-		std::bitset<::EntityX::MAX_COMPONENTS> GetComponentMask() const;
+		std::bitset<MAX_COMPONENTS> GetComponentMask() const;
 
 	private:
 		EntityManager *pManager = nullptr;
@@ -378,7 +378,7 @@ namespace EntityX
 		}
 		void copy_component_to(Entity source, Entity target) override 
 		{
-			target.assign_from_copy<C>(*(source.component<C>().get()));
+			target.assign_from_copy<C>(*(source.GetComponent<C>().get()));
 		}
 	};
 
@@ -388,7 +388,7 @@ namespace EntityX
 	class EntityManager : private ::EntityX::help::NonCopyable
 	{
 	public:
-		typedef std::bitset<::EntityX::MAX_COMPONENTS> ComponentMask;
+		typedef std::bitset<MAX_COMPONENTS> ComponentMask;
 
 		explicit EntityManager(EventManager &event_manager);
 		virtual ~EntityManager();
@@ -505,7 +505,7 @@ namespace EntityX
 
 			void each(typename identity<std::function<void(Entity entity, Components&...)>>::type f) {
 				for (auto it : *this)
-					f(it, *(it.template component<Components>().get())...);
+					f(it, *(it.template GetComponent<Components>().get())...);
 			}
 
 		private:
@@ -527,7 +527,7 @@ namespace EntityX
 				explicit Unpacker(ComponentHandle<Components> & ... handles) :
 					handles(std::tuple<ComponentHandle<Components> & ...>(handles...)) {}
 
-				void unpack(EntityX::Entity &entity) const
+				void unpack(Entity &entity) const
 				{
 					unpack_<0, Components...>(entity);
 				}
@@ -535,15 +535,15 @@ namespace EntityX
 
 			private:
 				template <int N, typename C>
-				void unpack_(EntityX::Entity &entity) const
+				void unpack_(Entity &entity) const
 				{
-					std::get<N>(handles) = entity.component<C>();
+					std::get<N>(handles) = entity.GetComponent<C>();
 				}
 
 				template <int N, typename C0, typename C1, typename ... Cn>
-				void unpack_(EntityX::Entity &entity) const
+				void unpack_(Entity &entity) const
 				{
-					std::get<N>(handles) = entity.component<C0>();
+					std::get<N>(handles) = entity.GetComponent<C0>();
 					unpack_<N + 1, C1, Cn...>(entity);
 				}
 
@@ -712,9 +712,9 @@ namespace EntityX
 			entity_component_mask_[id.index()].set(family);
 
 			// Create and return handle.
-			ComponentHandle<C> component(this, id);
-			event_manager_.emit<ComponentAddedEvent<C>>(Entity(this, id), component);
-			return component;
+			ComponentHandle<C> _component(this, id);
+			event_manager_.emit<ComponentAddedEvent<C>>(Entity(this, id), _component);
+			return _component;
 		}
 
 		/**
@@ -731,8 +731,8 @@ namespace EntityX
 
 			// Find the pool for this component family.
 			BasePool *pool = component_pools_[family];
-			ComponentHandle<C> component(this, id);
-			event_manager_.emit<ComponentRemovedEvent<C>>(Entity(this, id), component);
+			ComponentHandle<C> _component(this, id);
+			event_manager_.emit<ComponentRemovedEvent<C>>(Entity(this, id), _component);
 
 			// Remove component bit.
 			entity_component_mask_[id.index()].reset(family);
@@ -798,13 +798,13 @@ namespace EntityX
 
 		template <typename ... Components>
 		std::tuple<ComponentHandle<Components>...> GetComponents(Entity::Id id) {
-			return std::make_tuple(component<Components>(id)...);
+			return std::make_tuple(GetComponent<Components>(id)...);
 		}
 
 		template <typename ... Components>
 		std::tuple<ComponentHandle<const Components, const EntityManager>...> GetComponents(Entity::Id id) const
 		{
-			return std::make_tuple(component<const Components>(id)...);
+			return std::make_tuple(GetComponent<const Components>(id)...);
 		}
 
 		/**
@@ -812,8 +812,8 @@ namespace EntityX
 		 *
 		 * @code
 		 * for (Entity entity : entity_manager.entities_with_components<Position, Direction>()) {
-		 *   ComponentHandle<Position> position = entity.component<Position>();
-		 *   ComponentHandle<Direction> direction = entity.component<Direction>();
+		 *   ComponentHandle<Position> position = entity.GetComponent<Position>();
+		 *   ComponentHandle<Direction> direction = entity.GetComponent<Direction>();
 		 *
 		 *   ...
 		 * }
@@ -890,7 +890,7 @@ namespace EntityX
 		void unpack(Entity::Id id, ComponentHandle<A> &a, ComponentHandle<Args> & ... args)
 		{
 			assert_valid(id);
-			a = component<A>(id);
+			a = GetComponent<A>(id);
 			unpack<Args ...>(id, args ...);
 		}
 

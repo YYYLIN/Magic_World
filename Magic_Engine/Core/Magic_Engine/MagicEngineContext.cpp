@@ -1,5 +1,6 @@
 #include "MagicEngineContext.h"
-#pragma comment(lib,"glew32.lib")
+#include "System/Supervisor.h"
+
 #include <GL/glew.h>  
 
 #include <time.h>
@@ -305,6 +306,10 @@ bool MagicEngineContext::Initialize(HWND _hwnd, float _x, float _y, float _w, fl
 	result = m_Pen_Normal.Initialize();
 	if (!result)
 		return false;
+
+	Magic::System::Supervisor _Supervisor;
+
+	_Supervisor.Initialize();
 
 	return true;
 }

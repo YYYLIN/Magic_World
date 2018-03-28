@@ -43,6 +43,8 @@ namespace EntityX {
 		 *
 		 * Typically used to set up event handlers.
 		 */
+		//一旦所有系统被添加到SystemManager中，就会被调用。
+		//通常用于设置事件处理程序。
 		virtual void configure(EntityManager &entities, EventManager &events)
 		{
 			configure(events);
@@ -173,6 +175,8 @@ namespace EntityX {
 		 *
 		 * This is typically used to set up event handlers.
 		 */
+		//配置系统。 添加所有系统后调用。
+		//这通常用于设置事件处理程序。
 		void configure();
 
 	private:
