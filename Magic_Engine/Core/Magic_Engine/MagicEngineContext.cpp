@@ -279,6 +279,7 @@ bool MagicEngineContext::Initialize(HWND _hwnd, float _x, float _y, float _w, fl
 {
 	bool result;
 
+/*
 	pMagicEngineContext = this;
 	m_hWnd = _hwnd;
 	m_HDC = GetDC(m_hWnd);
@@ -305,11 +306,13 @@ bool MagicEngineContext::Initialize(HWND _hwnd, float _x, float _y, float _w, fl
 
 	result = m_Pen_Normal.Initialize();
 	if (!result)
-		return false;
+		return false;*/
 
 	Magic::System::Supervisor _Supervisor;
 
-	_Supervisor.Initialize();
+	result = _Supervisor.Initialize(_hwnd, _x, _y, _w, _h);
+	if (!m_hRC)
+		return false;
 
 	return true;
 }

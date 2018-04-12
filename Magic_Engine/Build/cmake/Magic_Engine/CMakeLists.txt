@@ -89,7 +89,7 @@ IF(WIN32)
 	SOURCE_GROUP("3rdparty\\Entityx\\help" FILES ${3RDPARTY_ENTITYX_HELP_FILES})
 ENDIF(WIN32)
 
-link_libraries(glew32.lib)
+link_libraries(glew32.lib opengl32.lib)
 add_definitions(-DMAGIC_ENGINE_EXPORTS)
 IF(WIN32)
 	add_definitions(-DUNICODE -D_UNICODE)

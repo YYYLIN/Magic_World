@@ -1,6 +1,6 @@
 #include "MagicPen.h"
 #include "MagicEngineContext.h"
-#pragma comment(lib,"glew32.lib")
+
 #include <GL/glew.h>  
 
 namespace Magic
