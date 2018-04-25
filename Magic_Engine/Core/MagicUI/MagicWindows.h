@@ -29,13 +29,13 @@ public:
 	MagicWindows();
 	~MagicWindows();
 
+	static MagicWindows* Instance(){ return pMagicWindows; }
+
 	bool Initialize(const wchar_t* _name, int _x, int _y, int _w, int _h);
 
 	LRESULT CALLBACK MessageHandler(HWND, UINT, WPARAM, LPARAM);  //消息处理函数
 
 	void Run();
-
-	MagicScenes* GetSystemScenes(Magic::SYSTEMSCENES _SYSTEMSCENES);
 
 	inline HWND GetHWND(){ return m_hwnd; }
 	inline HINSTANCE GetHINSTANCE(){ return m_hinstance; }
@@ -47,7 +47,6 @@ private:
 	void Shutdown();
 
 private:
-	MagicEngineContext m_MagicEngineContext;
 	Magic::UI::UserScene m_UserScene;
 	Magic::UI::MenuScene m_MenuScene;
 	Magic::UI::DebugScene m_DebugScene;
@@ -69,7 +68,7 @@ private:
 	wchar_t m_applicationName[256];
 	HINSTANCE m_hinstance;
 	HWND m_hwnd;
-public:
+
 	static MagicWindows* pMagicWindows;
 };
 

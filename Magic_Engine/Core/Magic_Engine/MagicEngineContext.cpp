@@ -1,13 +1,14 @@
-#include "MagicEngineContext.h"
-#include "System/Supervisor.h"
-
+#include "Include/MagicEngineContext.h"
+#include "Include/MagicEngineAPI.h"
 #include <GL/glew.h>  
-
 #include <time.h>
+
+
 
 const glm::mat4 CONST_CAMERA = glm::lookAt(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
 
+/*
 MagicScenes::MagicScenes()
 {
 	DisplayState = 0;
@@ -108,8 +109,9 @@ void MagicScenes::RenderEnd()
 	_Camera[3].x = pParentScene->GetDrawPos().x;
 	_Camera[3].y = pParentScene->GetDrawPos().y;
 	MagicEngineContext::pMagicEngineContext->GetPen_Normal()->SetCameraMatrix(_Camera);
-}
+}*/
 
+/*
 //拷贝缓冲区消息回掉
 void ScenesExCopyFBOBufferMessage(void *_data)
 {
@@ -206,113 +208,189 @@ void MagicScenesEx::RenderEnd()
 	glm::vec2 _WH = this->GetFrameBufferSize();
 	pPen_Normal->SetDrawWH(_WH.x, _WH.y);
 	pPen_Normal->RenderEnd();
-}
+}*/
 
-
-HGLRC CreateRCContxt(HDC _hdc)
+namespace Magic
 {
-	PIXELFORMATDESCRIPTOR pfd =
+	HGLRC CreateRCContxt(HDC _hdc)
 	{
-		sizeof(PIXELFORMATDESCRIPTOR), // size of this pfd
-		1,                                                     // version number
-		PFD_DRAW_TO_WINDOW |           // support window
-		PFD_SUPPORT_OPENGL |               // support OpenGL
-		PFD_DOUBLEBUFFER,                     // double buffered
-		PFD_TYPE_RGBA,                           // RGBA type
-		24,                                                 // 24-bit color depth
-		0, 0, 0, 0, 0, 0,                               // color bits ignored
-		0,                                                   // no alpha buffer
-		0,                                                   // shift bit ignored
-		0,                                                   // no accumulation buffer
-		0, 0, 0, 0,                                       // accum bits ignored
-		32,                                                 // 32-bit z-buffer
-		0,                                                   // no stencil buffer
-		0,                                                   // no auxiliary buffer
-		PFD_MAIN_PLANE,                         // main layer
-		0,                                                   // reserved
-		0, 0, 0                                            // layer masks ignored
-	};
+		PIXELFORMATDESCRIPTOR pfd =
+		{
+			sizeof(PIXELFORMATDESCRIPTOR), // size of this pfd
+			1,                                                     // version number
+			PFD_DRAW_TO_WINDOW |           // support window
+			PFD_SUPPORT_OPENGL |               // support OpenGL
+			PFD_DOUBLEBUFFER,                     // double buffered
+			PFD_TYPE_RGBA,                           // RGBA type
+			24,                                                 // 24-bit color depth
+			0, 0, 0, 0, 0, 0,                               // color bits ignored
+			0,                                                   // no alpha buffer
+			0,                                                   // shift bit ignored
+			0,                                                   // no accumulation buffer
+			0, 0, 0, 0,                                       // accum bits ignored
+			32,                                                 // 32-bit z-buffer
+			0,                                                   // no stencil buffer
+			0,                                                   // no auxiliary buffer
+			PFD_MAIN_PLANE,                         // main layer
+			0,                                                   // reserved
+			0, 0, 0                                            // layer masks ignored
+		};
 
-	int m_nPixelFormat = ChoosePixelFormat(_hdc, &pfd);
-	if (m_nPixelFormat == 0)
-	{
-		MessageBoxA(0, "ChoosePixelFormat failed.", "errer", MB_OK);
-		return false;
-	}
-	if (SetPixelFormat(_hdc, m_nPixelFormat, &pfd) == FALSE)
-	{
-		MessageBoxA(0, "SetPixelFormat failed.", "errer", MB_OK);
-		return false;
+		int m_nPixelFormat = ChoosePixelFormat(_hdc, &pfd);
+		if (m_nPixelFormat == 0)
+		{
+			MessageBoxA(0, "ChoosePixelFormat failed.", "errer", MB_OK);
+			return false;
+		}
+		if (SetPixelFormat(_hdc, m_nPixelFormat, &pfd) == FALSE)
+		{
+			MessageBoxA(0, "SetPixelFormat failed.", "errer", MB_OK);
+			return false;
+		}
+
+		HGLRC m_hRC = wglCreateContext(_hdc);
+		if (m_hRC == 0)
+		{
+			MessageBoxA(0, "Error Creating RC", "errer", MB_OK);
+			return false;
+		}
+
+		//Make the RC Current
+		if (wglMakeCurrent(_hdc, m_hRC) == FALSE)
+		{
+			MessageBoxA(0, "Error making RC Current", "errer", MB_OK);
+			return false;
+		}
+
+		return m_hRC;
 	}
 
-	HGLRC m_hRC = wglCreateContext(_hdc);
-	if (m_hRC == 0)
+	double EngineUpdataTime(EntityCommon _Entity)
 	{
-		MessageBoxA(0, "Error Creating RC", "errer", MB_OK);
-		return false;
+		Magic::System::ThreadsComponent* _pRenderThreadsComponent = _Entity.GetComponent<Magic::System::ThreadsComponent>().operator->();
+
+		double _time = clock();
+		_pRenderThreadsComponent->m_DiffTime = _time - _pRenderThreadsComponent->m_LastTime;
+		_pRenderThreadsComponent->m_LastTime = _time;
+
+		return _time;
 	}
 
-	//Make the RC Current
-	if (wglMakeCurrent(_hdc, m_hRC) == FALSE)
+	void EngineUpdataFPS(EntityCommon _Entity)
 	{
-		MessageBoxA(0, "Error making RC Current", "errer", MB_OK);
-		return false;
+		if (_Entity.has_component<Magic::System::RenderThreadsComponent>())
+		{
+			Magic::System::RenderThreadsComponent* _pRenderThreadsComponent = _Entity.GetComponent<Magic::System::RenderThreadsComponent>().operator->();
+
+			double time = clock();
+
+
+			_pRenderThreadsComponent->frameCount++;//每调用一次Get_FPS()函数，帧数自增1
+			_pRenderThreadsComponent->currentTime = time*0.001f;//获取系统时间，其中timeGetTime函数返回的是以毫秒为单位的系统时间，所以需要乘以0.001，得到单位为秒的时间
+
+																//如果当前时间减去持续时间大于了1秒钟，就进行一次FPS的计算和持续时间的更新，并将帧数值清零
+			if (_pRenderThreadsComponent->currentTime - _pRenderThreadsComponent->ContinuedTime > _pRenderThreadsComponent->FPSTime) //将时间控制在1秒钟
+			{
+				_pRenderThreadsComponent->FPS = _pRenderThreadsComponent->frameCount / (_pRenderThreadsComponent->currentTime - _pRenderThreadsComponent->ContinuedTime);//计算这1秒钟的FPS值
+				_pRenderThreadsComponent->ContinuedTime = _pRenderThreadsComponent->currentTime; //将当前时间currentTime赋给持续时间lastTime，作为下一秒的基准时间
+				_pRenderThreadsComponent->frameCount = 0;//将本次帧数frameCount值清零
+			}
+		}
 	}
 
-	return m_hRC;
+	void EngineRenderStart(EntityCommon _Entity)
+	{
+		EntityX::ComponentHandle<Magic::System::RenderThreadsComponent> _RenderThreadsComponent = _Entity.GetComponent<Magic::System::RenderThreadsComponent>();
+		_RenderThreadsComponent->m_DrawMessageNumber = 0;
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		_RenderThreadsComponent->m_Pen_Normal.RenderStart();
+		_RenderThreadsComponent->m_Pen_Normal.SetCameraMatrix(glm::mat4());
+	}
+
+	void EngineRenderEnd(EntityCommon _Entity)
+	{
+		EntityX::ComponentHandle<Magic::System::PosSizeComponent> _PosSizeComponent = _Entity.GetComponent<Magic::System::PosSizeComponent>();
+		EntityX::ComponentHandle<Magic::System::RenderThreadsComponent> _RenderThreadsComponent = _Entity.GetComponent<Magic::System::RenderThreadsComponent>();
+
+		glm::vec2 _WH = _PosSizeComponent->m_Size;
+		_RenderThreadsComponent->m_Pen_Normal.SetDrawWH(_WH.x, _WH.y);
+		_RenderThreadsComponent->m_Pen_Normal.RenderEnd();
+
+		SwapBuffers(_RenderThreadsComponent->m_HDC);
+	}
+
+
+	const unsigned char* GetRenderer()
+	{
+		return glGetString(GL_RENDERER);
+	}
+
+	const unsigned char* GetVendor()
+	{
+		return glGetString(GL_VENDOR);
+	}
+
+	const unsigned char* GetVersion()
+	{
+		return glGetString(GL_VERSION);
+	}
+
+	const unsigned char* GetGlSLVersion()
+	{
+		return glGetString(GL_SHADING_LANGUAGE_VERSION);
+	}
+
+	int Getmajor()
+	{
+		GLint major;
+		glGetIntegerv(GL_MAJOR_VERSION, &major);
+		return major;
+	}
+
+	int Getminor()
+	{
+		GLint minor;
+		glGetIntegerv(GL_MINOR_VERSION, &minor);
+		return minor;
+	}
 }
 
+EntityCommon* MagicEngineContext::S_T_pEntityCommon = 0;
 MagicEngineContext* MagicEngineContext::pMagicEngineContext = 0;
 
 MagicEngineContext::MagicEngineContext()
 {
-	m_DrawMessageNumber = 0;
+	pMagicEngineContext = this;
 }
 
 
 MagicEngineContext::~MagicEngineContext()
 {
+	Shutdown();
+	pMagicEngineContext = 0;
 }
 
-
-bool MagicEngineContext::Initialize(HWND _hwnd, float _x, float _y, float _w, float _h)
+bool MagicEngineContext::Initialize()
 {
-	bool result;
+	/*
+		m_Supervisor.m_systems.add<Magic::System::ObjectUpdataSystem>();
+		m_Supervisor.m_systems.add<Magic::System::ObjectRenderSystem>();
+		m_Supervisor.m_systems.add<Magic::System::TimeUpdataSystem>();
+		m_Supervisor.m_systems.configure();*/
 
-/*
-	pMagicEngineContext = this;
-	m_hWnd = _hwnd;
-	m_HDC = GetDC(m_hWnd);
-	m_hRC = CreateRCContxt(m_HDC);
-	if (!m_hRC)
-		return false;
+	EntityCommon _MainEntity = m_Supervisor.m_entities.create();
 
-	result = MagicScenes::Initialize(0, glm::vec4(_x, _y, _w, _h));
-	if (!result)
-		return false;
+	M_EntityThreads.insert(std::make_pair("MainThreads", _MainEntity));
+	S_T_pEntityCommon = &(M_EntityThreads["MainThreads"]);
 
-	m_BackColor.R = 0.0f; m_BackColor.G = 0.0f; m_BackColor.B = 0.0f;
-	glClearColor(m_BackColor.R, m_BackColor.B, m_BackColor.G, m_BackColor.A);
+	EntityX::EntityX* _Supervisor = &_MainEntity.assign<Magic::System::ObjectSupervisor>()->m_Supervisor;
 
-	GLenum err = glewInit();
-	if (GLEW_OK != err)
-	{
-		fprintf(stderr, "Error:'%s'\n", glewGetErrorString(err));
-		return false;
-	}
+	_Supervisor->m_systems.add<Magic::System::ObjectUpdataSystem>();
+	_Supervisor->m_systems.add<Magic::System::ObjectRenderSystem>();
+	_Supervisor->m_systems.configure();
 
-	//启用背面剔除
-	glEnable(GL_CULL_FACE);
+	_MainEntity.assign<Magic::System::UpdataComponent>((Magic::System::Call_Entity)0);
 
-	result = m_Pen_Normal.Initialize();
-	if (!result)
-		return false;*/
-
-	Magic::System::Supervisor _Supervisor;
-
-	result = _Supervisor.Initialize(_hwnd, _x, _y, _w, _h);
-	if (!m_hRC)
-		return false;
 
 	return true;
 }
@@ -320,12 +398,17 @@ void MagicEngineContext::Shutdown()
 {
 	for (std::map<std::string, MagicTexture*>::iterator i = Map_Texture.begin(); i != Map_Texture.end(); i++)
 		delete i->second;
+
+	for (auto i : M_SceneCommonBox)
+	{
+		if (i.second.AutoRelease)
+			delete i.second.pSceneCommon;
+	}
 }
 
 void MagicEngineContext::Render(void)
 {
-	this->Updata();
-	MagicScenes::Render(glm::vec2());
+	UpdataThread();
 }
 
 
@@ -359,6 +442,80 @@ MagicTexture* MagicEngineContext::LoadTextrue(const unsigned char* Data, int _wi
 	return pTextrue;
 }
 
+bool MagicEngineContext::CreateEntityThreads(const char* _name)
+{
+	EntityCommon _EntityCommon = m_Supervisor.m_entities.create();
+
+	M_EntityThreads.insert(std::make_pair(_name, _EntityCommon));
+
+	EntityX::EntityX* _Supervisor = &_EntityCommon.assign<Magic::System::ObjectSupervisor>()->m_Supervisor;
+
+	_Supervisor->m_systems.add<Magic::System::ObjectUpdataSystem>();
+	_Supervisor->m_systems.add<Magic::System::ObjectRenderSystem>();
+	_Supervisor->m_systems.configure();
+
+	EntityX::ComponentHandle<Magic::System::ThreadsComponent> _ThreadsComponent = _EntityCommon.assign<Magic::System::ThreadsComponent>();
+	_EntityCommon.assign<Magic::System::UpdataComponent>((Magic::System::Call_Entity)0);
+
+
+	HANDLE _Threads = (HANDLE)CreateThread(NULL, 0, UpdataThread, (LPVOID)(&M_EntityThreads[_name]), 0, NULL);
+	_ThreadsComponent->m_Threads = _Threads;
+	_ThreadsComponent->m_RunState = true;
+	ResumeThread(_Threads);
+
+	return true;
+}
+
+bool MagicEngineContext::CreateOpenglRender(HWND _hwnd, EntityCommon _EntityCommon)
+{
+	if (!_EntityCommon.valid())
+	{
+		Magic::SetEngineErrorMessage("1.Invalid module\n");
+		return false;
+	}
+	else if (_EntityCommon.has_component<Magic::System::RenderThreadsComponent>())
+	{
+		Magic::SetEngineErrorMessage("1.RenderThreadsComponent already exists\n");
+		return false;
+	}
+	else
+	{
+		Magic::System::RenderThreadsComponent* _pRenderThreadsComponent = _EntityCommon.assign<Magic::System::RenderThreadsComponent>().operator->();
+
+		_pRenderThreadsComponent->m_hWnd = _hwnd;
+		_pRenderThreadsComponent->m_HDC = GetDC(_pRenderThreadsComponent->m_hWnd);
+		_pRenderThreadsComponent->m_hRC = Magic::CreateRCContxt(_pRenderThreadsComponent->m_HDC);
+		if (!_pRenderThreadsComponent->m_hRC)
+			return false;
+
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+
+		GLenum err = glewInit();
+		if (GLEW_OK != err)
+		{
+			fprintf(stderr, "Error:'%s'\n", glewGetErrorString(err));
+			return false;
+		}
+
+		//启用背面剔除
+		glEnable(GL_CULL_FACE);
+
+		bool result = _pRenderThreadsComponent->m_Pen_Normal.Initialize();
+		if (!result)
+			return false;
+
+		RECT _Rect;
+		GetClientRect(_hwnd, &_Rect);
+
+		::EntityX::ComponentHandle<Magic::System::PosSizeComponent> _PosSizeComponent =
+			_EntityCommon.assign<Magic::System::PosSizeComponent>(glm::vec2(0.0f, 0.0f), glm::vec2(_Rect.right, _Rect.bottom));
+		_EntityCommon.assign<Magic::System::RenderComponent>(EntityCommon(), Magic::EngineRenderStart,
+			(Magic::System::Call_Entity)0, Magic::EngineRenderEnd);
+
+		return true;
+	}
+}
+
 void MagicEngineContext::DeleteTextrue(const char* _name)
 {
 	auto _auto = Map_Texture.find(_name);
@@ -371,67 +528,63 @@ void MagicEngineContext::DeleteTextrue(const char* _name)
 	return;
 }
 
-void MagicEngineContext::SetBackColor(float r, float g, float b, float a)
+bool MagicEngineContext::AddSceneCommon(Magic::SceneCommon* _pSceneCommon, bool _AutoRelease)
 {
-	m_BackColor.R = r;
-	m_BackColor.G = g;
-	m_BackColor.B = b;
-	m_BackColor.A = a;
-	glClearColor(r, g, b, a);
-}
-
-void MagicEngineContext::ResetDrawRECT(float _x, float _y, float _w, float _h)
-{
-	MagicScenes::ResetDrawRECT(_x, _y, _w, _h);
-	glViewport((int)_x, (int)_y, (int)_w, (int)_h); //设置视频口
-}
-
-bool MagicEngineContext::AddPen_Common(const char* _name, Magic::Pen_Common* _common)
-{
-	auto _auto = Map_Pen_Common.insert(std::map<std::string, Magic::Pen_Common*>::value_type(_name, _common));
-	if (_auto.second)
+	auto _Common = M_SceneCommonBox.find(_pSceneCommon->GetName());
+	if (_Common == M_SceneCommonBox.end())
+	{
+		M_SceneCommonBox.insert(std::make_pair(_pSceneCommon->GetName(), SceneCommonBox(_pSceneCommon, _AutoRelease)));
 		return true;
+	}
 	else
+	{
+		Magic::SetEngineErrorMessage("1.A scene with the same name already exists\n");
 		return false;
+	}
 }
 
-void MagicEngineContext::AddDrawMessageNumber(unsigned int _number)
+bool MagicEngineContext::DeleteSceneCommon(const char* _name)
 {
-	m_DrawMessageNumber += _number;
+	auto _Common = M_SceneCommonBox.find(_name);
+	if (_Common != M_SceneCommonBox.end())
+	{
+		if (_Common->second.AutoRelease)
+			delete _Common->second.pSceneCommon;
+		M_SceneCommonBox.erase(_Common);
+
+		return true;
+	}
+	else
+	{
+		Magic::SetEngineErrorMessage("1.No scene name\n");
+		return false;
+	}
 }
 
-const unsigned char* MagicEngineContext::GetRenderer()
+EntityCommon MagicEngineContext::GetEntityThreads(const char* _name)
 {
-	return glGetString(GL_RENDERER);
+	auto _auto = M_EntityThreads.find(_name);
+	if (_auto != M_EntityThreads.end())
+		return _auto->second;
+	else
+		return EntityCommon();
 }
 
-const unsigned char* MagicEngineContext::GetVendor()
+EntityCommon MagicEngineContext::GetEntityThreads()
 {
-	return glGetString(GL_VENDOR);
+	if (S_T_pEntityCommon)
+		return *S_T_pEntityCommon;
+	else
+		return EntityCommon();
 }
 
-const unsigned char* MagicEngineContext::GetVersion()
+Magic::SceneCommon* MagicEngineContext::GetSceneCommon(const char* _name)
 {
-	return glGetString(GL_VERSION);
-}
-
-const unsigned char* MagicEngineContext::GetGlSLVersion()
-{
-	return glGetString(GL_SHADING_LANGUAGE_VERSION);
-}
-
-int MagicEngineContext::Getmajor()
-{
-	GLint major;
-	glGetIntegerv(GL_MAJOR_VERSION, &major);
-	return major;
-}
-
-int MagicEngineContext::Getminor()
-{
-	GLint minor;
-	glGetIntegerv(GL_MINOR_VERSION, &minor);
-	return minor;
+	auto _auto = M_SceneCommonBox.find(_name);
+	if (_auto != M_SceneCommonBox.end())
+		return _auto->second.pSceneCommon;
+	else
+		return 0;
 }
 
 MagicTexture* MagicEngineContext::GetTextrue(const char* _name)
@@ -443,60 +596,48 @@ MagicTexture* MagicEngineContext::GetTextrue(const char* _name)
 		return 0;
 }
 
-Magic::Pen_Common* MagicEngineContext::GetPen(const char* _name)
+DWORD WINAPI MagicEngineContext::UpdataThread(LPVOID lpParameter)
 {
-	auto _auto = Map_Pen_Common.find(_name);
-	if (_auto != Map_Pen_Common.end())
-		return _auto->second;
-	else
-		return 0;
+	MagicEngineContext::S_T_pEntityCommon = (EntityCommon*)lpParameter;
+
+	pMagicEngineContext->UpdataThread();
+
+	return 0;
 }
 
-glm::vec2 MagicEngineContext::GetFrameBufferSize()
+void MagicEngineContext::UpdataThread()
 {
-	return glm::vec2(m_PosSize.z, m_PosSize.w);
-}
+	EntityCommon _EntityCommon = pMagicEngineContext->GetEntityThreads();
+	bool _RunState = false;
 
-void MagicEngineContext::OnUpdata()
-{
-	double time = clock();
-	diffTime = time - lastTime;
-	lastTime = clock();
-
-	SetFPS();
-}
-
-void MagicEngineContext::SetFPS()
-{
-	static int    frameCount = 0;//帧数
-	static float  currentTime = 0.0f;//当前时间
-	static float  lastTime = 0.0f;//持续时间
-
-	frameCount++;//每调用一次Get_FPS()函数，帧数自增1
-	currentTime = clock()*0.001f;//获取系统时间，其中timeGetTime函数返回的是以毫秒为单位的系统时间，所以需要乘以0.001，得到单位为秒的时间
-
-	//如果当前时间减去持续时间大于了1秒钟，就进行一次FPS的计算和持续时间的更新，并将帧数值清零
-	if (currentTime - lastTime > FPSTime) //将时间控制在1秒钟
+	do
 	{
-		FPS = (float)frameCount / (currentTime - lastTime);//计算这1秒钟的FPS值
-		lastTime = currentTime; //将当前时间currentTime赋给持续时间lastTime，作为下一秒的基准时间
-		frameCount = 0;//将本次帧数frameCount值清零
-	}
-}
+		EntityX::ComponentHandle<Magic::System::ObjectSupervisor> _ObjectSupervisor = _EntityCommon.GetComponent<Magic::System::ObjectSupervisor>();
+		EntityX::ComponentHandle<Magic::System::ThreadsComponent> _ThreadsComponent = _EntityCommon.GetComponent<Magic::System::ThreadsComponent>();
 
-void MagicEngineContext::RenderStart()
-{
-	m_DrawMessageNumber = 0;
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	m_Pen_Normal.RenderStart();
-	m_Pen_Normal.SetCameraMatrix(CONST_CAMERA);
-}
+		double _time = Magic::EngineUpdataTime(_EntityCommon);
+		Magic::EngineUpdataFPS(_EntityCommon);
 
-void MagicEngineContext::RenderEnd()
-{
-	glm::vec2 _WH = this->GetFrameBufferSize();
-	m_Pen_Normal.SetDrawWH(_WH.x, _WH.y);
-	m_Pen_Normal.RenderEnd();
+		_ObjectSupervisor->m_Supervisor.m_systems.Update<Magic::System::ObjectUpdataSystem>(_time);
 
-	SwapBuffers(m_HDC);
+		if (_EntityCommon.has_component<Magic::System::RenderComponent>())
+		{
+			EntityX::ComponentHandle<Magic::System::RenderComponent> _RenderComponent = _EntityCommon.GetComponent<Magic::System::RenderComponent>();
+			if (_RenderComponent->m_Call_RenderStart)
+				_RenderComponent->m_Call_RenderStart(_EntityCommon);
+			if (_RenderComponent->m_Call_Render)
+				_RenderComponent->m_Call_Render(_EntityCommon);
+		}
+
+		_ObjectSupervisor->m_Supervisor.m_systems.Update<Magic::System::ObjectRenderSystem>(_time);
+
+		if (_EntityCommon.has_component<Magic::System::RenderComponent>())
+		{
+			EntityX::ComponentHandle<Magic::System::RenderComponent> _RenderComponent = _EntityCommon.GetComponent<Magic::System::RenderComponent>();
+			if (_RenderComponent->m_Call_RenderEnd)
+				_RenderComponent->m_Call_RenderEnd(_EntityCommon);
+		}
+
+		_RunState = _ThreadsComponent->m_RunState;
+	} while (_RunState);
 }

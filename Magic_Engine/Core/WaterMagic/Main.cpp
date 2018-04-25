@@ -14,7 +14,8 @@ int CALLBACK _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevainstance, LPWSTR lpc
 
 	MainScene* pMainScene = new MainScene;
 
-	_result = pMainScene->Initialize(Magic::GetSystemScenes(Magic::USER_SCENES), glm::vec4(0, 0, 1024, 768));
+	EntityCommon _EntityCommon;
+	_result = Magic::CreateScene(Magic::GetSceneCommon("UserScene"), &_EntityCommon);
 	if (!_result)
 		return false;
 

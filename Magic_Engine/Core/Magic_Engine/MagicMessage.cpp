@@ -38,6 +38,7 @@ namespace Magic
 
 	int MessageScenes::MessageHandle(uint32_t _MessageType, uint64_t _Message)
 	{
+/*
 		MagicScenes* _pMagicScene = dynamic_cast<MagicScenes*>(this);
 		if (_pMagicScene && _pMagicScene->GetDisplayState())
 		{
@@ -76,7 +77,7 @@ namespace Magic
 			else
 				return MAGIC_MESSAGE_RETURN_OK;
 		}
-		else
+		else*/
 			return MAGIC_MESSAGE_RETURN_OK;
 	}
 }

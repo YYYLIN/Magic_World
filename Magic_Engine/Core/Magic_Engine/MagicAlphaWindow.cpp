@@ -1,4 +1,4 @@
-#include "MagicAlphaWindow.h"
+#include "Include/MagicAlphaWindow.h"
 
 
 bool EnableAlphaWindow(HWND m_hWnd, int WinWidth, int WinHeight, SGDI* g_GDI)

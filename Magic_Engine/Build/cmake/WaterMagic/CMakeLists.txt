@@ -1,6 +1,8 @@
 include_directories(
 ../../../Plugins/glm
+../../../Plugins/EntityX
 ../../../Core/Magic_Engine/Include
+../../../Core/Magic_Engine/
 ../../../Core/MagicUI/Include
 ../../../Core/WaterMagic
 ../../../Plugins/Structure)

@@ -5,13 +5,18 @@ namespace Magic
 	namespace UI
 	{
 
-		MenuScene::MenuScene()
+		MenuScene::MenuScene():SceneCommon("MenuScene")
 		{
 		}
 
 
 		MenuScene::~MenuScene()
 		{
+		}
+
+		bool MenuScene::OnInitialize()
+		{
+			return true;
 		}
 	}
 }

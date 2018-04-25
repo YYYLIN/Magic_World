@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <cstddef>
+#include "Include/Magic_Macro.h"
 
 namespace EntityX 
 {

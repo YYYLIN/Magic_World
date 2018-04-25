@@ -1,6 +1,7 @@
 include_directories(
 ../../../Plugins/glm
-../../../Core/Magic_Engine/Include
+../../../Plugins/EntityX
+../../../Core/Magic_Engine/
 ../../../Core/MagicUI/Include
 ../../../Core/MagicUI)
 

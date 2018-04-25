@@ -5,7 +5,7 @@ namespace Magic
 	namespace UI
 	{
 
-		DebugScene::DebugScene()
+		DebugScene::DebugScene():SceneCommon("DebugScene")
 		{
 		}
 
@@ -14,5 +14,9 @@ namespace Magic
 		{
 		}
 
+		bool DebugScene::OnInitialize()
+		{
+			return true;
+		}
 	}
 }

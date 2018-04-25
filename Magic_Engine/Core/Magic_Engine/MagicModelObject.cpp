@@ -1,4 +1,4 @@
-#include "MagicModelObject.h"
+#include "Include/MagicModelObject.h"
 
 #include <fstream>
 #include <iostream>

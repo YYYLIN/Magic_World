@@ -1,9 +1,9 @@
-#ifndef _MAGICENGINEAPI_H_
-#define _MAGICENGINEAPI_H_
+#ifndef _MAGIC_UI_API_H_
+#define _MAGIC_UI_API_H_
 
-
-#include "MagicEngineContext.h"
+#include "windows.h"
 #include "MagicUIMacro.h"
+
 
 namespace Magic
 {
@@ -14,8 +14,6 @@ namespace Magic
 	DLL_MAGICUI_OUTPUT_INPUT void RunSystem();
 
 	DLL_MAGICUI_OUTPUT_INPUT void RequestOuitSystem();
-
-	DLL_MAGICUI_OUTPUT_INPUT MagicScenes* GetSystemScenes(SYSTEMSCENES _SYSTEMSCENES);
 
 	DLL_MAGICUI_OUTPUT_INPUT void SetCallbackMessage_WIN32(CallbackMessage_WIN32 _CallbackMessage_WIN32);
 

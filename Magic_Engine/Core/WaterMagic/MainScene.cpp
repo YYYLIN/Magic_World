@@ -1,8 +1,8 @@
 #include "MainScene.h"
+#include "MagicEngineAPI.h"
 
 
-
-MainScene::MainScene()
+MainScene::MainScene():SceneCommon("MainScene")
 {
 	m_MagicRotate = 0.0f;
 }
@@ -34,17 +34,19 @@ bool MainScene::OnInitialize()
 
 void MainScene::OnUpdata()
 {
-	m_MagicRotate += (float)MagicEngineContext::pMagicEngineContext->GetDiffTime() * 0.01f;
+	m_MagicRotate += (float)Magic::GetThreadsDiffTime() * 0.01f;
 	if (m_MagicRotate >= 360.0f)
 		m_MagicRotate = 0.0f;
-	this->DrawSpirit();
 }
 
 void MainScene::Draw()
 {
 	glm::mat4 _worldMatrix;
 
-	Magic::Pen_Normal* pPen_Normal = MagicEngineContext::pMagicEngineContext->GetPen_Normal();
+	Magic::Pen_Normal* pPen_Normal = Magic::GetPen_Normal();
+
+	glm::vec2 _Size = Magic::GetSceneSize(this->GetEntity());
+
 	pPen_Normal->SetColor(Magic::Color4(1.0f, 0.0f, 0.0f, 1.0f));
 	pPen_Normal->DrawRectangle(Magic::Pen_Normal::TRIANGLES, 30, 30, 100, 100);
 
@@ -58,8 +60,8 @@ void MainScene::Draw()
 	pPen_Normal->EnableAlpha();
 	pPen_Normal->SetColor(Magic::Color4());
 	_worldMatrix = glm::rotate(m_MagicRotate, glm::vec3(0.0f, 0.0f, 1.0f));
-	_worldMatrix[3].x = m_PosSize.z * 0.5f;
-	_worldMatrix[3].y = m_PosSize.w * 0.5f;
+	_worldMatrix[3].x = _Size.x * 0.5f;
+	_worldMatrix[3].y = _Size.y * 0.5f;
 	pPen_Normal->SetWorldMatrix(_worldMatrix);
 	pPen_Normal->BindPicture(&pMagicTexture);
 	float _w = pMagicTexture.GetWidth() * 0.2f;
@@ -67,8 +69,8 @@ void MainScene::Draw()
 	pPen_Normal->DrawPicture(-_w * 0.5f, -_h * 0.5f, _w, _h);
 
 	pPen_Normal->SetColor(Magic::Color4(0.0f, 0.0f, 1.0f, 1.0f));
-	_worldMatrix[3].x = m_PosSize.z * 0.5f - 100.0f;
-	_worldMatrix[3].y = m_PosSize.w * 0.5f - 100.0f;
+	_worldMatrix[3].x = _Size.x * 0.5f - 100.0f;
+	_worldMatrix[3].y = _Size.y * 0.5f - 100.0f;
 	pPen_Normal->SetWorldMatrix(_worldMatrix);
 	pPen_Normal->RepeatDraw();
 
@@ -92,13 +94,13 @@ void MainScene::Draw()
 		{1.0f,0.0f,1.0f,1.0f},
 		{1.0f,1.0f,0.0f,1.0f}
 	};
-	_worldMatrix[3].x = m_PosSize.z * 0.5f - 50.0f;
-	_worldMatrix[3].y = m_PosSize.w * 0.5f - 50.0f;
+	_worldMatrix[3].x = _Size.x * 0.5f - 50.0f;
+	_worldMatrix[3].y = _Size.y * 0.5f - 50.0f;
 	pPen_Normal->SetWorldMatrix(_worldMatrix);
 	pPen_Normal->DrawVertex(Magic::Pen_Normal::TRIANGLES, _S_Vertex, _S_Color, 3);
 
-	_worldMatrix[3].x = m_PosSize.z * 0.5f;
-	_worldMatrix[3].y = m_PosSize.w * 0.5f;
+	_worldMatrix[3].x = _Size.x * 0.5f;
+	_worldMatrix[3].y = _Size.y * 0.5f;
 	pPen_Normal->SetWorldMatrix(_worldMatrix);
 	pPen_Normal->RepeatDraw();
 

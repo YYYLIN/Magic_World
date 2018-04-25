@@ -1,59 +1,55 @@
 #include "MagicUIAPI.h"
 #include "MagicWindows.h"
-
+#include "Include/MagicEngineAPI.h"
 
 namespace Magic
 {
 	bool CreateSystemUI(const wchar_t* _name, int _x, int _y, int _w, int _h)
 	{
-		if (MagicWindows::pMagicWindows)
+		if (MagicWindows::Instance())
+		{
+			SetEngineErrorMessage("ÒÑ´´½¨\n");
 			return false;
-		MagicWindows::pMagicWindows = new MagicWindows;
+		}
 
-		return MagicWindows::pMagicWindows->Initialize(_name, _x, _y, _w, _h);
+		new MagicWindows;
+
+		return MagicWindows::Instance()->Initialize(_name, _x, _y, _w, _h);
 	}
 
 	void ShutdownSystemUI()
 	{
-		if (MagicWindows::pMagicWindows)
-		{
-			delete MagicWindows::pMagicWindows;
-			MagicWindows::pMagicWindows = 0;
-		}
+		if (MagicWindows::Instance())
+			delete MagicWindows::Instance();
 	}
 
 	void RunSystem()
 	{
-		MagicWindows::pMagicWindows->Run();
+		MagicWindows::Instance()->Run();
 	}
 
 	void RequestOuitSystem()
 	{
-		MagicWindows::pMagicWindows->RequestOuitSystem();
-	}
-
-	MagicScenes* GetSystemScenes(SYSTEMSCENES _SYSTEMSCENES)
-	{
-		return MagicWindows::pMagicWindows->GetSystemScenes(_SYSTEMSCENES);
+		MagicWindows::Instance()->RequestOuitSystem();
 	}
 
 	void SetCallbackMessage_WIN32(CallbackMessage_WIN32 _CallbackMessage_WIN32)
 	{
-		MagicWindows::pMagicWindows->SetCallbackMessage_WIN32(_CallbackMessage_WIN32);
+		MagicWindows::Instance()->SetCallbackMessage_WIN32(_CallbackMessage_WIN32);
 	}
 
 	void SetWindowICO(HICON _ico)
 	{
-		::SendMessage(MagicWindows::pMagicWindows->GetHWND(),WM_SETICON,TRUE,(LPARAM)(_ico));
+		::SendMessage(MagicWindows::Instance()->GetHWND(), WM_SETICON, TRUE, (LPARAM)(_ico));
 	}
 
 	HWND GetWindowHWND()
 	{
-		return MagicWindows::pMagicWindows->GetHWND();
+		return MagicWindows::Instance()->GetHWND();
 	}
 
 	HINSTANCE GetWindowHINSTANCE()
 	{
-		return MagicWindows::pMagicWindows->GetHINSTANCE();
+		return MagicWindows::Instance()->GetHINSTANCE();
 	}
 }

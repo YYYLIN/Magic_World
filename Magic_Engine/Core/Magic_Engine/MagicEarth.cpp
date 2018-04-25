@@ -1,5 +1,5 @@
 #include "MagicEarth.h"
-#include "MagicMath.h"
+#include "Include/MagicMath.h"
 #include "Physical/Collision.h"
 
 TERRAIN_VEXTER::TERRAIN_VEXTER()

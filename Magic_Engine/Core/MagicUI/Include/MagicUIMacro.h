@@ -15,14 +15,6 @@
 
 namespace Magic
 {
-	enum SYSTEMSCENES
-	{
-		USER_SCENES = 0,
-		MENU_SCENES,
-		DEBUG_SCENES,
-		SYSTEM_SCENES
-	};
-
 	typedef void(*CallbackMessage_WIN32)(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam);
 }
 

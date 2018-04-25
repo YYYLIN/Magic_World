@@ -6,7 +6,6 @@ include_directories(
 ../../../Plugins/glew-1.9.0/include
 ../../../Plugins/freetype-2.6/include
 ../../../Plugins/EntityX
-../../../Core/Magic_Engine/Include
 ../../../Core/Magic_Engine)
 
 link_directories(
@@ -51,7 +50,9 @@ ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/MagicTexture.cpp
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/MagicVertex.cpp
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/MagicWorld.cpp
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/MagicEarth.cpp
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/MagicEarth.h)
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/MagicEarth.h
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/MagicScene.cpp
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/MagicScene.h)
 
 set(MAGIC_SYSTEM_FILES
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/System/Supervisor.cpp
@@ -80,11 +81,15 @@ ${PROJECT_SOURCE_DIR}../../../Plugins/EntityX/help/Pool.h
 ${PROJECT_SOURCE_DIR}../../../Plugins/EntityX/help/Pool.cc
 ${PROJECT_SOURCE_DIR}../../../Plugins/EntityX/help/NonCopyable.h)
 
+set(MAGIC_DEFINE_FILES
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Define/MagicType.h)
+
 IF(WIN32)
 	SOURCE_GROUP("Engine" FILES ${MAGIC_ENGINE_FILES})
 	SOURCE_GROUP("Math" FILES ${MAGIC_MATH_FILES})
 	SOURCE_GROUP("Engine\\System" FILES ${MAGIC_SYSTEM_FILES})
 	SOURCE_GROUP("Engine\\Physical" FILES ${MAGIC_PHYSICAL_FILES})
+	SOURCE_GROUP("Engine\\Define" FILES ${MAGIC_DEFINE_FILES})
 	SOURCE_GROUP("3rdparty\\Entityx" FILES ${3RDPARTY_ENTITYX_FILES})
 	SOURCE_GROUP("3rdparty\\Entityx\\help" FILES ${3RDPARTY_ENTITYX_HELP_FILES})
 ENDIF(WIN32)
@@ -108,6 +113,7 @@ ${MAGIC_MATH_FILES}
 ${MAGIC_ENGINE_FILES}
 ${MAGIC_SYSTEM_FILES}
 ${MAGIC_PHYSICAL_FILES}
+${MAGIC_DEFINE_FILES}
 ${3RDPARTY_ENTITYX_FILES}
 ${3RDPARTY_ENTITYX_HELP_FILES})
 

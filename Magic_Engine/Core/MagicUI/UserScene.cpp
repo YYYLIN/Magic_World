@@ -5,13 +5,18 @@ namespace Magic
 {
 	namespace UI
 	{
-		UserScene::UserScene()
+		UserScene::UserScene():SceneCommon("UserScene")
 		{
 		}
 
 
 		UserScene::~UserScene()
 		{
+		}
+
+		bool UserScene::OnInitialize()
+		{
+			return true;
 		}
 	}
 }

@@ -4,7 +4,7 @@
 #include <vector>
 #include "glm.hpp"
 #include "MagicFrustum.h"
-#include "MagicEngineContext.h"
+#include "Include/MagicEngineContext.h"
 
 struct TERRAIN_VEXTER
 {

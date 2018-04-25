@@ -10,6 +10,9 @@
 #include "MagicTexture.h"
 #include "MagicPen.h"
 #include "MagicMessage.h"
+#include "System/Supervisor.h"
+#include "Define/MagicType.h"
+#include "MagicScene.h"
 
 #pragma warning(push)
 #pragma warning(disable:4251)
@@ -42,6 +45,7 @@ public:
 
 	virtual void DrawSpirit() {}
 };
+/*
 
 class DLL_MAGIC_ENGINE_OUTPUT_INPUT MagicScenes :public MagicUICommon
 {
@@ -81,9 +85,9 @@ protected:
 	MagicScenes* pParentScene;
 
 	std::vector<MagicCommon*> v_Common;
-};
+};*/
 
-
+/*
 class DLL_MAGIC_ENGINE_OUTPUT_INPUT MagicScenesEx :public MagicScenes
 {
 public:
@@ -110,32 +114,16 @@ protected:
 	bool m_DrawMessage;
 
 	MagicFBOTexture m_FBOBuffer;
-};
-
-HGLRC CreateRCContxt(HDC _hdc);
-
-class DLL_MAGIC_ENGINE_OUTPUT_INPUT MagicEngineContext :public MagicScenes
+};*/
+namespace Magic
 {
-public:
-	MagicEngineContext();
-	~MagicEngineContext();
+	HGLRC CreateRCContxt(HDC _hdc);
 
-	bool Initialize(HWND _hwnd, float _x, float _y, float _w, float _h);
-	void Shutdown();
+	double EngineUpdataTime(EntityCommon _Entity);
+	void EngineUpdataFPS(EntityCommon _Entity);
 
-	void Render(void);
-
-	MagicTexture* LoadTextrue(const char* file_name, const char* _name, char format);
-	MagicTexture* LoadTextrue(const unsigned char* Data, int _width, int _height, const char* _name);
-	void DeleteTextrue(const char* _name);
-
-	void SetBackColor(float, float, float, float);
-
-	virtual void ResetDrawRECT(float _x, float _y, float _w, float _h);
-
-	bool AddPen_Common(const char* _name, Magic::Pen_Common* _common);
-
-	void AddDrawMessageNumber(unsigned int _number);
+	void EngineRenderStart(EntityCommon _Entity);
+	void EngineRenderEnd(EntityCommon _Entity);
 
 	//获得渲染器
 	const unsigned char* GetRenderer();
@@ -149,50 +137,65 @@ public:
 	int Getmajor();
 	//小版本号
 	int Getminor();
+}
+
+class MagicEngineContext
+{
+	struct SceneCommonBox
+	{
+		SceneCommonBox(Magic::SceneCommon* _pSceneCommon, bool _AutoRelease)
+			:pSceneCommon(_pSceneCommon), AutoRelease(_AutoRelease) {}
+
+		Magic::SceneCommon* pSceneCommon;
+		bool AutoRelease;
+	};
+public:
+	MagicEngineContext();
+	~MagicEngineContext();
+
+	static MagicEngineContext* Instance() { return pMagicEngineContext; }
+
+
+	bool Initialize();
+	void Shutdown();
+
+	void Render(void);
+
+	MagicTexture* LoadTextrue(const char* file_name, const char* _name, char format);
+	MagicTexture* LoadTextrue(const unsigned char* Data, int _width, int _height, const char* _name);
+
+	bool CreateEntityThreads(const char* _name);
+
+	bool CreateOpenglRender(HWND _hwnd, EntityCommon _EntityCommon);
+
+	void DeleteTextrue(const char* _name);
+
+	bool AddSceneCommon(Magic::SceneCommon* _pSceneCommon, bool _AutoRelease);
+	bool DeleteSceneCommon(const char* _name);
+
+	EntityX::EntityX* GetSupervisor() { return &m_Supervisor; }
+	EntityCommon GetEntityThreads(const char* _name);
+	EntityCommon GetEntityThreads();
+
+	Magic::SceneCommon* GetSceneCommon(const char* _name);
+
 	MagicTexture* GetTextrue(const char* _name);
 
-	Magic::Pen_Common* GetPen(const char* _name);
-
-	virtual glm::vec2 GetFrameBufferSize();
-
-	inline Magic::Pen_Normal* GetPen_Normal() { return &m_Pen_Normal; }
-
-	double GetDiffTime() { return diffTime; }
-
-protected:
-	void OnUpdata();
+private:
+	static DWORD WINAPI UpdataThread(LPVOID lpParameter);
+	void UpdataThread();
 
 private:
-	void SetFPS();
-	virtual void RenderStart();
-	virtual void RenderEnd();
-
-private:
-	Magic::Color4 m_BackColor;
-
-	float FPS, FPSTime;
-	double diffTime, lastTime;
-
-	std::map<std::string, Magic::Pen_Common*> Map_Pen_Common;
 	std::map<std::string, MagicTexture*> Map_Texture;
+	std::map<std::string, SceneCommonBox> M_SceneCommonBox;
+	std::map<std::string, EntityCommon> M_EntityThreads;
 
-	Magic::Pen_Normal m_Pen_Normal;
+	EntityX::EntityX m_Supervisor;
 
-	unsigned int m_DrawMessageNumber;
+	//线程局部静态变量
+	static __declspec(thread) EntityCommon* S_T_pEntityCommon;
 
-	//Windows
-	HGLRC m_hRC;
-	HDC m_HDC;
-	HWND m_hWnd;
-
-public:
 	static MagicEngineContext* pMagicEngineContext;
 };
-
-#ifdef _DEBUG 
-#define DEBUG_AddDrawMessageNumber(a)			MagicEngineContext::pMagicEngineContext->AddDrawMessageNumber(a) 
-#else
-#define DEBUG_AddDrawMessageNumber(a)
-#endif
 
 #pragma warning(pop)

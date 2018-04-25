@@ -2,7 +2,7 @@
 #define _DEBUGSCENE_H_
 
 
-#include "MagicEngineContext.h"
+#include "MagicScene.h"
 
 namespace Magic
 {
@@ -10,11 +10,13 @@ namespace Magic
 	{
 
 		class DebugScene :
-			public MagicScenes
+			public SceneCommon
 		{
 		public:
 			DebugScene();
 			~DebugScene();
+
+			virtual bool OnInitialize();
 		};
 	}
 }

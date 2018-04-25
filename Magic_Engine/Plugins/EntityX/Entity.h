@@ -34,6 +34,10 @@
 #include "config.h"
 #include "Event.h"
 #include "help/NonCopyable.h"
+#include "Include/Magic_Macro.h"
+
+#pragma warning(push)
+#pragma warning(disable:4251)
 
 namespace EntityX
 {
@@ -57,7 +61,7 @@ namespace EntityX
 	 *
 	 *     Entity entity = entity_manager->create();
 	 */
-	class Entity
+	class DLL_MAGIC_ENGINE_OUTPUT_INPUT Entity
 	{
 	public:
 		struct Id
@@ -1052,5 +1056,7 @@ namespace std
 
 
 #include "Entity.inl"
+
+#pragma warning(pop)
 
 #endif

@@ -5,13 +5,18 @@ namespace Magic
 	namespace UI
 	{
 
-		SystemScene::SystemScene()
+		SystemScene::SystemScene() :SceneCommon("SystemScene")
 		{
 		}
 
 
 		SystemScene::~SystemScene()
 		{
+		}
+
+		bool SystemScene::OnInitialize()
+		{
+			return true;
 		}
 	}
 }

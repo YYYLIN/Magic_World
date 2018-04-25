@@ -1,4 +1,4 @@
-#include "MagicTexture.h"
+#include "Include/MagicTexture.h"
 #include <wchar.h>
 #include <stdio.h>
 #include <gl/glew.h>
