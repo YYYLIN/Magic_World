@@ -23,11 +23,6 @@ namespace Magic
 			delete MagicWindows::Instance();
 	}
 
-	void RunSystem()
-	{
-		MagicWindows::Instance()->Run();
-	}
-
 	void RequestOuitSystem()
 	{
 		MagicWindows::Instance()->RequestOuitSystem();

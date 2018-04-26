@@ -60,6 +60,7 @@ bool MagicWindows::Initialize(const wchar_t* _name, int _x, int _y, int _w, int 
 	if (!result)
 		return false;
 	Magic::SetSceneSize(_pUserScene->GetEntity(), glm::vec2(_w, _h));
+	Magic::SetSceneCallUpdata(_pUserScene->GetEntity(), Updata);
 
 
 	Magic::UI::MenuScene* _pMenuScene = &m_MenuScene;
@@ -161,52 +162,32 @@ LRESULT CALLBACK MagicWindows::MessageHandler(HWND hwnd, UINT umsg, WPARAM wpara
 		m_CallbackMessage_WIN32(hwnd, umsg, wparam, lparam);
 }
 
-void MagicWindows::Run()     //过程处理函数
+void MagicWindows::Updata(EntityCommon _entity)     //过程处理函数
 {
 	MSG msg;
-	bool done;
-
 
 	// 初始化消息结构。
 	ZeroMemory(&msg, sizeof(MSG));
 
-	// 循环直到有从窗口或用户退出消息。
-	done = false;
-	while (!done)
+	// 处理Windows消息。
+	if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 	{
-		// 处理Windows消息。
-		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
-		{
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-		}
-
-		// 如果Windows信号端的应用然后退出。
-		if (msg.message == WM_QUIT)
-		{
-			done = true;
-		}
-		else
-		{
-
-
-			/*
-						glReadPixels(0, 0, m_SGDI.m_Width, m_SGDI.m_Height, GL_BGRA_EXT, GL_UNSIGNED_BYTE, m_SGDI.m_pBackBuffer);
-						glBindTexture(GL_TEXTURE_2D, m_MagicSceneCircle.GetTextrue());
-						glGetTexImage(GL_TEXTURE_2D, 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, m_SGDI.m_pBackBuffer);*/
-						/*
-									MG_Clear(MG_COLOR_BUFFER);
-
-									MGDrawArrays(MG_DrawPoints, 0, 3);
-
-									MG_WaitSwapFrame();
-
-									UpdataAlphaWindow(&m_SGDI);*/
-		}
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
 	}
 
-	return;
+	/*
+				glReadPixels(0, 0, m_SGDI.m_Width, m_SGDI.m_Height, GL_BGRA_EXT, GL_UNSIGNED_BYTE, m_SGDI.m_pBackBuffer);
+				glBindTexture(GL_TEXTURE_2D, m_MagicSceneCircle.GetTextrue());
+				glGetTexImage(GL_TEXTURE_2D, 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, m_SGDI.m_pBackBuffer);*/
+				/*
+							MG_Clear(MG_COLOR_BUFFER);
 
+							MGDrawArrays(MG_DrawPoints, 0, 3);
+
+							MG_WaitSwapFrame();
+
+							UpdataAlphaWindow(&m_SGDI);*/
 }
 
 void MagicWindows::SetCallbackMessage_WIN32(Magic::CallbackMessage_WIN32 _CallbackMessage_WIN32)

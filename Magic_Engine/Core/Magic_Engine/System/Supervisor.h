@@ -9,9 +9,6 @@ namespace Magic
 {
 	namespace System
 	{
-		typedef void(*Call_Entity)(EntityX::Entity _entity);
-		typedef bool(*Call_Entity_Bool)(EntityX::Entity _entity);
-
 		struct ObjectSupervisor : EntityX::Component<ObjectSupervisor>
 		{
 			ObjectSupervisor() = default;
@@ -44,7 +41,7 @@ namespace Magic
 
 		struct ThreadsComponent :EntityX::Component<ThreadsComponent>
 		{
-			explicit ThreadsComponent() :m_RunState(false), m_DiffTime(0.0), m_LastTime(0.0) {}
+			explicit ThreadsComponent() :m_RunState(false), m_DiffTime(0.0), m_LastTime(0.0), m_Threads(0) {}
 			HANDLE m_Threads;
 			double m_DiffTime, m_LastTime;
 			bool m_RunState;

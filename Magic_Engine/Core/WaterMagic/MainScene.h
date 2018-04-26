@@ -13,13 +13,15 @@ public:
 
 protected:
 	bool OnInitialize();
-	void OnUpdata();
-	void Draw();
+	static void OnUpdata(EntityCommon _Entity);
+	static void Draw(EntityCommon _Entity);
 
 private:
 	MagicTexture pMagicTexture;
 	Magic::Fonts m_Magic_Fonts;
 	float m_MagicRotate;
+
+	static MainScene* pMainScene;
 };
 
 

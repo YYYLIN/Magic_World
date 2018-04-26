@@ -1,6 +1,6 @@
 #include "MagicScene.h"
-#include "MagicEngineContext.h"
-#include "MagicEngineAPI.h"
+#include "Include/MagicEngineContext.h"
+#include "Include/MagicEngineAPI.h"
 
 namespace Magic
 {
@@ -69,10 +69,11 @@ namespace Magic
 	{
 		if (_ParentEntity.has_component<Magic::System::ObjectSupervisor>())
 		{
+			*_EntityCommon = _ParentEntity.GetComponent<Magic::System::ObjectSupervisor>()->m_Supervisor.m_entities.create();
+
 			EntityX::EntityX* _Supervisor = &((*_EntityCommon).assign<Magic::System::ObjectSupervisor>()->m_Supervisor);
 
-			*_EntityCommon = _Supervisor->m_entities.create();
-
+			(*_EntityCommon).assign<Magic::System::PosSizeComponent>(glm::vec2(0.0f, 0.0f), glm::vec2(0.0f, 0.0f));
 			(*_EntityCommon).assign<Magic::System::UpdataComponent>((Magic::System::Call_Entity)0);
 			(*_EntityCommon).assign<Magic::System::RenderComponent>(_ParentEntity, Magic::SceneRenderStart,
 				(Magic::System::Call_Entity)0, Magic::SceneRenderEnd);
@@ -105,6 +106,26 @@ namespace Magic
 	void SetSceneSize(EntityCommon _EntityCommon, const glm::vec2& _size)
 	{
 		_EntityCommon.GetComponent<Magic::System::PosSizeComponent>()->m_Size = _size;
+	}
+
+	void SetSceneCallUpdata(EntityCommon _EntityCommon, Magic::System::Call_Entity _call)
+	{
+		_EntityCommon.GetComponent<Magic::System::UpdataComponent>()->m_Call_Updata = _call;
+	}
+
+	void SetSceneCallRenderStart(EntityCommon _EntityCommon, Magic::System::Call_Entity _call)
+	{
+		_EntityCommon.GetComponent<Magic::System::RenderComponent>()->m_Call_RenderStart = _call;
+	}
+
+	void SetSceneCallRender(EntityCommon _EntityCommon, Magic::System::Call_Entity _call)
+	{
+		_EntityCommon.GetComponent<Magic::System::RenderComponent>()->m_Call_Render = _call;
+	}
+
+	void SetSceneCallRenderEnd(EntityCommon _EntityCommon, Magic::System::Call_Entity _call)
+	{
+		_EntityCommon.GetComponent<Magic::System::RenderComponent>()->m_Call_RenderEnd = _call;
 	}
 
 	Magic::SceneCommon* GetSceneCommon(const char* _name)

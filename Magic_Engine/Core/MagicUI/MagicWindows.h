@@ -35,7 +35,7 @@ public:
 
 	LRESULT CALLBACK MessageHandler(HWND, UINT, WPARAM, LPARAM);  //消息处理函数
 
-	void Run();
+	static void Updata(EntityCommon _entity);
 
 	inline HWND GetHWND(){ return m_hwnd; }
 	inline HINSTANCE GetHINSTANCE(){ return m_hinstance; }

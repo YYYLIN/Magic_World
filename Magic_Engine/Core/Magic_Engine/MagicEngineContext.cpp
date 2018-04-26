@@ -372,18 +372,14 @@ MagicEngineContext::~MagicEngineContext()
 
 bool MagicEngineContext::Initialize()
 {
-	/*
-		m_Supervisor.m_systems.add<Magic::System::ObjectUpdataSystem>();
-		m_Supervisor.m_systems.add<Magic::System::ObjectRenderSystem>();
-		m_Supervisor.m_systems.add<Magic::System::TimeUpdataSystem>();
-		m_Supervisor.m_systems.configure();*/
-
 	EntityCommon _MainEntity = m_Supervisor.m_entities.create();
 
 	M_EntityThreads.insert(std::make_pair("MainThreads", _MainEntity));
 	S_T_pEntityCommon = &(M_EntityThreads["MainThreads"]);
 
 	EntityX::EntityX* _Supervisor = &_MainEntity.assign<Magic::System::ObjectSupervisor>()->m_Supervisor;
+	EntityX::ComponentHandle<Magic::System::ThreadsComponent> _ThreadsComponent = _MainEntity.assign<Magic::System::ThreadsComponent>();
+	_ThreadsComponent->m_RunState = true;
 
 	_Supervisor->m_systems.add<Magic::System::ObjectUpdataSystem>();
 	_Supervisor->m_systems.add<Magic::System::ObjectRenderSystem>();

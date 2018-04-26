@@ -1,10 +1,12 @@
 #include "MainScene.h"
 #include "MagicEngineAPI.h"
 
+MainScene* MainScene::pMainScene = 0;
 
-MainScene::MainScene():SceneCommon("MainScene")
+MainScene::MainScene() :SceneCommon("MainScene")
 {
 	m_MagicRotate = 0.0f;
+	pMainScene = this;
 }
 
 
@@ -21,7 +23,7 @@ bool MainScene::OnInitialize()
 	_result = m_Magic_Fonts.Initialize("resources/fonts/Fonts1.maigcfonts");
 	if (!_result)
 		return false;
-
+	Magic::SetSceneSize(this->GetEntity(), glm::vec2(1024.0f, 768.0f));
 
 	/*
 		int _w = (int)m_PosSize.z, _h = (int)m_PosSize.w;
@@ -29,23 +31,26 @@ bool MainScene::OnInitialize()
 		if (!_result)
 			return false;*/
 
+	Magic::SetSceneCallUpdata(this->GetEntity(), OnUpdata);
+	Magic::SetSceneCallRender(this->GetEntity(), Draw);
+
 	return true;
 }
 
-void MainScene::OnUpdata()
+void MainScene::OnUpdata(EntityCommon _Entity)
 {
-	m_MagicRotate += (float)Magic::GetThreadsDiffTime() * 0.01f;
-	if (m_MagicRotate >= 360.0f)
-		m_MagicRotate = 0.0f;
+	pMainScene->m_MagicRotate += (float)Magic::GetThreadsDiffTime() * 0.01f;
+	if (pMainScene->m_MagicRotate >= 360.0f)
+		pMainScene->m_MagicRotate = 0.0f;
 }
 
-void MainScene::Draw()
+void MainScene::Draw(EntityCommon _Entity)
 {
 	glm::mat4 _worldMatrix;
 
 	Magic::Pen_Normal* pPen_Normal = Magic::GetPen_Normal();
 
-	glm::vec2 _Size = Magic::GetSceneSize(this->GetEntity());
+	glm::vec2 _Size = Magic::GetSceneSize(_Entity);
 
 	pPen_Normal->SetColor(Magic::Color4(1.0f, 0.0f, 0.0f, 1.0f));
 	pPen_Normal->DrawRectangle(Magic::Pen_Normal::TRIANGLES, 30, 30, 100, 100);
@@ -59,13 +64,13 @@ void MainScene::Draw()
 
 	pPen_Normal->EnableAlpha();
 	pPen_Normal->SetColor(Magic::Color4());
-	_worldMatrix = glm::rotate(m_MagicRotate, glm::vec3(0.0f, 0.0f, 1.0f));
+	_worldMatrix = glm::rotate(pMainScene->m_MagicRotate, glm::vec3(0.0f, 0.0f, 1.0f));
 	_worldMatrix[3].x = _Size.x * 0.5f;
 	_worldMatrix[3].y = _Size.y * 0.5f;
 	pPen_Normal->SetWorldMatrix(_worldMatrix);
-	pPen_Normal->BindPicture(&pMagicTexture);
-	float _w = pMagicTexture.GetWidth() * 0.2f;
-	float _h = pMagicTexture.GetHeight() * 0.2f;
+	pPen_Normal->BindPicture(&pMainScene->pMagicTexture);
+	float _w = pMainScene->pMagicTexture.GetWidth() * 0.2f;
+	float _h = pMainScene->pMagicTexture.GetHeight() * 0.2f;
 	pPen_Normal->DrawPicture(-_w * 0.5f, -_h * 0.5f, _w, _h);
 
 	pPen_Normal->SetColor(Magic::Color4(0.0f, 0.0f, 1.0f, 1.0f));
@@ -105,6 +110,6 @@ void MainScene::Draw()
 	pPen_Normal->RepeatDraw();
 
 	pPen_Normal->ResetWorldMatrix();
-	pPen_Normal->BindFonts(&m_Magic_Fonts);
+	pPen_Normal->BindFonts(&pMainScene->m_Magic_Fonts);
 	pPen_Normal->DrawTEXT(0, 200, L"FFFÄ§·¨ÐÇÔÂ£ºÐÇÉ« ¿Õ2333FFFF", 16);
 }
