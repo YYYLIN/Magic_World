@@ -438,7 +438,7 @@ MagicTexture* MagicEngineContext::LoadTextrue(const unsigned char* Data, int _wi
 	return pTextrue;
 }
 
-bool MagicEngineContext::CreateEntityThreads(const char* _name)
+bool MagicEngineContext::CreateThreadsResourceManager(const char* _name)
 {
 	EntityCommon _EntityCommon = m_Supervisor.m_entities.create();
 
@@ -462,21 +462,21 @@ bool MagicEngineContext::CreateEntityThreads(const char* _name)
 	return true;
 }
 
-bool MagicEngineContext::CreateOpenglRender(HWND _hwnd, EntityCommon _EntityCommon)
+bool MagicEngineContext::CreateOpenglRender(HWND _hwnd, EntityCommon _ThreadResourceManager)
 {
-	if (!_EntityCommon.valid())
+	if (!_ThreadResourceManager.valid())
 	{
 		Magic::SetEngineErrorMessage("1.Invalid module\n");
 		return false;
 	}
-	else if (_EntityCommon.has_component<Magic::System::RenderThreadsComponent>())
+	else if (_ThreadResourceManager.has_component<Magic::System::RenderThreadsComponent>())
 	{
 		Magic::SetEngineErrorMessage("1.RenderThreadsComponent already exists\n");
 		return false;
 	}
 	else
 	{
-		Magic::System::RenderThreadsComponent* _pRenderThreadsComponent = _EntityCommon.assign<Magic::System::RenderThreadsComponent>().operator->();
+		Magic::System::RenderThreadsComponent* _pRenderThreadsComponent = _ThreadResourceManager.assign<Magic::System::RenderThreadsComponent>().operator->();
 
 		_pRenderThreadsComponent->m_hWnd = _hwnd;
 		_pRenderThreadsComponent->m_HDC = GetDC(_pRenderThreadsComponent->m_hWnd);
@@ -504,8 +504,8 @@ bool MagicEngineContext::CreateOpenglRender(HWND _hwnd, EntityCommon _EntityComm
 		GetClientRect(_hwnd, &_Rect);
 
 		::EntityX::ComponentHandle<Magic::System::PosSizeComponent> _PosSizeComponent =
-			_EntityCommon.assign<Magic::System::PosSizeComponent>(glm::vec2(0.0f, 0.0f), glm::vec2(_Rect.right, _Rect.bottom));
-		_EntityCommon.assign<Magic::System::RenderComponent>(EntityCommon(), Magic::EngineRenderStart,
+			_ThreadResourceManager.assign<Magic::System::PosSizeComponent>(glm::vec2(0.0f, 0.0f), glm::vec2(_Rect.right, _Rect.bottom));
+		_ThreadResourceManager.assign<Magic::System::RenderComponent>(EntityCommon(), Magic::EngineRenderStart,
 			(Magic::System::Call_Entity)0, Magic::EngineRenderEnd);
 
 		return true;
@@ -557,7 +557,7 @@ bool MagicEngineContext::DeleteSceneCommon(const char* _name)
 	}
 }
 
-EntityCommon MagicEngineContext::GetEntityThreads(const char* _name)
+EntityCommon MagicEngineContext::GetThreadsResourceManager(const char* _name)
 {
 	auto _auto = M_EntityThreads.find(_name);
 	if (_auto != M_EntityThreads.end())
@@ -566,7 +566,7 @@ EntityCommon MagicEngineContext::GetEntityThreads(const char* _name)
 		return EntityCommon();
 }
 
-EntityCommon MagicEngineContext::GetEntityThreads()
+EntityCommon MagicEngineContext::GetThreadsResourceManager()
 {
 	if (S_T_pEntityCommon)
 		return *S_T_pEntityCommon;
@@ -603,7 +603,7 @@ DWORD WINAPI MagicEngineContext::UpdataThread(LPVOID lpParameter)
 
 void MagicEngineContext::UpdataThread()
 {
-	EntityCommon _EntityCommon = pMagicEngineContext->GetEntityThreads();
+	EntityCommon _EntityCommon = pMagicEngineContext->GetThreadsResourceManager();
 	bool _RunState = false;
 
 	do

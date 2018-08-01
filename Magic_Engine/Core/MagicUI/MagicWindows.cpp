@@ -45,7 +45,7 @@ bool MagicWindows::Initialize(const wchar_t* _name, int _x, int _y, int _w, int 
 	if (!result)
 		return false;
 
-	result = Magic::CreateOpenglRender(m_hwnd, Magic::GetEntityThreads());
+	result = Magic::CreateOpenglRender(m_hwnd, Magic::GetThreadsResourceManager());
 	if (!result)
 		return false;
 
@@ -56,7 +56,7 @@ bool MagicWindows::Initialize(const wchar_t* _name, int _x, int _y, int _w, int 
 
 	Magic::UI::UserScene* _pUserScene = &m_UserScene;
 
-	result = Magic::CreateScene(Magic::GetEntityThreads(), &_pUserScene);
+	result = Magic::CreateScene(Magic::GetThreadsResourceManager(), &_pUserScene);
 	if (!result)
 		return false;
 	Magic::SetSceneSize(_pUserScene->GetEntity(), glm::vec2(_w, _h));
@@ -64,19 +64,19 @@ bool MagicWindows::Initialize(const wchar_t* _name, int _x, int _y, int _w, int 
 
 
 	Magic::UI::MenuScene* _pMenuScene = &m_MenuScene;
-	result = Magic::CreateScene(Magic::GetEntityThreads(), &_pMenuScene);
+	result = Magic::CreateScene(Magic::GetThreadsResourceManager(), &_pMenuScene);
 	if (!result)
 		return false;
 	Magic::SetSceneSize(_pMenuScene->GetEntity(), glm::vec2(_w, _h));
 
 	Magic::UI::DebugScene* _pDebugScene = &m_DebugScene;
-	result = Magic::CreateScene(Magic::GetEntityThreads(), &_pDebugScene);
+	result = Magic::CreateScene(Magic::GetThreadsResourceManager(), &_pDebugScene);
 	if (!result)
 		return false;
 	Magic::SetSceneSize(_pDebugScene->GetEntity(), glm::vec2(_w, _h));
 
 	Magic::UI::SystemScene* _pSystemScene = &m_SystemScene;
-	result = Magic::CreateScene(Magic::GetEntityThreads(), &_pSystemScene);
+	result = Magic::CreateScene(Magic::GetThreadsResourceManager(), &_pSystemScene);
 	if (!result)
 		return false;
 	Magic::SetSceneSize(_pSystemScene->GetEntity(), glm::vec2(_w, _h));

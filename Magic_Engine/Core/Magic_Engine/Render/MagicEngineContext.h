@@ -164,7 +164,7 @@ public:
 	MagicTexture* LoadTextrue(const char* file_name, const char* _name, char format);
 	MagicTexture* LoadTextrue(const unsigned char* Data, int _width, int _height, const char* _name);
 
-	bool CreateEntityThreads(const char* _name);
+	bool CreateThreadsResourceManager(const char* _name);
 
 	bool CreateOpenglRender(HWND _hwnd, EntityCommon _EntityCommon);
 
@@ -174,8 +174,17 @@ public:
 	bool DeleteSceneCommon(const char* _name);
 
 	EntityX::EntityX* GetSupervisor() { return &m_Supervisor; }
-	EntityCommon GetEntityThreads(const char* _name);
-	EntityCommon GetEntityThreads();
+	EntityCommon GetThreadsResourceManager(const char* _name);
+
+	/*
+	功能：
+		获取当前线程中的线程资源对象
+	参数：
+		空
+	返回值：
+		EntityCommon = 线程资源对象
+	*/
+	EntityCommon GetThreadsResourceManager();
 
 	Magic::SceneCommon* GetSceneCommon(const char* _name);
 

@@ -56,43 +56,43 @@ namespace Magic
 		}
 	}
 
-	bool CreateEntityThreads(const char* _name)
+	bool CreateThreadsResourceManager(const char* _name)
 	{
-		return MagicEngineContext::Instance()->CreateEntityThreads(_name);
+		return MagicEngineContext::Instance()->CreateThreadsResourceManager(_name);
 	}
 
 	void ShutdownThreads()
 	{
-		MagicEngineContext::Instance()->GetEntityThreads().GetComponent<Magic::System::ThreadsComponent>()->m_RunState = false;
+		MagicEngineContext::Instance()->GetThreadsResourceManager().GetComponent<Magic::System::ThreadsComponent>()->m_RunState = false;
 	}
 
-	bool CreateOpenglRender(HWND _hwnd, EntityCommon _EntityCommon)
+	bool CreateOpenglRender(HWND _hwnd, EntityCommon _ThreadResourceManager)
 	{
-		return MagicEngineContext::Instance()->CreateOpenglRender(_hwnd, _EntityCommon);
+		return MagicEngineContext::Instance()->CreateOpenglRender(_hwnd, _ThreadResourceManager);
 	}
 
 	void AddDrawMessageNumber(unsigned int _number)
 	{
-		MagicEngineContext::Instance()->GetEntityThreads().GetComponent<Magic::System::RenderThreadsComponent>()->m_DrawMessageNumber += _number;
+		MagicEngineContext::Instance()->GetThreadsResourceManager().GetComponent<Magic::System::RenderThreadsComponent>()->m_DrawMessageNumber += _number;
 	}
 
 	Magic::Pen_Normal* GetPen_Normal()
 	{
-		return &(MagicEngineContext::Instance()->GetEntityThreads().GetComponent<Magic::System::RenderThreadsComponent>()->m_Pen_Normal);
+		return &(MagicEngineContext::Instance()->GetThreadsResourceManager().GetComponent<Magic::System::RenderThreadsComponent>()->m_Pen_Normal);
 	}
 
-	EntityCommon GetEntityThreads(const char* _name)
+	EntityCommon GetThreadsResourceManager(const char* _name)
 	{
-		return MagicEngineContext::Instance()->GetEntityThreads(_name);
+		return MagicEngineContext::Instance()->GetThreadsResourceManager(_name);
 	}
 
-	EntityCommon GetEntityThreads()
+	EntityCommon GetThreadsResourceManager()
 	{
-		return MagicEngineContext::Instance()->GetEntityThreads();
+		return MagicEngineContext::Instance()->GetThreadsResourceManager();
 	}
 
 	double GetThreadsDiffTime()
 	{
-		return MagicEngineContext::Instance()->GetEntityThreads().GetComponent<Magic::System::ThreadsComponent>()->m_DiffTime;
+		return MagicEngineContext::Instance()->GetThreadsResourceManager().GetComponent<Magic::System::ThreadsComponent>()->m_DiffTime;
 	}
 }
