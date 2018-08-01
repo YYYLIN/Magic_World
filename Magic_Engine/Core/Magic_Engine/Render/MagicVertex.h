@@ -1,7 +1,7 @@
 #ifndef _MAGICVERTEX_H_
 #define _MAGICVERTEX_H_
 
-#include "Magic_Macro.h"
+#include "Define/Magic_Macro.h"
 
 namespace Magic
 {

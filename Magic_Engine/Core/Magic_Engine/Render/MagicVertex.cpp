@@ -1,4 +1,4 @@
-#include "Include/MagicVertex.h"
+#include "MagicVertex.h"
 
 
 #include <gl/glew.h>

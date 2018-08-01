@@ -1,7 +1,7 @@
 #ifndef _MAGICENGINEAPI_H_
 #define _MAGICENGINEAPI_H_
 
-#include "Magic_Macro.h"
+#include "Define/Magic_Macro.h"
 #include "MagicScene.h"
 #include "MagicPen.h"
 #include "windows.h"

@@ -1,7 +1,7 @@
 #ifndef _MAGICMENU_H_
 #define _MAGICMENU_H_
 
-#include "MagicScene.h"
+#include "Render/MagicScene.h"
 
 namespace Magic
 {

@@ -1,6 +1,6 @@
 #include "MagicUIAPI.h"
 #include "MagicWindows.h"
-#include "Include/MagicEngineAPI.h"
+#include "Render/MagicEngineAPI.h"
 
 namespace Magic
 {

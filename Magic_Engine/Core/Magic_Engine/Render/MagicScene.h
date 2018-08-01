@@ -1,6 +1,6 @@
 #pragma once
 #include "Define/MagicType.h"
-#include "Include/Magic_Macro.h"
+#include "Define/Magic_Macro.h"
 #include "glm.hpp"
 #pragma warning(push)
 #pragma warning(disable:4251)

@@ -1,7 +1,7 @@
 #ifndef _MAGICSHADER_H_
 #define _MAGICSHADER_H_
 
-#include "Magic_Macro.h"
+#include "Define/Magic_Macro.h"
 #include <map>
 #include <string>
 #include <fstream> 

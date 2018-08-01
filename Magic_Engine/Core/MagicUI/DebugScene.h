@@ -2,7 +2,7 @@
 #define _DEBUGSCENE_H_
 
 
-#include "MagicScene.h"
+#include "Render/MagicScene.h"
 
 namespace Magic
 {

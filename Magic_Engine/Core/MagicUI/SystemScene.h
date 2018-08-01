@@ -1,7 +1,7 @@
 #ifndef _TOOLSCENE_H_
 #define _TOOLSCENE_H_
 
-#include "MagicScene.h"
+#include "Render/MagicScene.h"
 
 namespace Magic
 {

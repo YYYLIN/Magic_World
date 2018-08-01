@@ -1,7 +1,7 @@
 #ifndef _MAGICTEXTURE_H_
 #define _MAGICTEXTURE_H_
 
-#include "Magic_Macro.h"
+#include "Define/Magic_Macro.h"
 
 #define LOAD_BMP  0x00
 #define LOAD_PNG  0x01

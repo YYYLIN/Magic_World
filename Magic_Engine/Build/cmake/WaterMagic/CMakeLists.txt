@@ -57,3 +57,19 @@ endforeach()
 configure_file("vcxproj.user.in"
     ${NOW_PROJECT_NAME}.vcxproj.user
     @ONLY)
+	
+	
+IF(WIN32)
+	set(DLL_DEBUG_INSTALL_FILES
+	${PROJECT_SOURCE_DIR}/../../Plugins/lpng1621/dll/Debug/libpng16.dll
+	${PROJECT_SOURCE_DIR}/../../Plugins/glew-1.9.0/dll/glew32.dll
+	)
+	
+	set(DLL_RELEASE_INSTALL_FILES
+	${PROJECT_SOURCE_DIR}/../../Plugins/lpng1621/dll/Release/libpng16.dll
+	${PROJECT_SOURCE_DIR}/../../Plugins/glew-1.9.0/dll/glew32.dll
+	)
+	
+	install(FILES ${DLL_DEBUG_INSTALL_FILES} DESTINATION ${PROJECT_SOURCE_DIR}../../../bin/${CMAKE_SYSTEM_NAME}/Debug)
+	install(FILES ${DLL_RELEASE_INSTALL_FILES} DESTINATION ${PROJECT_SOURCE_DIR}../../../bin/${CMAKE_SYSTEM_NAME}/Release)
+ENDIF(WIN32)

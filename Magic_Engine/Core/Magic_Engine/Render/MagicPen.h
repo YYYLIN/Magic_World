@@ -8,7 +8,7 @@
 #include "MagicShader.h"
 #include "MagicTexture.h"
 #include "MagicVertex.h"
-#include "Magic_Macro.h"
+#include "Define/Magic_Macro.h"
 #include "Magic_Fonts.h"
 #include "MagicMessage.h"
 

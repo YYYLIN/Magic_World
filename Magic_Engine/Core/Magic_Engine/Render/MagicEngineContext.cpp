@@ -1,5 +1,5 @@
-#include "Include/MagicEngineContext.h"
-#include "Include/MagicEngineAPI.h"
+#include "MagicEngineContext.h"
+#include "MagicEngineAPI.h"
 #include <GL/glew.h>  
 #include <time.h>
 

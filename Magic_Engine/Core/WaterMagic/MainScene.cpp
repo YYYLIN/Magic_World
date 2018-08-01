@@ -1,5 +1,5 @@
 #include "MainScene.h"
-#include "MagicEngineAPI.h"
+#include "Render/MagicEngineAPI.h"
 
 MainScene* MainScene::pMainScene = 0;
 

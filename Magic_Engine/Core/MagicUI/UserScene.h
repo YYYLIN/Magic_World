@@ -1,7 +1,7 @@
 #ifndef _USERSCENE_H_
 #define _USERSCENE_H_
 
-#include "MagicScene.h"
+#include "Render/MagicScene.h"
 
 namespace Magic
 {

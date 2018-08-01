@@ -1,8 +1,8 @@
 
-#include "Include/MagicEngineAPI.h"
+#include "MagicEngineAPI.h"
 #include "string"
 #include "System/Supervisor.h"
-#include "Include/MagicEngineContext.h"
+#include "MagicEngineContext.h"
 
 namespace Magic
 {

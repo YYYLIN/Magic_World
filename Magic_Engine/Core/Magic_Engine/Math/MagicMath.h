@@ -5,7 +5,7 @@
 
 
 #include "glm.hpp"
-#include "Magic_Macro.h"
+#include "Define/Magic_Macro.h"
 
 #define MAGIC_PI    (3.14159265358979323846)
 #define FT_ME    (3.2808398950131)

@@ -34,7 +34,7 @@
 #include "config.h"
 #include "Event.h"
 #include "help/NonCopyable.h"
-#include "Include/Magic_Macro.h"
+#include "Define/Magic_Macro.h"
 
 #pragma warning(push)
 #pragma warning(disable:4251)

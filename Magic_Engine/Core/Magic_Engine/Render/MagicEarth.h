@@ -3,8 +3,8 @@
 
 #include <vector>
 #include "glm.hpp"
-#include "MagicFrustum.h"
-#include "Include/MagicEngineContext.h"
+#include "Physical/MagicFrustum.h"
+#include "MagicEngineContext.h"
 
 struct TERRAIN_VEXTER
 {

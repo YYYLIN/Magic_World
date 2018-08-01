@@ -3,7 +3,7 @@
 #include "Define/MagicType.h"
 #include "glm.hpp"
 #include "windows.h"
-#include "Include/MagicPen.h"
+#include "Render/MagicPen.h"
 
 namespace Magic
 {

@@ -9,7 +9,7 @@
 #define _MAGIC_FONTS_H_
 
 #include "MagicTexture.h"
-#include "Magic_Macro.h"
+#include "Define/Magic_Macro.h"
 #include <vector>
 #include <unordered_map>
 #include <stdint.h>

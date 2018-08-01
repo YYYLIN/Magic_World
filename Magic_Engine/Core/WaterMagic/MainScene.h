@@ -1,8 +1,8 @@
 #ifndef _MAINSCENE_H_
 #define _MAINSCENE_H_
 
-#include "MagicScene.h"
-#include "Magic_Fonts.h"
+#include "Render/MagicScene.h"
+#include "Render/Magic_Fonts.h"
 
 
 class MainScene : public Magic::SceneCommon

@@ -16,43 +16,40 @@ ${PROJECT_SOURCE_DIR}../../../Plugins/freetype-2.6/lib
 )
 
 set(MAGIC_MATH_FILES
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Include/MagicMath.h
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/MagicMath.cpp
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/MagicFrustum.h
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/MagicFrustum.cpp)
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Math/MagicMath.h
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Math/MagicMath.cpp)
 
-set(MAGIC_ENGINE_FILES
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Include/Magic_Macro.h
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Include/Magic_Fonts.h
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Include/MagicAlphaWindow.h
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Include/MagicCamera.h
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Include/MagicEngineAPI.h
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Include/MagicEngineContext.h
+set(MAGIC_RENDER_FILES
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/Magic_Fonts.h
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicAlphaWindow.h
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicCamera.h
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicEngineAPI.h
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicEngineContext.h
 
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Include/MagicMessage.h
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Include/MagicModelObject.h
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Include/MagicPen.h
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Include/MagicShader.h
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Include/MagicTexture.h
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Include/MagicVertex.h
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Include/MagicWorld.h
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Magic_Fonts.cpp
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/MagicAlphaWindow.cpp
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/MagicCamera.cpp
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/MagicEngineAPI.cpp
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/MagicEngineContext.cpp
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicMessage.h
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicModelObject.h
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicPen.h
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicShader.h
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicTexture.h
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicVertex.h
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicWorld.h
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/Magic_Fonts.cpp
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicAlphaWindow.cpp
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicCamera.cpp
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicEngineAPI.cpp
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicEngineContext.cpp
 
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/MagicMessage.cpp
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/MagicModelObject.cpp
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/MagicPen.cpp
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/MagicShader.cpp
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/MagicTexture.cpp
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/MagicVertex.cpp
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/MagicWorld.cpp
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/MagicEarth.cpp
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/MagicEarth.h
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/MagicScene.cpp
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/MagicScene.h)
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicMessage.cpp
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicModelObject.cpp
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicPen.cpp
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicShader.cpp
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicTexture.cpp
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicVertex.cpp
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicWorld.cpp
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicEarth.cpp
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicEarth.h
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicScene.cpp
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicScene.h)
 
 set(MAGIC_SYSTEM_FILES
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/System/Supervisor.cpp
@@ -60,7 +57,9 @@ ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/System/Supervisor.h)
 
 set(MAGIC_PHYSICAL_FILES
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Physical/Collision.cpp
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Physical/Collision.h)
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Physical/Collision.h
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Physical/MagicFrustum.h
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Physical/MagicFrustum.cpp)
 
 set(3RDPARTY_ENTITYX_FILES 
 ${PROJECT_SOURCE_DIR}../../../Plugins/EntityX/config.h
@@ -82,10 +81,11 @@ ${PROJECT_SOURCE_DIR}../../../Plugins/EntityX/help/Pool.cc
 ${PROJECT_SOURCE_DIR}../../../Plugins/EntityX/help/NonCopyable.h)
 
 set(MAGIC_DEFINE_FILES
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Define/MagicType.h)
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Define/MagicType.h
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Define/Magic_Macro.h)
 
 IF(WIN32)
-	SOURCE_GROUP("Engine" FILES ${MAGIC_ENGINE_FILES})
+	SOURCE_GROUP("Engine\\Render" FILES ${MAGIC_RENDER_FILES})
 	SOURCE_GROUP("Math" FILES ${MAGIC_MATH_FILES})
 	SOURCE_GROUP("Engine\\System" FILES ${MAGIC_SYSTEM_FILES})
 	SOURCE_GROUP("Engine\\Physical" FILES ${MAGIC_PHYSICAL_FILES})
@@ -110,7 +110,7 @@ set(NOW_PROJECT_NAME Magic_Engine)
 #add_library (Magic_Engine STATIC ${DIR_LIB_SRCS})
 add_library (${NOW_PROJECT_NAME} SHARED ${DIR_LIB_SRCS} 
 ${MAGIC_MATH_FILES}
-${MAGIC_ENGINE_FILES}
+${MAGIC_RENDER_FILES}
 ${MAGIC_SYSTEM_FILES}
 ${MAGIC_PHYSICAL_FILES}
 ${MAGIC_DEFINE_FILES}

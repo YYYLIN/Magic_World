@@ -1,5 +1,5 @@
 #include "MagicCamera.h"
-#include "MagicMath.h"
+#include "Math/MagicMath.h"
 
 
 MagicCamera::MagicCamera()

@@ -1,7 +1,7 @@
 #ifndef _MAGICMESSAGE_H_
 #define _MAGICMESSAGE_H_
 
-#include "Magic_Macro.h"
+#include "Define/Magic_Macro.h"
 #include <stdint.h>
 #include <vector>
 
