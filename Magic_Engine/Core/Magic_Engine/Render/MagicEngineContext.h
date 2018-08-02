@@ -164,6 +164,15 @@ public:
 	MagicTexture* LoadTextrue(const char* file_name, const char* _name, char format);
 	MagicTexture* LoadTextrue(const unsigned char* Data, int _width, int _height, const char* _name);
 
+	/*
+	*功能：
+	*	创建一个新的线程并添加一个管理员对象
+	*参数：
+	*	_name = 线程资源管理员名字
+	*返回值：
+	*	bool = true 成功 | false 失败
+	*详细错误请调用GetEngineErrorMessage查看
+	*/
 	bool CreateThreadsResourceManager(const char* _name);
 
 	bool CreateOpenglRender(HWND _hwnd, EntityCommon _EntityCommon);
@@ -200,6 +209,8 @@ private:
 	std::map<std::string, EntityCommon> M_EntityThreads;
 
 	EntityX::EntityX m_Supervisor;
+
+	CRITICAL_SECTION m_MutexThreadsResourceManager;
 
 	//线程局部静态变量
 	static __declspec(thread) EntityCommon* S_T_pEntityCommon;

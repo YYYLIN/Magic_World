@@ -387,11 +387,14 @@ bool MagicEngineContext::Initialize()
 
 	_MainEntity.assign<Magic::System::UpdataComponent>((Magic::System::Call_Entity)0);
 
+	InitializeCriticalSection(&m_MutexThreadsResourceManager);
 
 	return true;
 }
 void MagicEngineContext::Shutdown()
 {
+	DeleteCriticalSection(&m_MutexThreadsResourceManager);
+
 	for (std::map<std::string, MagicTexture*>::iterator i = Map_Texture.begin(); i != Map_Texture.end(); i++)
 		delete i->second;
 
@@ -440,6 +443,8 @@ MagicTexture* MagicEngineContext::LoadTextrue(const unsigned char* Data, int _wi
 
 bool MagicEngineContext::CreateThreadsResourceManager(const char* _name)
 {
+	EnterCriticalSection(&m_MutexThreadsResourceManager);
+
 	EntityCommon _EntityCommon = m_Supervisor.m_entities.create();
 
 	M_EntityThreads.insert(std::make_pair(_name, _EntityCommon));
@@ -458,6 +463,8 @@ bool MagicEngineContext::CreateThreadsResourceManager(const char* _name)
 	_ThreadsComponent->m_Threads = _Threads;
 	_ThreadsComponent->m_RunState = true;
 	ResumeThread(_Threads);
+
+	LeaveCriticalSection(&m_MutexThreadsResourceManager);
 
 	return true;
 }
@@ -559,11 +566,16 @@ bool MagicEngineContext::DeleteSceneCommon(const char* _name)
 
 EntityCommon MagicEngineContext::GetThreadsResourceManager(const char* _name)
 {
+	EntityCommon _EntityCommon;
+	EnterCriticalSection(&m_MutexThreadsResourceManager);
 	auto _auto = M_EntityThreads.find(_name);
 	if (_auto != M_EntityThreads.end())
-		return _auto->second;
+		_EntityCommon = _auto->second;
 	else
-		return EntityCommon();
+		_EntityCommon = EntityCommon();
+	LeaveCriticalSection(&m_MutexThreadsResourceManager);
+
+	return _EntityCommon;
 }
 
 EntityCommon MagicEngineContext::GetThreadsResourceManager()

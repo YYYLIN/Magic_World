@@ -28,8 +28,14 @@ ${PROJECT_SOURCE_DIR}../../../Core/MagicUI/SystemScene.h
 ${PROJECT_SOURCE_DIR}../../../Core/MagicUI/UserScene.cpp
 ${PROJECT_SOURCE_DIR}../../../Core/MagicUI/UserScene.h)
 
+set(UI_CONTROL_FILES
+${PROJECT_SOURCE_DIR}../../../Core/MagicUI/UI_Control/Button.h
+${PROJECT_SOURCE_DIR}../../../Core/MagicUI/UI_Control/Button.cpp
+)
+
 SOURCE_GROUP("Include Files" FILES ${INCLUDE_FILES})
 SOURCE_GROUP("Source Files" FILES ${SOURCE_FILES})
+SOURCE_GROUP("UI_Control" FILES ${UI_CONTROL_FILES})
 
 add_definitions(-DMAGICUI_EXPORTS)
 IF(WIN32)
@@ -43,7 +49,11 @@ aux_source_directory(../../../Core/MagicUI DIR_LIB_SRCS)
 set(NOW_PROJECT_NAME MagicUI)
 # 生成链接库
 #add_library (MagicUI STATIC ${DIR_LIB_SRCS})
-add_library (${NOW_PROJECT_NAME} SHARED ${DIR_LIB_SRCS} ${INCLUDE_FILES} ${SOURCE_FILES})
+add_library (${NOW_PROJECT_NAME} SHARED 
+${DIR_LIB_SRCS} 
+${INCLUDE_FILES} 
+${SOURCE_FILES}
+${UI_CONTROL_FILES})
 
 #RUNTIME	.exe、.dll	可执行档
 SET_TARGET_PROPERTIES(${NOW_PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ../../../bin/${CMAKE_SYSTEM_NAME})
