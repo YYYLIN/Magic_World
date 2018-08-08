@@ -4,6 +4,22 @@ namespace Magic
 {
 	namespace System
 	{
+		void MessageHandleSystem::Update(EntityX::EntityManager &_es, EntityX::EventManager &_events, EntityX::TimeDelta _time)
+		{
+			EntityX::ComponentHandle<MessageHandleComponent> _MessageHandleComponent;
+			for (EntityX::Entity _entity : _es.entities_with_components<MessageHandleComponent>(_MessageHandleComponent))
+			{
+				if (_MessageHandleComponent->m_Call_MessageHandle)
+					_MessageHandleComponent->m_Call_MessageHandle(_entity, m_MessageStruct);
+				if (_entity.has_component<ObjectSupervisor>())
+				{
+					ObjectSupervisor* _pObjectSupervisor = _entity.GetComponent<ObjectSupervisor>().operator->();
+					_pObjectSupervisor->m_Supervisor.m_systems.Update<MessageHandleSystem>(_time);
+					_pObjectSupervisor->m_Supervisor.m_systems.system<MessageHandleSystem>()->m_MessageStruct = m_MessageStruct;
+				}
+			}
+		}
+
 		void ObjectUpdataSystem::Update(EntityX::EntityManager &_es, EntityX::EventManager &_events, EntityX::TimeDelta _time)
 		{
 			EntityX::ComponentHandle<UpdataComponent> _UpdataComponent;

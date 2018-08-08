@@ -67,11 +67,38 @@ namespace Magic
 			HWND m_hWnd;
 		};
 
+		struct MessageHandleComponent :EntityX::Component<MessageHandleComponent>
+		{
+			explicit MessageHandleComponent(Call_MessageHandle _Call_MessageHandle = 0) : m_Call_MessageHandle(_Call_MessageHandle) {}
+
+			Call_MessageHandle m_Call_MessageHandle;
+		};
+
 		struct UpdataComponent : EntityX::Component<UpdataComponent>
 		{
 			explicit UpdataComponent(Call_Entity _Call_Updata = 0) : m_Call_Updata(_Call_Updata) {}
 
 			Call_Entity m_Call_Updata;
+		};
+
+		struct ObjectPositionSizeC :EntityX::Component<ObjectPositionSizeC>
+		{
+			explicit ObjectPositionSizeC(float _x, float _y, float _z, float _w, float _h) :
+				x(_x), y(_y), z(_z), w(_w), h(_h) {}
+			float x, y, z, w, h;
+		};
+
+		struct MouseCollisionStateC :EntityX::Component<MouseCollisionStateC>
+		{
+			bool IsCollision;
+		};
+
+		class MessageHandleSystem :public EntityX::System<MessageHandleSystem>
+		{
+		public:
+			virtual void Update(EntityX::EntityManager &_es, EntityX::EventManager &_events, EntityX::TimeDelta _time) override;
+
+			MessageStruct m_MessageStruct;
 		};
 
 		class ObjectUpdataSystem :public EntityX::System<ObjectUpdataSystem>
