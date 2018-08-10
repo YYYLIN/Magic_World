@@ -43,8 +43,8 @@ namespace EntityX {
 		 *
 		 * Typically used to set up event handlers.
 		 */
-		//一旦所有系统被添加到SystemManager中，就会被调用。
-		//通常用于设置事件处理程序。
+		 //一旦所有系统被添加到SystemManager中，就会被调用。
+		 //通常用于设置事件处理程序。
 		virtual void configure(EntityManager &entities, EventManager &events)
 		{
 			configure(events);
@@ -60,7 +60,7 @@ namespace EntityX {
 		 *
 		 * Called every game step.
 		 */
-		virtual void Update(EntityManager &entities, EventManager &events, TimeDelta dt) = 0;
+		virtual void Update(EntityManager &entities, EventManager &events, ::EntityX::Entity _NowEntity, TimeDelta dt) = 0;
 
 		static Family family_counter_;
 
@@ -150,11 +150,11 @@ namespace EntityX {
 		 * Call the System::update() method for a registered system.
 		 */
 		template <typename S>
-		void Update(TimeDelta dt)
+		void Update(::EntityX::Entity _NowEntity, TimeDelta dt)
 		{
 			assert(initialized_ && "SystemManager::configure() not called");
 			std::shared_ptr<S> s = system<S>();
-			s->Update(entity_manager_, event_manager_, dt);
+			s->Update(entity_manager_, event_manager_, _NowEntity, dt);
 		}
 
 		/**
@@ -168,15 +168,15 @@ namespace EntityX {
 		 * to manually specify the update order. EntityX does not yet support a way of
 		 * specifying priority for update_all().
 		 */
-		void update_all(TimeDelta dt);
+		void update_all(::EntityX::Entity _NowEntity, TimeDelta dt);
 
 		/**
 		 * Configure the system. Call after adding all Systems.
 		 *
 		 * This is typically used to set up event handlers.
 		 */
-		//配置系统。 添加所有系统后调用。
-		//这通常用于设置事件处理程序。
+		 //配置系统。 添加所有系统后调用。
+		 //这通常用于设置事件处理程序。
 		void configure();
 
 	private:

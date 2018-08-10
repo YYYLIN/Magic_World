@@ -96,7 +96,7 @@ namespace Magic
 		class MessageHandleSystem :public EntityX::System<MessageHandleSystem>
 		{
 		public:
-			virtual void Update(EntityX::EntityManager &_es, EntityX::EventManager &_events, EntityX::TimeDelta _time) override;
+			virtual void Update(EntityX::EntityManager &_es, EntityX::EventManager &_events, ::EntityX::Entity _NowEntity, EntityX::TimeDelta _time) override;
 
 			MessageStruct m_MessageStruct;
 		};
@@ -104,13 +104,19 @@ namespace Magic
 		class ObjectUpdataSystem :public EntityX::System<ObjectUpdataSystem>
 		{
 		public:
-			virtual void Update(EntityX::EntityManager &_es, EntityX::EventManager &_events, EntityX::TimeDelta _time) override;
+			virtual void Update(EntityX::EntityManager &_es, EntityX::EventManager &_events, ::EntityX::Entity _NowEntity, EntityX::TimeDelta _time) override;
 		};
 
 		class ObjectRenderSystem :public EntityX::System<ObjectRenderSystem>
 		{
 		public:
-			virtual void Update(EntityX::EntityManager &_es, EntityX::EventManager &_events, EntityX::TimeDelta _time) override;
+			virtual void Update(EntityX::EntityManager &_es, EntityX::EventManager &_events, ::EntityX::Entity _NowEntity, EntityX::TimeDelta _time) override;
+		};
+
+		class MouseCollisionCheckSystem :public EntityX::System<MouseCollisionCheckSystem>
+		{
+		public:
+			virtual void Update(EntityX::EntityManager &_es, EntityX::EventManager &_events, ::EntityX::Entity _NowEntity, EntityX::TimeDelta _time) override;
 		};
 	}
 }

@@ -14,21 +14,21 @@ namespace EntityX {
 
 	BaseSystem::Family BaseSystem::family_counter_;
 
-	BaseSystem::~BaseSystem() 
+	BaseSystem::~BaseSystem()
 	{
 	}
 
-	void SystemManager::update_all(TimeDelta dt) 
+	void SystemManager::update_all(::EntityX::Entity _NowEntity, TimeDelta dt)
 	{
 		assert(initialized_ && "SystemManager::configure() not called");
 		for (auto &pair : systems_) {
-			pair.second->Update(entity_manager_, event_manager_, dt);
+			pair.second->Update(entity_manager_, event_manager_, _NowEntity, dt);
 		}
 	}
 
-	void SystemManager::configure() 
+	void SystemManager::configure()
 	{
-		for (auto &pair : systems_) 
+		for (auto &pair : systems_)
 		{
 			pair.second->configure(entity_manager_, event_manager_);
 		}
