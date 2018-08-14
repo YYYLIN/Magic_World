@@ -1,10 +1,11 @@
 #include "Button.h"
 #include "System/Supervisor.h"
+#include "Render/MagicEngineAPI.h"
 
 
 bool CreateButton(const EntityCommon& _ParentEntity, EntityCommon* _pCommon)
 {
-	if (_ParentEntity.has_component<Magic::System::ObjectSupervisor>())
+	if (/*_ParentEntity.has_component<Magic::System::ObjectSupervisor>()*/TRUE)
 	{
 /*
 		*_pCommon = _ParentEntity.GetComponent<Magic::System::ObjectSupervisor>()->m_Supervisor.m_entities.create();
@@ -24,7 +25,7 @@ bool CreateButton(const EntityCommon& _ParentEntity, EntityCommon* _pCommon)
 	}
 	else
 	{
-		SetEngineErrorMessage("1.There is no ObjectSupervisor Component\n");
+		Magic::SetEngineErrorMessage("1.There is no ObjectSupervisor Component\n");
 		return false;
 	}
 

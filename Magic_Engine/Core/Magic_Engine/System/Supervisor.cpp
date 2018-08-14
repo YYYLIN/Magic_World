@@ -6,8 +6,6 @@ namespace Magic
 	{
 		void MessageHandleSystem::Update(EntityX::EntityManager &_es, EntityX::EventManager &_events, ::EntityX::Entity _NowEntity, EntityX::TimeDelta _time)
 		{
-
-
 			EntityX::ComponentHandle<MessageHandleComponent> _MessageHandleComponent;
 			for (EntityX::Entity _entity : _es.entities_with_components<MessageHandleComponent>(_MessageHandleComponent))
 			{
@@ -30,11 +28,16 @@ namespace Magic
 
 		void ObjectUpdataSystem::Update(EntityX::EntityManager &_es, EntityX::EventManager &_events, ::EntityX::Entity _NowEntity, EntityX::TimeDelta _time)
 		{
+			if (_NowEntity.has_component<Magic::System::UpdataComponent>())
+			{
+				EntityX::ComponentHandle<Magic::System::UpdataComponent> _UpdataComponent = _NowEntity.GetComponent<Magic::System::UpdataComponent>();
+				if (_UpdataComponent->m_Call_Updata)
+					_UpdataComponent->m_Call_Updata(_NowEntity);
+			}
+
 			EntityX::ComponentHandle<UpdataComponent> _UpdataComponent;
 			for (EntityX::Entity _entity : _es.entities_with_components<UpdataComponent>(_UpdataComponent))
 			{
-				if (_UpdataComponent->m_Call_Updata)
-					_UpdataComponent->m_Call_Updata(_entity);
 				if (_entity.has_component<ObjectSupervisor>())
 					_entity.GetComponent<ObjectSupervisor>()->m_Supervisor.m_systems.Update<ObjectUpdataSystem>(_entity, _time);
 			}
@@ -42,17 +45,27 @@ namespace Magic
 
 		void ObjectRenderSystem::Update(EntityX::EntityManager &_es, EntityX::EventManager &_events, ::EntityX::Entity _NowEntity, EntityX::TimeDelta _time)
 		{
+			if (_NowEntity.has_component<Magic::System::RenderComponent>())
+			{
+				EntityX::ComponentHandle<Magic::System::RenderComponent> _RenderComponent = _NowEntity.GetComponent<Magic::System::RenderComponent>();
+				if (_RenderComponent->m_Call_RenderStart)
+					_RenderComponent->m_Call_RenderStart(_NowEntity);
+				if (_RenderComponent->m_Call_Render)
+					_RenderComponent->m_Call_Render(_NowEntity);
+			}
+
 			EntityX::ComponentHandle<RenderComponent> _RenderComponent;
 			for (EntityX::Entity _entity : _es.entities_with_components<RenderComponent>(_RenderComponent))
 			{
-				if (_RenderComponent->m_Call_RenderStart)
-					_RenderComponent->m_Call_RenderStart(_entity);
 				if (_entity.has_component<ObjectSupervisor>())
 					_entity.GetComponent<ObjectSupervisor>()->m_Supervisor.m_systems.Update<ObjectRenderSystem>(_entity, _time);
-				if (_RenderComponent->m_Call_Render)
-					_RenderComponent->m_Call_Render(_entity);
+			}
+
+			if (_NowEntity.has_component<Magic::System::RenderComponent>())
+			{
+				EntityX::ComponentHandle<Magic::System::RenderComponent> _RenderComponent = _NowEntity.GetComponent<Magic::System::RenderComponent>();
 				if (_RenderComponent->m_Call_RenderEnd)
-					_RenderComponent->m_Call_RenderEnd(_entity);
+					_RenderComponent->m_Call_RenderEnd(_NowEntity);
 			}
 		}
 

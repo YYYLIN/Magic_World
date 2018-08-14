@@ -626,25 +626,7 @@ void MagicEngineContext::UpdataThread()
 		double _time = Magic::EngineUpdataTime(_EntityCommon);
 		Magic::EngineUpdataFPS(_EntityCommon);
 
-		_ObjectSupervisor->m_Supervisor.m_systems.Update<Magic::System::ObjectUpdataSystem>(_EntityCommon, _time);
-
-		if (_EntityCommon.has_component<Magic::System::RenderComponent>())
-		{
-			EntityX::ComponentHandle<Magic::System::RenderComponent> _RenderComponent = _EntityCommon.GetComponent<Magic::System::RenderComponent>();
-			if (_RenderComponent->m_Call_RenderStart)
-				_RenderComponent->m_Call_RenderStart(_EntityCommon);
-			if (_RenderComponent->m_Call_Render)
-				_RenderComponent->m_Call_Render(_EntityCommon);
-		}
-
-		_ObjectSupervisor->m_Supervisor.m_systems.Update<Magic::System::ObjectRenderSystem>(_EntityCommon, _time);
-
-		if (_EntityCommon.has_component<Magic::System::RenderComponent>())
-		{
-			EntityX::ComponentHandle<Magic::System::RenderComponent> _RenderComponent = _EntityCommon.GetComponent<Magic::System::RenderComponent>();
-			if (_RenderComponent->m_Call_RenderEnd)
-				_RenderComponent->m_Call_RenderEnd(_EntityCommon);
-		}
+		_ObjectSupervisor->m_Supervisor.m_systems.update_all(_EntityCommon, _time);
 
 		_RunState = _ThreadsComponent->m_RunState;
 	} while (_RunState);
