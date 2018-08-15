@@ -131,6 +131,22 @@ namespace EntityX {
 			return s;
 		}
 
+		/*
+		*功能：
+		*	检查是否存在某个系统
+		*模板参数：
+		*	系统类的类型
+		*参数：
+		*	空
+		*返回值：
+		*	bool = true 存在 | false 不存在
+		*/
+		template <typename S>
+		bool Has_System()
+		{
+			return systems_.find(S::family()) != systems_.end();
+		}
+
 		/**
 		 * Retrieve the registered System instance, if any.
 		 *

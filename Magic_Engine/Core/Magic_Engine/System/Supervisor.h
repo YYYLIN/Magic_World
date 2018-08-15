@@ -42,6 +42,8 @@ namespace Magic
 		struct ThreadsComponent :EntityX::Component<ThreadsComponent>
 		{
 			explicit ThreadsComponent() :m_RunState(false), m_DiffTime(0.0), m_LastTime(0.0), m_Threads(0) {}
+
+			std::vector<ObjectMessageStruct> m_vec_ObjectMessageStruct;
 			HANDLE m_Threads;
 			double m_DiffTime, m_LastTime;
 			bool m_RunState;

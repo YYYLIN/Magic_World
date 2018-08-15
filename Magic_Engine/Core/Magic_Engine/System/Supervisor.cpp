@@ -6,23 +6,32 @@ namespace Magic
 	{
 		void MessageHandleSystem::Update(EntityX::EntityManager &_es, EntityX::EventManager &_events, ::EntityX::Entity _NowEntity, EntityX::TimeDelta _time)
 		{
-			EntityX::ComponentHandle<MessageHandleComponent> _MessageHandleComponent;
-			for (EntityX::Entity _entity : _es.entities_with_components<MessageHandleComponent>(_MessageHandleComponent))
+			if (_NowEntity.has_component<Magic::System::MessageHandleComponent>())
 			{
-				if (m_MessageStruct.MessageType == MAGIC_UI_MESSAGE_MOUSE_MOVE &&
-					(_entity.has_component<MouseCollisionStateC>() && !_entity.GetComponent<MouseCollisionStateC>()->IsCollision))
+				EntityX::ComponentHandle<Magic::System::MessageHandleComponent> _MessageHandleComponent = _NowEntity.GetComponent<Magic::System::MessageHandleComponent>();
+				if (m_MessageStruct.MessageType == MAGIC_UI_MESSAGE_MOUSE_MOVE)
 				{
-					continue;
+					if (_NowEntity.has_component<MouseCollisionStateC>() && !_NowEntity.GetComponent<MouseCollisionStateC>()->IsCollision)
+					{
+						return;
+					}
+
+					if (_NowEntity.has_component<ObjectSupervisor>() && _NowEntity.GetComponent<ObjectSupervisor>()->m_Supervisor.m_systems.Has_System<MouseCollisionCheckSystem>())
+					{
+						_NowEntity.GetComponent<ObjectSupervisor>()->m_Supervisor.m_systems.Update<MouseCollisionCheckSystem>(_NowEntity, _time);
+					}
 				}
 
 				if (_MessageHandleComponent->m_Call_MessageHandle)
-					_MessageHandleComponent->m_Call_MessageHandle(_entity, m_MessageStruct);
-				if (_entity.has_component<ObjectSupervisor>())
-				{
-					ObjectSupervisor* _pObjectSupervisor = _entity.GetComponent<ObjectSupervisor>().operator->();
-					_pObjectSupervisor->m_Supervisor.m_systems.system<MessageHandleSystem>()->m_MessageStruct = m_MessageStruct;
-					_pObjectSupervisor->m_Supervisor.m_systems.Update<MessageHandleSystem>(_entity, _time);
-				}
+					_MessageHandleComponent->m_Call_MessageHandle(_NowEntity, m_MessageStruct);
+			}
+
+			EntityX::ComponentHandle<ObjectSupervisor> _ObjectSupervisor;
+			EntityX::ComponentHandle<MessageHandleComponent> _MessageHandleComponent;
+			for (EntityX::Entity _entity : _es.entities_with_components<ObjectSupervisor, MessageHandleComponent>(_ObjectSupervisor, _MessageHandleComponent))
+			{
+				_ObjectSupervisor->m_Supervisor.m_systems.system<MessageHandleSystem>()->m_MessageStruct = m_MessageStruct;
+				_ObjectSupervisor->m_Supervisor.m_systems.Update<MessageHandleSystem>(_entity, _time);
 			}
 		}
 
@@ -35,11 +44,11 @@ namespace Magic
 					_UpdataComponent->m_Call_Updata(_NowEntity);
 			}
 
+			EntityX::ComponentHandle<ObjectSupervisor> _ObjectSupervisor;
 			EntityX::ComponentHandle<UpdataComponent> _UpdataComponent;
-			for (EntityX::Entity _entity : _es.entities_with_components<UpdataComponent>(_UpdataComponent))
+			for (EntityX::Entity _entity : _es.entities_with_components<ObjectSupervisor, UpdataComponent>(_ObjectSupervisor, _UpdataComponent))
 			{
-				if (_entity.has_component<ObjectSupervisor>())
-					_entity.GetComponent<ObjectSupervisor>()->m_Supervisor.m_systems.Update<ObjectUpdataSystem>(_entity, _time);
+				_ObjectSupervisor->m_Supervisor.m_systems.Update<ObjectUpdataSystem>(_entity, _time);
 			}
 		}
 
@@ -54,11 +63,11 @@ namespace Magic
 					_RenderComponent->m_Call_Render(_NowEntity);
 			}
 
+			EntityX::ComponentHandle<ObjectSupervisor> _ObjectSupervisor;
 			EntityX::ComponentHandle<RenderComponent> _RenderComponent;
-			for (EntityX::Entity _entity : _es.entities_with_components<RenderComponent>(_RenderComponent))
+			for (EntityX::Entity _entity : _es.entities_with_components<ObjectSupervisor, RenderComponent>(_ObjectSupervisor, _RenderComponent))
 			{
-				if (_entity.has_component<ObjectSupervisor>())
-					_entity.GetComponent<ObjectSupervisor>()->m_Supervisor.m_systems.Update<ObjectRenderSystem>(_entity, _time);
+				_ObjectSupervisor->m_Supervisor.m_systems.Update<ObjectRenderSystem>(_entity, _time);
 			}
 
 			if (_NowEntity.has_component<Magic::System::RenderComponent>())
