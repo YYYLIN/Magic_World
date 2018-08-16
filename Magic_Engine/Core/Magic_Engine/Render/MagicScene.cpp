@@ -1,9 +1,48 @@
 #include "MagicScene.h"
 #include "MagicEngineContext.h"
 #include "MagicEngineAPI.h"
+#include "System/Supervisor.h"
 
 namespace Magic
 {
+	bool AddSceneCommon(Magic::SceneCommon* _pSceneCommon, bool _AutoRelease)
+	{
+		EntityX::ComponentHandle<System::ThreadsComponent> _TreadComponent = MagicEngineContext::Instance()->GetThreadsResourceManager().GetComponent<System::ThreadsComponent>();
+
+		auto _Common = _TreadComponent->M_SceneCommonBox.find(_pSceneCommon->GetName());
+		if (_Common == _TreadComponent->M_SceneCommonBox.end())
+		{
+			_TreadComponent->M_SceneCommonBox.insert(std::make_pair(_pSceneCommon->GetName(), Magic::System::SceneCommonBox(_pSceneCommon, _AutoRelease)));
+			return true;
+		}
+		else
+		{
+			Magic::SetEngineErrorMessage("1.A scene with the same name already exists\n");
+			return false;
+		}
+	}
+
+	struct SceneEntityC :public EntityX::Component<SceneEntityC>
+	{
+		explicit SceneEntityC(const Magic::System::SceneCommonBox& _SceneCommonBox) :m_SceneCommonBox(_SceneCommonBox) {}
+		~SceneEntityC();
+
+		Magic::System::SceneCommonBox m_SceneCommonBox;
+	};
+
+	SceneEntityC::~SceneEntityC()
+	{
+		EntityX::ComponentHandle<System::ThreadsComponent> _TreadComponent = MagicEngineContext::Instance()->GetThreadsResourceManager().GetComponent<System::ThreadsComponent>();
+
+		auto _Common = _TreadComponent->M_SceneCommonBox.find(m_SceneCommonBox.pSceneCommon->GetName());
+		if (_Common != _TreadComponent->M_SceneCommonBox.end())
+		{
+			if (_Common->second.AutoRelease)
+				delete _Common->second.pSceneCommon;
+			_TreadComponent->M_SceneCommonBox.erase(_Common);
+		}
+	}
+
 	SceneCommon::SceneCommon(const char* _name)
 	{
 		m_Name = _name;
@@ -11,7 +50,8 @@ namespace Magic
 
 	SceneCommon::~SceneCommon()
 	{
-		m_Entity.GetComponent<Magic::System::ObjectSupervisor>()->m_Supervisor.m_entities.destroy(m_Entity.id());
+		if (m_Entity.valid())
+			m_Entity.destroy();
 	}
 
 	bool SceneCommon::Initialize(const EntityCommon& _ParentEntity, Magic::SceneCommon* _pSceneCommon, bool _AutoRelease)
@@ -25,7 +65,9 @@ namespace Magic
 		if (!_result)
 			return false;
 
-		_result = MagicEngineContext::Instance()->AddSceneCommon(_pSceneCommon, _AutoRelease);
+		m_Entity.assign<SceneEntityC>(Magic::System::SceneCommonBox(_pSceneCommon, _AutoRelease));
+
+		_result = AddSceneCommon(_pSceneCommon, _AutoRelease);
 		if (!_result)
 			return false;
 
@@ -91,6 +133,24 @@ namespace Magic
 		}
 	}
 
+	bool DeleteScene(const char* _name)
+	{
+		EntityX::ComponentHandle<System::ThreadsComponent> _TreadComponent = MagicEngineContext::Instance()->GetThreadsResourceManager().GetComponent<System::ThreadsComponent>();
+
+		auto _Common = _TreadComponent->M_SceneCommonBox.find(_name);
+		if (_Common != _TreadComponent->M_SceneCommonBox.end())
+		{
+			_Common->second.pSceneCommon->GetEntity().destroy();
+
+			return true;
+		}
+		else
+		{
+			Magic::SetEngineErrorMessage("1.No scene name\n");
+			return false;
+		}
+	}
+
 	void SetScenePosSize(EntityCommon _EntityCommon, const glm::vec2& _pos, const glm::vec2& _size)
 	{
 		EntityX::ComponentHandle<Magic::System::PosSizeComponent> _PosSizeComponent = _EntityCommon.GetComponent<Magic::System::PosSizeComponent>();
@@ -130,7 +190,13 @@ namespace Magic
 
 	Magic::SceneCommon* GetSceneCommon(const char* _name)
 	{
-		return MagicEngineContext::Instance()->GetSceneCommon(_name);
+		EntityX::ComponentHandle<System::ThreadsComponent> _TreadComponent = MagicEngineContext::Instance()->GetThreadsResourceManager().GetComponent<System::ThreadsComponent>();
+
+		auto _auto = _TreadComponent->M_SceneCommonBox.find(_name);
+		if (_auto != _TreadComponent->M_SceneCommonBox.end())
+			return _auto->second.pSceneCommon;
+		else
+			return 0;
 	}
 
 	const glm::vec2& GetScenePos(EntityCommon _EntityCommon)

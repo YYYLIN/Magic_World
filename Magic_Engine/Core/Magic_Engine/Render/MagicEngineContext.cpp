@@ -397,12 +397,6 @@ void MagicEngineContext::Shutdown()
 
 	for (std::map<std::string, MagicTexture*>::iterator i = Map_Texture.begin(); i != Map_Texture.end(); i++)
 		delete i->second;
-
-	for (auto i : M_SceneCommonBox)
-	{
-		if (i.second.AutoRelease)
-			delete i.second.pSceneCommon;
-	}
 }
 
 void MagicEngineContext::Render(void)
@@ -531,39 +525,6 @@ void MagicEngineContext::DeleteTextrue(const char* _name)
 	return;
 }
 
-bool MagicEngineContext::AddSceneCommon(Magic::SceneCommon* _pSceneCommon, bool _AutoRelease)
-{
-	auto _Common = M_SceneCommonBox.find(_pSceneCommon->GetName());
-	if (_Common == M_SceneCommonBox.end())
-	{
-		M_SceneCommonBox.insert(std::make_pair(_pSceneCommon->GetName(), SceneCommonBox(_pSceneCommon, _AutoRelease)));
-		return true;
-	}
-	else
-	{
-		Magic::SetEngineErrorMessage("1.A scene with the same name already exists\n");
-		return false;
-	}
-}
-
-bool MagicEngineContext::DeleteSceneCommon(const char* _name)
-{
-	auto _Common = M_SceneCommonBox.find(_name);
-	if (_Common != M_SceneCommonBox.end())
-	{
-		if (_Common->second.AutoRelease)
-			delete _Common->second.pSceneCommon;
-		M_SceneCommonBox.erase(_Common);
-
-		return true;
-	}
-	else
-	{
-		Magic::SetEngineErrorMessage("1.No scene name\n");
-		return false;
-	}
-}
-
 EntityCommon MagicEngineContext::GetThreadsResourceManager(const char* _name)
 {
 	EntityCommon _EntityCommon;
@@ -584,15 +545,6 @@ EntityCommon MagicEngineContext::GetThreadsResourceManager()
 		return *S_T_pEntityCommon;
 	else
 		return EntityCommon();
-}
-
-Magic::SceneCommon* MagicEngineContext::GetSceneCommon(const char* _name)
-{
-	auto _auto = M_SceneCommonBox.find(_name);
-	if (_auto != M_SceneCommonBox.end())
-		return _auto->second.pSceneCommon;
-	else
-		return 0;
 }
 
 MagicTexture* MagicEngineContext::GetTextrue(const char* _name)

@@ -44,6 +44,7 @@ namespace Magic
 			explicit ThreadsComponent() :m_RunState(false), m_DiffTime(0.0), m_LastTime(0.0), m_Threads(0) {}
 
 			std::vector<ObjectMessageStruct> m_vec_ObjectMessageStruct;
+			std::map<std::string, SceneCommonBox> M_SceneCommonBox;
 			HANDLE m_Threads;
 			double m_DiffTime, m_LastTime;
 			bool m_RunState;

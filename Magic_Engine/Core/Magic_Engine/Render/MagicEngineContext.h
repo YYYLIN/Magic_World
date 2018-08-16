@@ -141,14 +141,6 @@ namespace Magic
 
 class MagicEngineContext
 {
-	struct SceneCommonBox
-	{
-		SceneCommonBox(Magic::SceneCommon* _pSceneCommon, bool _AutoRelease)
-			:pSceneCommon(_pSceneCommon), AutoRelease(_AutoRelease) {}
-
-		Magic::SceneCommon* pSceneCommon;
-		bool AutoRelease;
-	};
 public:
 	MagicEngineContext();
 	~MagicEngineContext();
@@ -179,9 +171,6 @@ public:
 
 	void DeleteTextrue(const char* _name);
 
-	bool AddSceneCommon(Magic::SceneCommon* _pSceneCommon, bool _AutoRelease);
-	bool DeleteSceneCommon(const char* _name);
-
 	EntityX::EntityX* GetSupervisor() { return &m_Supervisor; }
 	EntityCommon GetThreadsResourceManager(const char* _name);
 
@@ -195,8 +184,6 @@ public:
 	*/
 	EntityCommon GetThreadsResourceManager();
 
-	Magic::SceneCommon* GetSceneCommon(const char* _name);
-
 	MagicTexture* GetTextrue(const char* _name);
 
 private:
@@ -205,7 +192,6 @@ private:
 
 private:
 	std::map<std::string, MagicTexture*> Map_Texture;
-	std::map<std::string, SceneCommonBox> M_SceneCommonBox;
 	std::map<std::string, EntityCommon> M_EntityThreads;
 
 	EntityX::EntityX m_Supervisor;

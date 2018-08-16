@@ -91,6 +91,36 @@ namespace Magic
 		return MagicEngineContext::Instance()->GetThreadsResourceManager();
 	}
 
+	void SendMessageToScene(const char* _SceneName, Magic::System::MessageStruct _MessageStruct)
+	{
+
+	}
+
+	void SendMessageToScene(const EntityCommon& _SceneEntity, Magic::System::MessageStruct _MessageStruct)
+	{
+
+	}
+
+	void SendMessageToThreads(const char* _ThreadsName, Magic::System::MessageStruct _MessageStruct)
+	{
+
+	}
+
+	void SendMessageToThreads(const EntityCommon& _ThreadsEntity, Magic::System::MessageStruct _MessageStruct)
+	{
+
+	}
+
+	void SendMessageToThreadsScene(const char* _SceneName, const char* _ThreadsName, Magic::System::MessageStruct _MessageStruct)
+	{
+
+	}
+
+	void SendMessageToThreadsScene(const EntityCommon& _ThreadsEntity, const EntityCommon& _SceneEntity, Magic::System::MessageStruct _MessageStruct)
+	{
+
+	}
+
 	double GetThreadsDiffTime()
 	{
 		return MagicEngineContext::Instance()->GetThreadsResourceManager().GetComponent<Magic::System::ThreadsComponent>()->m_DiffTime;

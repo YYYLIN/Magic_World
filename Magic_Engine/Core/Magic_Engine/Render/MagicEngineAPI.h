@@ -44,7 +44,7 @@ namespace Magic
 	*	空
 	*/
 	DLL_MAGIC_ENGINE_OUTPUT_INPUT void ShutdownEngine();
-	
+
 	/*
 	*功能：
 	*	创建一个新的线程并添加一个管理员对象
@@ -112,6 +112,18 @@ namespace Magic
 	*/
 	DLL_MAGIC_ENGINE_OUTPUT_INPUT EntityCommon GetThreadsResourceManager();
 
+	DLL_MAGIC_ENGINE_OUTPUT_INPUT void SendMessageToScene(const char* _SceneName, Magic::System::MessageStruct _MessageStruct);
+
+	DLL_MAGIC_ENGINE_OUTPUT_INPUT void SendMessageToScene(const EntityCommon& _SceneEntity, Magic::System::MessageStruct _MessageStruct);
+
+	DLL_MAGIC_ENGINE_OUTPUT_INPUT void SendMessageToThreads(const char* _ThreadsName, Magic::System::MessageStruct _MessageStruct);
+
+	DLL_MAGIC_ENGINE_OUTPUT_INPUT void SendMessageToThreads(const EntityCommon& _ThreadsEntity, Magic::System::MessageStruct _MessageStruct);
+
+	DLL_MAGIC_ENGINE_OUTPUT_INPUT void SendMessageToThreadsScene(const char* _SceneName, const char* _ThreadsName, Magic::System::MessageStruct _MessageStruct);
+
+	DLL_MAGIC_ENGINE_OUTPUT_INPUT void SendMessageToThreadsScene(const EntityCommon& _ThreadsEntity, const EntityCommon& _SceneEntity, Magic::System::MessageStruct _MessageStruct);
+
 	/*
 	*功能：
 	*	获取当前线程中的差值时间
@@ -127,23 +139,6 @@ namespace Magic
 #else
 #define DEBUG_AddDrawMessageNumber(a)
 #endif
-
-	template <typename T>
-	bool CreateScene(EntityCommon _ParentEntity, T** _SceneCommon)
-	{
-		bool _AutoRelase = false;
-		if (!*_SceneCommon)
-		{
-			*_SceneCommon = new T;
-			_AutoRelase = true;
-		}
-
-		bool _result = (*_SceneCommon)->SceneCommon::Initialize(_ParentEntity, *_SceneCommon, _AutoRelase);
-		if (!_result)
-			return false;
-
-		return true;
-	}
 }
 
 #endif

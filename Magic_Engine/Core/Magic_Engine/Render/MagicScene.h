@@ -28,8 +28,26 @@ namespace Magic
 	void SceneRenderStart(EntityCommon _Entity);
 	void SceneRenderEnd(EntityCommon _Entity);
 
+	template <typename T>
+	bool CreateScene(EntityCommon _ParentEntity, T** _SceneCommon)
+	{
+		bool _AutoRelase = false;
+		if (!*_SceneCommon)
+		{
+			*_SceneCommon = new T;
+			_AutoRelase = true;
+		}
+
+		bool _result = (*_SceneCommon)->SceneCommon::Initialize(_ParentEntity, *_SceneCommon, _AutoRelase);
+		if (!_result)
+			return false;
+
+		return true;
+	}
+
 	DLL_MAGIC_ENGINE_OUTPUT_INPUT bool CreateScene(SceneCommon* _SceneCommon, EntityCommon* _EntityCommon);
 	DLL_MAGIC_ENGINE_OUTPUT_INPUT bool CreateScene(EntityCommon _ParentEntity, EntityCommon* _EntityCommon);
+	DLL_MAGIC_ENGINE_OUTPUT_INPUT bool DeleteScene(const char* _name);
 
 	DLL_MAGIC_ENGINE_OUTPUT_INPUT void SetScenePosSize(EntityCommon _EntityCommon, const glm::vec2& _pos, const glm::vec2& _size);
 

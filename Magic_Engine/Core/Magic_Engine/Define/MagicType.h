@@ -6,6 +6,8 @@ typedef ::EntityX::Entity EntityCommon;
 
 namespace Magic
 {
+	class SceneCommon;
+
 	namespace System
 	{
 		struct MessageStruct
@@ -23,6 +25,15 @@ namespace Magic
 		{
 			EntityCommon Object;
 			MessageStruct Message;
+		};
+
+		struct SceneCommonBox
+		{
+			SceneCommonBox(Magic::SceneCommon* _pSceneCommon, bool _AutoRelease)
+				:pSceneCommon(_pSceneCommon), AutoRelease(_AutoRelease) {}
+
+			Magic::SceneCommon* pSceneCommon;
+			bool AutoRelease;
 		};
 
 		typedef int(*Call_MessageHandle)(EntityX::Entity _entity, const MessageStruct& _MessageStruct);
