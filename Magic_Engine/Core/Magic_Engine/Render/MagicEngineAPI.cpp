@@ -3,6 +3,7 @@
 #include "string"
 #include "System/Supervisor.h"
 #include "MagicEngineContext.h"
+#include "MagicScene.h"
 
 namespace Magic
 {
@@ -91,34 +92,56 @@ namespace Magic
 		return MagicEngineContext::Instance()->GetThreadsResourceManager();
 	}
 
-	void SendMessageToScene(const char* _SceneName, Magic::System::MessageStruct _MessageStruct)
+	bool SendMessageToScene(const char* _SceneName, Magic::System::MessageStruct _MessageStruct)
 	{
+		EntityCommon _EntityCommon = MagicEngineContext::Instance()->GetThreadsResourceManager();
+		if (_EntityCommon.has_component<Magic::System::ThreadsComponent>())
+		{
+			Magic::SceneCommon* _pSceneCommon = GetSceneCommon(_SceneName);
+			if (_pSceneCommon)
+			{
+				//线程安全--------Start
+				_EntityCommon.GetComponent<Magic::System::ThreadsComponent>()->m_vec_ObjectMessageStruct.push_back({ _pSceneCommon->GetEntity(),_MessageStruct });
+				//线程安全--------End
 
+				return true;
+			}
+			else
+			{
+				SetEngineErrorMessage("没有此场景\n");
+				return false;
+			}
+		}
+		else
+		{
+			SetEngineErrorMessage("错误线程对象\n");
+			return false;
+		}
 	}
 
-	void SendMessageToScene(const EntityCommon& _SceneEntity, Magic::System::MessageStruct _MessageStruct)
+	bool SendMessageToScene(const EntityCommon& _SceneEntity, Magic::System::MessageStruct _MessageStruct)
 	{
-
+		return true;
 	}
 
-	void SendMessageToThreads(const char* _ThreadsName, Magic::System::MessageStruct _MessageStruct)
+	bool SendMessageToThreads(const char* _ThreadsName, Magic::System::MessageStruct _MessageStruct)
 	{
-
+		return true;
 	}
 
-	void SendMessageToThreads(const EntityCommon& _ThreadsEntity, Magic::System::MessageStruct _MessageStruct)
+	bool SendMessageToThreads(const EntityCommon& _ThreadsEntity, Magic::System::MessageStruct _MessageStruct)
 	{
-
+		return true;
 	}
 
-	void SendMessageToThreadsScene(const char* _SceneName, const char* _ThreadsName, Magic::System::MessageStruct _MessageStruct)
+	bool SendMessageToThreadsScene(const char* _SceneName, const char* _ThreadsName, Magic::System::MessageStruct _MessageStruct)
 	{
-
+		return true;
 	}
 
-	void SendMessageToThreadsScene(const EntityCommon& _ThreadsEntity, const EntityCommon& _SceneEntity, Magic::System::MessageStruct _MessageStruct)
+	bool SendMessageToThreadsScene(const EntityCommon& _ThreadsEntity, const EntityCommon& _SceneEntity, Magic::System::MessageStruct _MessageStruct)
 	{
-
+		return true;
 	}
 
 	double GetThreadsDiffTime()

@@ -95,6 +95,8 @@ namespace Magic
 	/*
 	*功能：
 	*	获取指定线程中的线程资源管理员对象
+	*线程保护：
+	*	有
 	*参数：
 	*	_name = 线程名字
 	*返回值：
@@ -112,17 +114,17 @@ namespace Magic
 	*/
 	DLL_MAGIC_ENGINE_OUTPUT_INPUT EntityCommon GetThreadsResourceManager();
 
-	DLL_MAGIC_ENGINE_OUTPUT_INPUT void SendMessageToScene(const char* _SceneName, Magic::System::MessageStruct _MessageStruct);
+	DLL_MAGIC_ENGINE_OUTPUT_INPUT bool SendMessageToScene(const char* _SceneName, Magic::System::MessageStruct _MessageStruct);
 
-	DLL_MAGIC_ENGINE_OUTPUT_INPUT void SendMessageToScene(const EntityCommon& _SceneEntity, Magic::System::MessageStruct _MessageStruct);
+	DLL_MAGIC_ENGINE_OUTPUT_INPUT bool SendMessageToScene(const EntityCommon& _SceneEntity, Magic::System::MessageStruct _MessageStruct);
 
-	DLL_MAGIC_ENGINE_OUTPUT_INPUT void SendMessageToThreads(const char* _ThreadsName, Magic::System::MessageStruct _MessageStruct);
+	DLL_MAGIC_ENGINE_OUTPUT_INPUT bool SendMessageToThreads(const char* _ThreadsName, Magic::System::MessageStruct _MessageStruct);
 
-	DLL_MAGIC_ENGINE_OUTPUT_INPUT void SendMessageToThreads(const EntityCommon& _ThreadsEntity, Magic::System::MessageStruct _MessageStruct);
+	DLL_MAGIC_ENGINE_OUTPUT_INPUT bool SendMessageToThreads(const EntityCommon& _ThreadsEntity, Magic::System::MessageStruct _MessageStruct);
 
-	DLL_MAGIC_ENGINE_OUTPUT_INPUT void SendMessageToThreadsScene(const char* _SceneName, const char* _ThreadsName, Magic::System::MessageStruct _MessageStruct);
+	DLL_MAGIC_ENGINE_OUTPUT_INPUT bool SendMessageToThreadsScene(const char* _SceneName, const char* _ThreadsName, Magic::System::MessageStruct _MessageStruct);
 
-	DLL_MAGIC_ENGINE_OUTPUT_INPUT void SendMessageToThreadsScene(const EntityCommon& _ThreadsEntity, const EntityCommon& _SceneEntity, Magic::System::MessageStruct _MessageStruct);
+	DLL_MAGIC_ENGINE_OUTPUT_INPUT bool SendMessageToThreadsScene(const EntityCommon& _ThreadsEntity, const EntityCommon& _SceneEntity, Magic::System::MessageStruct _MessageStruct);
 
 	/*
 	*功能：

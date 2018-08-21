@@ -23,6 +23,8 @@ namespace Magic
 
 		struct ObjectMessageStruct
 		{
+			ObjectMessageStruct() = default;
+			ObjectMessageStruct(const EntityCommon& _Object, const MessageStruct& _Message) :Object(_Object), Message(_Message) {}
 			EntityCommon Object;
 			MessageStruct Message;
 		};
