@@ -63,7 +63,43 @@ namespace Magic
 
 	DLL_MAGIC_ENGINE_OUTPUT_INPUT void SetSceneCallRenderEnd(EntityCommon _EntityCommon, Magic::System::Call_Entity _call);
 
+	/*
+	*功能：
+	*	获取当前线程资源中的窗口
+	*线程保护：
+	*	有
+	*参数：
+	*	_name = 窗口名字
+	*返回值：
+	*	Magic::SceneCommon* = 窗口指针
+	*/
 	DLL_MAGIC_ENGINE_OUTPUT_INPUT Magic::SceneCommon* GetSceneCommon(const char* _name);
+
+	/*
+	*功能：
+	*	获取指定线程资源中的窗口
+	*线程保护：
+	*	有
+	*参数：
+	*	_ThreadsName = 线程名字
+	*	_SceneName = 窗口名字
+	*返回值：
+	*	Magic::SceneCommon* = 窗口指针
+	*/
+	DLL_MAGIC_ENGINE_OUTPUT_INPUT Magic::SceneCommon* GetSceneCommon(const char* _ThreadsName,const char* _SceneName);
+
+	/*
+	*功能：
+	*	获取指定线程资源中的窗口
+	*线程保护：
+	*	有
+	*参数：
+	*	_ThreadsEntity = 线程对象
+	*	_SceneName = 窗口名字
+	*返回值：
+	*	Magic::SceneCommon* = 窗口指针
+	*/
+	DLL_MAGIC_ENGINE_OUTPUT_INPUT Magic::SceneCommon* GetSceneCommon(EntityCommon& _ThreadsEntity, const char* _SceneName);
 
 	DLL_MAGIC_ENGINE_OUTPUT_INPUT const glm::vec2& GetScenePos(EntityCommon _EntityCommon);
 

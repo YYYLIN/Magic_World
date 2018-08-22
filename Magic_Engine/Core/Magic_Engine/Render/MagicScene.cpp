@@ -9,17 +9,22 @@ namespace Magic
 	{
 		EntityX::ComponentHandle<System::ThreadsComponent> _TreadComponent = MagicEngineContext::Instance()->GetThreadsResourceManager().GetComponent<System::ThreadsComponent>();
 
+		bool _result;
+		EnterCriticalSection(&_TreadComponent->m_MutexSceneCommon);
 		auto _Common = _TreadComponent->M_SceneCommonBox.find(_pSceneCommon->GetName());
 		if (_Common == _TreadComponent->M_SceneCommonBox.end())
 		{
 			_TreadComponent->M_SceneCommonBox.insert(std::make_pair(_pSceneCommon->GetName(), Magic::System::SceneCommonBox(_pSceneCommon, _AutoRelease)));
-			return true;
+			_result = true;
 		}
 		else
-		{
+			_result = false;
+		LeaveCriticalSection(&_TreadComponent->m_MutexSceneCommon);
+
+		if (!_result)
 			Magic::SetEngineErrorMessage("1.A scene with the same name already exists\n");
-			return false;
-		}
+
+		return _result;
 	}
 
 	struct SceneEntityC :public EntityX::Component<SceneEntityC>
@@ -192,11 +197,45 @@ namespace Magic
 	{
 		EntityX::ComponentHandle<System::ThreadsComponent> _TreadComponent = MagicEngineContext::Instance()->GetThreadsResourceManager().GetComponent<System::ThreadsComponent>();
 
+		SceneCommon* _pSceneCommon;
+		EnterCriticalSection(&_TreadComponent->m_MutexSceneCommon);
 		auto _auto = _TreadComponent->M_SceneCommonBox.find(_name);
 		if (_auto != _TreadComponent->M_SceneCommonBox.end())
-			return _auto->second.pSceneCommon;
+			_pSceneCommon = _auto->second.pSceneCommon;
 		else
-			return 0;
+			_pSceneCommon = 0;
+		LeaveCriticalSection(&_TreadComponent->m_MutexSceneCommon);
+		return _pSceneCommon;
+	}
+
+	Magic::SceneCommon* GetSceneCommon(const char* _ThreadsName, const char* _SceneName)
+	{
+		EntityX::ComponentHandle<System::ThreadsComponent> _TreadComponent = MagicEngineContext::Instance()->GetThreadsResourceManager(_ThreadsName).GetComponent<System::ThreadsComponent>();
+
+		SceneCommon* _pSceneCommon;
+		EnterCriticalSection(&_TreadComponent->m_MutexSceneCommon);
+		auto _auto = _TreadComponent->M_SceneCommonBox.find(_SceneName);
+		if (_auto != _TreadComponent->M_SceneCommonBox.end())
+			_pSceneCommon = _auto->second.pSceneCommon;
+		else
+			_pSceneCommon = 0;
+		LeaveCriticalSection(&_TreadComponent->m_MutexSceneCommon);
+		return _pSceneCommon;
+	}
+
+	Magic::SceneCommon* GetSceneCommon(EntityCommon& _ThreadsEntity, const char* _SceneName)
+	{
+		EntityX::ComponentHandle<System::ThreadsComponent> _TreadComponent = _ThreadsEntity.GetComponent<System::ThreadsComponent>();
+
+		SceneCommon* _pSceneCommon;
+		EnterCriticalSection(&_TreadComponent->m_MutexSceneCommon);
+		auto _auto = _TreadComponent->M_SceneCommonBox.find(_SceneName);
+		if (_auto != _TreadComponent->M_SceneCommonBox.end())
+			_pSceneCommon = _auto->second.pSceneCommon;
+		else
+			_pSceneCommon = 0;
+		LeaveCriticalSection(&_TreadComponent->m_MutexSceneCommon);
+		return _pSceneCommon;
 	}
 
 	const glm::vec2& GetScenePos(EntityCommon _EntityCommon)

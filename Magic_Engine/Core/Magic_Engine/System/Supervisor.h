@@ -41,11 +41,14 @@ namespace Magic
 
 		struct ThreadsComponent :EntityX::Component<ThreadsComponent>
 		{
-			explicit ThreadsComponent() :m_RunState(false), m_DiffTime(0.0), m_LastTime(0.0), m_Threads(0) {}
+			explicit ThreadsComponent();
+			~ThreadsComponent();
 
 			std::vector<ObjectMessageStruct> m_vec_ObjectMessageStruct;
 			std::map<std::string, SceneCommonBox> M_SceneCommonBox;
 			HANDLE m_Threads;
+			CRITICAL_SECTION m_MutexObjectMessage;
+			CRITICAL_SECTION m_MutexSceneCommon;
 			double m_DiffTime, m_LastTime;
 			bool m_RunState;
 		};

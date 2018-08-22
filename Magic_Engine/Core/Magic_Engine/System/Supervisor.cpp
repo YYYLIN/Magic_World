@@ -4,6 +4,18 @@ namespace Magic
 {
 	namespace System
 	{
+		ThreadsComponent::ThreadsComponent() :m_RunState(false), m_DiffTime(0.0), m_LastTime(0.0), m_Threads(0) 
+		{
+			InitializeCriticalSection(&m_MutexObjectMessage);
+			InitializeCriticalSection(&m_MutexSceneCommon);
+		}
+
+		ThreadsComponent::~ThreadsComponent()
+		{
+			DeleteCriticalSection(&m_MutexSceneCommon);
+			DeleteCriticalSection(&m_MutexObjectMessage);
+		}
+
 		void MessageHandleSystem::Update(EntityX::EntityManager &_es, EntityX::EventManager &_events, ::EntityX::Entity _NowEntity, EntityX::TimeDelta _time)
 		{
 			if (_NowEntity.has_component<Magic::System::MessageHandleComponent>())

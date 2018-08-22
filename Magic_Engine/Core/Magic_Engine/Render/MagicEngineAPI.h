@@ -48,6 +48,8 @@ namespace Magic
 	/*
 	*功能：
 	*	创建一个新的线程并添加一个管理员对象
+	*线程保护：
+	*	有
 	*参数：
 	*	_name = 线程资源管理员名字
 	*返回值：
@@ -114,17 +116,89 @@ namespace Magic
 	*/
 	DLL_MAGIC_ENGINE_OUTPUT_INPUT EntityCommon GetThreadsResourceManager();
 
+	/*
+	*功能：
+	*	发送消息到当前线程指定窗口
+	*线程保护：
+	*	有
+	*参数：
+	*	_SceneName = 窗口名字
+	*	_MessageStruct = 消息结构体
+	*返回值：
+	*	bool = true 成功 | 失败
+	*/
 	DLL_MAGIC_ENGINE_OUTPUT_INPUT bool SendMessageToScene(const char* _SceneName, Magic::System::MessageStruct _MessageStruct);
 
+	/*
+	*功能：
+	*	发送消息到当前线程指定窗口
+	*线程保护：
+	*	有
+	*警告：
+	*	窗口对象必须为当前线程的窗口对象否则会出现线程安全问题
+	*参数：
+	*	_SceneEntity = 窗口对象
+	*	_MessageStruct = 消息结构体
+	*返回值：
+	*	bool = true 成功 | 失败
+	*/
 	DLL_MAGIC_ENGINE_OUTPUT_INPUT bool SendMessageToScene(const EntityCommon& _SceneEntity, Magic::System::MessageStruct _MessageStruct);
 
+	/*
+	*功能：
+	*	发送消息到指定线程
+	*线程保护：
+	*	有
+	*参数：
+	*	_ThreadsName = 线程名字
+	*	_MessageStruct = 消息结构体
+	*返回值：
+	*	bool = true 成功 | 失败
+	*/
 	DLL_MAGIC_ENGINE_OUTPUT_INPUT bool SendMessageToThreads(const char* _ThreadsName, Magic::System::MessageStruct _MessageStruct);
 
-	DLL_MAGIC_ENGINE_OUTPUT_INPUT bool SendMessageToThreads(const EntityCommon& _ThreadsEntity, Magic::System::MessageStruct _MessageStruct);
+	/*
+	*功能：
+	*	发送消息到指定线程
+	*线程保护：
+	*	有
+	*参数：
+	*	_ThreadsEntity = 线程对象
+	*	_MessageStruct = 消息结构体
+	*返回值：
+	*	bool = true 成功 | 失败
+	*/
+	DLL_MAGIC_ENGINE_OUTPUT_INPUT bool SendMessageToThreads( EntityCommon& _ThreadsEntity, Magic::System::MessageStruct _MessageStruct);
 
-	DLL_MAGIC_ENGINE_OUTPUT_INPUT bool SendMessageToThreadsScene(const char* _SceneName, const char* _ThreadsName, Magic::System::MessageStruct _MessageStruct);
+	/*
+	*功能：
+	*	发送消息到指定线程指定窗口
+	*线程保护：
+	*	有
+	*参数：
+	*	_ThreadsName = 线程名字
+	*	_SceneName = 窗口名字
+	*	_MessageStruct = 消息结构体
+	*返回值：
+	*	bool = true 成功 | 失败
+	*/
+	DLL_MAGIC_ENGINE_OUTPUT_INPUT bool SendMessageToThreadsScene(const char* _ThreadsName, const char* _SceneName, Magic::System::MessageStruct _MessageStruct);
 
-	DLL_MAGIC_ENGINE_OUTPUT_INPUT bool SendMessageToThreadsScene(const EntityCommon& _ThreadsEntity, const EntityCommon& _SceneEntity, Magic::System::MessageStruct _MessageStruct);
+	/*
+	*功能：
+	*	发送消息到指定线程指定窗口
+	*线程保护：
+	*	有
+	*警告：
+	*	窗口对象必须为指定线程的窗口对象否则会出现线程安全问题
+	*参数：
+	*	_ThreadsEntity = 线程对象
+	*	_SceneEntity = 窗口对象
+	*	_MessageStruct = 消息结构体
+	*返回值：
+	*	bool = true 成功 | 失败
+	*/
+	DLL_MAGIC_ENGINE_OUTPUT_INPUT bool SendMessageToThreadsScene( EntityCommon& _ThreadsEntity, const EntityCommon& _SceneEntity, Magic::System::MessageStruct _MessageStruct);
 
 	/*
 	*功能：
