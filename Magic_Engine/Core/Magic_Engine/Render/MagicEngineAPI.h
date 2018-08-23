@@ -119,10 +119,11 @@ namespace Magic
 	/*
 	*功能：
 	*	发送消息到当前线程指定窗口
+	*	如果_SceneName为空发送到当前线程
 	*线程保护：
 	*	有
 	*参数：
-	*	_SceneName = 窗口名字
+	*	_SceneName = 窗口名字（可以为NULL）
 	*	_MessageStruct = 消息结构体
 	*返回值：
 	*	bool = true 成功 | 失败
@@ -173,11 +174,12 @@ namespace Magic
 	/*
 	*功能：
 	*	发送消息到指定线程指定窗口
+	*	如果_SceneName为空发送到当前线程
 	*线程保护：
 	*	有
 	*参数：
 	*	_ThreadsName = 线程名字
-	*	_SceneName = 窗口名字
+	*	_SceneName = 窗口名字（可以为NULL）
 	*	_MessageStruct = 消息结构体
 	*返回值：
 	*	bool = true 成功 | 失败

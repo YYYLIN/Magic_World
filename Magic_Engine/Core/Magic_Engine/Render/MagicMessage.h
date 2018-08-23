@@ -40,18 +40,6 @@ namespace Magic
 	protected:
 		virtual int MessageHandle(uint32_t _MessageType, uint64_t _Message) = 0;
 	};
-
-	//消息分发
-	class DLL_MAGIC_ENGINE_OUTPUT_INPUT MessageScenes :public MessageCommon
-	{
-	public:
-		virtual void Send_Message(uint32_t _MessageType, uint64_t _Message);
-		void ProcessMessage();
-	protected:
-		virtual int MessageHandle(uint32_t _MessageType, uint64_t _Message);
-	protected:
-		std::vector<MESSAGE> V_Message;
-	};
 }
 
 #pragma warning(pop)

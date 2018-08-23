@@ -15,7 +15,7 @@
 
 namespace Magic
 {
-	typedef void(*CallbackMessage_WIN32)(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam);
+	typedef int(*CallbackMessage_WIN32)(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam);
 }
 
 #endif

@@ -114,7 +114,7 @@ int MagicWorld::MessageHandle(unsigned int _MessageType, unsigned int _Message)
 	m_CameraMatrix *= glm::rotate(_rotate, 0.0f, 1.0f, 0.0f);
 	m_CameraMatrix[3].z = _Look;
 
-	return MAGIC_MESSAGE_RETURN_OK;
+	return MAGIC_RETURN_OK;
 }
 
 void MagicWorld::AddModelObject(MagicModelObject* _pMagicModelObject)

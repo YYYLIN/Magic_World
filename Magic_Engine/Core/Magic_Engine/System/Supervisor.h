@@ -107,7 +107,30 @@ namespace Magic
 			MessageStruct m_MessageStruct;
 		};
 
+		/*
+		*功能：
+		*	线程消息转发系统
+		*警告：
+		*	只能添加到线程对象中
+		*/
+		class ThreadsMessageForwardSystem :public EntityX::System<ThreadsMessageForwardSystem>
+		{
+			virtual void Update(EntityX::EntityManager &_es, EntityX::EventManager &_events, ::EntityX::Entity _NowEntity, EntityX::TimeDelta _time) override;
+		};
+
 		class ObjectUpdataSystem :public EntityX::System<ObjectUpdataSystem>
+		{
+		public:
+			virtual void Update(EntityX::EntityManager &_es, EntityX::EventManager &_events, ::EntityX::Entity _NowEntity, EntityX::TimeDelta _time) override;
+		};
+
+		/*
+		*功能：
+		*	线程渲染处理系统
+		*警告：
+		*	只能添加到线程对象中
+		*/
+		class ThreadsRenderSystem :public EntityX::System<ThreadsRenderSystem>
 		{
 		public:
 			virtual void Update(EntityX::EntityManager &_es, EntityX::EventManager &_events, ::EntityX::Entity _NowEntity, EntityX::TimeDelta _time) override;

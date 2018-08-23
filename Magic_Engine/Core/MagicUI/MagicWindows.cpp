@@ -1,5 +1,7 @@
 #include "MagicWindows.h"
 #include "Render/MagicEngineAPI.h"
+
+#include "Windowsx.h"
 /*
 struct VertexShaderType
 {
@@ -141,36 +143,41 @@ bool MagicWindows::Initialize(const wchar_t* _name, int _x, int _y, int _w, int 
 	return true;
 }
 
-LRESULT CALLBACK MagicWindows::MessageHandler(HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam)    //消息处理函数
+LRESULT CALLBACK MagicWindows::MessageHandler(HWND _hwnd, UINT _umsg, WPARAM _wparam, LPARAM _lparam)    //消息处理函数
 {
-	switch (umsg)
+	if (m_CallbackMessage_WIN32)
+	{
+		int _result = m_CallbackMessage_WIN32(_hwnd, _umsg, _wparam, _lparam);
+		if (!_result)
+			return 0;
+	}
+
+	switch (_umsg)
 	{
 		// 检查是否有键被按下键盘上的。
 	case WM_KEYDOWN:
-		if (wparam == VK_ESCAPE)    // 如果被按下的键是ESC
-			DestroyWindow(hwnd);		// 销毁窗口, 并发送一条WM_DESTROY消息
+		if (_wparam == VK_ESCAPE)    // 如果被按下的键是ESC
+			DestroyWindow(_hwnd);		// 销毁窗口, 并发送一条WM_DESTROY消息
 		// m_MagicWorld.MessageHandle(wparam, lparam);
 		return 0;
 		// 检查是否已在键盘上释放的关键。
 	case WM_KEYUP:
 		return 0;
 		// 任何其他的消息发送到默认的消息处理程序为我们的应用程序不使用它们。
+	case WM_MOUSEMOVE:
+		Magic::SendMessageToScene(0, { MAGIC_UI_MESSAGE_MOUSE_MOVE,_lparam });
+		return 0;
 	default:
-		return DefWindowProc(hwnd, umsg, wparam, lparam);
+		return DefWindowProc(_hwnd, _umsg, _wparam, _lparam);
 	}
-	if (m_CallbackMessage_WIN32)
-		m_CallbackMessage_WIN32(hwnd, umsg, wparam, lparam);
 }
 
 void MagicWindows::Updata(EntityCommon _entity)     //过程处理函数
 {
 	MSG msg;
 
-	// 初始化消息结构。
-	ZeroMemory(&msg, sizeof(MSG));
-
 	// 处理Windows消息。
-	if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+	while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 	{
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);

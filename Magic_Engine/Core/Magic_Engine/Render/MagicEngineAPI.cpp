@@ -97,22 +97,34 @@ namespace Magic
 		EntityCommon _EntityCommon = MagicEngineContext::Instance()->GetThreadsResourceManager();
 		if (_EntityCommon.has_component<Magic::System::ThreadsComponent>())
 		{
-			Magic::SceneCommon* _pSceneCommon = GetSceneCommon(_SceneName);
-			if (_pSceneCommon)
+			if (_SceneName)
 			{
-				//线程安全--------Start
-				Magic::System::ThreadsComponent* _pThreadsComponent = _EntityCommon.GetComponent<Magic::System::ThreadsComponent>().operator->();
-				EnterCriticalSection(&_pThreadsComponent->m_MutexObjectMessage);
-				_pThreadsComponent->m_vec_ObjectMessageStruct.push_back({ _pSceneCommon->GetEntity(),_MessageStruct });
-				LeaveCriticalSection(&_pThreadsComponent->m_MutexObjectMessage);
-				//线程安全--------End
+				Magic::SceneCommon* _pSceneCommon = GetSceneCommon(_SceneName);
+				if (_pSceneCommon)
+				{
+					//线程安全--------Start
+					Magic::System::ThreadsComponent* _pThreadsComponent = _EntityCommon.GetComponent<Magic::System::ThreadsComponent>().operator->();
+					EnterCriticalSection(&_pThreadsComponent->m_MutexObjectMessage);
+					_pThreadsComponent->m_vec_ObjectMessageStruct.push_back({ _pSceneCommon->GetEntity(),_MessageStruct });
+					LeaveCriticalSection(&_pThreadsComponent->m_MutexObjectMessage);
+					//线程安全--------End
 
-				return true;
+					return true;
+				}
+				else
+				{
+					SetEngineErrorMessage("没有此场景\n");
+					return false;
+				}
 			}
 			else
 			{
-				SetEngineErrorMessage("没有此场景\n");
-				return false;
+				Magic::System::ThreadsComponent* _pThreadsComponent = _EntityCommon.GetComponent<Magic::System::ThreadsComponent>().operator->();
+				EnterCriticalSection(&_pThreadsComponent->m_MutexObjectMessage);
+				_pThreadsComponent->m_vec_ObjectMessageStruct.push_back({ EntityCommon(),_MessageStruct });
+				LeaveCriticalSection(&_pThreadsComponent->m_MutexObjectMessage);
+
+				return true;
 			}
 		}
 		else
@@ -189,22 +201,34 @@ namespace Magic
 		EntityCommon _EntityCommon = MagicEngineContext::Instance()->GetThreadsResourceManager(_ThreadsName);
 		if (_EntityCommon.has_component<Magic::System::ThreadsComponent>())
 		{
-			Magic::SceneCommon* _pSceneCommon = GetSceneCommon(_EntityCommon, _SceneName);
-			if (_pSceneCommon)
+			if (_SceneName)
 			{
-				//线程安全--------Start
-				Magic::System::ThreadsComponent* _pThreadsComponent = _EntityCommon.GetComponent<Magic::System::ThreadsComponent>().operator->();
-				EnterCriticalSection(&_pThreadsComponent->m_MutexObjectMessage);
-				_pThreadsComponent->m_vec_ObjectMessageStruct.push_back({ _pSceneCommon->GetEntity(),_MessageStruct });
-				LeaveCriticalSection(&_pThreadsComponent->m_MutexObjectMessage);
-				//线程安全--------End
+				Magic::SceneCommon* _pSceneCommon = GetSceneCommon(_EntityCommon, _SceneName);
+				if (_pSceneCommon)
+				{
+					//线程安全--------Start
+					Magic::System::ThreadsComponent* _pThreadsComponent = _EntityCommon.GetComponent<Magic::System::ThreadsComponent>().operator->();
+					EnterCriticalSection(&_pThreadsComponent->m_MutexObjectMessage);
+					_pThreadsComponent->m_vec_ObjectMessageStruct.push_back({ _pSceneCommon->GetEntity(),_MessageStruct });
+					LeaveCriticalSection(&_pThreadsComponent->m_MutexObjectMessage);
+					//线程安全--------End
 
-				return true;
+					return true;
+				}
+				else
+				{
+					SetEngineErrorMessage("没有此场景\n");
+					return false;
+				}
 			}
 			else
 			{
-				SetEngineErrorMessage("没有此场景\n");
-				return false;
+				Magic::System::ThreadsComponent* _pThreadsComponent = _EntityCommon.GetComponent<Magic::System::ThreadsComponent>().operator->();
+				EnterCriticalSection(&_pThreadsComponent->m_MutexObjectMessage);
+				_pThreadsComponent->m_vec_ObjectMessageStruct.push_back({ EntityCommon(),_MessageStruct });
+				LeaveCriticalSection(&_pThreadsComponent->m_MutexObjectMessage);
+
+				return true;
 			}
 		}
 		else
