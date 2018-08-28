@@ -13,20 +13,31 @@ namespace Magic
 		SceneCommon(const char* _name);
 		virtual ~SceneCommon();
 
+		static int S_MessageHandle(EntityX::Entity _Entity, const Magic::System::MessageStruct& _MessageStruct);
+		static void S_Updata(EntityX::Entity _Entity);
+		static void S_RenderStart(EntityCommon _Entity);
+		static void S_Render(EntityCommon _Entity);
+		static void S_RenderEnd(EntityCommon _Entity);
+
 		virtual bool OnInitialize() = 0;
 
 		inline EntityCommon GetEntity() { return m_Entity; }
 		inline const char* GetName() { return m_Name.c_str(); }
 
 		//此函数只能调用一次
-		bool Initialize(const EntityCommon& _ParentEntity, Magic::SceneCommon* _pSceneCommon, bool _AutoRelease);
+		virtual bool Initialize(const EntityCommon& _ParentEntity, bool _AutoRelease);
+
+	protected:
+		virtual int MessageHandle(const Magic::System::MessageStruct& _MessageStruct);
+		virtual void Updata();
+		virtual void RenderStart();
+		virtual void Render();
+		virtual void RenderEnd();
+
 	private:
 		EntityCommon m_Entity;
 		std::string m_Name;
 	};
-
-	void SceneRenderStart(EntityCommon _Entity);
-	void SceneRenderEnd(EntityCommon _Entity);
 
 	template <typename T>
 	bool CreateScene(EntityCommon _ParentEntity, T** _SceneCommon)
@@ -38,7 +49,7 @@ namespace Magic
 			_AutoRelase = true;
 		}
 
-		bool _result = (*_SceneCommon)->SceneCommon::Initialize(_ParentEntity, *_SceneCommon, _AutoRelase);
+		bool _result = (*_SceneCommon)->SceneCommon::Initialize(_ParentEntity, _AutoRelase);
 		if (!_result)
 			return false;
 
@@ -86,7 +97,7 @@ namespace Magic
 	*返回值：
 	*	Magic::SceneCommon* = 窗口指针
 	*/
-	DLL_MAGIC_ENGINE_OUTPUT_INPUT Magic::SceneCommon* GetSceneCommon(const char* _ThreadsName,const char* _SceneName);
+	DLL_MAGIC_ENGINE_OUTPUT_INPUT Magic::SceneCommon* GetSceneCommon(const char* _ThreadsName, const char* _SceneName);
 
 	/*
 	*功能：

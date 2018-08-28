@@ -31,6 +31,8 @@ ${PROJECT_SOURCE_DIR}../../../Core/MagicUI/UserScene.h)
 set(UI_CONTROL_FILES
 ${PROJECT_SOURCE_DIR}../../../Core/MagicUI/UI_Control/Button.h
 ${PROJECT_SOURCE_DIR}../../../Core/MagicUI/UI_Control/Button.cpp
+${PROJECT_SOURCE_DIR}../../../Core/MagicUI/UI_Control/BaseWindow.h
+${PROJECT_SOURCE_DIR}../../../Core/MagicUI/UI_Control/BaseWindow.cpp
 )
 
 SOURCE_GROUP("Include Files" FILES ${INCLUDE_FILES})

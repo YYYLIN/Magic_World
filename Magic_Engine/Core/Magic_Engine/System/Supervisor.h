@@ -96,6 +96,7 @@ namespace Magic
 
 		struct MouseCollisionStateC :EntityX::Component<MouseCollisionStateC>
 		{
+			explicit MouseCollisionStateC(bool _State = false) :IsCollision(_State) {}
 			bool IsCollision;
 		};
 
@@ -105,6 +106,7 @@ namespace Magic
 			virtual void Update(EntityX::EntityManager &_es, EntityX::EventManager &_events, ::EntityX::Entity _NowEntity, EntityX::TimeDelta _time) override;
 
 			MessageStruct m_MessageStruct;
+			int m_Return;
 		};
 
 		/*

@@ -4,6 +4,7 @@ include_directories(
 ../../../Core/Magic_Engine/Include
 ../../../Core/Magic_Engine/
 ../../../Core/MagicUI/Include
+../../../Core/MagicUI/
 ../../../Core/WaterMagic
 ../../../Plugins/Structure)
 

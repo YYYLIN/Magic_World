@@ -59,7 +59,32 @@ namespace Magic
 			m_Entity.destroy();
 	}
 
-	bool SceneCommon::Initialize(const EntityCommon& _ParentEntity, Magic::SceneCommon* _pSceneCommon, bool _AutoRelease)
+	int SceneCommon::S_MessageHandle(EntityX::Entity _Entity, const Magic::System::MessageStruct& _MessageStruct)
+	{
+		return _Entity.GetComponent<SceneEntityC>()->m_SceneCommonBox.pSceneCommon->MessageHandle(_MessageStruct);
+	}
+
+	void SceneCommon::S_Updata(EntityX::Entity _Entity)
+	{
+		_Entity.GetComponent<SceneEntityC>()->m_SceneCommonBox.pSceneCommon->Updata();
+	}
+
+	void SceneCommon::S_RenderStart(EntityCommon _Entity)
+	{
+		_Entity.GetComponent<SceneEntityC>()->m_SceneCommonBox.pSceneCommon->RenderStart();
+	}
+
+	void SceneCommon::S_Render(EntityCommon _Entity)
+	{
+		_Entity.GetComponent<SceneEntityC>()->m_SceneCommonBox.pSceneCommon->Render();
+	}
+
+	void SceneCommon::S_RenderEnd(EntityCommon _Entity)
+	{
+		_Entity.GetComponent<SceneEntityC>()->m_SceneCommonBox.pSceneCommon->RenderEnd();
+	}
+
+	bool SceneCommon::Initialize(const EntityCommon& _ParentEntity, bool _AutoRelease)
 	{
 		if (m_Entity.valid())
 		{
@@ -70,9 +95,15 @@ namespace Magic
 		if (!_result)
 			return false;
 
-		m_Entity.assign<SceneEntityC>(Magic::System::SceneCommonBox(_pSceneCommon, _AutoRelease));
+		m_Entity.assign<SceneEntityC>(Magic::System::SceneCommonBox(this, _AutoRelease));
 
-		_result = AddSceneCommon(_pSceneCommon, _AutoRelease);
+		m_Entity.GetComponent<Magic::System::MessageHandleComponent>()->m_Call_MessageHandle = Magic::SceneCommon::S_MessageHandle;
+		m_Entity.GetComponent<Magic::System::UpdataComponent>()->m_Call_Updata = Magic::SceneCommon::S_Updata;
+		m_Entity.GetComponent<Magic::System::RenderComponent>()->m_Call_RenderStart = Magic::SceneCommon::S_RenderStart;
+		m_Entity.GetComponent<Magic::System::RenderComponent>()->m_Call_Render = Magic::SceneCommon::S_Render;
+		m_Entity.GetComponent<Magic::System::RenderComponent>()->m_Call_RenderEnd = Magic::SceneCommon::S_RenderEnd;
+
+		_result = AddSceneCommon(this, _AutoRelease);
 		if (!_result)
 			return false;
 
@@ -83,9 +114,19 @@ namespace Magic
 		return true;
 	}
 
-	void SceneRenderStart(EntityCommon _Entity)
+	int SceneCommon::MessageHandle(const Magic::System::MessageStruct& _MessageStruct)
 	{
-		glm::vec2 _pos = _Entity.GetComponent<Magic::System::PosSizeComponent>()->m_Pos;
+		return MAGIC_RETURN_OK;
+	}
+
+	void SceneCommon::Updata()
+	{
+
+	}
+
+	void SceneCommon::RenderStart()
+	{
+		glm::vec2 _pos = m_Entity.GetComponent<Magic::System::PosSizeComponent>()->m_Pos;
 
 		glm::mat4 _Camera = CONST_CAMERA;
 		_Camera[3].x = _pos.x;
@@ -93,9 +134,14 @@ namespace Magic
 		Magic::GetPen_Normal()->SetCameraMatrix(_Camera);
 	}
 
-	void SceneRenderEnd(EntityCommon _Entity)
+	void SceneCommon::Render()
 	{
-		EntityCommon _pParentSupervisor = _Entity.GetComponent<Magic::System::RenderComponent>()->pParentSupervisor;
+
+	}
+
+	void SceneCommon::RenderEnd()
+	{
+		EntityCommon _pParentSupervisor = m_Entity.GetComponent<Magic::System::RenderComponent>()->pParentSupervisor;
 		if (_pParentSupervisor.valid())
 		{
 			glm::vec2 _pos = _pParentSupervisor.GetComponent<Magic::System::PosSizeComponent>()->m_Pos;
@@ -121,10 +167,11 @@ namespace Magic
 			EntityX::EntityX* _Supervisor = &((*_EntityCommon).assign<Magic::System::ObjectSupervisor>()->m_Supervisor);
 
 			(*_EntityCommon).assign<Magic::System::PosSizeComponent>(glm::vec2(0.0f, 0.0f), glm::vec2(0.0f, 0.0f));
-			(*_EntityCommon).assign<Magic::System::UpdataComponent>((Magic::System::Call_Entity)0);
-			(*_EntityCommon).assign<Magic::System::RenderComponent>(_ParentEntity, Magic::SceneRenderStart,
-				(Magic::System::Call_Entity)0, Magic::SceneRenderEnd);
+			(*_EntityCommon).assign<Magic::System::MessageHandleComponent>();
+			(*_EntityCommon).assign<Magic::System::UpdataComponent>();
+			(*_EntityCommon).assign<Magic::System::RenderComponent>(_ParentEntity);
 
+			_Supervisor->m_systems.add<Magic::System::MessageHandleSystem>();
 			_Supervisor->m_systems.add<Magic::System::ObjectUpdataSystem>();
 			_Supervisor->m_systems.add<Magic::System::ObjectRenderSystem>();
 			_Supervisor->m_systems.configure();

@@ -3,7 +3,7 @@
 
 MainScene* MainScene::pMainScene = 0;
 
-MainScene::MainScene() :SceneCommon("MainScene")
+MainScene::MainScene() :BaseWindow("MainScene")
 {
 	m_MagicRotate = 0.0f;
 	pMainScene = this;
@@ -31,26 +31,23 @@ bool MainScene::OnInitialize()
 		if (!_result)
 			return false;*/
 
-	Magic::SetSceneCallUpdata(this->GetEntity(), OnUpdata);
-	Magic::SetSceneCallRender(this->GetEntity(), Draw);
-
 	return true;
 }
 
-void MainScene::OnUpdata(EntityCommon _Entity)
+void MainScene::OnUpdata()
 {
 	pMainScene->m_MagicRotate += (float)Magic::GetThreadsDiffTime() * 0.01f;
 	if (pMainScene->m_MagicRotate >= 360.0f)
 		pMainScene->m_MagicRotate = 0.0f;
 }
 
-void MainScene::Draw(EntityCommon _Entity)
+void MainScene::Draw()
 {
 	glm::mat4 _worldMatrix;
 
 	Magic::Pen_Normal* pPen_Normal = Magic::GetPen_Normal();
 
-	glm::vec2 _Size = Magic::GetSceneSize(_Entity);
+	glm::vec2 _Size = Magic::GetSceneSize(GetEntity());
 
 	pPen_Normal->SetColor(Magic::Color4(1.0f, 0.0f, 0.0f, 1.0f));
 	pPen_Normal->DrawRectangle(Magic::Pen_Normal::TRIANGLES, 30, 30, 100, 100);

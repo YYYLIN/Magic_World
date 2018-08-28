@@ -25,6 +25,7 @@ namespace Magic
 				{
 					if (_NowEntity.has_component<MouseCollisionStateC>() && !_NowEntity.GetComponent<MouseCollisionStateC>()->IsCollision)
 					{
+						m_Return = MAGIC_RETURN_EXIT;
 						return;
 					}
 
@@ -39,12 +40,19 @@ namespace Magic
 			for (EntityX::Entity _entity : _es.entities_with_components<MessageHandleComponent>(_MessageHandleComponent))
 			{
 				if (_MessageHandleComponent->m_Call_MessageHandle)
-					_MessageHandleComponent->m_Call_MessageHandle(_entity, m_MessageStruct);
+				{
+					m_Return = _MessageHandleComponent->m_Call_MessageHandle(_entity, m_MessageStruct);
+					if (m_Return == MAGIC_RETURN_EXIT)
+						return;
+				}
 				if (_entity.has_component<ObjectSupervisor>())
 				{
 					ObjectSupervisor* _pObjectSupervisor = _entity.GetComponent<ObjectSupervisor>().operator->();
 					_pObjectSupervisor->m_Supervisor.m_systems.system<MessageHandleSystem>()->m_MessageStruct = m_MessageStruct;
 					_pObjectSupervisor->m_Supervisor.m_systems.Update<MessageHandleSystem>(_entity, _time);
+					m_Return = _pObjectSupervisor->m_Supervisor.m_systems.system<MessageHandleSystem>()->m_Return;
+					if (m_Return == MAGIC_RETURN_EXIT)
+						return;
 				}
 			}
 		}
@@ -59,12 +67,18 @@ namespace Magic
 				{
 					MessageHandleComponent* _pMessageHandleComponent = _Message.Object.GetComponent<MessageHandleComponent>().operator->();
 					if (_pMessageHandleComponent->m_Call_MessageHandle)
-						_pMessageHandleComponent->m_Call_MessageHandle(_Message.Object, _Message.Message);
+					{
+						int _result = _pMessageHandleComponent->m_Call_MessageHandle(_Message.Object, _Message.Message);
+						if (_result == MAGIC_RETURN_EXIT)
+							return;
+					}
 					if (_Message.Object.has_component<ObjectSupervisor>())
 					{
 						ObjectSupervisor* _pObjectSupervisor = _Message.Object.GetComponent<ObjectSupervisor>().operator->();
 						_pObjectSupervisor->m_Supervisor.m_systems.system<MessageHandleSystem>()->m_MessageStruct = _Message.Message;
 						_pObjectSupervisor->m_Supervisor.m_systems.Update<MessageHandleSystem>(_Message.Object, _time);
+						if (_pObjectSupervisor->m_Supervisor.m_systems.system<MessageHandleSystem>()->m_Return == MAGIC_RETURN_EXIT)
+							return;
 					}
 
 					continue;
@@ -74,12 +88,18 @@ namespace Magic
 				for (EntityX::Entity _entity : _es.entities_with_components<MessageHandleComponent>(_MessageHandleComponent))
 				{
 					if (_MessageHandleComponent->m_Call_MessageHandle)
-						_MessageHandleComponent->m_Call_MessageHandle(_entity, _Message.Message);
+					{
+						int _result = _MessageHandleComponent->m_Call_MessageHandle(_entity, _Message.Message);
+						if (_result == MAGIC_RETURN_EXIT)
+							return;
+					}
 					if (_entity.has_component<ObjectSupervisor>())
 					{
 						ObjectSupervisor* _pObjectSupervisor = _entity.GetComponent<ObjectSupervisor>().operator->();
 						_pObjectSupervisor->m_Supervisor.m_systems.system<MessageHandleSystem>()->m_MessageStruct = _Message.Message;
 						_pObjectSupervisor->m_Supervisor.m_systems.Update<MessageHandleSystem>(_entity, _time);
+						if (_pObjectSupervisor->m_Supervisor.m_systems.system<MessageHandleSystem>()->m_Return == MAGIC_RETURN_EXIT)
+							return;
 					}
 				}
 			}

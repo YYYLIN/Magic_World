@@ -1,11 +1,11 @@
 #ifndef _MAINSCENE_H_
 #define _MAINSCENE_H_
 
-#include "Render/MagicScene.h"
+#include "UI_Control/BaseWindow.h"
 #include "Render/Magic_Fonts.h"
 
 
-class MainScene : public Magic::SceneCommon
+class MainScene : public Magic::UI::BaseWindow
 {
 public:
 	MainScene();
@@ -13,8 +13,8 @@ public:
 
 protected:
 	bool OnInitialize();
-	static void OnUpdata(EntityCommon _Entity);
-	static void Draw(EntityCommon _Entity);
+	void OnUpdata();
+	void Draw();
 
 private:
 	MagicTexture pMagicTexture;
