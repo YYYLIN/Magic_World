@@ -21,11 +21,11 @@ namespace Magic
 			if (!_result)
 				return false;
 
-			//EntityX::EntityX* _Supervisor = &(GetEntity().GetComponent<Magic::System::ObjectSupervisor>()->m_Supervisor);
+			EntityX::EntityX* _Supervisor = &(GetEntity().GetComponent<Magic::System::ObjectSupervisor>()->m_Supervisor);
 
-			//GetEntity().assign<Magic::System::MouseCollisionStateC>(0);
+			GetEntity().assign<Magic::System::MouseCollisionStateC>();
 
-			//_Supervisor->m_systems.add<Magic::System::MouseCollisionCheckSystem>();
+			_Supervisor->m_systems.add<Magic::System::MouseCollisionCheckSystem>();
 
 			return true;
 		}

@@ -49,7 +49,7 @@ namespace Magic
 			_AutoRelase = true;
 		}
 
-		bool _result = (*_SceneCommon)->SceneCommon::Initialize(_ParentEntity, _AutoRelase);
+		bool _result = (*_SceneCommon)->Initialize(_ParentEntity, _AutoRelase);
 		if (!_result)
 			return false;
 

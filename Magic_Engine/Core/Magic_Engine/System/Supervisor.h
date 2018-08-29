@@ -5,11 +5,14 @@
 #include "windows.h"
 #include "Render/MagicPen.h"
 
+#pragma warning(push)
+#pragma warning(disable:4251)
+
 namespace Magic
 {
 	namespace System
 	{
-		struct ObjectSupervisor : EntityX::Component<ObjectSupervisor>
+		struct DLL_MAGIC_ENGINE_OUTPUT_INPUT ObjectSupervisor : EntityX::Component<ObjectSupervisor>
 		{
 			ObjectSupervisor() = default;
 			ObjectSupervisor(const ObjectSupervisor& _ObjectSupervisor)
@@ -94,7 +97,7 @@ namespace Magic
 			float x, y, z, w, h;
 		};
 
-		struct MouseCollisionStateC :EntityX::Component<MouseCollisionStateC>
+		struct DLL_MAGIC_ENGINE_OUTPUT_INPUT MouseCollisionStateC :EntityX::Component<MouseCollisionStateC>
 		{
 			explicit MouseCollisionStateC(bool _State = false) :IsCollision(_State) {}
 			bool IsCollision;
@@ -144,10 +147,12 @@ namespace Magic
 			virtual void Update(EntityX::EntityManager &_es, EntityX::EventManager &_events, ::EntityX::Entity _NowEntity, EntityX::TimeDelta _time) override;
 		};
 
-		class MouseCollisionCheckSystem :public EntityX::System<MouseCollisionCheckSystem>
+		class DLL_MAGIC_ENGINE_OUTPUT_INPUT MouseCollisionCheckSystem :public EntityX::System<MouseCollisionCheckSystem>
 		{
 		public:
 			virtual void Update(EntityX::EntityManager &_es, EntityX::EventManager &_events, ::EntityX::Entity _NowEntity, EntityX::TimeDelta _time) override;
 		};
 	}
 }
+
+#pragma warning(pop)

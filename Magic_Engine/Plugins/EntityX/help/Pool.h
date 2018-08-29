@@ -13,6 +13,10 @@
 #include <cstddef>
 #include <cassert>
 #include <vector>
+#include "Define/Magic_Macro.h"
+
+#pragma warning(push)
+#pragma warning(disable:4251)
 
 namespace EntityX
 {
@@ -27,7 +31,7 @@ namespace EntityX
 	 * Lookups are O(1).
 	 * Appends are amortized O(1).
 	 */
-	class BasePool
+	class DLL_MAGIC_ENGINE_OUTPUT_INPUT BasePool
 	{
 	public:
 		explicit BasePool(std::size_t element_size, std::size_t chunk_size = 8192)
@@ -102,3 +106,5 @@ namespace EntityX
 	};
 
 }  // namespace entityx
+
+#pragma warning(pop)

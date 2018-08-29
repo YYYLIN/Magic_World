@@ -20,7 +20,11 @@
 #include "Entity.h"
 #include "Event.h"
 #include "help/NonCopyable.h"
+#include "Define/Magic_Macro.h"
 
+
+#pragma warning(push)
+#pragma warning(disable:4251)
 
 namespace EntityX {
 
@@ -31,7 +35,7 @@ namespace EntityX {
 	/**
 	 * Base System class. Generally should not be directly used, instead see System<Derived>.
 	 */
-	class BaseSystem : ::EntityX::help::NonCopyable
+	class DLL_MAGIC_ENGINE_OUTPUT_INPUT BaseSystem : ::EntityX::help::NonCopyable
 	{
 	public:
 		typedef size_t Family;
@@ -204,5 +208,6 @@ namespace EntityX {
 
 }  // namespace EntityX
 
+#pragma warning(pop)
 
 #endif

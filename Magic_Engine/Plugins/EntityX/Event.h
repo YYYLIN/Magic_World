@@ -23,6 +23,8 @@
 #include "3rdparty/simplesignal.h"
 #include "help/NonCopyable.h"
 
+#pragma warning(push)
+#pragma warning(disable:4251)
 
 namespace EntityX
 {
@@ -30,7 +32,7 @@ namespace EntityX
 
 	/// Used internally by the EventManager.
 	// 由EventManager内部使用。
-	class BaseEvent
+	class DLL_MAGIC_ENGINE_OUTPUT_INPUT BaseEvent
 	{
 	public:
 		typedef std::size_t Family;
@@ -117,7 +119,7 @@ namespace EntityX
 	 *
 	 * Subscriptions are automatically removed when receivers are destroyed..
 	 */
-	class EventManager : private ::EntityX::help::NonCopyable
+	class DLL_MAGIC_ENGINE_OUTPUT_INPUT EventManager : private ::EntityX::help::NonCopyable
 	{
 	public:
 		EventManager();
@@ -242,5 +244,6 @@ namespace EntityX
 
 }  // namespace EntityX
 
+#pragma warning(pop)
 
 #endif

@@ -254,7 +254,7 @@ namespace EntityX
 	 *
 	 * Family is used for registration.
 	 */
-	struct BaseComponent
+	struct DLL_MAGIC_ENGINE_OUTPUT_INPUT BaseComponent
 	{
 	public:
 		typedef size_t Family;
@@ -389,7 +389,7 @@ namespace EntityX
 	/**
 	 * Manages Entity::Id creation and component assignment.
 	 */
-	class EntityManager : private ::EntityX::help::NonCopyable
+	class DLL_MAGIC_ENGINE_OUTPUT_INPUT EntityManager : private ::EntityX::help::NonCopyable
 	{
 	public:
 		typedef std::bitset<MAX_COMPONENTS> ComponentMask;
