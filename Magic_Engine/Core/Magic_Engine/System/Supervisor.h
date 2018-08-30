@@ -14,24 +14,24 @@ namespace Magic
 	{
 		struct DLL_MAGIC_ENGINE_OUTPUT_INPUT ObjectSupervisor : EntityX::Component<ObjectSupervisor>
 		{
-			ObjectSupervisor() = default;
+			explicit ObjectSupervisor(EntityCommon _pParent = EntityCommon()) :pParentSupervisor(_pParent) {}
 			ObjectSupervisor(const ObjectSupervisor& _ObjectSupervisor)
 			{
 				memcpy(this, &_ObjectSupervisor, sizeof(ObjectSupervisor));
 			}
 
 			EntityX::EntityX m_Supervisor;
+			EntityCommon pParentSupervisor;
 		};
 
 		struct RenderComponent : EntityX::Component<RenderComponent>
 		{
-			explicit RenderComponent(EntityCommon _pParent, Call_Entity _Call_RenderStart = 0, Call_Entity _Call_Render = 0, Call_Entity _Call_RenderEnd = 0)
-				:pParentSupervisor(_pParent), m_Call_RenderStart(_Call_RenderStart), m_Call_Render(_Call_Render), m_Call_RenderEnd(_Call_RenderEnd) {}
+			explicit RenderComponent(Call_Entity _Call_RenderStart = 0, Call_Entity _Call_Render = 0, Call_Entity _Call_RenderEnd = 0)
+				: m_Call_RenderStart(_Call_RenderStart), m_Call_Render(_Call_Render), m_Call_RenderEnd(_Call_RenderEnd) {}
 
 			Call_Entity m_Call_RenderStart;
 			Call_Entity m_Call_Render;
 			Call_Entity m_Call_RenderEnd;
-			EntityCommon pParentSupervisor;
 		};
 
 		struct PosSizeComponent :EntityX::Component<PosSizeComponent>
@@ -97,12 +97,6 @@ namespace Magic
 			float x, y, z, w, h;
 		};
 
-		struct DLL_MAGIC_ENGINE_OUTPUT_INPUT MouseCollisionStateC :EntityX::Component<MouseCollisionStateC>
-		{
-			explicit MouseCollisionStateC(bool _State = false) :IsCollision(_State) {}
-			bool IsCollision;
-		};
-
 		class MessageHandleSystem :public EntityX::System<MessageHandleSystem>
 		{
 		public:
@@ -142,12 +136,6 @@ namespace Magic
 		};
 
 		class ObjectRenderSystem :public EntityX::System<ObjectRenderSystem>
-		{
-		public:
-			virtual void Update(EntityX::EntityManager &_es, EntityX::EventManager &_events, ::EntityX::Entity _NowEntity, EntityX::TimeDelta _time) override;
-		};
-
-		class DLL_MAGIC_ENGINE_OUTPUT_INPUT MouseCollisionCheckSystem :public EntityX::System<MouseCollisionCheckSystem>
 		{
 		public:
 			virtual void Update(EntityX::EntityManager &_es, EntityX::EventManager &_events, ::EntityX::Entity _NowEntity, EntityX::TimeDelta _time) override;

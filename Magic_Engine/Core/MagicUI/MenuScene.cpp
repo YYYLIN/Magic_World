@@ -18,7 +18,7 @@ namespace Magic
 		bool MenuScene::OnInitialize()
 		{
 			EntityX::EntityX* _Supervisor = &(GetEntity().GetComponent<Magic::System::ObjectSupervisor>()->m_Supervisor);
-			_Supervisor->m_systems.add<Magic::System::MouseCollisionCheckSystem>();
+			_Supervisor->m_systems.add<Magic::MouseCollisionCheckSystem>();
 
 			return true;
 		}

@@ -48,6 +48,19 @@ namespace Magic
 		}
 	}
 
+	//------------------------------------------------------------------
+
+	void MouseCollisionCheckSystem::Update(EntityX::EntityManager &_es, EntityX::EventManager &_events, ::EntityX::Entity _NowEntity, EntityX::TimeDelta _time)
+	{
+		glm::vec2 _MousePos = GetNowSceneTOParentsScenePos(m_MousePos, _NowEntity, EntityCommon());
+		EntityX::ComponentHandle<Magic::System::ObjectPositionSizeC> _ObjectPositionSizeC;
+		EntityX::ComponentHandle<MouseCollisionStateC> _MouseCollisionStateC;
+		for (EntityX::Entity _entity : _es.entities_with_components<Magic::System::ObjectPositionSizeC, MouseCollisionStateC>(_ObjectPositionSizeC, _MouseCollisionStateC))
+		{
+
+		}
+	}
+
 	SceneCommon::SceneCommon(const char* _name)
 	{
 		m_Name = _name;
@@ -61,6 +74,22 @@ namespace Magic
 
 	int SceneCommon::S_MessageHandle(EntityX::Entity _Entity, const Magic::System::MessageStruct& _MessageStruct)
 	{
+		if (_MessageStruct.MessageType == MAGIC_UI_MESSAGE_MOUSE_MOVE)
+		{
+			if (_Entity.has_component<MouseCollisionStateC>() && !_Entity.GetComponent<MouseCollisionStateC>()->IsCollision)
+			{
+				return MAGIC_RETURN_EXIT;
+			}
+			EntityX::EntityX* _pSupervisor = &_Entity.GetComponent<Magic::System::ObjectSupervisor>()->m_Supervisor;
+
+			if (_Entity.has_component<Magic::System::ObjectSupervisor>() && _pSupervisor->m_systems.Has_System<MouseCollisionCheckSystem>())
+			{
+				_pSupervisor->m_systems.system<MouseCollisionCheckSystem>()->m_MousePos = 
+					glm::vec2(LONG_TO_MOUSE_X(_MessageStruct.Message), LONG_TO_MOUSE_Y(_MessageStruct.Message));
+				_pSupervisor->m_systems.Update<MouseCollisionCheckSystem>(_Entity, 0);
+			}
+		}
+
 		return _Entity.GetComponent<SceneEntityC>()->m_SceneCommonBox.pSceneCommon->MessageHandle(_MessageStruct);
 	}
 
@@ -141,7 +170,7 @@ namespace Magic
 
 	void SceneCommon::RenderEnd()
 	{
-		EntityCommon _pParentSupervisor = m_Entity.GetComponent<Magic::System::RenderComponent>()->pParentSupervisor;
+		EntityCommon _pParentSupervisor = m_Entity.GetComponent<Magic::System::ObjectSupervisor>()->pParentSupervisor;
 		if (_pParentSupervisor.valid())
 		{
 			glm::vec2 _pos = _pParentSupervisor.GetComponent<Magic::System::PosSizeComponent>()->m_Pos;
@@ -164,12 +193,12 @@ namespace Magic
 		{
 			*_EntityCommon = _ParentEntity.GetComponent<Magic::System::ObjectSupervisor>()->m_Supervisor.m_entities.create();
 
-			EntityX::EntityX* _Supervisor = &((*_EntityCommon).assign<Magic::System::ObjectSupervisor>()->m_Supervisor);
+			EntityX::EntityX* _Supervisor = &((*_EntityCommon).assign<Magic::System::ObjectSupervisor>(_ParentEntity)->m_Supervisor);
 
 			(*_EntityCommon).assign<Magic::System::PosSizeComponent>(glm::vec2(0.0f, 0.0f), glm::vec2(0.0f, 0.0f));
 			(*_EntityCommon).assign<Magic::System::MessageHandleComponent>();
 			(*_EntityCommon).assign<Magic::System::UpdataComponent>();
-			(*_EntityCommon).assign<Magic::System::RenderComponent>(_ParentEntity);
+			(*_EntityCommon).assign<Magic::System::RenderComponent>();
 
 			_Supervisor->m_systems.add<Magic::System::MessageHandleSystem>();
 			_Supervisor->m_systems.add<Magic::System::ObjectUpdataSystem>();
@@ -293,5 +322,18 @@ namespace Magic
 	const glm::vec2& GetSceneSize(EntityCommon _EntityCommon)
 	{
 		return _EntityCommon.GetComponent<Magic::System::PosSizeComponent>()->m_Size;
+	}
+
+	const glm::vec2& GetNowSceneTOParentsScenePos(glm::vec2 _Pos, EntityCommon _NowScene, const EntityCommon& _ParentsScene)
+	{
+		while (_NowScene != _ParentsScene && _NowScene.valid())
+		{
+			if (_NowScene.has_component<Magic::System::PosSizeComponent>())
+				_Pos += _NowScene.GetComponent<Magic::System::PosSizeComponent>()->m_Pos;
+			if (_NowScene.has_component<Magic::System::ObjectSupervisor>())
+				_NowScene = _NowScene.GetComponent<Magic::System::ObjectSupervisor>()->pParentSupervisor;
+		}
+
+		return _Pos;
 	}
 }

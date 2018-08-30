@@ -23,9 +23,9 @@ namespace Magic
 
 			EntityX::EntityX* _Supervisor = &(GetEntity().GetComponent<Magic::System::ObjectSupervisor>()->m_Supervisor);
 
-			GetEntity().assign<Magic::System::MouseCollisionStateC>();
+			GetEntity().assign<Magic::MouseCollisionStateC>();
 
-			_Supervisor->m_systems.add<Magic::System::MouseCollisionCheckSystem>();
+			_Supervisor->m_systems.add<Magic::MouseCollisionCheckSystem>();
 
 			return true;
 		}

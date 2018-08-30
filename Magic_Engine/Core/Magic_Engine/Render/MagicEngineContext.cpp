@@ -508,7 +508,7 @@ bool MagicEngineContext::CreateOpenglRender(HWND _hwnd, EntityCommon _ThreadReso
 
 		::EntityX::ComponentHandle<Magic::System::PosSizeComponent> _PosSizeComponent =
 			_ThreadResourceManager.assign<Magic::System::PosSizeComponent>(glm::vec2(0.0f, 0.0f), glm::vec2(_Rect.right, _Rect.bottom));
-		_ThreadResourceManager.assign<Magic::System::RenderComponent>(EntityCommon(), Magic::EngineRenderStart,
+		_ThreadResourceManager.assign<Magic::System::RenderComponent>(Magic::EngineRenderStart,
 			(Magic::System::Call_Entity)0, Magic::EngineRenderEnd);
 
 		return true;

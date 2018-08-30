@@ -7,6 +7,20 @@
 
 namespace Magic
 {
+	struct DLL_MAGIC_ENGINE_OUTPUT_INPUT MouseCollisionStateC :EntityX::Component<MouseCollisionStateC>
+	{
+		explicit MouseCollisionStateC(bool _State = false) :IsCollision(_State) {}
+		bool IsCollision;
+	};
+
+	class DLL_MAGIC_ENGINE_OUTPUT_INPUT MouseCollisionCheckSystem :public EntityX::System<MouseCollisionCheckSystem>
+	{
+	public:
+		virtual void Update(EntityX::EntityManager &_es, EntityX::EventManager &_events, ::EntityX::Entity _NowEntity, EntityX::TimeDelta _time) override;
+
+		glm::vec2 m_MousePos;
+	};
+
 	class DLL_MAGIC_ENGINE_OUTPUT_INPUT SceneCommon
 	{
 	public:
@@ -115,5 +129,19 @@ namespace Magic
 	DLL_MAGIC_ENGINE_OUTPUT_INPUT const glm::vec2& GetScenePos(EntityCommon _EntityCommon);
 
 	DLL_MAGIC_ENGINE_OUTPUT_INPUT const glm::vec2& GetSceneSize(EntityCommon _EntityCommon);
+
+	/*
+	*功能：
+	*	获取从相对当前窗口的某个位置转换到相对某一父亲窗口的相对位置
+	*警告：
+	*	必须是当前窗口的父亲窗口
+	*参数：
+	*	[IN]_Pos = 输入位置
+	*	[IN]_NowScene = 当前对象窗口
+	*	[IN]_ParentsScene = 需要转换到的父亲窗口
+	*返回值：
+	*	glm::vec2 = 当前窗口
+	*/
+	DLL_MAGIC_ENGINE_OUTPUT_INPUT const glm::vec2& GetNowSceneTOParentsScenePos(glm::vec2 _Pos, EntityCommon _NowScene, const EntityCommon& _ParentsScene);
 }
 #pragma warning(pop)

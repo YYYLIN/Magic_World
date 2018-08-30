@@ -18,24 +18,6 @@ namespace Magic
 
 		void MessageHandleSystem::Update(EntityX::EntityManager &_es, EntityX::EventManager &_events, ::EntityX::Entity _NowEntity, EntityX::TimeDelta _time)
 		{
-			if (_NowEntity.has_component<Magic::System::MessageHandleComponent>())
-			{
-				EntityX::ComponentHandle<Magic::System::MessageHandleComponent> _MessageHandleComponent = _NowEntity.GetComponent<Magic::System::MessageHandleComponent>();
-				if (m_MessageStruct.MessageType == MAGIC_UI_MESSAGE_MOUSE_MOVE)
-				{
-					if (_NowEntity.has_component<MouseCollisionStateC>() && !_NowEntity.GetComponent<MouseCollisionStateC>()->IsCollision)
-					{
-						m_Return = MAGIC_RETURN_EXIT;
-						return;
-					}
-
-					if (_NowEntity.has_component<ObjectSupervisor>() && _NowEntity.GetComponent<ObjectSupervisor>()->m_Supervisor.m_systems.Has_System<MouseCollisionCheckSystem>())
-					{
-						_NowEntity.GetComponent<ObjectSupervisor>()->m_Supervisor.m_systems.Update<MouseCollisionCheckSystem>(_NowEntity, _time);
-					}
-				}
-			}
-
 			EntityX::ComponentHandle<MessageHandleComponent> _MessageHandleComponent;
 			for (EntityX::Entity _entity : _es.entities_with_components<MessageHandleComponent>(_MessageHandleComponent))
 			{
@@ -70,7 +52,7 @@ namespace Magic
 					{
 						int _result = _pMessageHandleComponent->m_Call_MessageHandle(_Message.Object, _Message.Message);
 						if (_result == MAGIC_RETURN_EXIT)
-							return;
+							goto GOTO_TMFS_RRTURN;
 					}
 					if (_Message.Object.has_component<ObjectSupervisor>())
 					{
@@ -78,7 +60,7 @@ namespace Magic
 						_pObjectSupervisor->m_Supervisor.m_systems.system<MessageHandleSystem>()->m_MessageStruct = _Message.Message;
 						_pObjectSupervisor->m_Supervisor.m_systems.Update<MessageHandleSystem>(_Message.Object, _time);
 						if (_pObjectSupervisor->m_Supervisor.m_systems.system<MessageHandleSystem>()->m_Return == MAGIC_RETURN_EXIT)
-							return;
+							goto GOTO_TMFS_RRTURN;
 					}
 
 					continue;
@@ -91,7 +73,7 @@ namespace Magic
 					{
 						int _result = _MessageHandleComponent->m_Call_MessageHandle(_entity, _Message.Message);
 						if (_result == MAGIC_RETURN_EXIT)
-							return;
+							goto GOTO_TMFS_RRTURN;
 					}
 					if (_entity.has_component<ObjectSupervisor>())
 					{
@@ -99,11 +81,12 @@ namespace Magic
 						_pObjectSupervisor->m_Supervisor.m_systems.system<MessageHandleSystem>()->m_MessageStruct = _Message.Message;
 						_pObjectSupervisor->m_Supervisor.m_systems.Update<MessageHandleSystem>(_entity, _time);
 						if (_pObjectSupervisor->m_Supervisor.m_systems.system<MessageHandleSystem>()->m_Return == MAGIC_RETURN_EXIT)
-							return;
+							goto GOTO_TMFS_RRTURN;
 					}
 				}
 			}
 
+		GOTO_TMFS_RRTURN:
 			if (_pThreadsComponent->m_vec_ObjectMessageStruct.size())
 				_pThreadsComponent->m_vec_ObjectMessageStruct.clear();
 		}
@@ -165,16 +148,6 @@ namespace Magic
 					_entity.GetComponent<ObjectSupervisor>()->m_Supervisor.m_systems.Update<ObjectRenderSystem>(_entity, _time);
 				if (_RenderComponent->m_Call_RenderEnd)
 					_RenderComponent->m_Call_RenderEnd(_entity);
-			}
-		}
-
-		void MouseCollisionCheckSystem::Update(EntityX::EntityManager &_es, EntityX::EventManager &_events, ::EntityX::Entity _NowEntity, EntityX::TimeDelta _time)
-		{
-			EntityX::ComponentHandle<ObjectPositionSizeC> _ObjectPositionSizeC;
-			EntityX::ComponentHandle<MouseCollisionStateC> _MouseCollisionStateC;
-			for (EntityX::Entity _entity : _es.entities_with_components<ObjectPositionSizeC, MouseCollisionStateC>(_ObjectPositionSizeC, _MouseCollisionStateC))
-			{
-
 			}
 		}
 	}

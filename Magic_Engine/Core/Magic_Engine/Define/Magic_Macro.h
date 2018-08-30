@@ -26,4 +26,10 @@
 #define MAGIC_MESSAGE_SET_DISPLAY			0x00000001
 #define MAGIC_UI_MESSAGE_MOUSE_MOVE			0x00000002
 
+#define LONG_TO_MOUSE_X(a)			(short)(a)
+#define LONG_TO_MOUSE_Y(a)			(short)(a >> 16)
+
+#define MOUSE_X_TO_LONG(a)			(long)(a)
+#define MOUSE_Y_TO_LONG(a)			((long)a << 16)
+
 #endif
