@@ -165,8 +165,12 @@ LRESULT CALLBACK MagicWindows::MessageHandler(HWND _hwnd, UINT _umsg, WPARAM _wp
 		return 0;
 		// 任何其他的消息发送到默认的消息处理程序为我们的应用程序不使用它们。
 	case WM_MOUSEMOVE:
-		Magic::SendMessageToScene(0, { MAGIC_UI_MESSAGE_MOUSE_MOVE,_lparam });
+	{
+		RECT _rect;
+		GetClientRect(_hwnd, &_rect);
+		Magic::SendMessageToScene(0, { MAGIC_UI_MESSAGE_MOUSE_MOVE,(_lparam & 0xFFFF) | ((LPARAM)(_rect.bottom - GET_Y_LPARAM(_lparam))) << 16 });
 		return 0;
+	}
 	default:
 		return DefWindowProc(_hwnd, _umsg, _wparam, _lparam);
 	}

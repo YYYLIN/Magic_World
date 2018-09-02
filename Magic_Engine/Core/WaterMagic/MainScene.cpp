@@ -1,5 +1,6 @@
 #include "MainScene.h"
 #include "Render/MagicEngineAPI.h"
+#include "UI_Control/Button.h"
 
 MainScene* MainScene::pMainScene = 0;
 
@@ -30,6 +31,10 @@ bool MainScene::OnInitialize()
 		_result = m_FBOBuffer.ResetSize(_w, _h, 16);
 		if (!_result)
 			return false;*/
+
+	EntityCommon _Button;
+
+	CreateButton(this->GetEntity(), &_Button);
 
 	return true;
 }

@@ -52,12 +52,13 @@ namespace Magic
 
 	void MouseCollisionCheckSystem::Update(EntityX::EntityManager &_es, EntityX::EventManager &_events, ::EntityX::Entity _NowEntity, EntityX::TimeDelta _time)
 	{
-		glm::vec2 _MousePos = GetNowSceneTOParentsScenePos(m_MousePos, _NowEntity, EntityCommon());
+		m_MousePos -= GetNowSceneTOParentsScenePos(glm::vec2(), _NowEntity, EntityCommon());
 		EntityX::ComponentHandle<Magic::System::ObjectPositionSizeC> _ObjectPositionSizeC;
 		EntityX::ComponentHandle<MouseCollisionStateC> _MouseCollisionStateC;
 		for (EntityX::Entity _entity : _es.entities_with_components<Magic::System::ObjectPositionSizeC, MouseCollisionStateC>(_ObjectPositionSizeC, _MouseCollisionStateC))
 		{
-
+			_MouseCollisionStateC->IsCollision = _ObjectPositionSizeC->x <= m_MousePos.x && _ObjectPositionSizeC->x + _ObjectPositionSizeC->w >= m_MousePos.x &&
+				_ObjectPositionSizeC->y <= m_MousePos.y && _ObjectPositionSizeC->y + _ObjectPositionSizeC->h >= m_MousePos.y;
 		}
 	}
 
@@ -84,7 +85,7 @@ namespace Magic
 
 			if (_Entity.has_component<Magic::System::ObjectSupervisor>() && _pSupervisor->m_systems.Has_System<MouseCollisionCheckSystem>())
 			{
-				_pSupervisor->m_systems.system<MouseCollisionCheckSystem>()->m_MousePos = 
+				_pSupervisor->m_systems.system<MouseCollisionCheckSystem>()->m_MousePos =
 					glm::vec2(LONG_TO_MOUSE_X(_MessageStruct.Message), LONG_TO_MOUSE_Y(_MessageStruct.Message));
 				_pSupervisor->m_systems.Update<MouseCollisionCheckSystem>(_Entity, 0);
 			}
@@ -155,11 +156,11 @@ namespace Magic
 
 	void SceneCommon::RenderStart()
 	{
-		glm::vec2 _pos = m_Entity.GetComponent<Magic::System::PosSizeComponent>()->m_Pos;
+		EntityX::ComponentHandle<Magic::System::ObjectPositionSizeC> _ObjectPositionSizeC = m_Entity.GetComponent<Magic::System::ObjectPositionSizeC>();
 
 		glm::mat4 _Camera = CONST_CAMERA;
-		_Camera[3].x = _pos.x;
-		_Camera[3].y = _pos.y;
+		_Camera[3].x = _ObjectPositionSizeC->x;
+		_Camera[3].y = _ObjectPositionSizeC->y;
 		Magic::GetPen_Normal()->SetCameraMatrix(_Camera);
 	}
 
@@ -173,11 +174,11 @@ namespace Magic
 		EntityCommon _pParentSupervisor = m_Entity.GetComponent<Magic::System::ObjectSupervisor>()->pParentSupervisor;
 		if (_pParentSupervisor.valid())
 		{
-			glm::vec2 _pos = _pParentSupervisor.GetComponent<Magic::System::PosSizeComponent>()->m_Pos;
+			EntityX::ComponentHandle<Magic::System::ObjectPositionSizeC> _ObjectPositionSizeC = m_Entity.GetComponent<Magic::System::ObjectPositionSizeC>();
 
 			glm::mat4 _Camera = CONST_CAMERA;
-			_Camera[3].x = _pos.x;
-			_Camera[3].y = _pos.y;
+			_Camera[3].x = _ObjectPositionSizeC->x;
+			_Camera[3].y = _ObjectPositionSizeC->y;
 			Magic::GetPen_Normal()->SetCameraMatrix(_Camera);
 		}
 	}
@@ -195,7 +196,7 @@ namespace Magic
 
 			EntityX::EntityX* _Supervisor = &((*_EntityCommon).assign<Magic::System::ObjectSupervisor>(_ParentEntity)->m_Supervisor);
 
-			(*_EntityCommon).assign<Magic::System::PosSizeComponent>(glm::vec2(0.0f, 0.0f), glm::vec2(0.0f, 0.0f));
+			(*_EntityCommon).assign<Magic::System::ObjectPositionSizeC>(0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
 			(*_EntityCommon).assign<Magic::System::MessageHandleComponent>();
 			(*_EntityCommon).assign<Magic::System::UpdataComponent>();
 			(*_EntityCommon).assign<Magic::System::RenderComponent>();
@@ -234,19 +235,25 @@ namespace Magic
 
 	void SetScenePosSize(EntityCommon _EntityCommon, const glm::vec2& _pos, const glm::vec2& _size)
 	{
-		EntityX::ComponentHandle<Magic::System::PosSizeComponent> _PosSizeComponent = _EntityCommon.GetComponent<Magic::System::PosSizeComponent>();
-		_PosSizeComponent->m_Pos = _pos;
-		_PosSizeComponent->m_Size = _size;
+		EntityX::ComponentHandle<Magic::System::ObjectPositionSizeC> _ObjectPositionSizeC = _EntityCommon.GetComponent<Magic::System::ObjectPositionSizeC>();
+		_ObjectPositionSizeC->x = _pos.x;
+		_ObjectPositionSizeC->y = _pos.y;
+		_ObjectPositionSizeC->w = _size.x;
+		_ObjectPositionSizeC->h = _size.y;
 	}
 
 	void SetScenePos(EntityCommon _EntityCommon, const glm::vec2& _pos)
 	{
-		_EntityCommon.GetComponent<Magic::System::PosSizeComponent>()->m_Pos = _pos;
+		EntityX::ComponentHandle<Magic::System::ObjectPositionSizeC> _ObjectPositionSizeC = _EntityCommon.GetComponent<Magic::System::ObjectPositionSizeC>();
+		_ObjectPositionSizeC->x = _pos.x;
+		_ObjectPositionSizeC->y = _pos.y;
 	}
 
 	void SetSceneSize(EntityCommon _EntityCommon, const glm::vec2& _size)
 	{
-		_EntityCommon.GetComponent<Magic::System::PosSizeComponent>()->m_Size = _size;
+		EntityX::ComponentHandle<Magic::System::ObjectPositionSizeC> _ObjectPositionSizeC = _EntityCommon.GetComponent<Magic::System::ObjectPositionSizeC>();
+		_ObjectPositionSizeC->w = _size.x;
+		_ObjectPositionSizeC->h = _size.y;
 	}
 
 	void SetSceneCallUpdata(EntityCommon _EntityCommon, Magic::System::Call_Entity _call)
@@ -314,22 +321,28 @@ namespace Magic
 		return _pSceneCommon;
 	}
 
-	const glm::vec2& GetScenePos(EntityCommon _EntityCommon)
+	const glm::vec2 GetScenePos(EntityCommon _EntityCommon)
 	{
-		return _EntityCommon.GetComponent<Magic::System::PosSizeComponent>()->m_Pos;
+		EntityX::ComponentHandle<Magic::System::ObjectPositionSizeC> _ObjectPositionSizeC = _EntityCommon.GetComponent<Magic::System::ObjectPositionSizeC>();
+		return glm::vec2(_ObjectPositionSizeC->x, _ObjectPositionSizeC->y);
 	}
 
-	const glm::vec2& GetSceneSize(EntityCommon _EntityCommon)
+	const glm::vec2 GetSceneSize(EntityCommon _EntityCommon)
 	{
-		return _EntityCommon.GetComponent<Magic::System::PosSizeComponent>()->m_Size;
+		EntityX::ComponentHandle<Magic::System::ObjectPositionSizeC> _ObjectPositionSizeC = _EntityCommon.GetComponent<Magic::System::ObjectPositionSizeC>();
+		return glm::vec2(_ObjectPositionSizeC->w, _ObjectPositionSizeC->h);
 	}
 
-	const glm::vec2& GetNowSceneTOParentsScenePos(glm::vec2 _Pos, EntityCommon _NowScene, const EntityCommon& _ParentsScene)
+	const glm::vec2 GetNowSceneTOParentsScenePos(glm::vec2 _Pos, EntityCommon _NowScene, const EntityCommon& _ParentsScene)
 	{
 		while (_NowScene != _ParentsScene && _NowScene.valid())
 		{
-			if (_NowScene.has_component<Magic::System::PosSizeComponent>())
-				_Pos += _NowScene.GetComponent<Magic::System::PosSizeComponent>()->m_Pos;
+			if (_NowScene.has_component<Magic::System::ObjectPositionSizeC>())
+			{
+				EntityX::ComponentHandle<Magic::System::ObjectPositionSizeC> _ObjectPositionSizeC = _NowScene.GetComponent<Magic::System::ObjectPositionSizeC>();
+				_Pos.x += _ObjectPositionSizeC->x;
+				_Pos.y += _ObjectPositionSizeC->y;
+			}
 			if (_NowScene.has_component<Magic::System::ObjectSupervisor>())
 				_NowScene = _NowScene.GetComponent<Magic::System::ObjectSupervisor>()->pParentSupervisor;
 		}

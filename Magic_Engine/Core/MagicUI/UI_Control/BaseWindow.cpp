@@ -27,6 +27,8 @@ namespace Magic
 
 			_Supervisor->m_systems.add<Magic::MouseCollisionCheckSystem>();
 
+			_Supervisor->m_systems.configure();
+
 			return true;
 		}
 

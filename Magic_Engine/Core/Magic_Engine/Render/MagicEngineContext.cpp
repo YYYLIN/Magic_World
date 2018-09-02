@@ -309,11 +309,10 @@ namespace Magic
 
 	void EngineRenderEnd(EntityCommon _Entity)
 	{
-		EntityX::ComponentHandle<Magic::System::PosSizeComponent> _PosSizeComponent = _Entity.GetComponent<Magic::System::PosSizeComponent>();
+		EntityX::ComponentHandle<Magic::System::ObjectPositionSizeC> _ObjectPositionSizeC = _Entity.GetComponent<Magic::System::ObjectPositionSizeC>();
 		EntityX::ComponentHandle<Magic::System::RenderThreadsComponent> _RenderThreadsComponent = _Entity.GetComponent<Magic::System::RenderThreadsComponent>();
 
-		glm::vec2 _WH = _PosSizeComponent->m_Size;
-		_RenderThreadsComponent->m_Pen_Normal.SetDrawWH(_WH.x, _WH.y);
+		_RenderThreadsComponent->m_Pen_Normal.SetDrawWH(_ObjectPositionSizeC->w, _ObjectPositionSizeC->h);
 		_RenderThreadsComponent->m_Pen_Normal.RenderEnd();
 
 		SwapBuffers(_RenderThreadsComponent->m_HDC);
@@ -506,8 +505,8 @@ bool MagicEngineContext::CreateOpenglRender(HWND _hwnd, EntityCommon _ThreadReso
 		RECT _Rect;
 		GetClientRect(_hwnd, &_Rect);
 
-		::EntityX::ComponentHandle<Magic::System::PosSizeComponent> _PosSizeComponent =
-			_ThreadResourceManager.assign<Magic::System::PosSizeComponent>(glm::vec2(0.0f, 0.0f), glm::vec2(_Rect.right, _Rect.bottom));
+		::EntityX::ComponentHandle<Magic::System::ObjectPositionSizeC> _PosSizeComponent =
+			_ThreadResourceManager.assign<Magic::System::ObjectPositionSizeC>(0.0f, 0.0f, 0.0f, (float)_Rect.right, (float)_Rect.bottom);
 		_ThreadResourceManager.assign<Magic::System::RenderComponent>(Magic::EngineRenderStart,
 			(Magic::System::Call_Entity)0, Magic::EngineRenderEnd);
 

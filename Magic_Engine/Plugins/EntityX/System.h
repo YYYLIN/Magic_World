@@ -98,7 +98,7 @@ namespace EntityX {
 	};
 
 
-	class SystemManager : ::EntityX::help::NonCopyable
+	class DLL_MAGIC_ENGINE_OUTPUT_INPUT SystemManager : ::EntityX::help::NonCopyable
 	{
 	public:
 		SystemManager(EntityManager &entity_manager, EventManager &event_manager) :

@@ -126,9 +126,9 @@ namespace Magic
 	*/
 	DLL_MAGIC_ENGINE_OUTPUT_INPUT Magic::SceneCommon* GetSceneCommon(EntityCommon& _ThreadsEntity, const char* _SceneName);
 
-	DLL_MAGIC_ENGINE_OUTPUT_INPUT const glm::vec2& GetScenePos(EntityCommon _EntityCommon);
+	DLL_MAGIC_ENGINE_OUTPUT_INPUT const glm::vec2 GetScenePos(EntityCommon _EntityCommon);
 
-	DLL_MAGIC_ENGINE_OUTPUT_INPUT const glm::vec2& GetSceneSize(EntityCommon _EntityCommon);
+	DLL_MAGIC_ENGINE_OUTPUT_INPUT const glm::vec2 GetSceneSize(EntityCommon _EntityCommon);
 
 	/*
 	*功能：
@@ -142,6 +142,6 @@ namespace Magic
 	*返回值：
 	*	glm::vec2 = 当前窗口
 	*/
-	DLL_MAGIC_ENGINE_OUTPUT_INPUT const glm::vec2& GetNowSceneTOParentsScenePos(glm::vec2 _Pos, EntityCommon _NowScene, const EntityCommon& _ParentsScene);
+	DLL_MAGIC_ENGINE_OUTPUT_INPUT const glm::vec2 GetNowSceneTOParentsScenePos(glm::vec2 _Pos, EntityCommon _NowScene, const EntityCommon& _ParentsScene);
 }
 #pragma warning(pop)
