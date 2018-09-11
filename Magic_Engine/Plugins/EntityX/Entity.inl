@@ -14,7 +14,7 @@ namespace EntityX
 	BaseComponent::Family Component<C>::family()
 	{
 		static Family family = family_counter_++;
-		assert(family < MAX_COMPONENTS);
+		//assert(family < MAX_COMPONENTS);
 		return family;
 	}
 
@@ -185,4 +185,15 @@ namespace EntityX
 		return pManager->get(m_id);
 	}
 
+	template <typename C>
+	int32_t EntityManager::component_family()
+	{
+		return ComponentRealFamily(Component<typename std::remove_const<C>::type>::family());
+	}
+
+	template <typename C>
+	const int32_t EntityManager::component_family() const
+	{
+		return ComponentRealFamily(Component<typename std::remove_const<C>::type>::family());
+	}
 }

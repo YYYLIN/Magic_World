@@ -7,7 +7,7 @@
 
 namespace Magic
 {
-	static __declspec(thread) std::string Overall_EngineErrorMessage;
+	static std::string Overall_EngineErrorMessage;
 
 	const char* GetEngineErrorMessage()
 	{
@@ -105,7 +105,7 @@ namespace Magic
 					//线程安全--------Start
 					Magic::System::ThreadsComponent* _pThreadsComponent = _EntityCommon.GetComponent<Magic::System::ThreadsComponent>().operator->();
 					EnterCriticalSection(&_pThreadsComponent->m_MutexObjectMessage);
-					_pThreadsComponent->m_vec_ObjectMessageStruct.push_back({ _pSceneCommon->GetEntity(),_MessageStruct });
+					_pThreadsComponent->m_vec_ObjectMessageStruct.push_back({ _pSceneCommon->GetEntity(), _MessageStruct });
 					LeaveCriticalSection(&_pThreadsComponent->m_MutexObjectMessage);
 					//线程安全--------End
 
@@ -121,7 +121,7 @@ namespace Magic
 			{
 				Magic::System::ThreadsComponent* _pThreadsComponent = _EntityCommon.GetComponent<Magic::System::ThreadsComponent>().operator->();
 				EnterCriticalSection(&_pThreadsComponent->m_MutexObjectMessage);
-				_pThreadsComponent->m_vec_ObjectMessageStruct.push_back({ EntityCommon(),_MessageStruct });
+				_pThreadsComponent->m_vec_ObjectMessageStruct.push_back({ EntityCommon(), _MessageStruct });
 				LeaveCriticalSection(&_pThreadsComponent->m_MutexObjectMessage);
 
 				return true;
@@ -142,7 +142,7 @@ namespace Magic
 			//线程安全--------Start
 			Magic::System::ThreadsComponent* _pThreadsComponent = _EntityCommon.GetComponent<Magic::System::ThreadsComponent>().operator->();
 			EnterCriticalSection(&_pThreadsComponent->m_MutexObjectMessage);
-			_pThreadsComponent->m_vec_ObjectMessageStruct.push_back({ _SceneEntity,_MessageStruct });
+			_pThreadsComponent->m_vec_ObjectMessageStruct.push_back({ _SceneEntity, _MessageStruct });
 			LeaveCriticalSection(&_pThreadsComponent->m_MutexObjectMessage);
 			//线程安全--------End
 
@@ -163,7 +163,7 @@ namespace Magic
 			//线程安全--------Start
 			Magic::System::ThreadsComponent* _pThreadsComponent = _EntityCommon.GetComponent<Magic::System::ThreadsComponent>().operator->();
 			EnterCriticalSection(&_pThreadsComponent->m_MutexObjectMessage);
-			_pThreadsComponent->m_vec_ObjectMessageStruct.push_back({ EntityCommon(),_MessageStruct });
+			_pThreadsComponent->m_vec_ObjectMessageStruct.push_back({ EntityCommon(), _MessageStruct });
 			LeaveCriticalSection(&_pThreadsComponent->m_MutexObjectMessage);
 			//线程安全--------End
 
@@ -183,7 +183,7 @@ namespace Magic
 			//线程安全--------Start
 			Magic::System::ThreadsComponent* _pThreadsComponent = _ThreadsEntity.GetComponent<Magic::System::ThreadsComponent>().operator->();
 			EnterCriticalSection(&_pThreadsComponent->m_MutexObjectMessage);
-			_pThreadsComponent->m_vec_ObjectMessageStruct.push_back({ EntityCommon(),_MessageStruct });
+			_pThreadsComponent->m_vec_ObjectMessageStruct.push_back({ EntityCommon(), _MessageStruct });
 			LeaveCriticalSection(&_pThreadsComponent->m_MutexObjectMessage);
 			//线程安全--------End
 
@@ -209,7 +209,7 @@ namespace Magic
 					//线程安全--------Start
 					Magic::System::ThreadsComponent* _pThreadsComponent = _EntityCommon.GetComponent<Magic::System::ThreadsComponent>().operator->();
 					EnterCriticalSection(&_pThreadsComponent->m_MutexObjectMessage);
-					_pThreadsComponent->m_vec_ObjectMessageStruct.push_back({ _pSceneCommon->GetEntity(),_MessageStruct });
+					_pThreadsComponent->m_vec_ObjectMessageStruct.push_back({ _pSceneCommon->GetEntity(), _MessageStruct });
 					LeaveCriticalSection(&_pThreadsComponent->m_MutexObjectMessage);
 					//线程安全--------End
 
@@ -225,7 +225,7 @@ namespace Magic
 			{
 				Magic::System::ThreadsComponent* _pThreadsComponent = _EntityCommon.GetComponent<Magic::System::ThreadsComponent>().operator->();
 				EnterCriticalSection(&_pThreadsComponent->m_MutexObjectMessage);
-				_pThreadsComponent->m_vec_ObjectMessageStruct.push_back({ EntityCommon(),_MessageStruct });
+				_pThreadsComponent->m_vec_ObjectMessageStruct.push_back({ EntityCommon(), _MessageStruct });
 				LeaveCriticalSection(&_pThreadsComponent->m_MutexObjectMessage);
 
 				return true;
@@ -245,7 +245,7 @@ namespace Magic
 			//线程安全--------Start
 			Magic::System::ThreadsComponent* _pThreadsComponent = _ThreadsEntity.GetComponent<Magic::System::ThreadsComponent>().operator->();
 			EnterCriticalSection(&_pThreadsComponent->m_MutexObjectMessage);
-			_pThreadsComponent->m_vec_ObjectMessageStruct.push_back({ _SceneEntity,_MessageStruct });
+			_pThreadsComponent->m_vec_ObjectMessageStruct.push_back({ _SceneEntity, _MessageStruct });
 			LeaveCriticalSection(&_pThreadsComponent->m_MutexObjectMessage);
 			//线程安全--------End
 

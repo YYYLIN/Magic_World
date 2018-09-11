@@ -99,7 +99,7 @@ namespace EntityX
 		/**
 		 * Check if Entity handle is invalid.
 		 */
-		 //检查实体句柄是否无效。
+		//检查实体句柄是否无效。
 		operator bool() const {
 			return valid();
 		}
@@ -124,7 +124,7 @@ namespace EntityX
 		 * longer the case: if a slot is reassigned, old Entity::Id's will be
 		 * invalid.
 		 */
-		 //检查是否是有效实体,是否存在
+		//检查是否是有效实体,是否存在
 		bool valid() const;
 
 		/**
@@ -133,7 +133,7 @@ namespace EntityX
 		 * Note that this does *not* affect the underlying entity and its
 		 * components. Use destroy() to destroy the associated Entity and components.
 		 */
-		 //清楚当前数据,对存放的实体并无影响
+		//清楚当前数据,对存放的实体并无影响
 		void invalidate();
 
 		Id id() const { return m_id; }
@@ -180,7 +180,7 @@ namespace EntityX
 		/**
 		 * Destroy and invalidate this Entity.
 		 */
-		 //删除这个实体
+		//删除这个实体
 		void destroy();
 
 		std::bitset<MAX_COMPONENTS> GetComponentMask() const;
@@ -314,7 +314,7 @@ namespace EntityX
 	/**
 	 * Emitted when an entity is added to the system.
 	 */
-	 //将实体添加到系统时发出。
+	//将实体添加到系统时发出。
 	struct EntityCreatedEvent : public Event<EntityCreatedEvent>
 	{
 		explicit EntityCreatedEvent(Entity entity) : entity(entity) {}
@@ -343,7 +343,7 @@ namespace EntityX
 	struct ComponentAddedEvent : public Event<ComponentAddedEvent<C>>
 	{
 		ComponentAddedEvent(Entity entity, ComponentHandle<C> component) :
-			entity(entity), component(component) {}
+		entity(entity), component(component) {}
 
 		Entity entity;
 		ComponentHandle<C> component;
@@ -356,7 +356,7 @@ namespace EntityX
 	struct ComponentRemovedEvent : public Event<ComponentRemovedEvent<C>>
 	{
 		ComponentRemovedEvent(Entity entity, ComponentHandle<C> component) :
-			entity(entity), component(component) {}
+		entity(entity), component(component) {}
 
 		Entity entity;
 		ComponentHandle<C> component;
@@ -380,7 +380,7 @@ namespace EntityX
 		void remove_component(Entity e) override {
 			e.remove<C>();
 		}
-		void copy_component_to(Entity source, Entity target) override 
+		void copy_component_to(Entity source, Entity target) override
 		{
 			target.assign_from_copy<C>(*(source.GetComponent<C>().get()));
 		}
@@ -479,8 +479,8 @@ namespace EntityX
 				Iterator(EntityManager *manager, const ComponentMask mask,
 					uint32_t index) : ViewIterator<Iterator, All>(manager, mask, index)
 				{
-					ViewIterator<Iterator, All>::next();
-				}
+						ViewIterator<Iterator, All>::next();
+					}
 
 				void next_entity(Entity &entity) {}
 			};
@@ -529,7 +529,7 @@ namespace EntityX
 			struct Unpacker
 			{
 				explicit Unpacker(ComponentHandle<Components> & ... handles) :
-					handles(std::tuple<ComponentHandle<Components> & ...>(handles...)) {}
+				handles(std::tuple<ComponentHandle<Components> & ...>(handles...)) {}
 
 				void unpack(Entity &entity) const
 				{
@@ -562,8 +562,8 @@ namespace EntityX
 					const ComponentMask mask,
 					uint32_t index,
 					const Unpacker &unpacker) : ViewIterator<Iterator>(manager, mask, index), unpacker_(unpacker) {
-					ViewIterator<Iterator>::next();
-				}
+						ViewIterator<Iterator>::next();
+					}
 
 				void next_entity(Entity &entity) {
 					unpacker_.unpack(entity);
@@ -708,7 +708,7 @@ namespace EntityX
 			assert(!entity_component_mask_[id.index()].test(family));
 
 			// Placement new into the component pool.
-			//将新增加到组件池中。
+			//将新的属性增加到组件池中。
 			Pool<C> *pool = accomodate_component<C>();
 			::new(pool->get(id.index())) C(std::forward<Args>(args) ...);
 
@@ -752,12 +752,14 @@ namespace EntityX
 		bool has_component(Entity::Id id) const
 		{
 			assert_valid(id);
-			size_t family = component_family<C>();
-			// We don't bother checking the component mask, as we return a nullptr anyway.
-			if (family >= component_pools_.size())
+			int32_t _family = component_family<C>();
+			if (_family == -1)
 				return false;
-			BasePool *pool = component_pools_[family];
-			if (!pool || !entity_component_mask_[id.index()][family])
+			// We don't bother checking the component mask, as we return a nullptr anyway.
+			if (_family >= (int32_t)component_pools_.size())
+				return false;
+			BasePool *pool = component_pools_[_family];
+			if (!pool || !entity_component_mask_[id.index()][_family])
 				return false;
 			return true;
 		}
@@ -771,7 +773,8 @@ namespace EntityX
 		ComponentHandle<C> GetComponent(Entity::Id id)
 		{
 			assert_valid(id);
-			size_t family = component_family<C>();
+
+			size_t family = ((const EntityManager*)(this))->component_family<C>();
 			// We don't bother checking the component mask, as we return a nullptr anyway.
 			if (family >= component_pools_.size())
 				return ComponentHandle<C>();
@@ -905,10 +908,10 @@ namespace EntityX
 
 		// Retrieve the component family for a type.
 		template <typename C>
-		static BaseComponent::Family component_family()
-		{
-			return Component<typename std::remove_const<C>::type>::family();
-		}
+		int32_t component_family();
+
+		template <typename C>
+		const int32_t component_family() const;
 
 	private:
 		friend class Entity;
@@ -979,7 +982,7 @@ namespace EntityX
 				entity_component_mask_.resize(index + 1);
 				entity_version_.resize(index + 1);
 				for (BasePool *pool : component_pools_)
-					if (pool) pool->expand(index + 1);
+				if (pool) pool->expand(index + 1);
 			}
 		}
 
@@ -1008,7 +1011,29 @@ namespace EntityX
 			}
 			return static_cast<Pool<C>*>(component_pools_[family]);
 		}
+		//获取管理员中真实的组件值
+		int32_t ComponentRealFamily(BaseComponent::Family _family)
+		{
+			assert(m_ComponentReal.size() <= MAX_COMPONENTS);
+			if (m_ComponentReal.size() <= _family)
+			{
+				m_ComponentReal.resize(_family + 1, -1);
+			}
+			if (m_ComponentReal[_family] == -1)
+			{
+				return m_ComponentReal[_family] = m_ComponentSize++;
+			}
+			else
+				return m_ComponentReal[_family];
+		}
 
+		const int32_t ComponentRealFamily(BaseComponent::Family _family) const
+		{
+			if (m_ComponentReal.size() <= _family)
+				return -1;
+			else
+				return m_ComponentReal[_family];
+		}
 
 		uint32_t index_counter_ = 0;
 
@@ -1032,6 +1057,10 @@ namespace EntityX
 		// List of available entity slots.
 		// 可用实体插槽列表。
 		std::vector<uint32_t> free_list_;
+		//映射到组件内部的真实位标记
+		//用此方法可让多个系统之间的组件数量独立，使组件数量可以是uint32个
+		std::vector<int32_t> m_ComponentReal;
+		uint32_t m_ComponentSize; //当前组件数量
 	};
 }  // namespace EntityX
 
@@ -1046,12 +1075,12 @@ namespace std
 		}
 	};
 
-	template <> struct hash<const EntityX::Entity>
-	{
-		std::size_t operator () (const EntityX::Entity &entity) const {
-			return static_cast<std::size_t>(entity.id().index() ^ entity.id().version());
-		}
-	};
+		template <> struct hash<const EntityX::Entity>
+		{
+			std::size_t operator () (const EntityX::Entity &entity) const {
+				return static_cast<std::size_t>(entity.id().index() ^ entity.id().version());
+			}
+		};
 }
 
 

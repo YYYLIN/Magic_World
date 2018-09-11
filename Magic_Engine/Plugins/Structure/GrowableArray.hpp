@@ -3,7 +3,7 @@
 
 #include <process.h>
 #include "windows.h"
-#include <vcruntime_new.h>
+#include <new.h>
 
 //--------------------------------------------------------------------------------------
 // A growable array

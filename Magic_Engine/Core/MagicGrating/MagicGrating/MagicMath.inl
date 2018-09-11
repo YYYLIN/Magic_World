@@ -8,6 +8,8 @@ author:YYYLIN
 Create time:2017 04 01
 */
 
+#include <memory.h>
+
 namespace Magic
 {
 

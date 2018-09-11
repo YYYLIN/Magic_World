@@ -11,48 +11,49 @@
 #include <algorithm>
 #include "Entity.h"
 
-namespace EntityX 
+namespace EntityX
 {
 
 	const Entity::Id Entity::INVALID;
 	BaseComponent::Family BaseComponent::family_counter_ = 0;
 
-	void Entity::invalidate() 
+	void Entity::invalidate()
 	{
 		m_id = INVALID;
 		pManager = nullptr;
 	}
 
-	void Entity::destroy() 
+	void Entity::destroy()
 	{
 		assert(valid());
 		pManager->destroy(m_id);
 		invalidate();
 	}
 
-	std::bitset<EntityX::MAX_COMPONENTS> Entity::GetComponentMask() const 
+	std::bitset<EntityX::MAX_COMPONENTS> Entity::GetComponentMask() const
 	{
 		return pManager->GetComponentMask(m_id);
 	}
 
-	EntityManager::EntityManager(EventManager &event_manager) : event_manager_(event_manager) 
+	EntityManager::EntityManager(EventManager &event_manager) : event_manager_(event_manager)
 	{
+		m_ComponentSize = 0;
 	}
 
-	EntityManager::~EntityManager() 
+	EntityManager::~EntityManager()
 	{
 		reset();
 	}
 
-	void EntityManager::reset() 
+	void EntityManager::reset()
 	{
 		for (Entity entity : entities_for_debugging())
 			entity.destroy();
-		for (BasePool *pool : component_pools_) 
+		for (BasePool *pool : component_pools_)
 		{
 			if (pool) delete pool;
 		}
-		for (BaseComponentHelper *helper : component_helpers_) 
+		for (BaseComponentHelper *helper : component_helpers_)
 		{
 			if (helper) delete helper;
 		}
@@ -61,7 +62,9 @@ namespace EntityX
 		entity_component_mask_.clear();
 		entity_version_.clear();
 		free_list_.clear();
+		m_ComponentReal.clear();
 		index_counter_ = 0;
+		m_ComponentSize = 0;
 	}
 
 	EntityCreatedEvent::~EntityCreatedEvent() {}
