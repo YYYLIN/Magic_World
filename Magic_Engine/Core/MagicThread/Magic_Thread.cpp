@@ -1,17 +1,17 @@
 #include "Magic_Thread.h"
 #include "Magic_Thread_Management.h"
 
-WWT_Message_Struct::WWT_Message_Struct()
+Magic_Message_Struct::Magic_Message_Struct()
 {
 	MessageType = 0;
 	Message = 0;
 }
 
-WWT_Message_Struct::WWT_Message_Struct(const unsigned int& _MessageType, const long long& _message) :MessageType(_MessageType), Message(_message)
+Magic_Message_Struct::Magic_Message_Struct(const unsigned int& _MessageType, const long long& _message) :MessageType(_MessageType), Message(_message)
 {
 }
 
-namespace WWT
+namespace Magic
 {
 	namespace Management
 	{
@@ -20,8 +20,8 @@ namespace WWT
 			if (!SystemThread::Instance())
 			{
 				//创建线程管理系统
-				WWT::Management::SystemThread* _pSystemThread = 0;
-				_pSystemThread = new WWT::Management::SystemThread;
+				Magic::Management::SystemThread* _pSystemThread = 0;
+				_pSystemThread = new Magic::Management::SystemThread;
 				bool result = _pSystemThread->Initialize(_pUpdataCommon);
 				if (!result)
 					return 0;

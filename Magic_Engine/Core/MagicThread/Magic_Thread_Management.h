@@ -1,5 +1,5 @@
-#ifndef _WWT_THREAD_MANAGEMENT_H_
-#define _WWT_THREAD_MANAGEMENT_H_
+#ifndef _MAGIC_THREAD_MANAGEMENT_H_
+#define _MAGIC_THREAD_MANAGEMENT_H_
 
 #include "Cross_Platform_Port.h"
 #include "Magic_Thread.h"
@@ -7,7 +7,7 @@
 #include <set>
 #include <map>
 
-namespace WWT
+namespace Magic
 {
 	namespace Management
 	{
@@ -30,15 +30,15 @@ namespace WWT
 		struct ThreadObject
 		{
 			UpdataCommon* pUpdataCommon;
-			WWT_THREAD m_Thread;
+			Magic_THREAD m_Thread;
 			std::string m_Name;
 			ThreadTypeMode m_ThreadTypeMode;
 			ThreadMessageMode m_ThreadMessageMode;
 			ThreadRunState m_ThreadRunState;
 
 			std::queue<Message> m_queue_Message;
-			WWT_MUTEX m_MessageMutex;
-			WWT_SEM m_WWT_SEM;
+			Magic_MUTEX m_MessageMutex;
+			Magic_SEM m_WWT_SEM;
 
 			ThreadObject();
 			ThreadObject(UpdataCommon* _pUpdataCommon, ThreadTypeMode _ThreadTypeMode, ThreadRunState _ThreadRunState, const std::string& _name, ThreadMessageMode _ThreadMessageMode);
@@ -54,8 +54,8 @@ namespace WWT
 
 			std::queue<Message> m_queue_Message;
 
-			WWT_MUTEX m_MessageMutex;
-			WWT_SEM m_WWT_SEM;
+			Magic_MUTEX m_MessageMutex;
+			Magic_SEM m_WWT_SEM;
 		};
 
 		class SystemThread
@@ -110,7 +110,7 @@ namespace WWT
 
 			MAP_SRTING_THREADPOOLOBJECT m_map_Srting_ThreadPoolObject;
 
-			WWT_MUTEX m_Mutex, m_MutexPoolObject;
+			Magic_MUTEX m_Mutex, m_MutexPoolObject;
 
 			static S_THREAD ThreadObject* m_S_T_pThreadObject;
 			static S_THREAD ThreadPoolObject* m_S_T_pThreadPoolObject;
