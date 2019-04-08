@@ -53,7 +53,9 @@ ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicScene.h)
 
 set(MAGIC_SYSTEM_FILES
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/System/Supervisor.cpp
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/System/Supervisor.h)
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/System/Supervisor.h
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/System/Element.cpp
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/System/Element.h)
 
 set(MAGIC_PHYSICAL_FILES
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Physical/Collision.cpp

@@ -848,8 +848,13 @@ namespace Magic
 			if (pNowDRAW_BOX->Picture_Draw.pFonts != _pFonts)
 			{
 				pNowDRAW_BOX->Picture_Draw.pFonts = _pFonts;
-				pNowDRAW_BOX->V_Message.back().OverallMessage |= MESSAGE_FONTS;
-				pNowDRAW_BOX->V_Fonts_Message.push_back(_pFonts);
+				if (pNowDRAW_BOX->V_Message.back().OverallMessage & MESSAGE_FONTS)
+					pNowDRAW_BOX->V_Fonts_Message.back() = _pFonts;
+				else
+				{
+					pNowDRAW_BOX->V_Message.back().OverallMessage |= MESSAGE_FONTS;
+					pNowDRAW_BOX->V_Fonts_Message.push_back(_pFonts);
+				}
 			}
 		}
 	}
@@ -920,7 +925,7 @@ namespace Magic
 				pNowDRAW_BOX->V_Scissor_Message.push_back(SCISSOR_MESSAGE(
 					true,
 					pNowDRAW_BOX->V_Scissor_Message.size() ? pNowDRAW_BOX->V_Scissor_Message.back().ScissorPosWH : glm::vec4()
-				));
+					));
 				pNowDRAW_BOX->Create_Scissor_Message = true;
 			}
 			else
@@ -940,7 +945,7 @@ namespace Magic
 			pNowDRAW_BOX->V_Scissor_Message.push_back(SCISSOR_MESSAGE(
 				pNowDRAW_BOX->V_Scissor_Message.size() ? pNowDRAW_BOX->V_Scissor_Message.back().state : false,
 				_poswh
-			));
+				));
 		}
 		else
 			pNowDRAW_BOX->V_Scissor_Message.back().ScissorPosWH = _poswh;

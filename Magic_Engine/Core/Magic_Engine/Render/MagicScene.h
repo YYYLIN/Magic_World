@@ -1,7 +1,11 @@
 #pragma once
+
+
 #include "Define/MagicType.h"
 #include "Define/Magic_Macro.h"
 #include "glm.hpp"
+#include "System/Element.h"
+
 #pragma warning(push)
 #pragma warning(disable:4251)
 
@@ -21,7 +25,7 @@ namespace Magic
 		glm::vec2 m_MousePos;
 	};
 
-	class DLL_MAGIC_ENGINE_OUTPUT_INPUT SceneCommon
+	class DLL_MAGIC_ENGINE_OUTPUT_INPUT SceneCommon :public Magic::System::Object
 	{
 	public:
 		SceneCommon(const char* _name);
@@ -35,7 +39,6 @@ namespace Magic
 
 		virtual bool OnInitialize() = 0;
 
-		inline EntityCommon GetEntity() { return m_Entity; }
 		inline const char* GetName() { return m_Name.c_str(); }
 
 		//此函数只能调用一次
@@ -49,7 +52,6 @@ namespace Magic
 		virtual void RenderEnd();
 
 	private:
-		EntityCommon m_Entity;
 		std::string m_Name;
 	};
 
