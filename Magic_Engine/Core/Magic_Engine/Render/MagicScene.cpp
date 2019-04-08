@@ -73,7 +73,7 @@ namespace Magic
 			m_Entity.destroy();
 	}
 
-	int SceneCommon::S_MessageHandle(EntityX::Entity _Entity, const Magic::System::MessageStruct& _MessageStruct)
+	int SceneCommon::C_MessageHandle(EntityX::Entity _Entity, const Magic::System::MessageStruct& _MessageStruct)
 	{
 		if (_MessageStruct.MessageType == MAGIC_UI_MESSAGE_MOUSE_MOVE)
 		{
@@ -94,24 +94,24 @@ namespace Magic
 		return _Entity.GetComponent<SceneEntityC>()->m_SceneCommonBox.pSceneCommon->MessageHandle(_MessageStruct);
 	}
 
-	void SceneCommon::S_Updata(EntityX::Entity _Entity)
+	void SceneCommon::C_Updata(EntityX::Entity _Entity)
 	{
-		_Entity.GetComponent<SceneEntityC>()->m_SceneCommonBox.pSceneCommon->Updata();
+		this->Updata();
 	}
 
-	void SceneCommon::S_RenderStart(EntityCommon _Entity)
+	void SceneCommon::C_RenderStart(EntityCommon _Entity)
 	{
-		_Entity.GetComponent<SceneEntityC>()->m_SceneCommonBox.pSceneCommon->RenderStart();
+		this->RenderStart();
 	}
 
-	void SceneCommon::S_Render(EntityCommon _Entity)
+	void SceneCommon::C_Render(EntityCommon _Entity)
 	{
-		_Entity.GetComponent<SceneEntityC>()->m_SceneCommonBox.pSceneCommon->Render();
+		this->Render();
 	}
 
-	void SceneCommon::S_RenderEnd(EntityCommon _Entity)
+	void SceneCommon::C_RenderEnd(EntityCommon _Entity)
 	{
-		_Entity.GetComponent<SceneEntityC>()->m_SceneCommonBox.pSceneCommon->RenderEnd();
+		this->RenderEnd();
 	}
 
 	bool SceneCommon::Initialize(const EntityCommon& _ParentEntity, bool _AutoRelease)
@@ -127,11 +127,16 @@ namespace Magic
 
 		m_Entity.assign<SceneEntityC>(Magic::System::SceneCommonBox(this, _AutoRelease));
 
-		m_Entity.GetComponent<Magic::System::MessageHandleComponent>()->m_Call_MessageHandle = Magic::SceneCommon::S_MessageHandle;
-		m_Entity.GetComponent<Magic::System::UpdataComponent>()->m_Call_Updata = Magic::SceneCommon::S_Updata;
-		m_Entity.GetComponent<Magic::System::RenderComponent>()->m_Call_RenderStart = Magic::SceneCommon::S_RenderStart;
-		m_Entity.GetComponent<Magic::System::RenderComponent>()->m_Call_Render = Magic::SceneCommon::S_Render;
-		m_Entity.GetComponent<Magic::System::RenderComponent>()->m_Call_RenderEnd = Magic::SceneCommon::S_RenderEnd;
+		m_Entity.GetComponent<Magic::System::MessageHandleComponent>()->m_Call_MessageHandle = 
+			std::bind(&Magic::SceneCommon::C_MessageHandle, this, std::placeholders::_1, std::placeholders::_2);
+		m_Entity.GetComponent<Magic::System::UpdataComponent>()->m_Call_Updata = 
+			std::bind(&Magic::SceneCommon::C_Updata, this, std::placeholders::_1);
+		m_Entity.GetComponent<Magic::System::RenderComponent>()->m_Call_RenderStart =
+			std::bind(&Magic::SceneCommon::C_RenderStart, this, std::placeholders::_1);
+		m_Entity.GetComponent<Magic::System::RenderComponent>()->m_Call_Render = 
+			std::bind(&Magic::SceneCommon::C_Render, this, std::placeholders::_1);
+		m_Entity.GetComponent<Magic::System::RenderComponent>()->m_Call_RenderEnd = 
+			std::bind(&Magic::SceneCommon::C_RenderEnd, this, std::placeholders::_1);
 
 		_result = AddSceneCommon(this, _AutoRelease);
 		if (!_result)

@@ -38,8 +38,13 @@ namespace Magic
 			bool AutoRelease;
 		};
 
-		typedef int(*Call_MessageHandle)(EntityX::Entity _Entity, const MessageStruct& _MessageStruct);
-		typedef void(*Call_Entity)(EntityX::Entity _Entity);
-		typedef bool(*Call_Entity_Bool)(EntityX::Entity _Entity);
+		/*
+				typedef int(*Call_MessageHandle)(EntityX::Entity _Entity, const MessageStruct& _MessageStruct);
+				typedef void(*Call_Entity)(EntityX::Entity _Entity);
+				typedef bool(*Call_Entity_Bool)(EntityX::Entity _Entity);*/
+
+		typedef std::function<int(EntityX::Entity _Entity, const MessageStruct& _MessageStruct)> Call_MessageHandle;
+		typedef std::function<void(EntityX::Entity _Entity)> Call_Entity;
+		typedef std::function<bool(EntityX::Entity _Entity)> Call_Entity_Bool;
 	}
 }

@@ -22,6 +22,7 @@ add_subdirectory(Magic_Engine)
 add_subdirectory(MagicGrating)
 add_subdirectory(MagicUI)
 add_subdirectory(WaterMagic)
+add_subdirectory(MagicThread)
 
 set(CMAKE_BUILD_TYPE "Debug")
 #set (CMAKE_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX} "C:/Program Files (x86)/")

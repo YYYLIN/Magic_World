@@ -4,6 +4,7 @@
 #include "glm.hpp"
 #include "windows.h"
 #include "Render/MagicPen.h"
+#include <functional>
 
 #pragma warning(push)
 #pragma warning(disable:4251)

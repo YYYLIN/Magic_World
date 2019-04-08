@@ -27,11 +27,11 @@ namespace Magic
 		SceneCommon(const char* _name);
 		virtual ~SceneCommon();
 
-		static int S_MessageHandle(EntityX::Entity _Entity, const Magic::System::MessageStruct& _MessageStruct);
-		static void S_Updata(EntityX::Entity _Entity);
-		static void S_RenderStart(EntityCommon _Entity);
-		static void S_Render(EntityCommon _Entity);
-		static void S_RenderEnd(EntityCommon _Entity);
+		int C_MessageHandle(EntityX::Entity _Entity, const Magic::System::MessageStruct& _MessageStruct);
+		void C_Updata(EntityX::Entity _Entity);
+		void C_RenderStart(EntityCommon _Entity);
+		void C_Render(EntityCommon _Entity);
+		void C_RenderEnd(EntityCommon _Entity);
 
 		virtual bool OnInitialize() = 0;
 

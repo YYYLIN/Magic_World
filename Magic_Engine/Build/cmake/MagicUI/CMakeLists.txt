@@ -33,6 +33,8 @@ ${PROJECT_SOURCE_DIR}../../../Core/MagicUI/UI_Control/Button.h
 ${PROJECT_SOURCE_DIR}../../../Core/MagicUI/UI_Control/Button.cpp
 ${PROJECT_SOURCE_DIR}../../../Core/MagicUI/UI_Control/BaseWindow.h
 ${PROJECT_SOURCE_DIR}../../../Core/MagicUI/UI_Control/BaseWindow.cpp
+${PROJECT_SOURCE_DIR}../../../Core/MagicUI/UI_Control/BaseCommon.h
+${PROJECT_SOURCE_DIR}../../../Core/MagicUI/UI_Control/BaseCommon.cpp
 )
 
 SOURCE_GROUP("Include Files" FILES ${INCLUDE_FILES})
