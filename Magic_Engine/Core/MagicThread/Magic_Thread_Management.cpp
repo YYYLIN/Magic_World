@@ -137,7 +137,7 @@ namespace Magic
 				for (unsigned int a = 0; a < _ThreadNumber; a++)
 				{
 					char _text[256];
-					WWT_sprintf_t(_text, 256, "%s_%d", _name, a);
+					Magic_Sprintf_s(_text, 256, "%s_%d", _name, a);
 					THREAD_OBJECT _THREAD_OBJECT = Create(_text, &_findTO->second, THREAD_LOOP_RUN, THREAD_MESSAGE_WAIT);
 					SendMessageTo(_THREAD_OBJECT, 0, 0,
 						[_THREAD_POOL_OBJECT](unsigned int, long long)
