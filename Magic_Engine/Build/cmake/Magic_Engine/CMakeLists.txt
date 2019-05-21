@@ -6,9 +6,11 @@ include_directories(
 ../../../Plugins/glew-1.9.0/include
 ../../../Plugins/freetype-2.6/include
 ../../../Plugins/EntityX
-../../../Core/Magic_Engine)
+../../../Core/Magic_Engine
+../../../Core/MagicThread)
 
 link_directories(
+${PROJECT_SOURCE_DIR}../../../lib/${CMAKE_SYSTEM_NAME}/
 ${PROJECT_SOURCE_DIR}../../../Plugins/OpenGL/lib/
 ${PROJECT_SOURCE_DIR}../../../Plugins/lpng1621/lib/
 ${PROJECT_SOURCE_DIR}../../../Plugins/glew-1.9.0/lib
@@ -96,7 +98,8 @@ IF(WIN32)
 	SOURCE_GROUP("3rdparty\\Entityx\\help" FILES ${3RDPARTY_ENTITYX_HELP_FILES})
 ENDIF(WIN32)
 
-link_libraries(glew32.lib opengl32.lib)
+link_libraries(glew32.lib opengl32.lib 
+	debug MagicThread_d.lib optimized MagicThread.lib)
 add_definitions(-DMAGIC_ENGINE_EXPORTS)
 IF(WIN32)
 	add_definitions(-DUNICODE -D_UNICODE)

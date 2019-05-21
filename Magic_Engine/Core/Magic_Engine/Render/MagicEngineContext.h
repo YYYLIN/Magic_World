@@ -13,6 +13,7 @@
 #include "System/Supervisor.h"
 #include "Define/MagicType.h"
 #include "MagicScene.h"
+#include "Magic_Thread.h"
 
 #pragma warning(push)
 #pragma warning(disable:4251)
@@ -45,76 +46,7 @@ public:
 
 	virtual void DrawSpirit() {}
 };
-/*
 
-class DLL_MAGIC_ENGINE_OUTPUT_INPUT MagicScenes :public MagicUICommon
-{
-	friend class Magic::MessageScenes;
-public:
-	MagicScenes();
-	virtual ~MagicScenes();
-	bool Initialize(MagicScenes* _scene, glm::vec4 _PosSize);
-
-	virtual void SetDisplayState(bool _state);
-
-	virtual glm::vec2 GetFrameBufferSize();
-
-	inline bool GetDisplayState() { return DisplayState; }
-
-	inline glm::vec2 GetDrawPos() { return m_DrawPos; }
-
-	virtual MagicFBOTexture* GetFBOTexture() { return 0; }
-
-	void AddCommon(MagicCommon*);
-	void RemoveCommon(MagicCommon*);
-
-	virtual void ResetDrawRECT(float _x, float _y, float _w, float _h);
-
-protected:
-	virtual bool OnInitialize() { return true; }
-	virtual void Updata();
-	virtual	void Render(glm::vec2 _DrawPos);
-	virtual void RenderStart();
-	virtual void RenderEnd();
-
-protected:
-	bool DisplayState;
-
-	glm::vec4 m_PosSize;
-	glm::vec2 m_DrawPos;
-	MagicScenes* pParentScene;
-
-	std::vector<MagicCommon*> v_Common;
-};*/
-
-/*
-class DLL_MAGIC_ENGINE_OUTPUT_INPUT MagicScenesEx :public MagicScenes
-{
-public:
-	MagicScenesEx();
-
-	virtual void DrawSpirit();
-	virtual void SetDisplayState(bool);
-
-	virtual glm::vec2 GetFrameBufferSize();
-
-	inline virtual MagicFBOTexture* GetFBOTexture() { return &m_FBOBuffer; }
-
-	virtual bool Initialize(MagicScenes* _scene, glm::vec4 _PosSize);
-
-	virtual void CopyFBOBuffer();
-protected:
-	virtual void Render(glm::vec2 _DrawPos);
-	virtual void RenderBuffer();
-
-	virtual void RenderStart();
-	virtual void RenderEnd();
-
-protected:
-	bool m_DrawMessage;
-
-	MagicFBOTexture m_FBOBuffer;
-};*/
 namespace Magic
 {
 	HGLRC CreateRCContxt(HDC _hdc);
