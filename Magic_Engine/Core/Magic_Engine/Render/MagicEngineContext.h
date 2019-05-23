@@ -49,8 +49,6 @@ public:
 
 namespace Magic
 {
-	HGLRC CreateRCContxt(HDC _hdc);
-
 	double EngineUpdataTime(EntityCommon _Entity);
 	void EngineUpdataFPS(EntityCommon _Entity);
 
