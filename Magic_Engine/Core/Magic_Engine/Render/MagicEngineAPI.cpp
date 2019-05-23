@@ -4,27 +4,39 @@
 #include "System/Supervisor.h"
 #include "MagicEngineContext.h"
 #include "MagicScene.h"
+#include "Cross_Platform_Port.h"
 
 namespace Magic
 {
-	static std::string Overall_EngineErrorMessage;
+	static S_THREAD std::string* Overall_EngineErrorMessage = nullptr;
 
 	const char* GetEngineErrorMessage()
 	{
-		return Overall_EngineErrorMessage.c_str();
+		if (Overall_EngineErrorMessage)
+			return Overall_EngineErrorMessage->c_str();
+		else
+			return nullptr;
 	}
 
 	void SetEngineErrorMessage(const char* _text)
 	{
-		Overall_EngineErrorMessage = _text;
+		if (!Overall_EngineErrorMessage) {
+			Overall_EngineErrorMessage = new std::string;
+		}
+
+		*Overall_EngineErrorMessage = _text;
 	}
 
 	void AddEngineErrorMessage(const char* _text, bool _EndORStart)
 	{
+		if (!Overall_EngineErrorMessage) {
+			Overall_EngineErrorMessage = new std::string;
+		}
+
 		if (_EndORStart)
-			Overall_EngineErrorMessage += _text;
+			*Overall_EngineErrorMessage += _text;
 		else
-			Overall_EngineErrorMessage.insert(0, _text);
+			Overall_EngineErrorMessage->insert(0, _text);
 	}
 
 	bool CreateEngine()

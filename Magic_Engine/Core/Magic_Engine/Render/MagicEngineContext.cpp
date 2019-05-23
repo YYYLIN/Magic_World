@@ -371,23 +371,9 @@ MagicEngineContext::~MagicEngineContext()
 
 bool MagicEngineContext::Initialize()
 {
-	EntityCommon _MainEntity = m_Supervisor.m_entities.create();
-
-	M_EntityThreads.insert(std::make_pair("MainThreads", _MainEntity));
-	S_T_pEntityCommon = &(M_EntityThreads["MainThreads"]);
-
-	EntityX::EntityX* _Supervisor = &_MainEntity.assign<Magic::System::ObjectSupervisor>()->m_Supervisor;
-	EntityX::ComponentHandle<Magic::System::ThreadsComponent> _ThreadsComponent = _MainEntity.assign<Magic::System::ThreadsComponent>();
-	_ThreadsComponent->m_RunState = true;
-
-	_Supervisor->m_systems.add<Magic::System::ThreadsMessageForwardSystem>();
-	_Supervisor->m_systems.add<Magic::System::ObjectUpdataSystem>();
-	_Supervisor->m_systems.add<Magic::System::ThreadsRenderSystem>();
-	_Supervisor->m_systems.configure();
-
-	_MainEntity.assign<Magic::System::UpdataComponent>((Magic::System::Call_Entity)0);
-
-	InitializeCriticalSection(&m_MutexThreadsResourceManager);
+	bool _result = Magic::Management::CreateThreadManagement(0);
+	if (!_result)
+		return false;
 
 	return true;
 }
