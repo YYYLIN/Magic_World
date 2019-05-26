@@ -76,11 +76,15 @@ namespace Magic
 
 			void ShutdownPool(THREAD_POOL_OBJECT _THREAD_POOL_OBJECT);
 
-			bool SendMessageTo(THREAD_OBJECT _THREAD_OBJECT, unsigned int _MessageType, long long _Message, Callback_Message _CallBack = nullptr);
+			void MonitorThreadMessage(MESSAGE_TYPE _MessageType, Callback_Message _CallBack);
 
-			bool SendMessageTo(unsigned int _MessageType, long long _Message, Callback_Message _CallBack = nullptr);
+			void MonitorThreadPoolMessage(MESSAGE_TYPE _MessageType, Callback_Message _CallBack);
 
-			bool SendMessageToPool(THREAD_POOL_OBJECT _THREAD_POOL_OBJECT, unsigned int _MessageType, long long _Message, Callback_Message _CallBack);
+			bool SendMessageTo(THREAD_OBJECT _THREAD_OBJECT, MESSAGE_TYPE _MessageType, MESSAGE _Message, Callback_Message _CallBack = nullptr);
+
+			bool SendMessageTo(MESSAGE_TYPE _MessageType, MESSAGE _Message, Callback_Message _CallBack = nullptr);
+
+			bool SendMessageToPool(THREAD_POOL_OBJECT _THREAD_POOL_OBJECT, MESSAGE_TYPE _MessageType, MESSAGE _Message, Callback_Message _CallBack);
 
 			THREAD_OBJECT GetNowTHREAD_OBJECT(){ return (void*)m_S_T_pThreadObject; }
 

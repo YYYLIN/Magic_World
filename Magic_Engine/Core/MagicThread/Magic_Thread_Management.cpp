@@ -140,7 +140,7 @@ namespace Magic
 					Magic_Sprintf_s(_text, 256, "%s_%d", _name, a);
 					THREAD_OBJECT _THREAD_OBJECT = Create(_text, &_findTO->second, THREAD_LOOP_RUN, THREAD_MESSAGE_WAIT);
 					SendMessageTo(_THREAD_OBJECT, 0, 0,
-						[_THREAD_POOL_OBJECT](unsigned int, long long)
+						[_THREAD_POOL_OBJECT](MESSAGE_TYPE, MESSAGE)
 					{
 						m_S_T_pThreadPoolObject = (ThreadPoolObject*)_THREAD_POOL_OBJECT;
 						m_S_T_pThreadObject->m_ThreadMessageMode = THREAD_MESSAGE_NO_WAIT;
@@ -191,7 +191,17 @@ namespace Magic
 			Magic_Thread_Mutex_unLock(&m_MutexPoolObject);
 		}
 
-		bool SystemThread::SendMessageTo(THREAD_OBJECT _THREAD_OBJECT, unsigned int _MessageType, long long _Message, Callback_Message _CallBack)
+		void SystemThread::MonitorThreadMessage(MESSAGE_TYPE _MessageType, Callback_Message _CallBack)
+		{
+
+		}
+
+		void SystemThread::MonitorThreadPoolMessage(MESSAGE_TYPE _MessageType, Callback_Message _CallBack)
+		{
+
+		}
+
+		bool SystemThread::SendMessageTo(THREAD_OBJECT _THREAD_OBJECT, MESSAGE_TYPE _MessageType, MESSAGE _Message, Callback_Message _CallBack)
 		{
 			ThreadObject* _pThreadObject = (ThreadObject*)_THREAD_OBJECT;
 			if (!_pThreadObject)
@@ -212,12 +222,12 @@ namespace Magic
 			return true;
 		}
 
-		bool SystemThread::SendMessageTo(unsigned int _MessageType, long long _Message, Callback_Message _CallBack)
+		bool SystemThread::SendMessageTo(MESSAGE_TYPE _MessageType, MESSAGE _Message, Callback_Message _CallBack)
 		{
 			return SendMessageTo(m_S_T_pThreadObject, _MessageType, _Message, _CallBack);
 		}
 
-		bool SystemThread::SendMessageToPool(THREAD_POOL_OBJECT _THREAD_POOL_OBJECT, unsigned int _MessageType, long long _Message, Callback_Message _CallBack)
+		bool SystemThread::SendMessageToPool(THREAD_POOL_OBJECT _THREAD_POOL_OBJECT, MESSAGE_TYPE _MessageType, MESSAGE _Message, Callback_Message _CallBack)
 		{
 			ThreadPoolObject* _pThreadPoolObject = (ThreadPoolObject*)_THREAD_POOL_OBJECT;
 			if (!_pThreadPoolObject)

@@ -80,27 +80,37 @@ namespace Magic
 			SystemThread::Instance()->Shutdown(SystemThread::Instance()->GetNowTHREAD_OBJECT());
 		}
 
-		bool SendMessageTo(THREAD_OBJECT _THREAD_OBJECT, unsigned int _MessageType, long long _Message, Callback_Message _CallBack)
+		void MonitorThreadMessage(MESSAGE_TYPE _MessageType, Callback_Message _CallBack)
+		{
+
+		}
+
+		void MonitorThreadPoolMessage(MESSAGE_TYPE _MessageType, Callback_Message _CallBack)
+		{
+
+		}
+
+		bool SendMessageTo(THREAD_OBJECT _THREAD_OBJECT, MESSAGE_TYPE _MessageType, MESSAGE _Message, Callback_Message _CallBack)
 		{
 			return SystemThread::Instance()->SendMessageTo(_THREAD_OBJECT, _MessageType, _Message, _CallBack);
 		}
 
-		bool SendMessageTo(const char* _name, unsigned int _MessageType, long long _Message, Callback_Message _CallBack)
+		bool SendMessageTo(const char* _name, MESSAGE_TYPE _MessageType, MESSAGE _Message, Callback_Message _CallBack)
 		{
 			return SystemThread::Instance()->SendMessageTo(SystemThread::Instance()->GetTHREAD_OBJECT(_name), _MessageType, _Message, _CallBack);
 		}
 
-		bool SendMessageTo(unsigned int _MessageType, long long _Message, Callback_Message _CallBack)
+		bool SendMessageTo(MESSAGE_TYPE _MessageType, MESSAGE _Message, Callback_Message _CallBack)
 		{
 			return SystemThread::Instance()->SendMessageTo(_MessageType, _Message, _CallBack);
 		}
 
-		bool SendMessageToPool(const char* _name, unsigned int _MessageType, long long _Message, Callback_Message _CallBack)
+		bool SendMessageToPool(const char* _name, MESSAGE_TYPE _MessageType, MESSAGE _Message, Callback_Message _CallBack)
 		{
 			return SystemThread::Instance()->SendMessageToPool(SystemThread::Instance()->GetTHREAD_POOL_OBJECT(_name), _MessageType, _Message, _CallBack);
 		}
 
-		bool SendMessageToPool(THREAD_POOL_OBJECT _THREAD_POOL_OBJECT, unsigned int _MessageType, long long _Message, Callback_Message _CallBack)
+		bool SendMessageToPool(THREAD_POOL_OBJECT _THREAD_POOL_OBJECT, MESSAGE_TYPE _MessageType, MESSAGE _Message, Callback_Message _CallBack)
 		{
 			return SystemThread::Instance()->SendMessageToPool(_THREAD_POOL_OBJECT, _MessageType, _Message, _CallBack);
 		}

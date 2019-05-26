@@ -38,6 +38,9 @@ namespace Magic
 {
 	namespace Management
 	{
+		typedef unsigned int MESSAGE_TYPE;
+		typedef long long MESSAGE;
+
 		class UpdataCommon
 		{
 		public:
@@ -64,7 +67,7 @@ namespace Magic
 
 		typedef void* THREAD_OBJECT;
 		typedef void* THREAD_POOL_OBJECT;
-		typedef std::function<void(unsigned int, long long)> Callback_Message;
+		typedef std::function<void(MESSAGE_TYPE, MESSAGE)> Callback_Message;
 
 		/*
 		*功能：
@@ -106,7 +109,11 @@ namespace Magic
 		*返回值：
 		*	THREAD_OBJECT = 线程对象
 		*/
-		DLL_MAGIC_THREAD_OUTPUT_INPUT THREAD_OBJECT CreateThreadObject(const char* _name, UpdataCommon* _pUpdataCommon, ThreadTypeMode _ThreadTypeMode, ThreadMessageMode _ThreadMessageMode = THREAD_MESSAGE_NO_WAIT);
+		DLL_MAGIC_THREAD_OUTPUT_INPUT THREAD_OBJECT CreateThreadObject(
+			const char* _name, 
+			UpdataCommon* _pUpdataCommon, 
+			ThreadTypeMode _ThreadTypeMode,
+			ThreadMessageMode _ThreadMessageMode = THREAD_MESSAGE_NO_WAIT);
 
 		/*
 		*功能：
@@ -171,6 +178,28 @@ namespace Magic
 
 		/*
 		*功能：
+		*	监听线程消息
+		*参数：
+		*	_MessageType = 监听消息类型
+		*	_CallBack = 处理函数
+		*返回值：
+		*	空
+		*/
+		DLL_MAGIC_THREAD_OUTPUT_INPUT void MonitorThreadMessage(MESSAGE_TYPE _MessageType, Callback_Message _CallBack);
+
+		/*
+		*功能：
+		*	监听线程池消息
+		*参数：
+		*	_MessageType = 监听消息类型
+		*	_CallBack = 处理函数
+		*返回值：
+		*	空
+		*/
+		DLL_MAGIC_THREAD_OUTPUT_INPUT void MonitorThreadPoolMessage(MESSAGE_TYPE _MessageType, Callback_Message _CallBack);
+
+		/*
+		*功能：
 		*	发送消息到指定线程
 		*参数：
 		*	[IN]_THREAD_OBJECT = 线程对象
@@ -182,7 +211,7 @@ namespace Magic
 		*返回值：
 		*	bool = true 发送成功 | false发送失败
 		*/
-		DLL_MAGIC_THREAD_OUTPUT_INPUT bool SendMessageTo(THREAD_OBJECT _THREAD_OBJECT, unsigned int _MessageType, long long _Message, Callback_Message _CallBack = nullptr);
+		DLL_MAGIC_THREAD_OUTPUT_INPUT bool SendMessageTo(THREAD_OBJECT _THREAD_OBJECT, MESSAGE_TYPE _MessageType, MESSAGE _Message, Callback_Message _CallBack = nullptr);
 
 		/*
 		*功能：
@@ -197,7 +226,7 @@ namespace Magic
 		*返回值：
 		*	bool = true 发送成功 | false发送失败
 		*/
-		DLL_MAGIC_THREAD_OUTPUT_INPUT bool SendMessageTo(const char* _name, unsigned int _MessageType, long long _Message, Callback_Message _CallBack = nullptr);
+		DLL_MAGIC_THREAD_OUTPUT_INPUT bool SendMessageTo(const char* _name, MESSAGE_TYPE _MessageType, MESSAGE _Message, Callback_Message _CallBack = nullptr);
 
 		/*
 		*功能：
@@ -211,7 +240,7 @@ namespace Magic
 		*返回值：
 		*	bool = true 发送成功 | false发送失败
 		*/
-		DLL_MAGIC_THREAD_OUTPUT_INPUT bool SendMessageTo(unsigned int _MessageType, long long _Message, Callback_Message _CallBack = nullptr);
+		DLL_MAGIC_THREAD_OUTPUT_INPUT bool SendMessageTo(MESSAGE_TYPE _MessageType, MESSAGE _Message, Callback_Message _CallBack = nullptr);
 
 		/*
 		*功能：
@@ -224,7 +253,7 @@ namespace Magic
 		*返回值：
 		*	bool = true 发送成功 | false发送失败
 		*/
-		DLL_MAGIC_THREAD_OUTPUT_INPUT bool SendMessageToPool(const char* _name, unsigned int _MessageType, long long _Message, Callback_Message _CallBack);
+		DLL_MAGIC_THREAD_OUTPUT_INPUT bool SendMessageToPool(const char* _name, MESSAGE_TYPE _MessageType, MESSAGE _Message, Callback_Message _CallBack);
 
 		/*
 		*功能：
@@ -237,7 +266,7 @@ namespace Magic
 		*返回值：
 		*	bool = true 发送成功 | false发送失败
 		*/
-		DLL_MAGIC_THREAD_OUTPUT_INPUT bool SendMessageToPool(THREAD_POOL_OBJECT _THREAD_POOL_OBJECT, unsigned int _MessageType, long long _Message, Callback_Message _CallBack);
+		DLL_MAGIC_THREAD_OUTPUT_INPUT bool SendMessageToPool(THREAD_POOL_OBJECT _THREAD_POOL_OBJECT, MESSAGE_TYPE _MessageType, MESSAGE _Message, Callback_Message _CallBack);
 
 		/*
 		*功能：
