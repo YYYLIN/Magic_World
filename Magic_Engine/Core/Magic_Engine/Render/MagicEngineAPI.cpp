@@ -8,35 +8,18 @@
 
 namespace Magic
 {
-	static S_THREAD std::string* Overall_EngineErrorMessage = nullptr;
+#define  ENGINE_ERROR_MESSAGE_BUFFER_SIZE 1024
+	static S_THREAD char Overall_EngineErrorMessage[ENGINE_ERROR_MESSAGE_BUFFER_SIZE] = { 0 };
 
 	const char* GetEngineErrorMessage()
 	{
-		if (Overall_EngineErrorMessage)
-			return Overall_EngineErrorMessage->c_str();
-		else
-			return nullptr;
+		return Overall_EngineErrorMessage;
 	}
 
 	void SetEngineErrorMessage(const char* _text)
 	{
-		if (!Overall_EngineErrorMessage) {
-			Overall_EngineErrorMessage = new std::string;
-		}
-
-		*Overall_EngineErrorMessage = _text;
-	}
-
-	void AddEngineErrorMessage(const char* _text, bool _EndORStart)
-	{
-		if (!Overall_EngineErrorMessage) {
-			Overall_EngineErrorMessage = new std::string;
-		}
-
-		if (_EndORStart)
-			*Overall_EngineErrorMessage += _text;
-		else
-			Overall_EngineErrorMessage->insert(0, _text);
+		size_t _len = strlen(_text);
+		memcpy(Overall_EngineErrorMessage, _text, _len > ENGINE_ERROR_MESSAGE_BUFFER_SIZE ? ENGINE_ERROR_MESSAGE_BUFFER_SIZE: _len);
 	}
 
 	bool CreateEngine()
