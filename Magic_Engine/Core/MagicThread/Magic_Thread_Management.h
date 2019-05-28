@@ -6,6 +6,7 @@
 #include <queue>
 #include <set>
 #include <map>
+#include <unordered_map>
 
 namespace Magic
 {
@@ -29,6 +30,8 @@ namespace Magic
 
 		struct ThreadObject
 		{
+			typedef std::unordered_map<MESSAGE_TYPE, std::vector<Callback_Message>> UMAP_VEC_CALLBACK;
+
 			UpdataCommon* pUpdataCommon;
 			Magic_THREAD m_Thread;
 			std::string m_Name;
@@ -39,6 +42,9 @@ namespace Magic
 			std::queue<Message> m_queue_Message;
 			Magic_MUTEX m_MessageMutex;
 			Magic_SEM m_WWT_SEM;
+
+			UMAP_VEC_CALLBACK m_umap_MonitorFunction;
+			Magic_MUTEX m_MonitorMutex;
 
 			ThreadObject();
 			ThreadObject(UpdataCommon* _pUpdataCommon, ThreadTypeMode _ThreadTypeMode, ThreadRunState _ThreadRunState, const std::string& _name, ThreadMessageMode _ThreadMessageMode);
@@ -76,9 +82,9 @@ namespace Magic
 
 			void ShutdownPool(THREAD_POOL_OBJECT _THREAD_POOL_OBJECT);
 
-			void MonitorThreadMessage(MESSAGE_TYPE _MessageType, Callback_Message _CallBack);
+			bool MonitorThreadMessage(THREAD_OBJECT _THREAD_OBJECT, MESSAGE_TYPE _MessageType, Callback_Message _CallBack);
 
-			void MonitorThreadPoolMessage(MESSAGE_TYPE _MessageType, Callback_Message _CallBack);
+			bool MonitorThreadPoolMessage(THREAD_POOL_OBJECT _THREAD_POOL_OBJECT, MESSAGE_TYPE _MessageType, Callback_Message _CallBack);
 
 			bool SendMessageTo(THREAD_OBJECT _THREAD_OBJECT, MESSAGE_TYPE _MessageType, MESSAGE _Message, Callback_Message _CallBack = nullptr);
 
@@ -86,9 +92,9 @@ namespace Magic
 
 			bool SendMessageToPool(THREAD_POOL_OBJECT _THREAD_POOL_OBJECT, MESSAGE_TYPE _MessageType, MESSAGE _Message, Callback_Message _CallBack);
 
-			THREAD_OBJECT GetNowTHREAD_OBJECT(){ return (void*)m_S_T_pThreadObject; }
+			THREAD_OBJECT GetNowTHREAD_OBJECT() { return (void*)m_S_T_pThreadObject; }
 
-			THREAD_POOL_OBJECT GetNowTHREAD_POOL_OBJECT(){ return (void*)m_S_T_pThreadPoolObject; }
+			THREAD_POOL_OBJECT GetNowTHREAD_POOL_OBJECT() { return (void*)m_S_T_pThreadPoolObject; }
 
 			THREAD_OBJECT GetTHREAD_OBJECT(const char* _name);
 

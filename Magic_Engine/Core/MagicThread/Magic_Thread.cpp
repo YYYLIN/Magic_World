@@ -80,14 +80,14 @@ namespace Magic
 			SystemThread::Instance()->Shutdown(SystemThread::Instance()->GetNowTHREAD_OBJECT());
 		}
 
-		void MonitorThreadMessage(MESSAGE_TYPE _MessageType, Callback_Message _CallBack)
+		bool MonitorThreadMessage(THREAD_OBJECT _THREAD_OBJECT, MESSAGE_TYPE _MessageType, Callback_Message _CallBack)
 		{
-
+			return SystemThread::Instance()->MonitorThreadMessage(_THREAD_OBJECT, _MessageType, _CallBack);
 		}
 
-		void MonitorThreadPoolMessage(MESSAGE_TYPE _MessageType, Callback_Message _CallBack)
+		bool MonitorThreadPoolMessage(THREAD_POOL_OBJECT _THREAD_POOL_OBJECT, MESSAGE_TYPE _MessageType, Callback_Message _CallBack)
 		{
-
+			return SystemThread::Instance()->MonitorThreadPoolMessage(_THREAD_POOL_OBJECT, _MessageType, _CallBack);
 		}
 
 		bool SendMessageTo(THREAD_OBJECT _THREAD_OBJECT, MESSAGE_TYPE _MessageType, MESSAGE _Message, Callback_Message _CallBack)

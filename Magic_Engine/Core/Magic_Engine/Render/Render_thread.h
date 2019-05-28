@@ -5,6 +5,12 @@
 #include "windows.h"
 namespace Magic
 {
+	enum RENDER_THREAD_EVENT
+	{
+		RENDER_START = 1,
+		RENDER_END = 2
+	};
+
 	HGLRC CreateRCContxt(HDC _hdc);
 
 	class Render_thread :public Magic::Management::UpdataCommon

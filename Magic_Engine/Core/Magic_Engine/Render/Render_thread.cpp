@@ -81,7 +81,7 @@ namespace Magic
 				ShutdownEngine();
 				return false;
 			}
-		
+
 
 			glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
@@ -102,7 +102,8 @@ namespace Magic
 
 	bool Render_thread::Updata()
 	{
-
+		Magic::Management::SendMessageTo(RENDER_START, 0);
+		Magic::Management::SendMessageTo(RENDER_END, 0);
 	}
 
 }

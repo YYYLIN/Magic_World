@@ -110,8 +110,8 @@ namespace Magic
 		*	THREAD_OBJECT = 线程对象
 		*/
 		DLL_MAGIC_THREAD_OUTPUT_INPUT THREAD_OBJECT CreateThreadObject(
-			const char* _name, 
-			UpdataCommon* _pUpdataCommon, 
+			const char* _name,
+			UpdataCommon* _pUpdataCommon,
 			ThreadTypeMode _ThreadTypeMode,
 			ThreadMessageMode _ThreadMessageMode = THREAD_MESSAGE_NO_WAIT);
 
@@ -180,23 +180,25 @@ namespace Magic
 		*功能：
 		*	监听线程消息
 		*参数：
+		*	_THREAD_OBJECT = 线程对象
 		*	_MessageType = 监听消息类型
 		*	_CallBack = 处理函数
 		*返回值：
 		*	空
 		*/
-		DLL_MAGIC_THREAD_OUTPUT_INPUT void MonitorThreadMessage(MESSAGE_TYPE _MessageType, Callback_Message _CallBack);
+		DLL_MAGIC_THREAD_OUTPUT_INPUT bool MonitorThreadMessage(THREAD_OBJECT _THREAD_OBJECT, MESSAGE_TYPE _MessageType, Callback_Message _CallBack);
 
 		/*
 		*功能：
 		*	监听线程池消息
 		*参数：
+		*	_THREAD_POOL_OBJECT =  线程池对象
 		*	_MessageType = 监听消息类型
 		*	_CallBack = 处理函数
 		*返回值：
 		*	空
 		*/
-		DLL_MAGIC_THREAD_OUTPUT_INPUT void MonitorThreadPoolMessage(MESSAGE_TYPE _MessageType, Callback_Message _CallBack);
+		DLL_MAGIC_THREAD_OUTPUT_INPUT bool MonitorThreadPoolMessage(THREAD_POOL_OBJECT _THREAD_POOL_OBJECT, MESSAGE_TYPE _MessageType, Callback_Message _CallBack);
 
 		/*
 		*功能：

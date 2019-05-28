@@ -95,6 +95,7 @@ namespace Magic
 				m_S_T_pThreadObject = &_findTO->second;
 				m_set_ThreadObject.insert(&_findTO->second);
 				Magic_Thread_Mutex_Init(&_findTO->second.m_MessageMutex);
+				Magic_Thread_Mutex_Init(&_findTO->second.m_MonitorMutex);
 			}
 
 			return true;
@@ -112,6 +113,7 @@ namespace Magic
 				_THREAD_OBJECT = &_findTO->second;
 				m_set_ThreadObject.insert(&_findTO->second);
 				Magic_Thread_Mutex_Init(&_findTO->second.m_MessageMutex);
+				Magic_Thread_Mutex_Init(&_findTO->second.m_MonitorMutex);
 				Magic_Thread_SEM_init(_findTO->second.m_WWT_SEM, NULL, 0, LONG_MAX, NULL, NULL, 0);
 				if (Magic_Thread_Create(_findTO->second.m_Thread, NULL, ThreadFunction, (void*)(&_findTO->second)))
 					Magic_ResumeThread(_findTO->second.m_Thread);
@@ -191,14 +193,47 @@ namespace Magic
 			Magic_Thread_Mutex_unLock(&m_MutexPoolObject);
 		}
 
-		void SystemThread::MonitorThreadMessage(MESSAGE_TYPE _MessageType, Callback_Message _CallBack)
+		bool SystemThread::MonitorThreadMessage(THREAD_OBJECT _THREAD_OBJECT, MESSAGE_TYPE _MessageType, Callback_Message _CallBack)
 		{
+			ThreadObject* _pThreadObject = (ThreadObject*)_THREAD_OBJECT;
+			if (!_pThreadObject)
+				return false;
+			bool _IsHave;
+			Magic_Thread_Mutex_Lock(&m_Mutex);
+			_IsHave = m_set_ThreadObject.find(_pThreadObject) != m_set_ThreadObject.end();
+			Magic_Thread_Mutex_unLock(&m_Mutex);
+			if (!_IsHave)
+				return false;
 
+			Magic_Thread_Mutex_Lock(&_pThreadObject->m_MonitorMutex);
+			auto _MointorVec = _pThreadObject->m_umap_MonitorFunction.find(_MessageType);
+			if (_MointorVec != _pThreadObject->m_umap_MonitorFunction.end())
+				_MointorVec->second.push_back(_CallBack);
+			else
+				_pThreadObject->m_umap_MonitorFunction.insert(std::make_pair(_MessageType, std::vector<Callback_Message>({ _CallBack })));
+			Magic_Thread_Mutex_unLock(&_pThreadObject->m_MonitorMutex);
+
+			return true;
 		}
 
-		void SystemThread::MonitorThreadPoolMessage(MESSAGE_TYPE _MessageType, Callback_Message _CallBack)
+		bool SystemThread::MonitorThreadPoolMessage(THREAD_POOL_OBJECT _THREAD_POOL_OBJECT, MESSAGE_TYPE _MessageType, Callback_Message _CallBack)
 		{
+			ThreadPoolObject* _pThreadPoolObject = (ThreadPoolObject*)_THREAD_POOL_OBJECT;
+			if (!_pThreadPoolObject)
+				return false;
 
+			bool _IsError = true;
+			Magic_Thread_Mutex_Lock(&_pThreadPoolObject->m_MessageMutex);
+			for (auto _auto : _pThreadPoolObject->m_vec_ThreadObject) {
+				_IsError = MonitorThreadMessage(_auto, _MessageType, _CallBack);
+				if (!_IsError) {
+					_IsError = false;
+					break;
+				}
+			}
+			Magic_Thread_Mutex_unLock(&_pThreadPoolObject->m_MessageMutex);
+
+			return _IsError;
 		}
 
 		bool SystemThread::SendMessageTo(THREAD_OBJECT _THREAD_OBJECT, MESSAGE_TYPE _MessageType, MESSAGE _Message, Callback_Message _CallBack)
@@ -330,6 +365,7 @@ namespace Magic
 				Magic_Thread_Wait(_auto->second.m_Thread);
 				Magic_CloseHandle(_auto->second.m_Thread);
 				Magic_MUTEX _Mutex = _auto->second.m_MessageMutex;
+				Magic_MUTEX _MonitorMutex = _auto->second.m_MonitorMutex;
 				Magic_SEM _SEM = _auto->second.m_WWT_SEM;
 
 				m_set_ThreadObject.erase(&_auto->second);
@@ -340,6 +376,7 @@ namespace Magic
 
 				Magic_Thread_SEM_destroy(_SEM);
 				Magic_Thread_Mutex_Destroy(&_Mutex);
+				Magic_Thread_Mutex_Destroy(&_MonitorMutex);
 			}
 			else
 				_auto++;
@@ -396,6 +433,18 @@ namespace Magic
 				{
 					if (_Message.m_CallBack)
 						_Message.m_CallBack(_Message.m_MessageType, _Message.m_Message);
+
+					std::vector<Callback_Message> _vec_Callback;
+					Magic_Thread_Mutex_Lock(&_pThreadObject->m_MonitorMutex);
+					auto _MonitorVec = _pThreadObject->m_umap_MonitorFunction.find(_Message.m_MessageType);
+					if (_MonitorVec != _pThreadObject->m_umap_MonitorFunction.end())
+						_vec_Callback = _MonitorVec->second;
+					Magic_Thread_Mutex_unLock(&_pThreadObject->m_MonitorMutex);
+
+					for (auto _allback : _vec_Callback) {
+						_allback(_Message.m_MessageType, _Message.m_Message);
+					}
+
 					if (_pThreadObject->pUpdataCommon)
 					{
 						ThreadMessage* _pThreadMessage = dynamic_cast<ThreadMessage*>(_pThreadObject->pUpdataCommon);
