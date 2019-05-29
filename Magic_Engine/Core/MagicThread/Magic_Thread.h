@@ -24,7 +24,7 @@
 
 #endif
 
-#define MAGIC_THREAD_MAIN_THREAD_NAME			"MAIN_THREAD"
+#define MAGIC_MAIN_THREAD_NAME			"MAIN_THREAD"
 
 struct DLL_MAGIC_THREAD_OUTPUT_INPUT Magic_Message_Struct
 {

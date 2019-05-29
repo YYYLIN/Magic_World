@@ -1,5 +1,6 @@
 #include "Render_thread.h"
 #include "MagicEngineAPI.h"
+#include "Cross_Platform_Port.h"
 #include <GL/glew.h>  
 
 namespace Magic
@@ -78,7 +79,7 @@ namespace Magic
 			m_hRC = Magic::CreateRCContxt(m_HDC);
 			if (!m_hRC)
 			{
-				ShutdownEngine();
+				ShutdownEngine(1, "CreateRCContxt failure!");
 				return false;
 			}
 
@@ -88,8 +89,10 @@ namespace Magic
 			GLenum err = glewInit();
 			if (GLEW_OK != err)
 			{
-				fprintf(stderr, "Error:'%s'\n", glewGetErrorString(err));
-				ShutdownEngine();
+				char _text[256];
+				Magic_Sprintf_s(_text, 256, "Error:'%s'\n", glewGetErrorString(err));
+
+				ShutdownEngine(err, _text);
 				return false;
 			}
 

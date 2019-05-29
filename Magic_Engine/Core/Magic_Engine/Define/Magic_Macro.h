@@ -32,4 +32,11 @@
 #define MOUSE_X_TO_LONG(a)			(long)(a)
 #define MOUSE_Y_TO_LONG(a)			((long)a << 16)
 
+namespace Magic {
+	enum ENGINE_MESSAGE {
+		SHUTOWN_ENGINE = 1
+	};
+}
+
+
 #endif

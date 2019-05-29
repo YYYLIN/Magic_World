@@ -307,6 +307,7 @@ MagicEngineContext* MagicEngineContext::pMagicEngineContext = 0;
 MagicEngineContext::MagicEngineContext()
 {
 	pMagicEngineContext = this;
+	m_EngineRunState = false;
 }
 
 
@@ -324,17 +325,35 @@ bool MagicEngineContext::Initialize()
 
 	return true;
 }
-void MagicEngineContext::Shutdown()
-{
-	DeleteCriticalSection(&m_MutexThreadsResourceManager);
 
-	for (std::map<std::string, MagicTexture*>::iterator i = Map_Texture.begin(); i != Map_Texture.end(); i++)
-		delete i->second;
+void MagicEngineContext::ShutdownMessage(Magic::Management::MESSAGE _Message, const char* _Text) {
+	std::string _str_text = _Text;
+
+	Magic::Management::SendMessageTo(MAGIC_MAIN_THREAD_NAME, Magic::SHUTOWN_ENGINE, _Message,
+		[this, _str_text](Magic::Management::MESSAGE_TYPE, Magic::Management::MESSAGE) {
+		Magic::SetEngineErrorMessage(_str_text.c_str());
+		m_EngineRunState = false;
+	});
 }
 
-void MagicEngineContext::Render(void)
+void MagicEngineContext::Shutdown()
 {
-	UpdataThread();
+	for (std::map<std::string, MagicTexture*>::iterator i = Map_Texture.begin(); i != Map_Texture.end(); i++)
+		delete i->second;
+
+	Magic::Management::ShutdownThreadManagement();
+}
+
+void MagicEngineContext::Run(void)
+{
+	m_EngineRunState = true;
+
+	while (m_EngineRunState)
+	{
+		Magic::Management::UpdataThreadManagement();
+	}
+
+	Shutdown();
 }
 
 

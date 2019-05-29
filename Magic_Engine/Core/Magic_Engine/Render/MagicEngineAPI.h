@@ -39,11 +39,11 @@ namespace Magic
 	*功能：
 	*	关闭引擎
 	*参数：
-	*	空
+	*	_Message = 0 为正常退出
 	*返回值：
 	*	空
 	*/
-	DLL_MAGIC_ENGINE_OUTPUT_INPUT void ShutdownEngine();
+	DLL_MAGIC_ENGINE_OUTPUT_INPUT void ShutdownEngine(Magic::Management::MESSAGE _Message, const char* _Text);
 
 	/*
 	*功能：

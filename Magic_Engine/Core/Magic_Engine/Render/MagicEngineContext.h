@@ -79,9 +79,11 @@ public:
 
 
 	bool Initialize();
+	//_Message = 0 为正常退出
+	void ShutdownMessage(Magic::Management::MESSAGE _Message, const char* _Text);
 	void Shutdown();
 
-	void Render(void);
+	void Run(void);
 
 	MagicTexture* LoadTextrue(const char* file_name, const char* _name, char format);
 	MagicTexture* LoadTextrue(const unsigned char* Data, int _width, int _height, const char* _name);
@@ -121,6 +123,8 @@ private:
 	void UpdataThread();
 
 private:
+	bool m_EngineRunState;
+
 	std::map<std::string, MagicTexture*> Map_Texture;
 	std::map<std::string, EntityCommon> M_EntityThreads;
 

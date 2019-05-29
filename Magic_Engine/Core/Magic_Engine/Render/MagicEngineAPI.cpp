@@ -8,7 +8,7 @@
 
 namespace Magic
 {
-#define  ENGINE_ERROR_MESSAGE_BUFFER_SIZE 1024
+#define  ENGINE_ERROR_MESSAGE_BUFFER_SIZE 256
 	static S_THREAD char Overall_EngineErrorMessage[ENGINE_ERROR_MESSAGE_BUFFER_SIZE] = { 0 };
 
 	const char* GetEngineErrorMessage()
@@ -19,7 +19,7 @@ namespace Magic
 	void SetEngineErrorMessage(const char* _text)
 	{
 		size_t _len = strlen(_text);
-		memcpy(Overall_EngineErrorMessage, _text, _len > ENGINE_ERROR_MESSAGE_BUFFER_SIZE ? ENGINE_ERROR_MESSAGE_BUFFER_SIZE: _len);
+		memcpy(Overall_EngineErrorMessage, _text, _len > ENGINE_ERROR_MESSAGE_BUFFER_SIZE ? ENGINE_ERROR_MESSAGE_BUFFER_SIZE : _len);
 	}
 
 	bool CreateEngine()
@@ -41,14 +41,14 @@ namespace Magic
 
 	void RunEngine()
 	{
-		MagicEngineContext::Instance()->Render();
+		MagicEngineContext::Instance()->Run();
 	}
 
-	void ShutdownEngine()
+	void ShutdownEngine(Magic::Management::MESSAGE _Message, const char* _Text)
 	{
 		if (MagicEngineContext::Instance())
 		{
-			delete MagicEngineContext::Instance();
+			MagicEngineContext::Instance()->ShutdownMessage(_Message, _Text);
 		}
 	}
 
