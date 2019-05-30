@@ -11,15 +11,19 @@ namespace Magic
 		RENDER_END = 2
 	};
 
-	HGLRC CreateRCContxt(HDC _hdc);
-
 	class Render_thread :public Magic::Management::UpdataCommon
 	{
 	public:
+		static Render_thread* Instance() { return pRender_thread; }
+
 		Render_thread();
 		~Render_thread();
 
-		bool Initialize(HWND _hwnd);
+		bool Initialize();
+
+		void BindRC(HDC _HDC, HGLRC _hRC);
+
+		Magic::Management::THREAD_OBJECT GetTHREAD_OBJECT() { return m_TO_Render_thread; }
 	private:
 		virtual bool Updata();
 
@@ -28,7 +32,8 @@ namespace Magic
 
 		HGLRC m_hRC;
 		HDC m_HDC;
-		HWND m_hWnd;
+
+		static Render_thread* pRender_thread;
 	};
 }
 

@@ -299,6 +299,59 @@ namespace Magic
 		glGetIntegerv(GL_MINOR_VERSION, &minor);
 		return minor;
 	}
+
+	HGLRC CreateRCContxt(HDC _hdc)
+	{
+		PIXELFORMATDESCRIPTOR pfd =
+		{
+			sizeof(PIXELFORMATDESCRIPTOR), // size of this pfd
+			1,                                                     // version number
+			PFD_DRAW_TO_WINDOW |           // support window
+			PFD_SUPPORT_OPENGL |               // support OpenGL
+			PFD_DOUBLEBUFFER,                     // double buffered
+			PFD_TYPE_RGBA,                           // RGBA type
+			24,                                                 // 24-bit color depth
+			0, 0, 0, 0, 0, 0,                               // color bits ignored
+			0,                                                   // no alpha buffer
+			0,                                                   // shift bit ignored
+			0,                                                   // no accumulation buffer
+			0, 0, 0, 0,                                       // accum bits ignored
+			32,                                                 // 32-bit z-buffer
+			0,                                                   // no stencil buffer
+			0,                                                   // no auxiliary buffer
+			PFD_MAIN_PLANE,                         // main layer
+			0,                                                   // reserved
+			0, 0, 0                                            // layer masks ignored
+		};
+
+		int m_nPixelFormat = ChoosePixelFormat(_hdc, &pfd);
+		if (m_nPixelFormat == 0)
+		{
+			Magic::SetEngineErrorMessage("ChoosePixelFormat failed.");
+			return false;
+		}
+		if (SetPixelFormat(_hdc, m_nPixelFormat, &pfd) == FALSE)
+		{
+			Magic::SetEngineErrorMessage("SetPixelFormat failed.");
+			return false;
+		}
+
+		HGLRC m_hRC = wglCreateContext(_hdc);
+		if (m_hRC == 0)
+		{
+			Magic::SetEngineErrorMessage("Error Creating RC");
+			return false;
+		}
+
+		//Make the RC Current
+		if (wglMakeCurrent(_hdc, m_hRC) == FALSE)
+		{
+			Magic::SetEngineErrorMessage("Error making RC Current");
+			return false;
+		}
+
+		return m_hRC;
+	}
 }
 
 EntityCommon* MagicEngineContext::S_T_pEntityCommon = 0;
@@ -320,6 +373,16 @@ MagicEngineContext::~MagicEngineContext()
 bool MagicEngineContext::Initialize()
 {
 	bool _result = Magic::Management::CreateThreadManagement(0);
+	if (!_result)
+		return false;
+
+	m_Load_Thread = Magic::Management::CreateThreadObject("Load_Thread", 0, Magic::Management::THREAD_LOOP_RUN, Magic::Management::THREAD_MESSAGE_WAIT);
+
+	_result = m_Render_thread.Initialize();
+	if (!_result)
+		return false;
+
+	_result = m_DrawSimpleGraphics.Initialize();
 	if (!_result)
 		return false;
 
@@ -354,6 +417,11 @@ void MagicEngineContext::Run(void)
 	}
 
 	Shutdown();
+}
+
+void MagicEngineContext::LoadThread(Magic::Management::Callback_Message _Callback_Message)
+{
+	Magic::Management::SendMessageTo(m_Load_Thread, 0, 0, _Callback_Message);
 }
 
 

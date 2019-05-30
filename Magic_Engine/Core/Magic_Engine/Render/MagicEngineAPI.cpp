@@ -52,6 +52,10 @@ namespace Magic
 		}
 	}
 
+	void Load(Magic::Management::Callback_Message _Callback_Message) {
+		MagicEngineContext::Instance()->LoadThread(_Callback_Message);
+	}
+
 	bool CreateThreadsResourceManager(const char* _name)
 	{
 		return MagicEngineContext::Instance()->CreateThreadsResourceManager(_name);

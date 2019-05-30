@@ -7,6 +7,7 @@
 	(4-test_wait)为线程管理模块增加新功能，可添加线程监听消息的接口函数  
 	(关键对象umap<uint,vector<std:funtion<uint,long long>>>)
 	(5)设计Render_thread需要的消息类型以及顺序 RENDER_THREAD_EVENT
+	(6)编写简易多边形渲染的类，渲染参考之前的引擎
 2.简化渲染接口调用
 3.实现一个触发器模块，需要实现  可增加任意数量的处理函数。和触发函数。
 

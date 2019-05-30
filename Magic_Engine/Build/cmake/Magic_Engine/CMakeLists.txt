@@ -53,7 +53,9 @@ ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicEarth.h
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicScene.cpp
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicScene.h
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/Render_thread.cpp
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/Render_thread.h)
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/Render_thread.h
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/DrawSimpleGraphics.cpp
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/DrawSimpleGraphics.h)
 
 set(MAGIC_SYSTEM_FILES
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/System/Supervisor.cpp

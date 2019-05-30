@@ -47,6 +47,16 @@ namespace Magic
 
 	/*
 	*功能：
+	*	加载功能线程
+	*参数：
+	*	_Callback_Message = 处理函数
+	*返回值：
+	*	空
+	*/
+	DLL_MAGIC_ENGINE_OUTPUT_INPUT void Load(Magic::Management::Callback_Message _Callback_Message);
+
+	/*
+	*功能：
 	*	创建一个新的线程并添加一个管理员对象
 	*线程保护：
 	*	有

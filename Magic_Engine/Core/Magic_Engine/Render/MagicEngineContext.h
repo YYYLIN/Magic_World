@@ -14,6 +14,8 @@
 #include "Define/MagicType.h"
 #include "MagicScene.h"
 #include "Magic_Thread.h"
+#include "Render_thread.h"
+#include "DrawSimpleGraphics.h"
 
 #pragma warning(push)
 #pragma warning(disable:4251)
@@ -67,6 +69,8 @@ namespace Magic
 	int Getmajor();
 	//小版本号
 	int Getminor();
+
+	HGLRC CreateRCContxt(HDC _hdc);
 }
 
 class MagicEngineContext
@@ -84,6 +88,8 @@ public:
 	void Shutdown();
 
 	void Run(void);
+
+	void LoadThread(Magic::Management::Callback_Message _Callback_Message);
 
 	MagicTexture* LoadTextrue(const char* file_name, const char* _name, char format);
 	MagicTexture* LoadTextrue(const unsigned char* Data, int _width, int _height, const char* _name);
@@ -131,6 +137,10 @@ private:
 	EntityX::EntityX m_Supervisor;
 
 	CRITICAL_SECTION m_MutexThreadsResourceManager;
+
+	Magic::Render_thread m_Render_thread;
+	Magic::Management::THREAD_OBJECT m_Load_Thread;
+	DrawSimpleGraphics m_DrawSimpleGraphics;
 
 	//线程局部静态变量
 	static __declspec(thread) EntityCommon* S_T_pEntityCommon;
