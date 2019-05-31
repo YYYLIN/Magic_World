@@ -8,7 +8,9 @@ namespace Magic
 	enum RENDER_THREAD_EVENT
 	{
 		RENDER_START = 1,
-		RENDER_END = 2
+		RENDER,
+		RENDER_TRANSPARENT,
+		RENDER_END
 	};
 
 	class Render_thread :public Magic::Management::UpdataCommon
