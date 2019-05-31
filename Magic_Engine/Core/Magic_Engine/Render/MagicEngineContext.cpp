@@ -302,6 +302,34 @@ namespace Magic
 
 	HGLRC CreateRCContxt(HDC _hdc)
 	{
+		HGLRC m_hRC = wglCreateContext(_hdc);
+		if (m_hRC == 0)
+		{
+			Magic::SetEngineErrorMessage("Error Creating RC");
+			return false;
+		}
+
+		//Make the RC Current
+		if (wglMakeCurrent(_hdc, m_hRC) == FALSE)
+		{
+			Magic::SetEngineErrorMessage("Error making RC Current");
+			return false;
+		}
+
+		return m_hRC;
+	}
+	
+	void ShutdownRC(HGLRC _hRC){
+		//Make the RC Current
+		if (wglMakeCurrent(NULL, NULL) == FALSE){
+			return;
+		}
+		if(wglDeleteContext(_hRC) == FALSE){
+			return;
+		}
+	}
+	
+	bool CreateHD(HDC _hdc){
 		PIXELFORMATDESCRIPTOR pfd =
 		{
 			sizeof(PIXELFORMATDESCRIPTOR), // size of this pfd
@@ -335,22 +363,8 @@ namespace Magic
 			Magic::SetEngineErrorMessage("SetPixelFormat failed.");
 			return false;
 		}
-
-		HGLRC m_hRC = wglCreateContext(_hdc);
-		if (m_hRC == 0)
-		{
-			Magic::SetEngineErrorMessage("Error Creating RC");
-			return false;
-		}
-
-		//Make the RC Current
-		if (wglMakeCurrent(_hdc, m_hRC) == FALSE)
-		{
-			Magic::SetEngineErrorMessage("Error making RC Current");
-			return false;
-		}
-
-		return m_hRC;
+		
+		return true;
 	}
 }
 
