@@ -44,6 +44,7 @@ namespace Magic
 	*	¿Õ
 	*/
 	DLL_MAGIC_ENGINE_OUTPUT_INPUT void ShutdownEngine(Magic::Management::MESSAGE _Message, const char* _Text);
+	DLL_MAGIC_ENGINE_OUTPUT_INPUT void ShutdownEngine(Magic::Management::MESSAGE _Message);
 
 	/*
 	*¹¦ÄÜ£º

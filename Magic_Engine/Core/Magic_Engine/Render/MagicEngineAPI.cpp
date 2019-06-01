@@ -52,6 +52,10 @@ namespace Magic
 		}
 	}
 
+	void ShutdownEngine(Magic::Management::MESSAGE _Message) {
+		ShutdownEngine(_Message, GetEngineErrorMessage());
+	}
+
 	void Load(Magic::Management::Callback_Message _Callback_Message) {
 		MagicEngineContext::Instance()->LoadThread(_Callback_Message);
 	}

@@ -11,6 +11,7 @@
 #include "Define/Magic_Macro.h"
 #include "Magic_Fonts.h"
 #include "MagicMessage.h"
+#include "MagicOpengl.h"
 
 #include "vector"
 
@@ -19,20 +20,6 @@
 
 namespace Magic
 {
-	typedef  struct {
-		unsigned int count;
-		unsigned int instanceCount;
-		unsigned int first;
-		unsigned int baseInstance;
-	} DrawArraysIndirectCommand;
-
-	typedef struct {
-		unsigned int count;
-		unsigned int instanceCount;
-		unsigned int firstIndex;
-		unsigned int baseVertex;
-		unsigned int baseInstance;
-	} DrawElementsIndirectCommand;
 
 	class Pen_Common
 	{

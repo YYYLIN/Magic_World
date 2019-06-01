@@ -71,6 +71,10 @@ namespace Magic
 	int Getminor();
 
 	HGLRC CreateRCContxt(HDC _hdc);
+
+	void ShutdownRC(HGLRC _hRC);
+
+	bool CreateHD(HDC _hdc);
 }
 
 class MagicEngineContext

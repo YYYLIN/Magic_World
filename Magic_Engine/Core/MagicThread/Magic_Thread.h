@@ -26,6 +26,9 @@
 
 #define MAGIC_MAIN_THREAD_NAME			"MAIN_THREAD"
 
+#define BindClassFunctionToMessage(F) std::bind(F, this, std::placeholders::_1, std::placeholders::_2)
+#define BindClassFunctionToMessageObject(F,O) std::bind(F, O, std::placeholders::_1, std::placeholders::_2)
+
 struct DLL_MAGIC_THREAD_OUTPUT_INPUT Magic_Message_Struct
 {
 	unsigned int MessageType;

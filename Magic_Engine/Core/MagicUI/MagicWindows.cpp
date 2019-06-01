@@ -32,7 +32,7 @@ MagicWindows::~MagicWindows()
 {
 
 	Shutdown();
-	Magic::ShutdownEngine();
+	//Magic::ShutdownEngine();
 	pMagicWindows = 0;
 }
 
