@@ -30,9 +30,6 @@ MagicWindows::MagicWindows()
 
 MagicWindows::~MagicWindows()
 {
-
-	Shutdown();
-	//Magic::ShutdownEngine();
 	pMagicWindows = 0;
 }
 
@@ -47,98 +44,9 @@ bool MagicWindows::Initialize(const wchar_t* _name, int _x, int _y, int _w, int 
 	if (!result)
 		return false;
 
-	result = Magic::CreateOpenglRender(m_hwnd, Magic::GetThreadsResourceManager());
-	if (!result)
-		return false;
+	Magic::Engine(BindClassFunctionToMessage(&MagicWindows::Updata));
 
-	/*
-		result = EnableAlphaWindow(m_hwnd, 1024, 768, &m_SGDI);
-		if (!result)
-		return false;*/
-
-	Magic::UI::UserScene* _pUserScene = &m_UserScene;
-
-	result = Magic::CreateScene(Magic::GetThreadsResourceManager(), &_pUserScene);
-	if (!result)
-		return false;
-	Magic::SetSceneSize(_pUserScene->GetEntity(), glm::vec2(_w, _h));
-	Magic::SetSceneCallUpdata(_pUserScene->GetEntity(), Updata);
-
-
-	Magic::UI::MenuScene* _pMenuScene = &m_MenuScene;
-	result = Magic::CreateScene(Magic::GetThreadsResourceManager(), &_pMenuScene);
-	if (!result)
-		return false;
-	Magic::SetSceneSize(_pMenuScene->GetEntity(), glm::vec2(_w, _h));
-
-	Magic::UI::DebugScene* _pDebugScene = &m_DebugScene;
-	result = Magic::CreateScene(Magic::GetThreadsResourceManager(), &_pDebugScene);
-	if (!result)
-		return false;
-	Magic::SetSceneSize(_pDebugScene->GetEntity(), glm::vec2(_w, _h));
-
-	Magic::UI::SystemScene* _pSystemScene = &m_SystemScene;
-	result = Magic::CreateScene(Magic::GetThreadsResourceManager(), &_pSystemScene);
-	if (!result)
-		return false;
-	Magic::SetSceneSize(_pSystemScene->GetEntity(), glm::vec2(_w, _h));
-
-	/*
-		result = m_MagicWorld.Initialize();
-		if (!result)
-		return false;
-		m_MagicEngineContext.AddCommon(&m_MagicWorld);*/
-
-		/*
-			result = m_MagicScene.Initialize(&m_MagicEngineContext, glm::vec4(0, 0, 1024, 768));
-			if (!result)
-			return false;*/
-
-
-			//--------------------------------------------
-			/*
-				result = CreateMagicGratingContext(&m_MGContext);
-				if (!result)
-				return false;
-				result = InitMagicGratingContext(m_MGContext);
-				if (!result)
-				return false;
-				BindMagicGratingContext(m_MGContext);
-				BindMGDisplayContext(m_MGContext, m_SGDI.m_pBackBuffer, 1024, 768, MG_BGRA, MG_UCHAR);
-				//--------------------------------------------
-				MG_CreateFrameBufferObject(&m_MGFrameBuffer);
-				MG_BindFrameBuffer(m_MGFrameBuffer);
-				result = MG_InitFrameBuffer(1024, 768);
-				if (!result)
-				return false;
-				MG_ClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-				//-------------Shader-------------------------
-				CreateMagicShaderObject(&m_Shader);
-				BindMagicShaderObject(m_Shader);
-				m_ShaderCamera = MGAddShaderVariate(sizeof(Magic::Matrix4));
-				m_Shaderprojection = MGAddShaderVariate(sizeof(Magic::Matrix4));
-				m_Shaderworld = MGAddShaderVariate(sizeof(Magic::Matrix4));
-				InitMagicShaderObject(Shader_VertexShader, Shader_PixelShader);
-
-				MG_SetShaderVariate(m_ShaderCamera, &Magic::Matrix4());
-				MG_SetShaderVariate(m_Shaderprojection, &Magic::Matrix4());
-				MG_SetShaderVariate(m_Shaderworld, &Magic::Matrix4());
-				//--------------------------------------------
-				MG_CreateVertexArrays(&m_VertexArrays);
-				MG_BindVertexArrays(m_VertexArrays);
-				MG_EnableVertexAttribArray(1);
-
-				float pVertex[] =
-				{
-				0.5f,0.0f,0.0f,
-				0.0f,0.5f,0.0f,
-				-0.5f,0.0f,0.0f
-				};
-
-				MG_CreateBuffer(&m_VertexBuffer);
-				MG_BindBuffer(MG_ARRAY_BUFFER, m_VertexBuffer);
-				MG_BufferData(MG_ARRAY_BUFFER, sizeof(float) * 3 * 3, pVertex);
-				MG_VertexAttribPointer(0, 3, MG_FLOAT);*/
+	Magic::ShutdownMessage(BindClassFunctionToMessage(&MagicWindows::Shutdown));
 
 	return true;
 }
@@ -168,7 +76,7 @@ LRESULT CALLBACK MagicWindows::MessageHandler(HWND _hwnd, UINT _umsg, WPARAM _wp
 	{
 		RECT _rect;
 		GetClientRect(_hwnd, &_rect);
-		Magic::SendMessageToScene(0, { MAGIC_UI_MESSAGE_MOUSE_MOVE,(_lparam & 0xFFFF) | ((LPARAM)(_rect.bottom - GET_Y_LPARAM(_lparam))) << 16 });
+		//Magic::SendMessageToScene(0, { MAGIC_UI_MESSAGE_MOUSE_MOVE,(_lparam & 0xFFFF) | ((LPARAM)(_rect.bottom - GET_Y_LPARAM(_lparam))) << 16 });
 		return 0;
 	}
 	default:
@@ -176,7 +84,7 @@ LRESULT CALLBACK MagicWindows::MessageHandler(HWND _hwnd, UINT _umsg, WPARAM _wp
 	}
 }
 
-void MagicWindows::Updata(EntityCommon _entity)     //过程处理函数
+void MagicWindows::Updata(Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message)     //过程处理函数
 {
 	MSG msg;
 
@@ -187,18 +95,6 @@ void MagicWindows::Updata(EntityCommon _entity)     //过程处理函数
 		DispatchMessage(&msg);
 	}
 
-	/*
-				glReadPixels(0, 0, m_SGDI.m_Width, m_SGDI.m_Height, GL_BGRA_EXT, GL_UNSIGNED_BYTE, m_SGDI.m_pBackBuffer);
-				glBindTexture(GL_TEXTURE_2D, m_MagicSceneCircle.GetTextrue());
-				glGetTexImage(GL_TEXTURE_2D, 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, m_SGDI.m_pBackBuffer);*/
-				/*
-							MG_Clear(MG_COLOR_BUFFER);
-
-							MGDrawArrays(MG_DrawPoints, 0, 3);
-
-							MG_WaitSwapFrame();
-
-							UpdataAlphaWindow(&m_SGDI);*/
 }
 
 void MagicWindows::SetCallbackMessage_WIN32(Magic::CallbackMessage_WIN32 _CallbackMessage_WIN32)
@@ -254,17 +150,8 @@ bool MagicWindows::CreateWindows(const wchar_t* _Name, int _x, int _y, int _widt
 	return true;
 }
 
-void MagicWindows::Shutdown()
+void MagicWindows::Shutdown(Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message)
 {
-	/*
-		MG_DeleteBuffer(&m_VertexBuffer);
-		MG_DeleteVertexArrays(&m_VertexArrays);
-		DeleteMagicShaderObject(&m_Shader);
-		MG_DeleteFrameBufferObject(&m_MGFrameBuffer);
-		DeleteMagicGratingContext(&m_MGContext);*/
-
-		/*	DisableAlphaWindow(&m_SGDI);*/
-		// 删除窗口。
 	DestroyWindow(m_hwnd);
 	m_hwnd = NULL;
 

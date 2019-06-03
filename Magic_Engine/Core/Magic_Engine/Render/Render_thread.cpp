@@ -76,6 +76,7 @@ namespace Magic
 	}
 
 	bool Render_thread::Updata() {
+		return true;
 	}
 
 	void Render_thread::RenderStart(Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message) {

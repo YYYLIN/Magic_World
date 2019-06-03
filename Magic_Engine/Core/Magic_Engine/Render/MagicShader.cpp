@@ -85,8 +85,9 @@ bool MagicShader::LoadFromString(unsigned int type, const std::string& source)
 			GLsizei written;
 			//得到日志信息并输出  
 			glGetShaderInfoLog(shader, logLen, &written, log);
-			Magic::SetEngineErrorMessage("vertex shader compile log : ");
-			Magic::AddEngineErrorMessage(log);
+			std::string _text = "vertex shader compile log : ";
+			_text += log;
+			Magic::SetEngineErrorMessage(_text.c_str());
 			free(log);//释放空间  
 			return false;
 		}
@@ -132,8 +133,9 @@ bool MagicShader::CreateAndLinkProgram()
 			GLsizei written;
 			glGetProgramInfoLog(programHandle, logLen,
 				&written, log);
-			Magic::SetEngineErrorMessage("Program log : ");
-			Magic::AddEngineErrorMessage(log);
+			std::string _text = "Program log : ";
+			_text += log;
+			Magic::SetEngineErrorMessage(_text.c_str());
 			free(log);
 
 			return false;

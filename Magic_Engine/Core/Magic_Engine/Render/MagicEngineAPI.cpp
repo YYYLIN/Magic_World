@@ -60,6 +60,14 @@ namespace Magic
 		MagicEngineContext::Instance()->LoadThread(_Callback_Message);
 	}
 
+	void Engine(Magic::Management::Callback_Message _Callback_Message) {
+		Magic::Management::MonitorThreadMessage(MAGIC_MAIN_THREAD_NAME, 0, _Callback_Message);
+	}
+
+	void ShutdownMessage(Magic::Management::Callback_Message _Callback_Message) {
+		Magic::Management::MonitorThreadMessage(MAGIC_MAIN_THREAD_NAME, Magic::SHUTOWN_ENGINE, _Callback_Message);
+	}
+
 	bool CreateThreadsResourceManager(const char* _name)
 	{
 		return MagicEngineContext::Instance()->CreateThreadsResourceManager(_name);

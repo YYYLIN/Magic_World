@@ -6,7 +6,8 @@ include_directories(
 ../../../Core/MagicUI/Include
 ../../../Core/MagicUI/
 ../../../Core/WaterMagic
-../../../Plugins/Structure)
+../../../Plugins/Structure
+../../../Core/MagicThread)
 
 link_directories(
 ${PROJECT_SOURCE_DIR}../../../lib/${CMAKE_SYSTEM_NAME}/)

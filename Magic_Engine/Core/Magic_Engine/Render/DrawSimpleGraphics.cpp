@@ -2,10 +2,6 @@
 #include "Render_thread.h"
 #include <GL/glew.h>  
 
-#include <glm.hpp>
-#include <gtc/matrix_transform.hpp>
-#include <gtx/transform2.hpp>
-
 #include "MagicEngineAPI.h"
 
 static const char* S_Pure_Color_Vertex =

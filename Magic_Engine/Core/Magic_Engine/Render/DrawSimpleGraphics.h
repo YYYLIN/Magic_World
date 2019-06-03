@@ -11,6 +11,10 @@
 #include "MagicOpengl.h"
 #include "Cross_Platform_Port.h"
 
+#include <glm.hpp>
+#include <gtc/matrix_transform.hpp>
+#include <gtx/transform2.hpp>
+
 
 class DrawSimpleGraphics {
 

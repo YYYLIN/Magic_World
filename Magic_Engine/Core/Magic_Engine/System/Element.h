@@ -8,6 +8,7 @@ namespace Magic
 	{
 		class Object
 		{
+		public:
 			virtual ~Object(){}
 		public:
 			inline EntityCommon GetEntity() { return m_Entity; }

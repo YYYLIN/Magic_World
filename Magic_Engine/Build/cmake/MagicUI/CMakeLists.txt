@@ -3,7 +3,8 @@ include_directories(
 ../../../Plugins/EntityX
 ../../../Core/Magic_Engine/
 ../../../Core/MagicUI/Include
-../../../Core/MagicUI)
+../../../Core/MagicUI
+../../../Core/MagicThread)
 
 link_directories(
 ${PROJECT_SOURCE_DIR}../../../lib/${CMAKE_SYSTEM_NAME}/)

@@ -5,6 +5,7 @@
 #include "MagicScene.h"
 #include "MagicPen.h"
 #include "windows.h"
+#include "Magic_Thread.h"
 
 namespace Magic
 {
@@ -55,6 +56,11 @@ namespace Magic
 	*	¿Õ
 	*/
 	DLL_MAGIC_ENGINE_OUTPUT_INPUT void Load(Magic::Management::Callback_Message _Callback_Message);
+
+
+	DLL_MAGIC_ENGINE_OUTPUT_INPUT void Engine(Magic::Management::Callback_Message _Callback_Message);
+
+	DLL_MAGIC_ENGINE_OUTPUT_INPUT void ShutdownMessage(Magic::Management::Callback_Message _Callback_Message);
 
 	/*
 	*¹¦ÄÜ£º
