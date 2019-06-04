@@ -3,10 +3,40 @@
 
 #include "Magic_Thread.h"
 #include "windows.h"
+#include "Define/Magic_Macro.h"
 
 
 namespace Magic
 {
+	class Render_Context
+	{
+	public:
+		Render_Context() {}
+		virtual ~Render_Context() = 0;
+	public:
+		virtual bool CreateRenderContext(HWND _hwnd) = 0;
+		virtual void ShutdownRenderContext() = 0;
+		virtual void BindRenderContext() = 0;
+		virtual void SwapBuffers() = 0;
+	};
+
+	class Render_Context_Opengl
+	{
+	public:
+		Render_Context_Opengl();
+		virtual ~Render_Context_Opengl();
+	public:
+		virtual bool CreateRenderContext(HWND _hwnd);
+		virtual void ShutdownRenderContext();
+		virtual void BindRenderContext();
+		virtual void SwapBuffers();
+
+	private:
+		HWND m_hwnd;
+		HGLRC m_hRC;
+		HDC m_HDC;
+	};
+
 	enum RENDER_THREAD_EVENT
 	{
 		RENDER_START = 1,
@@ -29,7 +59,9 @@ namespace Magic
 
 		bool Initialize();
 
-		void BindRC(HDC _HDC, HGLRC _hRC);
+		void BindRC(Render_Context* _pRender_Context);
+
+		void ShutdownRC(Render_Context* _pRender_Context);
 
 		Magic::Management::THREAD_OBJECT GetTHREAD_OBJECT() { return m_TO_Render_thread; }
 
@@ -45,8 +77,7 @@ namespace Magic
 	private:
 		Magic::Management::THREAD_OBJECT m_TO_Render_thread;
 
-		HGLRC m_hRC;
-		HDC m_HDC;
+		Render_Context* m_pRender_Context;
 
 		static Render_thread* pRender_thread;
 	};

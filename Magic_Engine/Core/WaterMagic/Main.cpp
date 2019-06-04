@@ -9,7 +9,7 @@ int CALLBACK _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevainstance, LPWSTR lpc
 	bool _result = Magic::CreateSystemUI(L"WaterMagic", 0, 0, 1024, 768);
 	if (!_result)
 	{
-		MessageBoxA(NULL, "´íÎó", Magic::GetEngineErrorMessage(), MB_OK);
+		MessageBoxA(NULL, Magic::GetEngineErrorMessage(), "´íÎó", MB_OK);
 		return false;
 	}
 

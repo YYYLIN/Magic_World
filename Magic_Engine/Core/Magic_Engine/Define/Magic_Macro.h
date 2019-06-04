@@ -38,5 +38,6 @@ namespace Magic {
 	};
 }
 
+typedef void* RenderContext;
 
 #endif

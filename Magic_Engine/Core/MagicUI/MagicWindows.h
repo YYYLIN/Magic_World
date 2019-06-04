@@ -51,6 +51,8 @@ private:
 	HINSTANCE m_hinstance;
 	HWND m_hwnd;
 
+	RenderContext m_RenderContext;
+
 	static MagicWindows* pMagicWindows;
 };
 

@@ -12,6 +12,8 @@ namespace Magic
 {
 	namespace Management
 	{
+		struct ThreadObject;
+
 		enum ThreadRunState
 		{
 			THREAD_STATE_RUN,
@@ -24,8 +26,9 @@ namespace Magic
 			unsigned int m_MessageType;
 			long long m_Message;
 			Callback_Message m_CallBack;
+			ThreadObject* m_pThreadObject;
 			Message();
-			Message(const unsigned int& _MessageType, const long long& _Message, const Callback_Message& _CallBack);
+			Message(const unsigned int& _MessageType, const long long& _Message, const Callback_Message& _CallBack, ThreadObject* _pThreadObject);
 		};
 
 		struct ThreadObject
@@ -41,7 +44,8 @@ namespace Magic
 
 			std::queue<Message> m_queue_Message;
 			Magic_MUTEX m_MessageMutex;
-			Magic_SEM m_WWT_SEM;
+			Magic_SEM m_Queue_SEM;
+			Magic_SEM m_Synch_SEM;
 
 			UMAP_VEC_CALLBACK m_umap_MonitorFunction;
 			Magic_MUTEX m_MonitorMutex;
@@ -61,7 +65,7 @@ namespace Magic
 			std::queue<Message> m_queue_Message;
 
 			Magic_MUTEX m_MessageMutex;
-			Magic_SEM m_WWT_SEM;
+			Magic_SEM m_queue_SEM;
 		};
 
 		class SystemThread
@@ -76,21 +80,21 @@ namespace Magic
 
 			bool Initialize(UpdataCommon* _pUpdataCommon);
 
-			THREAD_OBJECT Create(const char* _name, UpdataCommon* _pUpdataCommon, ThreadTypeMode _ThreadTypeMode, ThreadMessageMode _ThreadMessageMode);
+			THREAD_OBJECT Create(const char* _name, UpdataCommon* _pUpdataCommon, ThreadTypeMode _ThreadTypeMode, ThreadMessageMode _ThreadMessageMode, bool _IsNewThread);
 
 			THREAD_POOL_OBJECT CreatePool(const char* _name, unsigned int _ThreadNumber);
 
 			void ShutdownPool(THREAD_POOL_OBJECT _THREAD_POOL_OBJECT);
 
-			bool MonitorThreadMessage(THREAD_OBJECT _THREAD_OBJECT, MESSAGE_TYPE _MessageType, Callback_Message _CallBack);
+			bool MonitorThreadMessage(THREAD_OBJECT _THREAD_OBJECT, MESSAGE_TYPE _MessageType, const Callback_Message& _CallBack);
 
-			bool MonitorThreadPoolMessage(THREAD_POOL_OBJECT _THREAD_POOL_OBJECT, MESSAGE_TYPE _MessageType, Callback_Message _CallBack);
+			bool MonitorThreadPoolMessage(THREAD_POOL_OBJECT _THREAD_POOL_OBJECT, MESSAGE_TYPE _MessageType, const Callback_Message& _CallBack);
 
-			bool SendMessageTo(THREAD_OBJECT _THREAD_OBJECT, MESSAGE_TYPE _MessageType, MESSAGE _Message, Callback_Message _CallBack = nullptr);
+			bool SendMessageTo(THREAD_OBJECT _THREAD_OBJECT, MESSAGE_TYPE _MessageType, MESSAGE _Message, const Callback_Message& _CallBack = nullptr, bool _Synch = false);
 
-			bool SendMessageTo(MESSAGE_TYPE _MessageType, MESSAGE _Message, Callback_Message _CallBack = nullptr);
+			bool SendMessageTo(MESSAGE_TYPE _MessageType, MESSAGE _Message, const Callback_Message& _CallBack = nullptr, bool _Synch = false);
 
-			bool SendMessageToPool(THREAD_POOL_OBJECT _THREAD_POOL_OBJECT, MESSAGE_TYPE _MessageType, MESSAGE _Message, Callback_Message _CallBack);
+			bool SendMessageToPool(THREAD_POOL_OBJECT _THREAD_POOL_OBJECT, MESSAGE_TYPE _MessageType, MESSAGE _Message, const Callback_Message& _CallBack, bool _Synch = false);
 
 			THREAD_OBJECT GetNowTHREAD_OBJECT() { return (void*)m_S_T_pThreadObject; }
 

@@ -68,6 +68,26 @@ namespace Magic
 		Magic::Management::MonitorThreadMessage(MAGIC_MAIN_THREAD_NAME, Magic::SHUTOWN_ENGINE, _Callback_Message);
 	}
 
+	RenderContext CreateRenderContext(HWND _hwnd) {
+		Render_Context_Opengl* _pRender_Context = new Render_Context_Opengl;
+
+		bool _result = _pRender_Context->CreateRenderContext(_hwnd);
+		if (!_result) {
+			delete _pRender_Context;
+			return NULL;
+		}
+
+		return (Render_Context*)_pRender_Context;
+	}
+
+	void ShutdownRenderContext(RenderContext _RenderContext) {
+		Render_thread::Instance()->ShutdownRC((Render_Context*)_RenderContext);
+	}
+
+	void BindRenderContext(RenderContext _RenderContext) {
+		Render_thread::Instance()->BindRC((Render_Context*)_RenderContext);
+	}
+
 	bool CreateThreadsResourceManager(const char* _name)
 	{
 		return MagicEngineContext::Instance()->CreateThreadsResourceManager(_name);

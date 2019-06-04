@@ -189,7 +189,7 @@ namespace Magic
 		*返回值：
 		*	空
 		*/
-		DLL_MAGIC_THREAD_OUTPUT_INPUT bool MonitorThreadMessage(THREAD_OBJECT _THREAD_OBJECT, MESSAGE_TYPE _MessageType, Callback_Message _CallBack);
+		DLL_MAGIC_THREAD_OUTPUT_INPUT bool MonitorThreadMessage(THREAD_OBJECT _THREAD_OBJECT, MESSAGE_TYPE _MessageType, const Callback_Message& _CallBack);
 
 		/*
 		*功能：
@@ -201,7 +201,7 @@ namespace Magic
 		*返回值：
 		*	空
 		*/
-		DLL_MAGIC_THREAD_OUTPUT_INPUT bool MonitorThreadPoolMessage(THREAD_POOL_OBJECT _THREAD_POOL_OBJECT, MESSAGE_TYPE _MessageType, Callback_Message _CallBack);
+		DLL_MAGIC_THREAD_OUTPUT_INPUT bool MonitorThreadPoolMessage(THREAD_POOL_OBJECT _THREAD_POOL_OBJECT, MESSAGE_TYPE _MessageType, const Callback_Message& _CallBack);
 
 		/*
 		*功能：
@@ -211,12 +211,14 @@ namespace Magic
 		*	[IN]_MessageType = 消息类型
 		*	[IN]_Message = 消息并且会作为函数参数传入
 		*	[IN]_CallBack = 在指定线程延迟运行此函数
+		*	[IN]_Synch = 同步模式在_CallBack不等于null时,
+		*				 必须等待_CallBack处理完成再退出。
 		*警告：
 		*	 如果消息类型为0着不传递消息只执行函数
 		*返回值：
 		*	bool = true 发送成功 | false发送失败
 		*/
-		DLL_MAGIC_THREAD_OUTPUT_INPUT bool SendMessageTo(THREAD_OBJECT _THREAD_OBJECT, MESSAGE_TYPE _MessageType, MESSAGE _Message, Callback_Message _CallBack = nullptr);
+		DLL_MAGIC_THREAD_OUTPUT_INPUT bool SendMessageTo(THREAD_OBJECT _THREAD_OBJECT, MESSAGE_TYPE _MessageType, MESSAGE _Message,const Callback_Message& _CallBack = nullptr, bool _Synch = false);
 
 		/*
 		*功能：
@@ -226,12 +228,14 @@ namespace Magic
 		*	[IN]_MessageType = 消息类型
 		*	[IN]_Message = 消息并且会作为函数参数传入
 		*	[IN]_CallBack = 在指定线程延迟运行此函数
+		*	[IN]_Synch = 同步模式在_CallBack不等于null时,
+		*				 必须等待_CallBack处理完成再退出。
 		*警告：
 		*	 如果消息类型为0着不传递消息只执行函数
 		*返回值：
 		*	bool = true 发送成功 | false发送失败
 		*/
-		DLL_MAGIC_THREAD_OUTPUT_INPUT bool SendMessageTo(const char* _name, MESSAGE_TYPE _MessageType, MESSAGE _Message, Callback_Message _CallBack = nullptr);
+		DLL_MAGIC_THREAD_OUTPUT_INPUT bool SendMessageTo(const char* _name, MESSAGE_TYPE _MessageType, MESSAGE _Message, const Callback_Message& _CallBack = nullptr, bool _Synch = false);
 
 		/*
 		*功能：
@@ -245,7 +249,7 @@ namespace Magic
 		*返回值：
 		*	bool = true 发送成功 | false发送失败
 		*/
-		DLL_MAGIC_THREAD_OUTPUT_INPUT bool SendMessageTo(MESSAGE_TYPE _MessageType, MESSAGE _Message, Callback_Message _CallBack = nullptr);
+		DLL_MAGIC_THREAD_OUTPUT_INPUT bool SendMessageTo(MESSAGE_TYPE _MessageType, MESSAGE _Message, const Callback_Message& _CallBack = nullptr);
 
 		/*
 		*功能：
@@ -255,10 +259,12 @@ namespace Magic
 		*	[IN]_MessageType = 消息类型
 		*	[IN]_Message = 消息并且会作为函数参数传入
 		*	[IN]_CallBack = 在指定线程延迟运行此函数
+		*	[IN]_Synch = 同步模式在_CallBack不等于null时,
+		*				 必须等待_CallBack处理完成再退出。
 		*返回值：
 		*	bool = true 发送成功 | false发送失败
 		*/
-		DLL_MAGIC_THREAD_OUTPUT_INPUT bool SendMessageToPool(const char* _name, MESSAGE_TYPE _MessageType, MESSAGE _Message, Callback_Message _CallBack);
+		DLL_MAGIC_THREAD_OUTPUT_INPUT bool SendMessageToPool(const char* _name, MESSAGE_TYPE _MessageType, MESSAGE _Message, const Callback_Message& _CallBack, bool _Synch = false);
 
 		/*
 		*功能：
@@ -268,10 +274,12 @@ namespace Magic
 		*	[IN]_MessageType = 消息类型
 		*	[IN]_Message = 消息并且会作为函数参数传入
 		*	[IN]_CallBack = 在指定线程延迟运行此函数
+		*	[IN]_Synch = 同步模式在_CallBack不等于null时,
+		*				 必须等待_CallBack处理完成再退出。
 		*返回值：
 		*	bool = true 发送成功 | false发送失败
 		*/
-		DLL_MAGIC_THREAD_OUTPUT_INPUT bool SendMessageToPool(THREAD_POOL_OBJECT _THREAD_POOL_OBJECT, MESSAGE_TYPE _MessageType, MESSAGE _Message, Callback_Message _CallBack);
+		DLL_MAGIC_THREAD_OUTPUT_INPUT bool SendMessageToPool(THREAD_POOL_OBJECT _THREAD_POOL_OBJECT, MESSAGE_TYPE _MessageType, MESSAGE _Message, const Callback_Message& _CallBack, bool _Synch = false);
 
 		/*
 		*功能：

@@ -44,6 +44,12 @@ bool MagicWindows::Initialize(const wchar_t* _name, int _x, int _y, int _w, int 
 	if (!result)
 		return false;
 
+	m_RenderContext = Magic::CreateRenderContext(m_hwnd);
+	if (m_RenderContext == NULL)
+		return false;
+
+	Magic::BindRenderContext(m_RenderContext);
+
 	Magic::Engine(BindClassFunctionToMessage(&MagicWindows::Updata));
 
 	Magic::ShutdownMessage(BindClassFunctionToMessage(&MagicWindows::Shutdown));
@@ -152,6 +158,7 @@ bool MagicWindows::CreateWindows(const wchar_t* _Name, int _x, int _y, int _widt
 
 void MagicWindows::Shutdown(Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message)
 {
+	Magic::ShutdownRenderContext(m_RenderContext);
 	DestroyWindow(m_hwnd);
 	m_hwnd = NULL;
 

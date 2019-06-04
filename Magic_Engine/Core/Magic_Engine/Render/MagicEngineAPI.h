@@ -62,6 +62,12 @@ namespace Magic
 
 	DLL_MAGIC_ENGINE_OUTPUT_INPUT void ShutdownMessage(Magic::Management::Callback_Message _Callback_Message);
 
+	DLL_MAGIC_ENGINE_OUTPUT_INPUT RenderContext CreateRenderContext(HWND _hwnd);
+
+	DLL_MAGIC_ENGINE_OUTPUT_INPUT void ShutdownRenderContext(RenderContext _RenderContext);
+
+	DLL_MAGIC_ENGINE_OUTPUT_INPUT void BindRenderContext(RenderContext _RenderContext);
+
 	/*
 	*功能：
 	*	创建一个新的线程并添加一个管理员对象

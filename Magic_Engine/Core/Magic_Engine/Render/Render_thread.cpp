@@ -5,6 +5,104 @@
 
 namespace Magic
 {
+	HGLRC CreateRCContxt(HDC _hdc)
+	{
+		HGLRC m_hRC = wglCreateContext(_hdc);
+		if (m_hRC == 0)
+		{
+			Magic::SetEngineErrorMessage("Error Creating RC");
+			return false;
+		}
+
+		return m_hRC;
+	}
+
+	void ShutdownRC(HGLRC _hRC) {
+		if (wglDeleteContext(_hRC) == FALSE) {
+			return;
+		}
+	}
+
+	bool CreateHD(HDC _hdc) {
+		PIXELFORMATDESCRIPTOR pfd =
+		{
+			sizeof(PIXELFORMATDESCRIPTOR), // size of this pfd
+			1,                                                     // version number
+			PFD_DRAW_TO_WINDOW |           // support window
+			PFD_SUPPORT_OPENGL |               // support OpenGL
+			PFD_DOUBLEBUFFER,                     // double buffered
+			PFD_TYPE_RGBA,                           // RGBA type
+			24,                                                 // 24-bit color depth
+			0, 0, 0, 0, 0, 0,                               // color bits ignored
+			0,                                                   // no alpha buffer
+			0,                                                   // shift bit ignored
+			0,                                                   // no accumulation buffer
+			0, 0, 0, 0,                                       // accum bits ignored
+			32,                                                 // 32-bit z-buffer
+			0,                                                   // no stencil buffer
+			0,                                                   // no auxiliary buffer
+			PFD_MAIN_PLANE,                         // main layer
+			0,                                                   // reserved
+			0, 0, 0                                            // layer masks ignored
+		};
+
+		int m_nPixelFormat = ChoosePixelFormat(_hdc, &pfd);
+		if (m_nPixelFormat == 0)
+		{
+			Magic::SetEngineErrorMessage("ChoosePixelFormat failed.");
+			return false;
+		}
+		if (SetPixelFormat(_hdc, m_nPixelFormat, &pfd) == FALSE)
+		{
+			Magic::SetEngineErrorMessage("SetPixelFormat failed.");
+			return false;
+		}
+
+		return true;
+	}
+
+	Render_Context_Opengl::Render_Context_Opengl() {
+		m_hwnd = 0;
+		m_hRC = 0;
+		m_HDC = 0;
+	}
+
+	Render_Context_Opengl::~Render_Context_Opengl() {
+		m_hwnd = 0;
+		m_hRC = 0;
+		m_HDC = 0;
+	}
+
+	bool Render_Context_Opengl::CreateRenderContext(HWND _hwnd)
+	{
+		m_hwnd = _hwnd;
+		m_HDC = GetDC(_hwnd);
+
+		bool _result = CreateHD(m_HDC);
+		if (!_result)
+			return false;
+
+		m_hRC = CreateRCContxt(m_HDC);
+		if (!m_hRC)
+			return false;
+
+		return true;
+	}
+
+	void Render_Context_Opengl::ShutdownRenderContext() {
+		ShutdownRC(m_hRC);
+	}
+
+	void Render_Context_Opengl::BindRenderContext() {
+		if (wglMakeCurrent(m_HDC, m_hRC) == FALSE) {
+			Magic::SetEngineErrorMessage("Error making RC Current");
+		}
+	}
+
+	void Render_Context_Opengl::SwapBuffers() {
+		::SwapBuffers(m_HDC);
+	}
+
 	bool RenderThread(Magic::Management::Callback_Message _Callback_Message)
 	{
 		return Magic::Management::SendMessageTo(Magic::Render_thread::Instance()->GetTHREAD_OBJECT(), 0, 0, _Callback_Message);
@@ -21,6 +119,7 @@ namespace Magic
 	{
 		pRender_thread = this;
 		m_TO_Render_thread = 0;
+		m_pRender_Context = 0;
 	}
 
 	Render_thread::~Render_thread()
@@ -29,17 +128,20 @@ namespace Magic
 	}
 
 	bool Render_thread::Initialize() {
+
 		m_TO_Render_thread = Magic::Management::CreateThreadObject("Render_thread", this, Magic::Management::THREAD_LOOP_RUN, Magic::Management::THREAD_MESSAGE_WAIT);
 
+		char _text[256];
+		char* _ptext = _text;
+		bool _result = false;
+
 		Magic::Management::SendMessageTo(m_TO_Render_thread, 0, 0,
-			[this](Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message) {
+			[this, _ptext,&_result](Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message) {
 			GLenum err = glewInit();
 			if (GLEW_OK != err)
 			{
-				char _text[256];
-				Magic_Sprintf_s(_text, 256, "Error:'%s'\n", glewGetErrorString(err));
-
-				ShutdownEngine(err, _text);
+				Magic_Sprintf_s(_ptext, 256, "Error:'%s'\n", glewGetErrorString(err));
+				_result = false;
 				return;
 			}
 
@@ -50,20 +152,42 @@ namespace Magic
 
 			MonitorRenderThread(RENDER_START, BindClassFunctionToMessage(&Render_thread::RenderStart));
 			MonitorRenderThread(RENDER_END, BindClassFunctionToMessage(&Render_thread::RenderEnd));
-		});
+
+			_result = true;
+		}, true);
+
+		if (!_result) {
+			Magic::SetEngineErrorMessage(_text);
+			return false;
+		}
 
 		return true;
 	}
 
-	void Render_thread::BindRC(HDC _HDC, HGLRC _hRC) {
-		Magic::Management::SendMessageTo(m_TO_Render_thread, 0, 0, [this, _HDC, _hRC](unsigned int, long long) {
+	void Render_thread::BindRC(Render_Context* _pRender_Context) {
+		Magic::Management::SendMessageTo(m_TO_Render_thread, 0, 0, [this, _pRender_Context](unsigned int, long long) {
 			//Make the RC Current
-			if (wglMakeCurrent(_HDC, _hRC) == FALSE) {
-				Magic::SetEngineErrorMessage("Error making RC Current");
-			}
+			m_pRender_Context = _pRender_Context;
+			if (_pRender_Context)
+				m_pRender_Context->BindRenderContext();
 			else {
-				m_HDC = _HDC;
-				m_hRC = _hRC;
+				if (wglMakeCurrent(NULL, NULL) == FALSE) {
+					Magic::SetEngineErrorMessage("Error making RC Current");
+				}
+			}
+		});
+	}
+
+	void Render_thread::ShutdownRC(Render_Context* _pRender_Context) {
+		Magic::Management::SendMessageTo(m_TO_Render_thread, 0, 0, [this, _pRender_Context](unsigned int, long long) {
+			//Make the RC Current
+
+			_pRender_Context->ShutdownRenderContext();
+			delete _pRender_Context;
+
+			m_pRender_Context = NULL;
+			if (wglMakeCurrent(NULL, NULL) == FALSE) {
+				Magic::SetEngineErrorMessage("Error making RC Current");
 			}
 		});
 	}
@@ -92,6 +216,6 @@ namespace Magic
 	}
 
 	void Render_thread::RenderEnd(Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message) {
-		SwapBuffers(m_HDC);
+		m_pRender_Context->SwapBuffers();
 	}
 }
