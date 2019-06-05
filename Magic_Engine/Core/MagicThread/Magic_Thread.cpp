@@ -1,28 +1,18 @@
 #include "Magic_Thread.h"
 #include "Magic_Thread_Management.h"
 
-Magic_Message_Struct::Magic_Message_Struct()
-{
-	MessageType = 0;
-	Message = 0;
-}
-
-Magic_Message_Struct::Magic_Message_Struct(const unsigned int& _MessageType, const long long& _message) :MessageType(_MessageType), Message(_message)
-{
-}
-
 namespace Magic
 {
 	namespace Management
 	{
-		bool CreateThreadManagement(UpdataCommon* _pUpdataCommon)
+		bool CreateThreadManagement()
 		{
 			if (!SystemThread::Instance())
 			{
 				//创建线程管理系统
 				Magic::Management::SystemThread* _pSystemThread = 0;
 				_pSystemThread = new Magic::Management::SystemThread;
-				bool result = _pSystemThread->Initialize(_pUpdataCommon);
+				bool result = _pSystemThread->Initialize();
 				if (!result)
 					return 0;
 
@@ -45,9 +35,9 @@ namespace Magic
 			SystemThread::Instance()->Updata();
 		}
 
-		THREAD_OBJECT CreateThreadObject(const char* _name, UpdataCommon* _pUpdataCommon, ThreadTypeMode _ThreadTypeMode, ThreadMessageMode _ThreadMessageMode)
+		THREAD_OBJECT CreateThreadObject(const char* _name, ThreadTypeMode _ThreadTypeMode, ThreadMessageMode _ThreadMessageMode)
 		{
-			return SystemThread::Instance()->Create(_name, _pUpdataCommon, _ThreadTypeMode, _ThreadMessageMode, true);
+			return SystemThread::Instance()->Create(_name, _ThreadTypeMode, _ThreadMessageMode, true);
 		}
 
 		THREAD_POOL_OBJECT CreateThreadPoolObject(const char* _name, unsigned int _ThreadNumber)
@@ -80,14 +70,38 @@ namespace Magic
 			SystemThread::Instance()->Shutdown(SystemThread::Instance()->GetNowTHREAD_OBJECT());
 		}
 
+		bool MonitorThread(THREAD_OBJECT _THREAD_OBJECT, const Callback_Void& _CallBack) {
+			return SystemThread::Instance()->MonitorThread(_THREAD_OBJECT, _CallBack);
+		}
+
+		bool MonitorThread(const char* _name, const Callback_Void& _CallBack) {
+			return SystemThread::Instance()->MonitorThread(SystemThread::Instance()->GetTHREAD_OBJECT(_name), _CallBack);
+		}
+
+		bool MonitorThreadPool(THREAD_POOL_OBJECT _THREAD_POOL_OBJECT, const Callback_Void& _CallBack) {
+			return SystemThread::Instance()->MonitorThreadPool(_THREAD_POOL_OBJECT, _CallBack);
+		}
+
+		bool MonitorThreadPool(const char* _name, const Callback_Void& _CallBack) {
+			return SystemThread::Instance()->MonitorThreadPool(SystemThread::Instance()->GetTHREAD_POOL_OBJECT(_name), _CallBack);
+		}
+
 		bool MonitorThreadMessage(THREAD_OBJECT _THREAD_OBJECT, MESSAGE_TYPE _MessageType, const Callback_Message& _CallBack)
 		{
 			return SystemThread::Instance()->MonitorThreadMessage(_THREAD_OBJECT, _MessageType, _CallBack);
 		}
 
+		bool MonitorThreadMessage(const char* _name, MESSAGE_TYPE _MessageType, const Callback_Message& _CallBack) {
+			return SystemThread::Instance()->MonitorThreadMessage(SystemThread::Instance()->GetTHREAD_POOL_OBJECT(_name), _MessageType, _CallBack);
+		}
+
 		bool MonitorThreadPoolMessage(THREAD_POOL_OBJECT _THREAD_POOL_OBJECT, MESSAGE_TYPE _MessageType, const Callback_Message& _CallBack)
 		{
 			return SystemThread::Instance()->MonitorThreadPoolMessage(_THREAD_POOL_OBJECT, _MessageType, _CallBack);
+		}
+
+		bool MonitorThreadPoolMessage(const char* _name, MESSAGE_TYPE _MessageType, const Callback_Message& _CallBack) {
+			return SystemThread::Instance()->MonitorThreadPoolMessage(SystemThread::Instance()->GetTHREAD_POOL_OBJECT(_name), _MessageType, _CallBack);
 		}
 
 		bool SendMessageTo(THREAD_OBJECT _THREAD_OBJECT, MESSAGE_TYPE _MessageType, MESSAGE _Message, const Callback_Message& _CallBack, bool _Synch)

@@ -86,14 +86,14 @@ public:
 	static MagicEngineContext* Instance() { return pMagicEngineContext; }
 
 
-	bool Initialize();
+	bool Initialize(RenderContext _pRenderContext);
 	//_Message = 0 为正常退出
 	void ShutdownMessage(Magic::Management::MESSAGE _Message, const char* _Text);
 	void Shutdown();
 
 	void Run(void);
 
-	void LoadThread(Magic::Management::Callback_Message _Callback_Message);
+	void LoadThread(const Magic::Management::Callback_Message& _Callback_Message);
 
 	MagicTexture* LoadTextrue(const char* file_name, const char* _name, char format);
 	MagicTexture* LoadTextrue(const unsigned char* Data, int _width, int _height, const char* _name);

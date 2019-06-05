@@ -127,16 +127,20 @@ namespace Magic
 
 	}
 
-	bool Render_thread::Initialize() {
+	bool Render_thread::Initialize(Render_Context* _pRender_Context) {
 
-		m_TO_Render_thread = Magic::Management::CreateThreadObject("Render_thread", this, Magic::Management::THREAD_LOOP_RUN, Magic::Management::THREAD_MESSAGE_WAIT);
+		m_TO_Render_thread = Magic::Management::CreateThreadObject("Render_thread", Magic::Management::THREAD_LOOP_RUN, Magic::Management::THREAD_MESSAGE_WAIT);
 
 		char _text[256];
 		char* _ptext = _text;
 		bool _result = false;
 
 		Magic::Management::SendMessageTo(m_TO_Render_thread, 0, 0,
-			[this, _ptext,&_result](Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message) {
+			[this, _ptext, &_result, _pRender_Context](Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message) {
+			m_pRender_Context = _pRender_Context;
+			if (_pRender_Context)
+				m_pRender_Context->BindRenderContext();
+
 			GLenum err = glewInit();
 			if (GLEW_OK != err)
 			{
@@ -197,10 +201,6 @@ namespace Magic
 		Magic::Management::SendMessageTo(RENDER, 0);
 		Magic::Management::SendMessageTo(RENDER_TRANSPARENT, 0);
 		Magic::Management::SendMessageTo(RENDER_END, 0);
-	}
-
-	bool Render_thread::Updata() {
-		return true;
 	}
 
 	void Render_thread::RenderStart(Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message) {

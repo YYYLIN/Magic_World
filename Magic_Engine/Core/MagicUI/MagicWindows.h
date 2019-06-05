@@ -33,7 +33,7 @@ public:
 
 	LRESULT CALLBACK MessageHandler(HWND, UINT, WPARAM, LPARAM);  //消息处理函数
 
-	void Updata(Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message);
+	void Updata();
 
 	inline HWND GetHWND() { return m_hwnd; }
 	inline HINSTANCE GetHINSTANCE() { return m_hinstance; }

@@ -28,14 +28,8 @@
 
 #define BindClassFunctionToMessage(F) std::bind(F, this, std::placeholders::_1, std::placeholders::_2)
 #define BindClassFunctionToMessageObject(F,O) std::bind(F, O, std::placeholders::_1, std::placeholders::_2)
-
-struct DLL_MAGIC_THREAD_OUTPUT_INPUT Magic_Message_Struct
-{
-	unsigned int MessageType;
-	long long Message;
-	Magic_Message_Struct();
-	Magic_Message_Struct(const unsigned int& _MessageType, const long long& _message);
-};
+#define BindClassFunction(F) std::bind(F, this)
+#define BindClassFunctionObject(F,O) std::bind(F, O)
 
 namespace Magic
 {
@@ -43,18 +37,6 @@ namespace Magic
 	{
 		typedef unsigned int MESSAGE_TYPE;
 		typedef long long MESSAGE;
-
-		class UpdataCommon
-		{
-		public:
-			virtual bool Updata() = 0;
-		};
-
-		class ThreadMessage
-		{
-		public:
-			virtual int MessageHandle(Magic_Message_Struct MessageStruct) = 0;
-		};
 
 		enum ThreadTypeMode
 		{
@@ -71,6 +53,7 @@ namespace Magic
 		typedef void* THREAD_OBJECT;
 		typedef void* THREAD_POOL_OBJECT;
 		typedef std::function<void(MESSAGE_TYPE, MESSAGE)> Callback_Message;
+		typedef std::function<void(void)> Callback_Void;
 
 		/*
 		*功能：
@@ -80,7 +63,7 @@ namespace Magic
 		*返回值：
 		*	bool = true 成功 | false 失败
 		*/
-		DLL_MAGIC_THREAD_OUTPUT_INPUT bool CreateThreadManagement(UpdataCommon* _pUpdataCommon);
+		DLL_MAGIC_THREAD_OUTPUT_INPUT bool CreateThreadManagement();
 
 		/*
 		*功能：
@@ -107,14 +90,12 @@ namespace Magic
 		*	创建线程对象
 		*参数：
 		*	[IN]_name = 线程对象名字
-		*	[IN]_pWWTCommon = 执行对象
 		*	[IN]_ThreadTypeMode = 线程类型模式 ThreadTypeMode
 		*返回值：
 		*	THREAD_OBJECT = 线程对象
 		*/
 		DLL_MAGIC_THREAD_OUTPUT_INPUT THREAD_OBJECT CreateThreadObject(
 			const char* _name,
-			UpdataCommon* _pUpdataCommon,
 			ThreadTypeMode _ThreadTypeMode,
 			ThreadMessageMode _ThreadMessageMode = THREAD_MESSAGE_NO_WAIT);
 
@@ -181,6 +162,30 @@ namespace Magic
 
 		/*
 		*功能：
+		*	监听线程
+		*参数：
+		*	_THREAD_OBJECT = 线程对象
+		*	_CallBack = 处理函数
+		*返回值：
+		*	空
+		*/
+		DLL_MAGIC_THREAD_OUTPUT_INPUT bool MonitorThread(THREAD_OBJECT _THREAD_OBJECT, const Callback_Void& _CallBack);
+		DLL_MAGIC_THREAD_OUTPUT_INPUT bool MonitorThread(const char* _name, const Callback_Void& _CallBack);
+
+		/*
+		*功能：
+		*	监听线程池
+		*参数：
+		*	_THREAD_POOL_OBJECT = 线程池对象
+		*	_CallBack = 处理函数
+		*返回值：
+		*	空
+		*/
+		DLL_MAGIC_THREAD_OUTPUT_INPUT bool MonitorThreadPool(THREAD_POOL_OBJECT _THREAD_POOL_OBJECT, const Callback_Void& _CallBack);
+		DLL_MAGIC_THREAD_OUTPUT_INPUT bool MonitorThreadPool(const char* _name, const Callback_Void& _CallBack);
+
+		/*
+		*功能：
 		*	监听线程消息
 		*参数：
 		*	_THREAD_OBJECT = 线程对象
@@ -190,6 +195,7 @@ namespace Magic
 		*	空
 		*/
 		DLL_MAGIC_THREAD_OUTPUT_INPUT bool MonitorThreadMessage(THREAD_OBJECT _THREAD_OBJECT, MESSAGE_TYPE _MessageType, const Callback_Message& _CallBack);
+		DLL_MAGIC_THREAD_OUTPUT_INPUT bool MonitorThreadMessage(const char* _name, MESSAGE_TYPE _MessageType, const Callback_Message& _CallBack);
 
 		/*
 		*功能：
@@ -202,6 +208,7 @@ namespace Magic
 		*	空
 		*/
 		DLL_MAGIC_THREAD_OUTPUT_INPUT bool MonitorThreadPoolMessage(THREAD_POOL_OBJECT _THREAD_POOL_OBJECT, MESSAGE_TYPE _MessageType, const Callback_Message& _CallBack);
+		DLL_MAGIC_THREAD_OUTPUT_INPUT bool MonitorThreadPoolMessage(const char* _name, MESSAGE_TYPE _MessageType, const Callback_Message& _CallBack);
 
 		/*
 		*功能：

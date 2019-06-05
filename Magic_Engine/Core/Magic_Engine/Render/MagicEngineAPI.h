@@ -24,7 +24,7 @@ namespace Magic
 	*	bool = true 成功 | false 失败
 	*	详细错误请调用GetEngineErrorMessage查看
 	*/
-	DLL_MAGIC_ENGINE_OUTPUT_INPUT bool CreateEngine();
+	DLL_MAGIC_ENGINE_OUTPUT_INPUT bool CreateEngine(RenderContext _pRenderContext);
 
 	/*
 	*功能：
@@ -55,12 +55,12 @@ namespace Magic
 	*返回值：
 	*	空
 	*/
-	DLL_MAGIC_ENGINE_OUTPUT_INPUT void Load(Magic::Management::Callback_Message _Callback_Message);
+	DLL_MAGIC_ENGINE_OUTPUT_INPUT void Load(const Magic::Management::Callback_Message& _Callback_Message);
 
 
-	DLL_MAGIC_ENGINE_OUTPUT_INPUT void Engine(Magic::Management::Callback_Message _Callback_Message);
+	DLL_MAGIC_ENGINE_OUTPUT_INPUT void Engine(const Magic::Management::Callback_Void& _Callback);
 
-	DLL_MAGIC_ENGINE_OUTPUT_INPUT void ShutdownMessage(Magic::Management::Callback_Message _Callback_Message);
+	DLL_MAGIC_ENGINE_OUTPUT_INPUT void ShutdownMessage(const Magic::Management::Callback_Message& _Callback_Message);
 
 	DLL_MAGIC_ENGINE_OUTPUT_INPUT RenderContext CreateRenderContext(HWND _hwnd);
 

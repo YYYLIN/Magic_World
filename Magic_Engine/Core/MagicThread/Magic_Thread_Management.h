@@ -35,7 +35,7 @@ namespace Magic
 		{
 			typedef std::unordered_map<MESSAGE_TYPE, std::vector<Callback_Message>> UMAP_VEC_CALLBACK;
 
-			UpdataCommon* pUpdataCommon;
+			std::vector<Callback_Void> m_vec_Callback;
 			Magic_THREAD m_Thread;
 			std::string m_Name;
 			ThreadTypeMode m_ThreadTypeMode;
@@ -43,21 +43,20 @@ namespace Magic
 			ThreadRunState m_ThreadRunState;
 
 			std::queue<Message> m_queue_Message;
-			Magic_MUTEX m_MessageMutex;
 			Magic_SEM m_Queue_SEM;
 			Magic_SEM m_Synch_SEM;
 
 			UMAP_VEC_CALLBACK m_umap_MonitorFunction;
-			Magic_MUTEX m_MonitorMutex;
+			Magic_MUTEX m_MessageMutex;
 
 			ThreadObject();
-			ThreadObject(UpdataCommon* _pUpdataCommon, ThreadTypeMode _ThreadTypeMode, ThreadRunState _ThreadRunState, const std::string& _name, ThreadMessageMode _ThreadMessageMode);
+			ThreadObject(ThreadTypeMode _ThreadTypeMode, ThreadRunState _ThreadRunState, const std::string& _name, ThreadMessageMode _ThreadMessageMode);
 		};
 
-		class ThreadPoolObject :public UpdataCommon
+		class ThreadPoolObject 
 		{
-		protected:
-			virtual bool Updata();
+		public:
+			void Updata();
 		public:
 			std::string m_Name;
 			std::vector<ThreadObject*> m_vec_ThreadObject;
@@ -78,13 +77,17 @@ namespace Magic
 
 			static SystemThread* Instance();
 
-			bool Initialize(UpdataCommon* _pUpdataCommon);
+			bool Initialize();
 
-			THREAD_OBJECT Create(const char* _name, UpdataCommon* _pUpdataCommon, ThreadTypeMode _ThreadTypeMode, ThreadMessageMode _ThreadMessageMode, bool _IsNewThread);
+			THREAD_OBJECT Create(const char* _name, ThreadTypeMode _ThreadTypeMode, ThreadMessageMode _ThreadMessageMode, bool _IsNewThread);
 
 			THREAD_POOL_OBJECT CreatePool(const char* _name, unsigned int _ThreadNumber);
 
 			void ShutdownPool(THREAD_POOL_OBJECT _THREAD_POOL_OBJECT);
+
+			bool MonitorThread(THREAD_OBJECT _THREAD_OBJECT, const Callback_Void& _CallBack);
+
+			bool MonitorThreadPool(THREAD_POOL_OBJECT _THREAD_POOL_OBJECT, const Callback_Void& _CallBack);
 
 			bool MonitorThreadMessage(THREAD_OBJECT _THREAD_OBJECT, MESSAGE_TYPE _MessageType, const Callback_Message& _CallBack);
 
@@ -115,7 +118,7 @@ namespace Magic
 		protected:
 			void UpdataStop(MAP_SRTING_THREADOBJECT::iterator& _auto);
 		public:
-			virtual bool Updata();
+			void Updata();
 		private:
 			static arcoss ThreadFunction(void* _data);
 		private:

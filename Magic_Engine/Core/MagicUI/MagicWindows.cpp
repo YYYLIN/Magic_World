@@ -40,17 +40,15 @@ bool MagicWindows::Initialize(const wchar_t* _name, int _x, int _y, int _w, int 
 	if (!result)
 		return false;
 
-	result = Magic::CreateEngine();
-	if (!result)
-		return false;
-
 	m_RenderContext = Magic::CreateRenderContext(m_hwnd);
 	if (m_RenderContext == NULL)
 		return false;
 
-	Magic::BindRenderContext(m_RenderContext);
+	result = Magic::CreateEngine(m_RenderContext);
+	if (!result)
+		return false;
 
-	Magic::Engine(BindClassFunctionToMessage(&MagicWindows::Updata));
+	Magic::Engine(BindClassFunction(&MagicWindows::Updata));
 
 	Magic::ShutdownMessage(BindClassFunctionToMessage(&MagicWindows::Shutdown));
 
@@ -90,7 +88,7 @@ LRESULT CALLBACK MagicWindows::MessageHandler(HWND _hwnd, UINT _umsg, WPARAM _wp
 	}
 }
 
-void MagicWindows::Updata(Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message)     //过程处理函数
+void MagicWindows::Updata()     //过程处理函数
 {
 	MSG msg;
 

@@ -49,7 +49,7 @@ namespace Magic
 
 	bool MonitorRenderThread(RENDER_THREAD_EVENT _event, Magic::Management::Callback_Message _Callback_Message);
 
-	class Render_thread :public Magic::Management::UpdataCommon
+	class Render_thread
 	{
 	public:
 		static Render_thread* Instance() { return pRender_thread; }
@@ -57,7 +57,7 @@ namespace Magic
 		Render_thread();
 		~Render_thread();
 
-		bool Initialize();
+		bool Initialize(Render_Context* _pRender_Context);
 
 		void BindRC(Render_Context* _pRender_Context);
 
@@ -67,8 +67,6 @@ namespace Magic
 
 		void DrawFrame();
 	private:
-		virtual bool Updata();
-
 		void RenderStart(Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message);
 		void Render(Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message);
 		void RenderTransparent(Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message);

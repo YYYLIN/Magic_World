@@ -317,15 +317,15 @@ MagicEngineContext::~MagicEngineContext()
 	pMagicEngineContext = 0;
 }
 
-bool MagicEngineContext::Initialize()
+bool MagicEngineContext::Initialize(RenderContext _pRenderContext)
 {
-	bool _result = Magic::Management::CreateThreadManagement(0);
+	bool _result = Magic::Management::CreateThreadManagement();
 	if (!_result)
 		return false;
 
-	m_Load_Thread = Magic::Management::CreateThreadObject("Load_Thread", 0, Magic::Management::THREAD_LOOP_RUN, Magic::Management::THREAD_MESSAGE_WAIT);
+	m_Load_Thread = Magic::Management::CreateThreadObject("Load_Thread", Magic::Management::THREAD_LOOP_RUN, Magic::Management::THREAD_MESSAGE_WAIT);
 
-	_result = m_Render_thread.Initialize();
+	_result = m_Render_thread.Initialize((Magic::Render_Context*)_pRenderContext);
 	if (!_result)
 		return false;
 
@@ -366,7 +366,7 @@ void MagicEngineContext::Run(void)
 	Shutdown();
 }
 
-void MagicEngineContext::LoadThread(Magic::Management::Callback_Message _Callback_Message)
+void MagicEngineContext::LoadThread(const Magic::Management::Callback_Message& _Callback_Message)
 {
 	Magic::Management::SendMessageTo(m_Load_Thread, 0, 0, _Callback_Message);
 }

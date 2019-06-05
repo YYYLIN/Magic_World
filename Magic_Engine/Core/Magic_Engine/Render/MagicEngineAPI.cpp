@@ -22,7 +22,7 @@ namespace Magic
 		memcpy(Overall_EngineErrorMessage, _text, _len > ENGINE_ERROR_MESSAGE_BUFFER_SIZE ? ENGINE_ERROR_MESSAGE_BUFFER_SIZE : _len);
 	}
 
-	bool CreateEngine()
+	bool CreateEngine(RenderContext _pRenderContext)
 	{
 		if (MagicEngineContext::Instance())
 		{
@@ -32,7 +32,7 @@ namespace Magic
 
 		new MagicEngineContext;
 
-		bool _result = MagicEngineContext::Instance()->Initialize();
+		bool _result = MagicEngineContext::Instance()->Initialize(_pRenderContext);
 		if (!_result)
 			return false;
 
@@ -56,15 +56,15 @@ namespace Magic
 		ShutdownEngine(_Message, GetEngineErrorMessage());
 	}
 
-	void Load(Magic::Management::Callback_Message _Callback_Message) {
+	void Load(const Magic::Management::Callback_Message& _Callback_Message) {
 		MagicEngineContext::Instance()->LoadThread(_Callback_Message);
 	}
 
-	void Engine(Magic::Management::Callback_Message _Callback_Message) {
-		Magic::Management::MonitorThreadMessage(MAGIC_MAIN_THREAD_NAME, 0, _Callback_Message);
+	void Engine(const Magic::Management::Callback_Void& _Callback) {
+		Magic::Management::MonitorThread(MAGIC_MAIN_THREAD_NAME, _Callback);
 	}
 
-	void ShutdownMessage(Magic::Management::Callback_Message _Callback_Message) {
+	void ShutdownMessage(const Magic::Management::Callback_Message& _Callback_Message) {
 		Magic::Management::MonitorThreadMessage(MAGIC_MAIN_THREAD_NAME, Magic::SHUTOWN_ENGINE, _Callback_Message);
 	}
 
