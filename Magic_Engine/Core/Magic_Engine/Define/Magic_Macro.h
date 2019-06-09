@@ -32,6 +32,9 @@
 #define MOUSE_X_TO_LONG(a)			(long)(a)
 #define MOUSE_Y_TO_LONG(a)			((long)a << 16)
 
+#define SCREEN_RECT_TO_MESSAGE(a)		(*((Magic::Management::MESSAGE*)(&a)))
+#define MESSAGE_TO_SCREEN_RECT(a)		(*((Magic::Screen_Rect*)(&a)))
+
 namespace Magic {
 	enum ENGINE_MESSAGE {
 		SHUTOWN_ENGINE = 1

@@ -15,8 +15,11 @@
 #include <gtc/matrix_transform.hpp>
 #include <gtx/transform2.hpp>
 
+#pragma warning(push)
+#pragma warning(disable:4251)
 
-class DrawSimpleGraphics {
+
+class DLL_MAGIC_ENGINE_OUTPUT_INPUT DrawSimpleGraphics {
 
 	struct LINE_VERTEX
 	{
@@ -33,6 +36,8 @@ public:
 	DrawSimpleGraphics();
 	~DrawSimpleGraphics();
 
+	static DrawSimpleGraphics* Instance() { return m_S_pDrawSimpleGraphics; }
+
 	bool Initialize();
 
 	void DrawLine(float _x1, float _y1, float _x2, float _y2);
@@ -42,13 +47,16 @@ public:
 	void SetColor(Magic::Color4 _Color);
 
 	void SetWorldMatrix(glm::mat4 _WorldMatrix);
+
+	
 private:
+	void Event_Rect(Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message);
 	void Render(Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message);
 private:
 	unsigned int m_LastDrawType;
 	glm::mat4 m_WorldMatrix;
 	Magic::Color4 m_NowColor;
-	//RenderThread 对象
+	//RenderThread 对象---------->
 	Magic::VERTEX_BUFFER m_Line_VBO;
 	MagicShader m_LineShader;
 	unsigned int m_Line_projectionMatrix;
@@ -59,6 +67,11 @@ private:
 	std::vector<LINE_VERTEX> m_vec_Line_Vertex;
 	std::vector<LINE_INSTANCE> m_vec_Instance;
 	std::vector<Magic::DrawArraysIndirectCommand> m_vec_DEICommand;
+
+	static DrawSimpleGraphics* m_S_pDrawSimpleGraphics;
+	//---------------------------<
 };
+
+#pragma warning(pop)
 
 #endif

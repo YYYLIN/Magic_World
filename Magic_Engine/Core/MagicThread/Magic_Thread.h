@@ -218,8 +218,7 @@ namespace Magic
 		*	[IN]_MessageType = 消息类型
 		*	[IN]_Message = 消息并且会作为函数参数传入
 		*	[IN]_CallBack = 在指定线程延迟运行此函数
-		*	[IN]_Synch = 同步模式在_CallBack不等于null时,
-		*				 必须等待_CallBack处理完成再退出。
+		*	[IN]_Synch = 必须等待消息传递到指定线程并且_CallBack和监听函数处理完成再退出。		 
 		*警告：
 		*	 如果消息类型为0着不传递消息只执行函数
 		*返回值：
@@ -235,8 +234,7 @@ namespace Magic
 		*	[IN]_MessageType = 消息类型
 		*	[IN]_Message = 消息并且会作为函数参数传入
 		*	[IN]_CallBack = 在指定线程延迟运行此函数
-		*	[IN]_Synch = 同步模式在_CallBack不等于null时,
-		*				 必须等待_CallBack处理完成再退出。
+		*	[IN]_Synch = 必须等待消息传递到指定线程并且_CallBack和监听函数处理完成再退出。
 		*警告：
 		*	 如果消息类型为0着不传递消息只执行函数
 		*返回值：

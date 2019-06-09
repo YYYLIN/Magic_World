@@ -17,12 +17,6 @@ namespace Magic
 		return MagicWindows::Instance()->Initialize(_name, _x, _y, _w, _h);
 	}
 
-	void ShutdownSystemUI()
-	{
-		if (MagicWindows::Instance())
-			delete MagicWindows::Instance();
-	}
-
 	void RequestOuitSystem()
 	{
 		MagicWindows::Instance()->RequestOuitSystem();

@@ -61,6 +61,9 @@ namespace Magic
 		return true;
 	}
 
+	Render_Context::Render_Context() {
+	}
+
 	Render_Context_Opengl::Render_Context_Opengl() {
 		m_hwnd = 0;
 		m_hRC = 0;
@@ -155,7 +158,11 @@ namespace Magic
 			glEnable(GL_CULL_FACE);
 
 			MonitorRenderThread(RENDER_START, BindClassFunctionToMessage(&Render_thread::RenderStart));
+			MonitorRenderThread(RENDER, BindClassFunctionToMessage(&Render_thread::Render));
+			MonitorRenderThread(RENDER_TRANSPARENT, BindClassFunctionToMessage(&Render_thread::RenderTransparent));
 			MonitorRenderThread(RENDER_END, BindClassFunctionToMessage(&Render_thread::RenderEnd));
+
+			MonitorRenderThread(RENDER_SET_RECT, BindClassFunctionToMessage(&Render_thread::SetScreenWidthHeight));
 
 			_result = true;
 		}, true);
@@ -164,6 +171,8 @@ namespace Magic
 			Magic::SetEngineErrorMessage(_text);
 			return false;
 		}
+
+		Magic::Engine(BindClassFunction(&Render_thread::DrawFrame));
 
 		return true;
 	}
@@ -197,10 +206,19 @@ namespace Magic
 	}
 
 	void Render_thread::DrawFrame() {
-		Magic::Management::SendMessageTo(RENDER_START, 0);
-		Magic::Management::SendMessageTo(RENDER, 0);
-		Magic::Management::SendMessageTo(RENDER_TRANSPARENT, 0);
-		Magic::Management::SendMessageTo(RENDER_END, 0);
+		Magic::Management::SendMessageTo(m_TO_Render_thread, RENDER_START, 0);
+		Magic::Management::SendMessageTo(m_TO_Render_thread, RENDER, 0);
+		Magic::Management::SendMessageTo(m_TO_Render_thread, RENDER_TRANSPARENT, 0);
+		Magic::Management::SendMessageTo(m_TO_Render_thread, RENDER_END, 0, NULL, true);
+	}
+
+	void Render_thread::SetScreenWidthHeight(Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message) {
+		m_Screen_Rect = MESSAGE_TO_SCREEN_RECT(_Message);
+		glViewport(m_Screen_Rect.x, m_Screen_Rect.y, m_Screen_Rect.w, m_Screen_Rect.h); //…Ë÷√ ”∆µø⁄
+	}
+
+	void Render_thread::SetRect(const Screen_Rect& _Screen_Rect) {
+		Magic::Management::SendMessageTo(m_TO_Render_thread, RENDER_SET_RECT, SCREEN_RECT_TO_MESSAGE(_Screen_Rect));
 	}
 
 	void Render_thread::RenderStart(Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message) {

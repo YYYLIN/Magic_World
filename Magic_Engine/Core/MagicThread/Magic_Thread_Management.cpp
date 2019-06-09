@@ -190,7 +190,7 @@ namespace Magic
 		bool SystemThread::MonitorThread(THREAD_OBJECT _THREAD_OBJECT, const Callback_Void& _CallBack) {
 			Callback_Void _BufferCallback = _CallBack;
 
-			return SendMessageTo(_THREAD_OBJECT, 0, 0, [_BufferCallback](MESSAGE_TYPE _MessageType,MESSAGE _Message) {
+			return SendMessageTo(_THREAD_OBJECT, 0, 0, [_BufferCallback](MESSAGE_TYPE _MessageType, MESSAGE _Message) {
 				m_S_T_pThreadObject->m_vec_Callback.push_back(_BufferCallback);
 			});
 		}
@@ -245,7 +245,7 @@ namespace Magic
 			bool _ThreadMessageMode = false;
 
 			ThreadObject* _pSendThreadObject = 0;
-			if (_Synch && _CallBack && _pSendThreadObject != m_S_T_pThreadObject) {
+			if (_Synch && _pSendThreadObject != m_S_T_pThreadObject) {
 				_pSendThreadObject = m_S_T_pThreadObject;
 			}
 
@@ -275,7 +275,7 @@ namespace Magic
 				return false;
 
 			ThreadObject* _pSendThreadObject = 0;
-			if (_Synch && _CallBack && m_S_T_pThreadObject) {
+			if (_Synch && m_S_T_pThreadObject) {
 				_pSendThreadObject = m_S_T_pThreadObject;
 			}
 
@@ -445,9 +445,6 @@ namespace Magic
 				{
 					if (_Message.m_CallBack) {
 						_Message.m_CallBack(_Message.m_MessageType, _Message.m_Message);
-						if (_Message.m_pThreadObject) {
-							Magic_Thread_SEM_Post(_Message.m_pThreadObject->m_Synch_SEM);
-						}
 					}
 
 					auto _MonitorVec = _pThreadObject->m_umap_MonitorFunction.find(_Message.m_MessageType);
@@ -455,6 +452,10 @@ namespace Magic
 						for (auto& _allback : _MonitorVec->second) {
 							_allback(_Message.m_MessageType, _Message.m_Message);
 						}
+					}
+
+					if (_Message.m_pThreadObject) {
+						Magic_Thread_SEM_Post(_Message.m_pThreadObject->m_Synch_SEM);
 					}
 				}
 				//当消息处理完时退出，或者当处理数量大于100时退出

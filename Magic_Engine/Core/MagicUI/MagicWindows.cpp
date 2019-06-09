@@ -52,6 +52,13 @@ bool MagicWindows::Initialize(const wchar_t* _name, int _x, int _y, int _w, int 
 
 	Magic::ShutdownMessage(BindClassFunctionToMessage(&MagicWindows::Shutdown));
 
+	Magic::Screen_Rect _Screen_Rect;
+	_Screen_Rect.x = 0;
+	_Screen_Rect.y = 0;
+	_Screen_Rect.w = _w;
+	_Screen_Rect.h = _h;
+	Magic::SetRenderContextRect(_Screen_Rect);
+
 	return true;
 }
 
@@ -163,6 +170,9 @@ void MagicWindows::Shutdown(Magic::Management::MESSAGE_TYPE _MessageType, Magic:
 	// 删除应用实例。
 	UnregisterClass(m_applicationName, m_hinstance);
 	m_hinstance = NULL;
+
+	if (MagicWindows::Instance())
+		delete MagicWindows::Instance();
 }
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)    //消息处理函数

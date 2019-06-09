@@ -47,4 +47,12 @@ namespace Magic
 		typedef std::function<void(EntityX::Entity _Entity)> Call_Entity;
 		typedef std::function<bool(EntityX::Entity _Entity)> Call_Entity_Bool;
 	}
+
+	struct Screen_Rect
+	{
+		unsigned short x;
+		unsigned short y;
+		unsigned short w;
+		unsigned short h;
+	};
 }

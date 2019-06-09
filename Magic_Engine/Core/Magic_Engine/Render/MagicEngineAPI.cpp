@@ -88,6 +88,10 @@ namespace Magic
 		Render_thread::Instance()->BindRC((Render_Context*)_RenderContext);
 	}
 
+	void SetRenderContextRect(const Screen_Rect& _Screen_Rect) {
+		Render_thread::Instance()->SetRect(_Screen_Rect);
+	}
+
 	bool CreateThreadsResourceManager(const char* _name)
 	{
 		return MagicEngineContext::Instance()->CreateThreadsResourceManager(_name);

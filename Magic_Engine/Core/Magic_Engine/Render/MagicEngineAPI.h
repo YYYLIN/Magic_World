@@ -2,6 +2,7 @@
 #define _MAGICENGINEAPI_H_
 
 #include "Define/Magic_Macro.h"
+#include "Define/MagicType.h"
 #include "MagicScene.h"
 #include "MagicPen.h"
 #include "windows.h"
@@ -67,6 +68,8 @@ namespace Magic
 	DLL_MAGIC_ENGINE_OUTPUT_INPUT void ShutdownRenderContext(RenderContext _RenderContext);
 
 	DLL_MAGIC_ENGINE_OUTPUT_INPUT void BindRenderContext(RenderContext _RenderContext);
+
+	DLL_MAGIC_ENGINE_OUTPUT_INPUT void SetRenderContextRect(const Screen_Rect& _Screen_Rect);
 
 	/*
 	*功能：
@@ -192,7 +195,7 @@ namespace Magic
 	*返回值：
 	*	bool = true 成功 | 失败
 	*/
-	DLL_MAGIC_ENGINE_OUTPUT_INPUT bool SendMessageToThreads( EntityCommon& _ThreadsEntity, Magic::System::MessageStruct _MessageStruct);
+	DLL_MAGIC_ENGINE_OUTPUT_INPUT bool SendMessageToThreads(EntityCommon& _ThreadsEntity, Magic::System::MessageStruct _MessageStruct);
 
 	/*
 	*功能：
@@ -223,7 +226,7 @@ namespace Magic
 	*返回值：
 	*	bool = true 成功 | 失败
 	*/
-	DLL_MAGIC_ENGINE_OUTPUT_INPUT bool SendMessageToThreadsScene( EntityCommon& _ThreadsEntity, const EntityCommon& _SceneEntity, Magic::System::MessageStruct _MessageStruct);
+	DLL_MAGIC_ENGINE_OUTPUT_INPUT bool SendMessageToThreadsScene(EntityCommon& _ThreadsEntity, const EntityCommon& _SceneEntity, Magic::System::MessageStruct _MessageStruct);
 
 	/*
 	*功能：

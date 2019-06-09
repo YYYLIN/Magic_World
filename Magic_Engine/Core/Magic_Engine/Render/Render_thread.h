@@ -4,6 +4,7 @@
 #include "Magic_Thread.h"
 #include "windows.h"
 #include "Define/Magic_Macro.h"
+#include "Define/MagicType.h"
 
 
 namespace Magic
@@ -11,7 +12,7 @@ namespace Magic
 	class Render_Context
 	{
 	public:
-		Render_Context() {}
+		Render_Context();
 		virtual ~Render_Context() = 0;
 	public:
 		virtual bool CreateRenderContext(HWND _hwnd) = 0;
@@ -42,7 +43,9 @@ namespace Magic
 		RENDER_START = 1,
 		RENDER,
 		RENDER_TRANSPARENT,
-		RENDER_END
+		RENDER_END,
+
+		RENDER_SET_RECT
 	};
 
 	bool RenderThread(Magic::Management::Callback_Message _Callback_Message);
@@ -66,6 +69,12 @@ namespace Magic
 		Magic::Management::THREAD_OBJECT GetTHREAD_OBJECT() { return m_TO_Render_thread; }
 
 		void DrawFrame();
+
+		void SetScreenWidthHeight(Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message);
+
+		void SetRect(const Screen_Rect& _Screen_Rect);
+
+		inline const Screen_Rect& GetScreenWidthHeight() { return m_Screen_Rect; }
 	private:
 		void RenderStart(Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message);
 		void Render(Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message);
@@ -73,9 +82,12 @@ namespace Magic
 		void RenderEnd(Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message);
 
 	private:
+		//render_thread线程对象
 		Magic::Management::THREAD_OBJECT m_TO_Render_thread;
 
 		Render_Context* m_pRender_Context;
+
+		Screen_Rect m_Screen_Rect;
 
 		static Render_thread* pRender_thread;
 	};

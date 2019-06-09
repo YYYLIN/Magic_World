@@ -1,6 +1,9 @@
 #include "DrawSimpleGraphics.h"
 #include "Render_thread.h"
+#include "Define/Magic_Macro.h"
+#include "Define/MagicType.h"
 #include <GL/glew.h>  
+#include "MagicEngineContext.h"
 
 #include "MagicEngineAPI.h"
 
@@ -44,12 +47,14 @@ static const char* S_Pure_Color_Frag =
 #define DRAW_TYPE_TRIANGLE_FAN					0x08
 #define DRAW_TYPE_DISTANCE_TEXT					0x09
 
-DrawSimpleGraphics::DrawSimpleGraphics() {
+DrawSimpleGraphics* DrawSimpleGraphics::m_S_pDrawSimpleGraphics = nullptr;
 
+DrawSimpleGraphics::DrawSimpleGraphics() {
+	m_S_pDrawSimpleGraphics = this;
 }
 
 DrawSimpleGraphics::~DrawSimpleGraphics() {
-
+	m_S_pDrawSimpleGraphics = nullptr;
 }
 
 bool DrawSimpleGraphics::Initialize() {
@@ -77,7 +82,6 @@ bool DrawSimpleGraphics::Initialize() {
 
 		m_LineShader.Use();
 
-		m_LineShader.AddUniform("CameraMatrix");
 		m_LineShader.AddUniform("projectionMatrix");
 		m_LineShader.AddUniform("PointSize");
 
@@ -103,6 +107,8 @@ bool DrawSimpleGraphics::Initialize() {
 		Magic::MonitorRenderThread(Magic::RENDER, BindClassFunctionToMessage(&DrawSimpleGraphics::Render));
 	});
 
+	Magic::MonitorRenderThread(Magic::RENDER_SET_RECT, BindClassFunctionToMessage(&DrawSimpleGraphics::Event_Rect));
+
 	return true;
 }
 
@@ -119,10 +125,10 @@ void DrawSimpleGraphics::DrawLine(float _x1, float _y1, float _x2, float _y2, Ma
 	Magic::RenderThread([this, _LastDrawType, _Color, _WorldMatrix, _x1, _y1, _x2, _y2](Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message) {
 		LINE_VERTEX _Vertex;
 
-		if (_LastDrawType != DRAW_TYPE_LINES)
+		if (_LastDrawType != DRAW_TYPE_LINES || !m_vec_Instance.size())
 		{
 			LINE_INSTANCE _Instance;
-			_Instance.WorldMatrix = _WorldMatrix;
+			_Instance.WorldMatrix = CONST_CAMERA;
 			m_vec_Instance.push_back(_Instance);
 		}
 
@@ -161,6 +167,11 @@ void DrawSimpleGraphics::SetWorldMatrix(glm::mat4 _WorldMatrix) {
 	m_WorldMatrix = _WorldMatrix;
 }
 
+void DrawSimpleGraphics::Event_Rect(Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message) {
+	Magic::Screen_Rect _Screen_Rect = MESSAGE_TO_SCREEN_RECT(_Message);
+	m_projectionMatrix = glm::ortho(0.0f, (float)_Screen_Rect.w, 0.0f, (float)_Screen_Rect.h, 0.1f, 100.0f);
+}
+
 void DrawSimpleGraphics::Render(Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message)
 {
 	if (m_vec_Line_Vertex.size())
@@ -181,4 +192,7 @@ void DrawSimpleGraphics::Render(Magic::Management::MESSAGE_TYPE _MessageType, Ma
 		glMultiDrawArraysIndirect(GL_LINE_LOOP, (GLvoid*)(sizeof(Magic::DrawArraysIndirectCommand)), m_vec_DEICommand.size(), 0);
 	}
 
+	m_vec_Line_Vertex.clear();
+	m_vec_Instance.clear();
+	m_vec_DEICommand.clear();
 }
