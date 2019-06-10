@@ -29,7 +29,7 @@ class DLL_MAGIC_ENGINE_OUTPUT_INPUT DrawSimpleGraphics {
 
 	struct LINE_INSTANCE
 	{
-		glm::mat4 WorldMatrix;
+		glm::mat4 CameraMatrix;
 	};
 
 public:

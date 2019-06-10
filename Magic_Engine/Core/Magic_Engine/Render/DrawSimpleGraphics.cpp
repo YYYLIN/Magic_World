@@ -101,7 +101,7 @@ bool DrawSimpleGraphics::Initialize() {
 			sizeof(glm::vec4) / sizeof(float)
 		};
 		m_Line_VBO.SetBuffer(0, Magic::VERTEX_BUFFER::DYNAMIC_DRAW, 2, _Line_Array_Size);
-		m_Line_VBO.SetBuffer(1, Magic::VERTEX_BUFFER::DYNAMIC_DRAW, 4, &_Line_Array_Size[1], 1);
+		m_Line_VBO.SetBuffer(1, Magic::VERTEX_BUFFER::DYNAMIC_DRAW, 4, &_Line_Array_Size[2], 1);
 		m_Line_VBO.SetDrawIndirectBuffer(2, Magic::VERTEX_BUFFER::DYNAMIC_DRAW);
 
 		Magic::MonitorRenderThread(Magic::RENDER, BindClassFunctionToMessage(&DrawSimpleGraphics::Render));
@@ -119,7 +119,6 @@ void DrawSimpleGraphics::DrawLine(float _x1, float _y1, float _x2, float _y2) {
 
 void DrawSimpleGraphics::DrawLine(float _x1, float _y1, float _x2, float _y2, Magic::Color4 _Color) {
 	unsigned int _LastDrawType = m_LastDrawType;
-	Magic::Color4 _NowColor = m_NowColor;
 	glm::mat4 _WorldMatrix = m_WorldMatrix;
 
 	Magic::RenderThread([this, _LastDrawType, _Color, _WorldMatrix, _x1, _y1, _x2, _y2](Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message) {
@@ -128,7 +127,7 @@ void DrawSimpleGraphics::DrawLine(float _x1, float _y1, float _x2, float _y2, Ma
 		if (_LastDrawType != DRAW_TYPE_LINES || !m_vec_Instance.size())
 		{
 			LINE_INSTANCE _Instance;
-			_Instance.WorldMatrix = CONST_CAMERA;
+			_Instance.CameraMatrix = CONST_CAMERA * _WorldMatrix;
 			m_vec_Instance.push_back(_Instance);
 		}
 
@@ -189,7 +188,7 @@ void DrawSimpleGraphics::Render(Magic::Management::MESSAGE_TYPE _MessageType, Ma
 
 		m_Line_VBO.BindBuffer(2);
 		m_Line_VBO.Bind();
-		glMultiDrawArraysIndirect(GL_LINE_LOOP, (GLvoid*)(sizeof(Magic::DrawArraysIndirectCommand)), m_vec_DEICommand.size(), 0);
+		glMultiDrawArraysIndirect(GL_LINES, (GLvoid*)(sizeof(Magic::DrawArraysIndirectCommand) * 0), m_vec_DEICommand.size(), 0);
 	}
 
 	m_vec_Line_Vertex.clear();
