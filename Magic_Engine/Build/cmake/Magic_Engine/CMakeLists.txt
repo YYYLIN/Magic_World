@@ -57,7 +57,11 @@ ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/Render_thread.h
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/DrawSimpleGraphics.cpp
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/DrawSimpleGraphics.h
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicOpengl.cpp
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicOpengl.h)
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicOpengl.h
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/TemplateEffects.cpp
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/TemplateEffects.h
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/DrawTool.cpp
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/DrawTool.h)
 
 set(MAGIC_SYSTEM_FILES
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/System/Supervisor.cpp

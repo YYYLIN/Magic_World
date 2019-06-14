@@ -19,17 +19,17 @@ private:
 };
 
 template<class T>
-void VariableMonitoring::Monitor(const Callback& _Callback) {
+void VariableMonitoring<T>::Monitor(const Callback& _Callback) {
 	m_vec_Callback.push_back(_Callback);
 }
 
 template<class T>
-const T& VariableMonitoring::operator=() {
+const T&  VariableMonitoring<T>::operator=() {
 	return m_Variable;
 }
 
 template<class T>
-const T& VariableMonitoring::operator=(const T& _t) {
+const T&  VariableMonitoring<T>::operator=(const T& _t) {
 	if (m_Variable != _t) {
 		m_Variable = _t;
 
