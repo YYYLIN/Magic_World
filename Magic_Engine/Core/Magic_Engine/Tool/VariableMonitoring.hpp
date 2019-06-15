@@ -10,10 +10,11 @@ public:
 	typedef std::function<void(const T&)> Callback;
 
 	void Monitor(const Callback& _Callback);
+	void RemoveMonitor(const Callback& _Callback);
 
 	const T& operator=();
 	const T& operator=(const T& _t);
-private:
+protected:
 	T m_Variable;
 	std::vector<Callback> m_vec_Callback;
 };
@@ -21,6 +22,17 @@ private:
 template<class T>
 void VariableMonitoring<T>::Monitor(const Callback& _Callback) {
 	m_vec_Callback.push_back(_Callback);
+}
+
+template<class T>
+void VariableMonitoring::RemoveMonitor(const Callback& _Callback) {
+	for (std::vector<Callback>::iterator _i = m_vec_Callback.begin();_i != m_vec_Callback.end();) {
+		if (_i == _Callback) {
+			_i = m_vec_Callback.erase(_i);
+		}
+		else
+			++_i;
+	}
 }
 
 template<class T>
@@ -36,6 +48,32 @@ const T&  VariableMonitoring<T>::operator=(const T& _t) {
 		for (auto& _auto : m_vec_Callback) {
 			_auto(m_Variable);
 		}
+	}
+}
+
+template<class T>
+class VariableRecord :public VariableMonitoring<T> {
+public:
+	const T& operator=(const T& _t);
+
+	void back();
+protected:
+	std::vector<T> m_vec_Record;
+};
+
+template<class T>
+const T& VariableRecord<T>::operator=(const T& _t) {
+	if (m_Variable != _t) {
+		m_vec_Record.push_back(m_Variable);
+		VariableMonitoring<T>::operator =(_t);
+	}
+}
+
+template<class T>
+void VariableRecord<T>::back() {
+	if (m_vec_Record.size()) {
+		VariableMonitoring<T>::operator=(m_vec_Record.back());
+		m_vec_Record.erase(m_vec_Record.end() - 1);
 	}
 }
 

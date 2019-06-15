@@ -11,9 +11,9 @@ namespace Magic {
 		DrawTool();
 		~DrawTool();
 
-		virtual void MonitorTemplateEffects(Template_Effects* _pTemplate_Effects);
+		virtual void MonitorTEffects(const PTemplate_Effects& _pTemplate_Effects);
 
-		inline T* operator this() {
+		inline T* operator->() {
 			return m_this;
 		}
 	protected:
@@ -24,17 +24,26 @@ namespace Magic {
 
 	template<class T>
 	DrawTool<T>::DrawTool() {
-
+		m_this = 0;
+		MonitorTemplateEffects(BindClassFunction_1(MonitorTEffects)):
 	}
 
 	template<class T>
 	DrawTool<T>::~DrawTool() {
-
+		RemoveMonitorTemplateEffects(BindClassFunction_1(MonitorTEffects)):
 	}
 
 	template<class T>
-	void DrawTool<T>::MonitorTemplateEffects(Template_Effects* _pTemplate_Effects) {
-
+	void DrawTool<T>::MonitorTEffects(const PTemplate_Effects& _pTemplate_Effects) {
+		auto _auto = m_vec_DrawContent.find(_pTemplate_Effects);
+		if (_auto != m_vec_DrawContent.end()) {
+			m_this = &_auto->second;
+		}
+		else {
+			auto _pair = std::make_pair(_pTemplate_Effects, T());
+			m_this = &_pair->second;
+			m_vec_DrawContent.insert(_pair);
+		}
 	}
 }
 
