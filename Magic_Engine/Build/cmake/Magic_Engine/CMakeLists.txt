@@ -100,7 +100,8 @@ ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Define/Magic_Macro.h)
 
 set(MAGIC_TOOL_FILES
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Tool/VariableMonitoring.hpp
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Tool/EnvironmentSwitcher.h)
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Tool/AutoLoadFunction.h
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Tool/AutoLoadFunction.cpp)
 
 IF(WIN32)
 	SOURCE_GROUP("Engine\\Render" FILES ${MAGIC_RENDER_FILES})

@@ -4,6 +4,14 @@
 #include "TemplateEffects.h"
 
 namespace Magic {
+	
+#define RT_ENVIRONMENT_START	struct RT_Environment_Object {
+
+
+
+#define RT_ENVIRONMENT_END		};
+
+#define ClassDrawTool(a)		DrawTool<a::RT_Environment_Object>
 
 	template<class T>
 	class DrawTool {

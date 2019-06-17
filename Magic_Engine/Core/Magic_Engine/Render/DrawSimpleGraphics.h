@@ -10,6 +10,7 @@
 #include "Magic_Thread.h"
 #include "MagicOpengl.h"
 #include "Cross_Platform_Port.h"
+#include "DrawTool.h"
 
 #include <glm.hpp>
 #include <gtc/matrix_transform.hpp>
@@ -19,7 +20,8 @@
 #pragma warning(disable:4251)
 
 
-class DLL_MAGIC_ENGINE_OUTPUT_INPUT DrawSimpleGraphics {
+class DLL_MAGIC_ENGINE_OUTPUT_INPUT DrawSimpleGraphics 
+	:public Magic::ClassDrawTool(DrawSimpleGraphics) {
 
 	struct LINE_VERTEX
 	{
@@ -48,7 +50,7 @@ public:
 
 	void SetWorldMatrix(glm::mat4 _WorldMatrix);
 
-	
+
 private:
 	void Event_Rect(Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message);
 	void Render(Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message);
@@ -61,15 +63,17 @@ private:
 	MagicShader m_LineShader;
 	unsigned int m_Line_projectionMatrix;
 	unsigned int m_Line_PointSize;
-
+	RT_ENVIRONMENT_START
 	glm::mat4 m_projectionMatrix;
 
 	std::vector<LINE_VERTEX> m_vec_Line_Vertex;
 	std::vector<LINE_INSTANCE> m_vec_Instance;
 	std::vector<Magic::DrawArraysIndirectCommand> m_vec_DEICommand;
+	RT_ENVIRONMENT_END
+	//---------------------------<
 
 	static DrawSimpleGraphics* m_S_pDrawSimpleGraphics;
-	//---------------------------<
+
 };
 
 #pragma warning(pop)

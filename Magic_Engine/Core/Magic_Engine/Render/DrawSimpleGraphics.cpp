@@ -124,35 +124,35 @@ void DrawSimpleGraphics::DrawLine(float _x1, float _y1, float _x2, float _y2, Ma
 	Magic::RenderThread([this, _LastDrawType, _Color, _WorldMatrix, _x1, _y1, _x2, _y2](Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message) {
 		LINE_VERTEX _Vertex;
 
-		if (_LastDrawType != DRAW_TYPE_LINES || !m_vec_Instance.size())
+		if (_LastDrawType != DRAW_TYPE_LINES || !m_this->m_vec_Instance.size())
 		{
 			LINE_INSTANCE _Instance;
 			_Instance.CameraMatrix = CONST_CAMERA * _WorldMatrix;
-			m_vec_Instance.push_back(_Instance);
+			m_this->m_vec_Instance.push_back(_Instance);
 		}
 
-		if (!m_vec_DEICommand.size() || _LastDrawType != DRAW_TYPE_LINES)
+		if (!m_this->m_vec_DEICommand.size() || _LastDrawType != DRAW_TYPE_LINES)
 		{
 			Magic::DrawArraysIndirectCommand _DEICommand;
 
 			_DEICommand.count = 2;
 			_DEICommand.instanceCount = 1;
-			_DEICommand.first = m_vec_Line_Vertex.size();
-			_DEICommand.baseInstance = m_vec_Instance.size() - 1;
+			_DEICommand.first = m_this->m_vec_Line_Vertex.size();
+			_DEICommand.baseInstance = m_this->m_vec_Instance.size() - 1;
 
-			m_vec_DEICommand.push_back(_DEICommand);
+			m_this->m_vec_DEICommand.push_back(_DEICommand);
 		}
 		else
-			m_vec_DEICommand.back().count += 2;
+			m_this->m_vec_DEICommand.back().count += 2;
 
 		_Vertex.Color = _Color;
 
 		_Vertex.Position.x = _x1;
 		_Vertex.Position.y = _y1;
-		m_vec_Line_Vertex.push_back(_Vertex);
+		m_this->m_vec_Line_Vertex.push_back(_Vertex);
 		_Vertex.Position.x = _x2;
 		_Vertex.Position.y = _y2;
-		m_vec_Line_Vertex.push_back(_Vertex);
+		m_this->m_vec_Line_Vertex.push_back(_Vertex);
 	});
 
 	m_LastDrawType = DRAW_TYPE_LINES;
@@ -168,19 +168,19 @@ void DrawSimpleGraphics::SetWorldMatrix(glm::mat4 _WorldMatrix) {
 
 void DrawSimpleGraphics::Event_Rect(Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message) {
 	Magic::Screen_Rect _Screen_Rect = MESSAGE_TO_SCREEN_RECT(_Message);
-	m_projectionMatrix = glm::ortho(0.0f, (float)_Screen_Rect.w, 0.0f, (float)_Screen_Rect.h, 0.1f, 100.0f);
+	m_this->m_projectionMatrix = glm::ortho(0.0f, (float)_Screen_Rect.w, 0.0f, (float)_Screen_Rect.h, 0.1f, 100.0f);
 }
 
 void DrawSimpleGraphics::Render(Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message)
 {
-	if (m_vec_Line_Vertex.size())
+	if (m_this->m_vec_Line_Vertex.size())
 	{
 		m_LineShader.Use();
-		glUniformMatrix4fv(m_Line_projectionMatrix, 1, GL_FALSE, &m_projectionMatrix[0][0]);
+		glUniformMatrix4fv(m_Line_projectionMatrix, 1, GL_FALSE, &m_this->m_projectionMatrix[0][0]);
 
-		m_Line_VBO.DynamicWrite(0, m_vec_Line_Vertex.size() * sizeof(LINE_VERTEX), &m_vec_Line_Vertex[0]);
-		m_Line_VBO.DynamicWrite(1, m_vec_Instance.size() * sizeof(LINE_INSTANCE), &m_vec_Instance[0]);
-		m_Line_VBO.DynamicWrite(2, m_vec_DEICommand.size() * sizeof(Magic::DrawArraysIndirectCommand), &m_vec_DEICommand[0]);
+		m_Line_VBO.DynamicWrite(0, m_this-> m_vec_Line_Vertex.size() * sizeof(LINE_VERTEX), &m_this->m_vec_Line_Vertex[0]);
+		m_Line_VBO.DynamicWrite(1, m_this->m_vec_Instance.size() * sizeof(LINE_INSTANCE), &m_this->m_vec_Instance[0]);
+		m_Line_VBO.DynamicWrite(2, m_this->m_vec_DEICommand.size() * sizeof(Magic::DrawArraysIndirectCommand), &m_this->m_vec_DEICommand[0]);
 
 		glLineWidth(1.0f);
 		//glPointSize(1.0f);
@@ -188,10 +188,10 @@ void DrawSimpleGraphics::Render(Magic::Management::MESSAGE_TYPE _MessageType, Ma
 
 		m_Line_VBO.BindBuffer(2);
 		m_Line_VBO.Bind();
-		glMultiDrawArraysIndirect(GL_LINES, (GLvoid*)(sizeof(Magic::DrawArraysIndirectCommand) * 0), m_vec_DEICommand.size(), 0);
+		glMultiDrawArraysIndirect(GL_LINES, (GLvoid*)(sizeof(Magic::DrawArraysIndirectCommand) * 0), m_this->m_vec_DEICommand.size(), 0);
 	}
 
-	m_vec_Line_Vertex.clear();
-	m_vec_Instance.clear();
-	m_vec_DEICommand.clear();
+	m_this->m_vec_Line_Vertex.clear();
+	m_this->m_vec_Instance.clear();
+	m_this->m_vec_DEICommand.clear();
 }
