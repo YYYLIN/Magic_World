@@ -19,9 +19,7 @@
 #pragma warning(push)
 #pragma warning(disable:4251)
 
-
-class DLL_MAGIC_ENGINE_OUTPUT_INPUT DrawSimpleGraphics 
-	:public Magic::ClassDrawTool(DrawSimpleGraphics) {
+class DLL_MAGIC_ENGINE_OUTPUT_INPUT DrawSimpleGraphics {
 
 	struct LINE_VERTEX
 	{
@@ -69,7 +67,7 @@ private:
 	std::vector<LINE_VERTEX> m_vec_Line_Vertex;
 	std::vector<LINE_INSTANCE> m_vec_Instance;
 	std::vector<Magic::DrawArraysIndirectCommand> m_vec_DEICommand;
-	RT_ENVIRONMENT_END
+	RT_ENVIRONMENT_END;
 	//---------------------------<
 
 	static DrawSimpleGraphics* m_S_pDrawSimpleGraphics;

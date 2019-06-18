@@ -2,6 +2,7 @@
 #include "MagicEngineAPI.h"
 #include <GL/glew.h>  
 #include <time.h>
+#include "Tool/InjectFunction.h"
 
 
 
@@ -356,6 +357,12 @@ void MagicEngineContext::Shutdown()
 
 void MagicEngineContext::Run(void)
 {
+	const auto _EngineRunStartFunction = S_map_inject_function.find("EngineRunStart");
+
+	for (const auto& _Fun : _EngineRunStartFunction->second) {
+		_Fun();
+	}
+
 	m_EngineRunState = true;
 
 	while (m_EngineRunState)

@@ -2,6 +2,7 @@
 #include "MagicEngineAPI.h"
 #include "Cross_Platform_Port.h"
 #include "Render_thread.h"
+#include "Tool/InjectFunction.h"
 
 namespace Magic {
 
@@ -126,4 +127,8 @@ namespace Magic {
 	Template_Effects::~Template_Effects() {
 		m_vec_Template_Effects.erase(m_Name);
 	}
+
+	INJECT_FUNCTION("EngineRunStart", []() {
+		m_S_Now_Template_Effects = 0;
+	});
 }

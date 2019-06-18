@@ -6,8 +6,8 @@
 #include <string>
 #include "Tool/VariableMonitoring.hpp"
 
-#define BindClassFunction_1(F) std::bind(F, this, std::placeholders::_1)
-#define BindClassFunction_1(F,O) std::bind(F, O, std::placeholders::_1)
+#define BindClassFunction_F_1(F) std::bind(F, this, std::placeholders::_1)
+#define BindClassFunction_FO_1(F,O) std::bind(F, O, std::placeholders::_1)
 
 namespace Magic {
 
@@ -15,7 +15,7 @@ namespace Magic {
 
 	typedef Template_Effects* PTemplate_Effects;
 
-	typedef	std::function<void(const PTemplate_Effects&)> Fun_Template_Effects;
+	typedef	std::function<void(const ::Magic::PTemplate_Effects&)> Fun_Template_Effects;
 
 	bool TemplateEffects(const char* _Name,const Fun_Template_Effects& _Fun);
 

@@ -178,7 +178,7 @@ void DrawSimpleGraphics::Render(Magic::Management::MESSAGE_TYPE _MessageType, Ma
 		m_LineShader.Use();
 		glUniformMatrix4fv(m_Line_projectionMatrix, 1, GL_FALSE, &m_this->m_projectionMatrix[0][0]);
 
-		m_Line_VBO.DynamicWrite(0, m_this-> m_vec_Line_Vertex.size() * sizeof(LINE_VERTEX), &m_this->m_vec_Line_Vertex[0]);
+		m_Line_VBO.DynamicWrite(0, m_this->m_vec_Line_Vertex.size() * sizeof(LINE_VERTEX), &m_this->m_vec_Line_Vertex[0]);
 		m_Line_VBO.DynamicWrite(1, m_this->m_vec_Instance.size() * sizeof(LINE_INSTANCE), &m_this->m_vec_Instance[0]);
 		m_Line_VBO.DynamicWrite(2, m_this->m_vec_DEICommand.size() * sizeof(Magic::DrawArraysIndirectCommand), &m_this->m_vec_DEICommand[0]);
 
