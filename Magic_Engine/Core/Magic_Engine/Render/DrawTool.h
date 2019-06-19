@@ -24,19 +24,20 @@ namespace Magic {
 		T* m_this;
 	private:
 		std::map<::Magic::PTemplate_Effects, T> m_vec_DrawContent;
-		::Magic::Fun_Template_Effects m_Fun;
+		::Magic::Fun_Template_Effects m_Fun, m_Monitor;
 	};
 
 	template<class T>
 	DrawTool<T>::DrawTool(const ::Magic::Fun_Template_Effects& _Fun = NULL) {
+		m_Monitor = BindClassFunction_F_1(&DrawTool<T>::MonitorTEffects);
 		m_Fun = _Fun;
 		m_this = 0;
-		MonitorTemplateEffects(BindClassFunction_F_1(&DrawTool<T>::MonitorTEffects));
+		MonitorTemplateEffects(&m_Monitor);
 	}
 
 	template<class T>
 	DrawTool<T>::~DrawTool() {
-		RemoveMonitorTemplateEffects(BindClassFunction_F_1(&DrawTool<T>::MonitorTEffects));
+		RemoveMonitorTemplateEffects(&m_Monitor);
 	}
 
 	template<class T>

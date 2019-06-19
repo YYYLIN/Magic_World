@@ -29,9 +29,9 @@ namespace Magic {
 
 	bool DisableTemplateEffects(Template_Effects* _pTemplate_Effects);
 
-	void MonitorTemplateEffects(const Fun_Template_Effects& _Fun);
+	void MonitorTemplateEffects(Fun_Template_Effects* _Fun);
 
-	void RemoveMonitorTemplateEffects(const Fun_Template_Effects& _Fun);
+	void RemoveMonitorTemplateEffects(Fun_Template_Effects* _Fun);
 
 	class Template_Effects {
 	public:

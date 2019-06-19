@@ -357,11 +357,7 @@ void MagicEngineContext::Shutdown()
 
 void MagicEngineContext::Run(void)
 {
-	const auto _EngineRunStartFunction = S_map_inject_function.find("EngineRunStart");
-
-	for (const auto& _Fun : _EngineRunStartFunction->second) {
-		_Fun();
-	}
+	Run_Inject_function("EngineRunStart");
 
 	m_EngineRunState = true;
 

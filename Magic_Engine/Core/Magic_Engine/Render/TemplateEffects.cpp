@@ -99,14 +99,19 @@ namespace Magic {
 			Magic::RenderThread([_pTemplate_Effects](Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message) {
 				_pTemplate_Effects->Render();
 			});
+
+			return true;
+		}
+		else {
+			return false;
 		}
 	}
 
-	void MonitorTemplateEffects(const Fun_Template_Effects& _Fun) {
+	void MonitorTemplateEffects(Fun_Template_Effects* _Fun) {
 		m_S_Now_Template_Effects.Monitor(_Fun);
 	}
 
-	void RemoveMonitorTemplateEffects(const Fun_Template_Effects& _Fun) {
+	void RemoveMonitorTemplateEffects(Fun_Template_Effects* _Fun) {
 		m_S_Now_Template_Effects.RemoveMonitor(_Fun);
 	}
 
@@ -124,11 +129,18 @@ namespace Magic {
 		}
 	}
 
+	/*INJECT_FUNCTION("EngineRunStart", []() {
+		m_S_Now_Template_Effects = 0;
+	});*/
+
 	Template_Effects::~Template_Effects() {
 		m_vec_Template_Effects.erase(m_Name);
 	}
 
-	INJECT_FUNCTION("EngineRunStart", []() {
-		m_S_Now_Template_Effects = 0;
-	});
+	static int S_INJECT_FUNCTION_222 = []() {
+		S_map_inject_function["EngineRunStart"].push_back([]() {
+			m_S_Now_Template_Effects = 0;
+		});
+		return 0;
+	}();
 }
