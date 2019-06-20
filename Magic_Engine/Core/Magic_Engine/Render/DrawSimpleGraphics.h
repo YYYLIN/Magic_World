@@ -50,7 +50,6 @@ public:
 
 
 private:
-	void Event_Rect(Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message);
 	void Render(Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message);
 private:
 	unsigned int m_LastDrawType;

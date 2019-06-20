@@ -107,8 +107,6 @@ bool DrawSimpleGraphics::Initialize() {
 		Magic::MonitorRenderThread(Magic::RENDER, BindClassFunctionToMessage(&DrawSimpleGraphics::Render));
 	});
 
-	Magic::MonitorRenderThread(Magic::RENDER_SET_RECT, BindClassFunctionToMessage(&DrawSimpleGraphics::Event_Rect));
-
 	return true;
 }
 
@@ -166,15 +164,13 @@ void DrawSimpleGraphics::SetWorldMatrix(glm::mat4 _WorldMatrix) {
 	m_WorldMatrix = _WorldMatrix;
 }
 
-void DrawSimpleGraphics::Event_Rect(Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message) {
-	Magic::Screen_Rect _Screen_Rect = MESSAGE_TO_SCREEN_RECT(_Message);
-	m_this->m_projectionMatrix = glm::ortho(0.0f, (float)_Screen_Rect.w, 0.0f, (float)_Screen_Rect.h, 0.1f, 100.0f);
-}
-
 void DrawSimpleGraphics::Render(Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message)
 {
 	if (m_this->m_vec_Line_Vertex.size())
 	{
+		Magic::Screen_Rect _Screen_Rect = m_this->Now_PTE->Rect();
+		m_this->m_projectionMatrix = glm::ortho(0.0f, (float)_Screen_Rect.w, 0.0f, (float)_Screen_Rect.h, 0.1f, 100.0f);
+
 		m_LineShader.Use();
 		glUniformMatrix4fv(m_Line_projectionMatrix, 1, GL_FALSE, &m_this->m_projectionMatrix[0][0]);
 

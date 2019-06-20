@@ -5,6 +5,8 @@
 #include <functional>
 #include <string>
 #include "Tool/VariableMonitoring.hpp"
+#include "Define/MagicType.h"
+#include "Define/Magic_Macro.h"
 
 #define BindClassFunction_F_1(F) std::bind(F, this, std::placeholders::_1)
 #define BindClassFunction_FO_1(F,O) std::bind(F, O, std::placeholders::_1)
@@ -17,30 +19,35 @@ namespace Magic {
 
 	typedef	std::function<void(const ::Magic::PTemplate_Effects&)> Fun_Template_Effects;
 
-	bool TemplateEffects(const char* _Name,const Fun_Template_Effects& _Fun);
+	bool DLL_MAGIC_ENGINE_OUTPUT_INPUT TemplateEffects(const char* _Name, const Fun_Template_Effects& _Fun);
 
-	bool TemplateEffects(Template_Effects* _pTemplate_Effects, const Fun_Template_Effects& _Fun);
+	bool DLL_MAGIC_ENGINE_OUTPUT_INPUT TemplateEffects(Template_Effects* _pTemplate_Effects, const Fun_Template_Effects& _Fun);
 
-	bool EnableTemplateEffects(const char* _Name);
+	bool DLL_MAGIC_ENGINE_OUTPUT_INPUT EnableTemplateEffects(const char* _Name);
 
-	bool EnableTemplateEffects(Template_Effects* _pTemplate_Effects);
+	bool DLL_MAGIC_ENGINE_OUTPUT_INPUT EnableTemplateEffects(Template_Effects* _pTemplate_Effects);
 
-	bool DisableTemplateEffects(const char* _Name);
+	bool DLL_MAGIC_ENGINE_OUTPUT_INPUT DisableTemplateEffects(const char* _Name);
 
-	bool DisableTemplateEffects(Template_Effects* _pTemplate_Effects);
+	bool DLL_MAGIC_ENGINE_OUTPUT_INPUT DisableTemplateEffects(Template_Effects* _pTemplate_Effects);
 
-	void MonitorTemplateEffects(Fun_Template_Effects* _Fun);
+	void DLL_MAGIC_ENGINE_OUTPUT_INPUT MonitorTemplateEffects(Fun_Template_Effects* _Fun);
 
-	void RemoveMonitorTemplateEffects(Fun_Template_Effects* _Fun);
+	void DLL_MAGIC_ENGINE_OUTPUT_INPUT RemoveMonitorTemplateEffects(Fun_Template_Effects* _Fun);
 
 	class Template_Effects {
 	public:
 		Template_Effects(const char* _Name);
-		~Template_Effects();
+		virtual ~Template_Effects();
+
+		void Rect(const Magic::Screen_Rect& _Rect);
+
+		inline const Magic::Screen_Rect& Rect() { return m_Rect; }
 
 		virtual void Render() = 0;
 	private:
 		std::string m_Name;
+		Magic::Screen_Rect m_Rect;
 	};
 }
 

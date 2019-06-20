@@ -2,7 +2,7 @@
 #include "MagicEngineAPI.h"
 #include "Cross_Platform_Port.h"
 #include "Render_thread.h"
-#include "Tool/InjectFunction.h"
+#include "MainTemplateEffects.h"
 
 namespace Magic {
 
@@ -16,13 +16,18 @@ namespace Magic {
 
 			_Fun(_TE->second);
 
-			m_S_Now_Template_Effects.back();
-
 			Template_Effects* _pTemplate_Effects = _TE->second;
-
-			Magic::RenderThread([_pTemplate_Effects](Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message) {
+			if (Main_Template_Effects::Instance() == _pTemplate_Effects) {
+				OutputDebugString(L"VS shu chu ceshi 1\n");
 				_pTemplate_Effects->Render();
-			});
+			}
+			else {
+				Magic::RenderThread([_pTemplate_Effects](Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message) {
+					_pTemplate_Effects->Render();
+				});
+			}
+			OutputDebugString(L"VS shu chu ceshi 2\n");
+			m_S_Now_Template_Effects.back();
 
 			return true;
 		}
@@ -37,11 +42,16 @@ namespace Magic {
 
 			_Fun(_pTemplate_Effects);
 
-			m_S_Now_Template_Effects.back();
-
-			Magic::RenderThread([_pTemplate_Effects](Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message) {
+			if (Main_Template_Effects::Instance() == _pTemplate_Effects) {
 				_pTemplate_Effects->Render();
-			});
+			}
+			else {
+				Magic::RenderThread([_pTemplate_Effects](Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message) {
+					_pTemplate_Effects->Render();
+				});
+			}
+
+			m_S_Now_Template_Effects.back();
 
 			return true;
 		}
@@ -77,13 +87,17 @@ namespace Magic {
 		auto _TE = m_vec_Template_Effects.find(_Name);
 		if (_TE != m_vec_Template_Effects.end()) {
 
-			m_S_Now_Template_Effects.back();
-
 			Template_Effects* _pTemplate_Effects = _TE->second;
-
-			Magic::RenderThread([_pTemplate_Effects](Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message) {
+			if (Main_Template_Effects::Instance() == _pTemplate_Effects) {
 				_pTemplate_Effects->Render();
-			});
+			}
+			else {
+				Magic::RenderThread([_pTemplate_Effects](Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message) {
+					_pTemplate_Effects->Render();
+				});
+			}
+
+			m_S_Now_Template_Effects.back();
 
 			return true;
 		}
@@ -94,11 +108,17 @@ namespace Magic {
 
 	bool DisableTemplateEffects(Template_Effects* _pTemplate_Effects) {
 		if (_pTemplate_Effects) {
-			m_S_Now_Template_Effects.back();
 
-			Magic::RenderThread([_pTemplate_Effects](Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message) {
+			if (Main_Template_Effects::Instance() == _pTemplate_Effects) {
 				_pTemplate_Effects->Render();
-			});
+			}
+			else {
+				Magic::RenderThread([_pTemplate_Effects](Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message) {
+					_pTemplate_Effects->Render();
+				});
+			}
+
+			m_S_Now_Template_Effects.back();
 
 			return true;
 		}
@@ -129,18 +149,11 @@ namespace Magic {
 		}
 	}
 
-	/*INJECT_FUNCTION("EngineRunStart", []() {
-		m_S_Now_Template_Effects = 0;
-	});*/
-
 	Template_Effects::~Template_Effects() {
 		m_vec_Template_Effects.erase(m_Name);
 	}
 
-	static int S_INJECT_FUNCTION_222 = []() {
-		S_map_inject_function["EngineRunStart"].push_back([]() {
-			m_S_Now_Template_Effects = 0;
-		});
-		return 0;
-	}();
+	void Template_Effects::Rect(const Magic::Screen_Rect& _Rect) {
+		m_Rect = _Rect;
+	}
 }

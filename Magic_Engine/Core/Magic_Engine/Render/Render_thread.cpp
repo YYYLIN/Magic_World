@@ -172,8 +172,6 @@ namespace Magic
 			return false;
 		}
 
-		Magic::Engine(BindClassFunction(&Render_thread::DrawFrame));
-
 		return true;
 	}
 

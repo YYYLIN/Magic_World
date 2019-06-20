@@ -334,6 +334,10 @@ bool MagicEngineContext::Initialize(RenderContext _pRenderContext)
 	if (!_result)
 		return false;
 
+	_result = m_Main_Template_Effects.Initialize();
+	if (!_result)
+		return false;
+
 	return true;
 }
 
@@ -357,7 +361,9 @@ void MagicEngineContext::Shutdown()
 
 void MagicEngineContext::Run(void)
 {
-	Run_Inject_function("EngineRunStart");
+	Magic::RenderThread([](Magic::Management::MESSAGE_TYPE, Magic::Management::MESSAGE) {
+		Inject_function("EngineRunStart_RT", NULL, true);
+	});
 
 	m_EngineRunState = true;
 

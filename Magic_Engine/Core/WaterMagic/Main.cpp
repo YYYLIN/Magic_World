@@ -4,6 +4,7 @@
 #include <tchar.h>
 
 #include "Render/DrawSimpleGraphics.h"
+#include "Render/TemplateEffects.h"
 
 int CALLBACK _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevainstance, LPWSTR lpcmdline, int iCmdshow)
 {
@@ -18,12 +19,14 @@ int CALLBACK _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevainstance, LPWSTR lpc
 	Magic::SetWindowICO(_ico);
 
 	Magic::Engine([]() {
-		DrawSimpleGraphics::Instance()->SetColor(Magic::Color4(0.0f, 1.0f, 0.0f, 1.0f));
-		DrawSimpleGraphics::Instance()->DrawLine(0.0f, 10, 100.0f, 10);
-		DrawSimpleGraphics::Instance()->SetColor(Magic::Color4(1.0f, 0.0f, 0.0f, 1.0f));
-		DrawSimpleGraphics::Instance()->DrawLine(0.0f, 40, 100, 40);
-		DrawSimpleGraphics::Instance()->SetColor(Magic::Color4(1.0f, 1.0f, 0.0f, 1.0f));
-		DrawSimpleGraphics::Instance()->DrawLine(0.0f, 100, 100, 100.0f);
+		Magic::TemplateEffects("Main", [](const ::Magic::PTemplate_Effects& _PTE) {
+			DrawSimpleGraphics::Instance()->SetColor(Magic::Color4(0.0f, 1.0f, 0.0f, 1.0f));
+			DrawSimpleGraphics::Instance()->DrawLine(0.0f, 10, 100.0f, 10);
+			DrawSimpleGraphics::Instance()->SetColor(Magic::Color4(1.0f, 0.0f, 0.0f, 1.0f));
+			DrawSimpleGraphics::Instance()->DrawLine(0.0f, 40, 100, 40);
+			DrawSimpleGraphics::Instance()->SetColor(Magic::Color4(1.0f, 1.0f, 0.0f, 1.0f));
+			DrawSimpleGraphics::Instance()->DrawLine(0.0f, 100, 100, 100.0f);
+		});	
 	});
 
 	Magic::RunEngine();

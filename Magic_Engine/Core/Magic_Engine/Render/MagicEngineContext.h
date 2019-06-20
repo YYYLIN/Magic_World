@@ -16,6 +16,7 @@
 #include "Magic_Thread.h"
 #include "Render_thread.h"
 #include "DrawSimpleGraphics.h"
+#include "MainTemplateEffects.h"
 
 #pragma warning(push)
 #pragma warning(disable:4251)
@@ -145,6 +146,7 @@ private:
 	Magic::Render_thread m_Render_thread;
 	Magic::Management::THREAD_OBJECT m_Load_Thread;
 	DrawSimpleGraphics m_DrawSimpleGraphics;
+	Magic::Main_Template_Effects m_Main_Template_Effects;
 
 	//线程局部静态变量
 	static __declspec(thread) EntityCommon* S_T_pEntityCommon;

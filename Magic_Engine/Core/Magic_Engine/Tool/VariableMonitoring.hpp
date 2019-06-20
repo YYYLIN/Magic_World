@@ -12,8 +12,10 @@ public:
 	void Monitor(Callback* _Callback);
 	void RemoveMonitor(Callback* _Callback);
 
+	void Value(const T& _t);
 	inline const T& Value();
 	const T& operator=(const T& _t);
+	void operator()(const T&);
 protected:
 	T m_Variable;
 	std::set<Callback*> m_vec_Callback;
@@ -30,12 +32,17 @@ void VariableMonitoring<T>::RemoveMonitor(Callback* _Callback) {
 }
 
 template<class T>
+void VariableMonitoring<T>::Value(const T& _t) {
+	m_Variable = _t;
+}
+
+template<class T>
 const T&  VariableMonitoring<T>::Value() {
 	return m_Variable;
 }
 
 template<class T>
-const T&  VariableMonitoring<T>::operator=(const T& _t) {
+const T& VariableMonitoring<T>::operator=(const T& _t) {
 	if (m_Variable != _t) {
 		m_Variable = _t;
 
@@ -45,6 +52,13 @@ const T&  VariableMonitoring<T>::operator=(const T& _t) {
 	}
 
 	return m_Variable;
+}
+
+template<class T>
+void VariableMonitoring<T>::operator()(const T& _t) {
+	for (auto& _auto : m_vec_Callback) {
+		(*_auto)(_t);
+	}
 }
 
 template<class T>
