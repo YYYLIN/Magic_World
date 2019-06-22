@@ -7,13 +7,13 @@
 #include <Vector>
 #include <list>
 #include "windows.h"
-#include "MagicTexture.h"
-#include "MagicPen.h"
+#include "Render/MagicTexture.h"
+#include "Render/MagicPen.h"
 #include "Define/MagicType.h"
 #include "Magic_Thread.h"
-#include "Render_thread.h"
-#include "DrawSimpleGraphics.h"
-#include "MainTemplateEffects.h"
+#include "Render/Render_thread.h"
+#include "Render/DrawSimpleGraphics.h"
+#include "Render/MainTemplateEffects.h"
 
 #pragma warning(push)
 #pragma warning(disable:4251)

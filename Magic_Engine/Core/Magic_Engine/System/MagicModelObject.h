@@ -2,8 +2,8 @@
 #define _MAGICMODELOBJECT_H_
 
 #include "glm.hpp"
-#include "MagicVertex.h"
-#include "MagicTexture.h"
+#include "Render/MagicVertex.h"
+#include "Render/MagicTexture.h"
 
 
 struct FILE_OBG_TYPE

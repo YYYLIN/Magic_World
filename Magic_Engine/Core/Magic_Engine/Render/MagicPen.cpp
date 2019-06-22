@@ -1,6 +1,6 @@
 #include "MagicPen.h"
-#include "MagicEngineContext.h"
-#include "MagicEngineAPI.h"
+#include "System/MagicEngineContext.h"
+#include "System/MagicEngineAPI.h"
 
 #include <GL/glew.h>  
 

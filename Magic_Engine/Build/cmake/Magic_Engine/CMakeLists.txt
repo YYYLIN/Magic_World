@@ -21,32 +21,19 @@ ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Math/MagicMath.h
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Math/MagicMath.cpp)
 
 set(MAGIC_RENDER_FILES
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/Magic_Fonts.h
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicAlphaWindow.h
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicCamera.h
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicEngineAPI.h
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicEngineContext.h
 
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicModelObject.h
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicPen.h
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicShader.h
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicTexture.h
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicVertex.h
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicWorld.h
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/Magic_Fonts.cpp
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicAlphaWindow.cpp
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicCamera.cpp
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicEngineAPI.cpp
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicEngineContext.cpp
 
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicModelObject.cpp
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicCamera.cpp
+
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicPen.cpp
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicShader.cpp
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicTexture.cpp
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicVertex.cpp
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicWorld.cpp
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicEarth.cpp
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicEarth.h
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/Render_thread.cpp
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/Render_thread.h
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/DrawSimpleGraphics.cpp
@@ -61,6 +48,20 @@ ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MainTemplateEffects.cpp
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MainTemplateEffects.h)
 
 set(MAGIC_SYSTEM_FILES
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/System/MagicWorld.h
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/System/MagicWorld.cpp
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/System/MagicEngineContext.h
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/System/MagicEngineContext.cpp
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/System/MagicEngineAPI.h
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/System/MagicEngineAPI.cpp
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/System/MagicEarth.h
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/System/MagicEarth.cpp
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/System/MagicModelObject.h
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/System/MagicModelObject.cpp
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/System/Magic_Fonts.h
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/System/Magic_Fonts.cpp
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/System/MagicAlphaWindow.h
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/System/MagicAlphaWindow.cpp
 )
 
 set(MAGIC_PHYSICAL_FILES

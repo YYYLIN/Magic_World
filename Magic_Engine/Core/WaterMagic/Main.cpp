@@ -1,5 +1,5 @@
 #include "MagicUIAPI.h"
-#include "Render/MagicEngineAPI.h"
+#include "System/MagicEngineAPI.h"
 #include <tchar.h>
 
 #include "Render/DrawSimpleGraphics.h"

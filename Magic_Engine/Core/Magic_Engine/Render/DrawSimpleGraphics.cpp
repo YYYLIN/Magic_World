@@ -3,9 +3,9 @@
 #include "Define/Magic_Macro.h"
 #include "Define/MagicType.h"
 #include <GL/glew.h>  
-#include "MagicEngineContext.h"
+#include "System/MagicEngineContext.h"
 
-#include "MagicEngineAPI.h"
+#include "System/MagicEngineAPI.h"
 
 static const char* S_Pure_Color_Vertex =
 "#version 400\r\n"

@@ -9,7 +9,7 @@
 #include "MagicTexture.h"
 #include "MagicVertex.h"
 #include "Define/Magic_Macro.h"
-#include "Magic_Fonts.h"
+#include "System/Magic_Fonts.h"
 #include "MagicOpengl.h"
 
 #include "vector"

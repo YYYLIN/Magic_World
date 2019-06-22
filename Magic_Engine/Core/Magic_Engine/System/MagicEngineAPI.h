@@ -3,7 +3,7 @@
 
 #include "Define/Magic_Macro.h"
 #include "Define/MagicType.h"
-#include "MagicPen.h"
+#include "Render/MagicPen.h"
 #include "windows.h"
 #include "Magic_Thread.h"
 

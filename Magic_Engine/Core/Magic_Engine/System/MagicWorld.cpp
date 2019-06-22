@@ -1,5 +1,5 @@
 #include "MagicWorld.h"
-#include "MagicCamera.h"
+#include "Render/MagicCamera.h"
 
 
 MagicWorld::MagicWorld()

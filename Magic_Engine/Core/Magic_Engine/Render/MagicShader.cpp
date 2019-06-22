@@ -1,5 +1,5 @@
 #include "MagicShader.h"
-#include "MagicEngineAPI.h"
+#include "System/MagicEngineAPI.h"
 
 #include <iostream>
 #pragma comment(lib,"glew32.lib")
