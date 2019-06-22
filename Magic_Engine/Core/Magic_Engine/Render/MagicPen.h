@@ -10,7 +10,6 @@
 #include "MagicVertex.h"
 #include "Define/Magic_Macro.h"
 #include "Magic_Fonts.h"
-#include "MagicMessage.h"
 #include "MagicOpengl.h"
 
 #include "vector"
@@ -20,6 +19,25 @@
 
 namespace Magic
 {
+	typedef void(*CallBack_Common)(void* _data);
+
+	struct MESSAGE
+	{
+		MESSAGE() :MessageType(0), Message(0) {}
+		MESSAGE(uint32_t _MessageType, uint64_t _Message) : MessageType(_MessageType), Message(_Message) {}
+		uint32_t MessageType;
+		uint64_t Message;
+	};
+
+	typedef struct DLL_MAGIC_ENGINE_OUTPUT_INPUT CALLBACK_COMMON
+	{
+		CallBack_Common pCallBack_Common;
+		void* m_Data;
+		CALLBACK_COMMON();
+		CALLBACK_COMMON(CallBack_Common _pCallBack);
+		CALLBACK_COMMON(CallBack_Common _pCallBack, void* _data);
+		void operator()();
+	}*PCALLBACK_COMMON;
 
 	class Pen_Common
 	{

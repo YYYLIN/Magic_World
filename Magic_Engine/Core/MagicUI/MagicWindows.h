@@ -10,11 +10,8 @@
 //头文件声明:
 #include "windows.h"
 #include "MagicUIMacro.h"
-#include "UserScene.h"
-#include "MenuScene.h"
-#include "DebugScene.h"
-#include "SystemScene.h"
 #include "Magic_Thread.h"
+#include "Define/Magic_Macro.h"
 
 
 class MagicWindows

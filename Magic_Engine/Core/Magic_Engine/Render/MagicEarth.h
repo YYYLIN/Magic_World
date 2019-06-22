@@ -14,7 +14,7 @@ struct TERRAIN_VEXTER
 	TERRAIN_VEXTER(float _x, float _y, float _z, float _u, float _v, float _h);
 };
 
-class EarthScenes :public MagicCommon
+class EarthScenes
 {
 	EarthScenes();
 
@@ -22,8 +22,8 @@ protected:
 	void BuildGrid(int _level, TERRAIN_VEXTER* _VO, TERRAIN_VEXTER* _V1, TERRAIN_VEXTER* _V2, int _cullfags);
 	float FindNowPosHeight(int _level, TERRAIN_VEXTER* _V0, TERRAIN_VEXTER* _V1, TERRAIN_VEXTER* _V2);
 
-	virtual void OnUpdata() override;
-	virtual	void Draw() override;
+	/*virtual void OnUpdata() override;
+	virtual	void Draw() override;*/
 private:
 	int m_Lod_Draw_Level_Max;
 	glm::vec3 m_CameraPos;

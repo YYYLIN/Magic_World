@@ -83,6 +83,20 @@ namespace Magic
 		"	gl_FragColor = Out_Color;"
 		"}";
 
+	CALLBACK_COMMON::CALLBACK_COMMON() :pCallBack_Common(NULL), m_Data(0)
+	{}
+
+	CALLBACK_COMMON::CALLBACK_COMMON(CallBack_Common _pCallBack, void* _data) : pCallBack_Common(_pCallBack), m_Data(_data)
+	{}
+
+	CALLBACK_COMMON::CALLBACK_COMMON(CallBack_Common _pCallBack) : pCallBack_Common(_pCallBack), m_Data(0)
+	{}
+
+	void CALLBACK_COMMON::operator()()
+	{
+		pCallBack_Common(m_Data);
+	}
+
 	Pen_Normal::MESSAGE_STATE::MESSAGE_STATE()
 	{
 		DrawFaceMode = No_Draw_Face;
@@ -925,7 +939,7 @@ namespace Magic
 				pNowDRAW_BOX->V_Scissor_Message.push_back(SCISSOR_MESSAGE(
 					true,
 					pNowDRAW_BOX->V_Scissor_Message.size() ? pNowDRAW_BOX->V_Scissor_Message.back().ScissorPosWH : glm::vec4()
-					));
+				));
 				pNowDRAW_BOX->Create_Scissor_Message = true;
 			}
 			else
@@ -945,7 +959,7 @@ namespace Magic
 			pNowDRAW_BOX->V_Scissor_Message.push_back(SCISSOR_MESSAGE(
 				pNowDRAW_BOX->V_Scissor_Message.size() ? pNowDRAW_BOX->V_Scissor_Message.back().state : false,
 				_poswh
-				));
+			));
 		}
 		else
 			pNowDRAW_BOX->V_Scissor_Message.back().ScissorPosWH = _poswh;
@@ -1469,7 +1483,7 @@ namespace Magic
 						{
 							glMultiDrawElementsIndirect(GL_TRIANGLES, GL_UNSIGNED_INT, (GLvoid*)(sizeof(DrawElementsIndirectCommand)* _Picture_Now_DrawNumber), _iterator->DrawNumber, 0);
 							_Picture_Now_DrawNumber += _iterator->DrawNumber;
-							DEBUG_AddDrawMessageNumber(1);
+							//DEBUG_AddDrawMessageNumber(1);
 						}
 						break;
 					case DRAW_TYPE_POINTS:
@@ -1489,7 +1503,7 @@ namespace Magic
 						{
 							glMultiDrawArraysIndirect(_Color_DrawMode, (GLvoid*)(sizeof(DrawArraysIndirectCommand)* _Line_Now_DrawNumber), _iterator->DrawNumber, 0);
 							_Line_Now_DrawNumber += _iterator->DrawNumber;
-							DEBUG_AddDrawMessageNumber(1);
+							//DEBUG_AddDrawMessageNumber(1);
 						}
 						break;
 					}

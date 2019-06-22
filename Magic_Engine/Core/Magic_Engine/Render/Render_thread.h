@@ -48,7 +48,7 @@ namespace Magic
 		RENDER_SET_RECT
 	};
 
-	bool RenderThread(Magic::Management::Callback_Message _Callback_Message);
+	bool RenderThread(Magic::Management::Callback_Message _Callback_Message, bool _Synch = false);
 
 	bool MonitorRenderThread(RENDER_THREAD_EVENT _event, Magic::Management::Callback_Message _Callback_Message);
 

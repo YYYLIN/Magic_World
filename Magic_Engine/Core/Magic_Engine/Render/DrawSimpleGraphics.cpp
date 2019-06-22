@@ -105,7 +105,7 @@ bool DrawSimpleGraphics::Initialize() {
 		m_Line_VBO.SetDrawIndirectBuffer(2, Magic::VERTEX_BUFFER::DYNAMIC_DRAW);
 
 		Magic::MonitorRenderThread(Magic::RENDER, BindClassFunctionToMessage(&DrawSimpleGraphics::Render));
-	});
+	}, true);
 
 	return true;
 }

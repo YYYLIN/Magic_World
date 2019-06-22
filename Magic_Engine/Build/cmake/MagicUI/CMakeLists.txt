@@ -1,6 +1,5 @@
 include_directories(
 ../../../Plugins/glm
-../../../Plugins/EntityX
 ../../../Core/Magic_Engine/
 ../../../Core/MagicUI/Include
 ../../../Core/MagicUI
@@ -17,25 +16,11 @@ ${PROJECT_SOURCE_DIR}../../../Core/MagicUI/Include/MagicUIMacro.h
 )
 
 set(SOURCE_FILES
-${PROJECT_SOURCE_DIR}../../../Core/MagicUI/DebugScene.cpp
-${PROJECT_SOURCE_DIR}../../../Core/MagicUI/DebugScene.h
 ${PROJECT_SOURCE_DIR}../../../Core/MagicUI/MagicUIAPI.cpp
 ${PROJECT_SOURCE_DIR}../../../Core/MagicUI/MagicWindows.cpp
-${PROJECT_SOURCE_DIR}../../../Core/MagicUI/MagicWindows.h
-${PROJECT_SOURCE_DIR}../../../Core/MagicUI/MenuScene.cpp
-${PROJECT_SOURCE_DIR}../../../Core/MagicUI/MenuScene.h
-${PROJECT_SOURCE_DIR}../../../Core/MagicUI/SystemScene.cpp
-${PROJECT_SOURCE_DIR}../../../Core/MagicUI/SystemScene.h
-${PROJECT_SOURCE_DIR}../../../Core/MagicUI/UserScene.cpp
-${PROJECT_SOURCE_DIR}../../../Core/MagicUI/UserScene.h)
+${PROJECT_SOURCE_DIR}../../../Core/MagicUI/MagicWindows.h)
 
 set(UI_CONTROL_FILES
-${PROJECT_SOURCE_DIR}../../../Core/MagicUI/UI_Control/Button.h
-${PROJECT_SOURCE_DIR}../../../Core/MagicUI/UI_Control/Button.cpp
-${PROJECT_SOURCE_DIR}../../../Core/MagicUI/UI_Control/BaseWindow.h
-${PROJECT_SOURCE_DIR}../../../Core/MagicUI/UI_Control/BaseWindow.cpp
-${PROJECT_SOURCE_DIR}../../../Core/MagicUI/UI_Control/BaseCommon.h
-${PROJECT_SOURCE_DIR}../../../Core/MagicUI/UI_Control/BaseCommon.cpp
 )
 
 SOURCE_GROUP("Include Files" FILES ${INCLUDE_FILES})

@@ -123,7 +123,7 @@ float EarthScenes::FindNowPosHeight(int _level, TERRAIN_VEXTER* _V0, TERRAIN_VEX
 		return 0.0f;
 }
 
-void EarthScenes::OnUpdata()
+/*void EarthScenes::OnUpdata()
 {
 
 }
@@ -131,4 +131,4 @@ void EarthScenes::OnUpdata()
 void EarthScenes::Draw()
 {
 
-}
+}*/

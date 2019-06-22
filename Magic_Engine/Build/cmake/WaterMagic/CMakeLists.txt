@@ -1,6 +1,5 @@
 include_directories(
 ../../../Plugins/glm
-../../../Plugins/EntityX
 ../../../Core/Magic_Engine/Include
 ../../../Core/Magic_Engine/
 ../../../Core/MagicUI/Include
@@ -13,8 +12,7 @@ link_directories(
 ${PROJECT_SOURCE_DIR}../../../lib/${CMAKE_SYSTEM_NAME}/)
 
 set(SCENE_FILES
-${PROJECT_SOURCE_DIR}../../../Core/WaterMagic/MainScene.cpp
-${PROJECT_SOURCE_DIR}../../../Core/WaterMagic/MainScene.h)
+)
 
 SOURCE_GROUP("Scene" FILES ${SCENE_FILES})
 

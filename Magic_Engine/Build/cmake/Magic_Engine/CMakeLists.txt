@@ -5,7 +5,6 @@ include_directories(
 ../../../Plugins/glm
 ../../../Plugins/glew-1.9.0/include
 ../../../Plugins/freetype-2.6/include
-../../../Plugins/EntityX
 ../../../Core/Magic_Engine
 ../../../Core/MagicThread)
 
@@ -28,7 +27,6 @@ ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicCamera.h
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicEngineAPI.h
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicEngineContext.h
 
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicMessage.h
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicModelObject.h
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicPen.h
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicShader.h
@@ -41,7 +39,6 @@ ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicCamera.cpp
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicEngineAPI.cpp
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicEngineContext.cpp
 
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicMessage.cpp
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicModelObject.cpp
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicPen.cpp
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicShader.cpp
@@ -50,8 +47,6 @@ ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicVertex.cpp
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicWorld.cpp
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicEarth.cpp
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicEarth.h
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicScene.cpp
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicScene.h
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/Render_thread.cpp
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/Render_thread.h
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/DrawSimpleGraphics.cpp
@@ -66,35 +61,13 @@ ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MainTemplateEffects.cpp
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MainTemplateEffects.h)
 
 set(MAGIC_SYSTEM_FILES
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/System/Supervisor.cpp
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/System/Supervisor.h
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/System/Element.cpp
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/System/Element.h)
+)
 
 set(MAGIC_PHYSICAL_FILES
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Physical/Collision.cpp
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Physical/Collision.h
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Physical/MagicFrustum.h
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Physical/MagicFrustum.cpp)
-
-set(3RDPARTY_ENTITYX_FILES 
-${PROJECT_SOURCE_DIR}../../../Plugins/EntityX/config.h
-${PROJECT_SOURCE_DIR}../../../Plugins/EntityX/Entity.h
-${PROJECT_SOURCE_DIR}../../../Plugins/EntityX/Entity.cc
-${PROJECT_SOURCE_DIR}../../../Plugins/EntityX/Entity.h
-${PROJECT_SOURCE_DIR}../../../Plugins/EntityX/Entity.inl
-${PROJECT_SOURCE_DIR}../../../Plugins/EntityX/EntityX.h
-${PROJECT_SOURCE_DIR}../../../Plugins/EntityX/Event.cc
-${PROJECT_SOURCE_DIR}../../../Plugins/EntityX/Event.h
-${PROJECT_SOURCE_DIR}../../../Plugins/EntityX/quick.h
-${PROJECT_SOURCE_DIR}../../../Plugins/EntityX/System.cc
-${PROJECT_SOURCE_DIR}../../../Plugins/EntityX/System.h
-${PROJECT_SOURCE_DIR}../../../Plugins/EntityX/COPYING)
-
-set(3RDPARTY_ENTITYX_HELP_FILES 
-${PROJECT_SOURCE_DIR}../../../Plugins/EntityX/help/Pool.h
-${PROJECT_SOURCE_DIR}../../../Plugins/EntityX/help/Pool.cc
-${PROJECT_SOURCE_DIR}../../../Plugins/EntityX/help/NonCopyable.h)
 
 set(MAGIC_DEFINE_FILES
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Define/MagicType.h
@@ -112,8 +85,6 @@ IF(WIN32)
 	SOURCE_GROUP("Engine\\Physical" FILES ${MAGIC_PHYSICAL_FILES})
 	SOURCE_GROUP("Engine\\Define" FILES ${MAGIC_DEFINE_FILES})
 	SOURCE_GROUP("Engine\\Tool" FILES ${MAGIC_TOOL_FILES})
-	SOURCE_GROUP("3rdparty\\Entityx" FILES ${3RDPARTY_ENTITYX_FILES})
-	SOURCE_GROUP("3rdparty\\Entityx\\help" FILES ${3RDPARTY_ENTITYX_HELP_FILES})
 ENDIF(WIN32)
 
 link_libraries(glew32.lib opengl32.lib 
@@ -137,9 +108,7 @@ ${MAGIC_RENDER_FILES}
 ${MAGIC_SYSTEM_FILES}
 ${MAGIC_PHYSICAL_FILES}
 ${MAGIC_DEFINE_FILES}
-${MAGIC_TOOL_FILES}
-${3RDPARTY_ENTITYX_FILES}
-${3RDPARTY_ENTITYX_HELP_FILES})
+${MAGIC_TOOL_FILES})
 
 #RUNTIME	.exe°¢.dll	ø…÷¥––µµ
 SET_TARGET_PROPERTIES(${NOW_PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ../../../bin/${CMAKE_SYSTEM_NAME})

@@ -1,5 +1,4 @@
 #include "MagicUIAPI.h"
-#include "MainScene.h"
 #include "Render/MagicEngineAPI.h"
 #include <tchar.h>
 

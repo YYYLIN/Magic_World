@@ -2,9 +2,8 @@
 
 #include "MagicEngineContext.h"
 #include "MagicModelObject.h"
-#include "MagicMessage.h"
 
-class MagicWorld :public MagicCommon, public Magic::MessageCommon
+class MagicWorld
 {
 public:
 	MagicWorld();

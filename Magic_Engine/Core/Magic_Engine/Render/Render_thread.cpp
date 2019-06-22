@@ -106,9 +106,9 @@ namespace Magic
 		::SwapBuffers(m_HDC);
 	}
 
-	bool RenderThread(Magic::Management::Callback_Message _Callback_Message)
+	bool RenderThread(Magic::Management::Callback_Message _Callback_Message, bool _Synch)
 	{
-		return Magic::Management::SendMessageTo(Magic::Render_thread::Instance()->GetTHREAD_OBJECT(), 0, 0, _Callback_Message);
+		return Magic::Management::SendMessageTo(Magic::Render_thread::Instance()->GetTHREAD_OBJECT(), 0, 0, _Callback_Message, _Synch);
 	}
 
 	bool MonitorRenderThread(RENDER_THREAD_EVENT _event, Magic::Management::Callback_Message _Callback_Message)
@@ -129,6 +129,10 @@ namespace Magic
 	{
 
 	}
+
+#ifdef WIN32
+	typedef BOOL(APIENTRY *PFNWGLSWAPINTERVALFARPROC)(int);
+#endif
 
 	bool Render_thread::Initialize(Render_Context* _pRender_Context) {
 
@@ -156,6 +160,10 @@ namespace Magic
 
 			//启用背面剔除
 			glEnable(GL_CULL_FACE);
+
+			PFNWGLSWAPINTERVALFARPROC wglSwapIntervalEXT = 0;
+			wglSwapIntervalEXT = (PFNWGLSWAPINTERVALFARPROC)wglGetProcAddress("wglSwapIntervalEXT");
+			wglSwapIntervalEXT(1);//打开垂直分布，限制帧率
 
 			MonitorRenderThread(RENDER_START, BindClassFunctionToMessage(&Render_thread::RenderStart));
 			MonitorRenderThread(RENDER, BindClassFunctionToMessage(&Render_thread::Render));

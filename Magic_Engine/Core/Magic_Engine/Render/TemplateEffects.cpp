@@ -18,7 +18,6 @@ namespace Magic {
 
 			Template_Effects* _pTemplate_Effects = _TE->second;
 			if (Main_Template_Effects::Instance() == _pTemplate_Effects) {
-				OutputDebugString(L"VS shu chu ceshi 1\n");
 				_pTemplate_Effects->Render();
 			}
 			else {
@@ -26,7 +25,6 @@ namespace Magic {
 					_pTemplate_Effects->Render();
 				});
 			}
-			OutputDebugString(L"VS shu chu ceshi 2\n");
 			m_S_Now_Template_Effects.back();
 
 			return true;
