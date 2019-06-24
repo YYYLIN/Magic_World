@@ -44,10 +44,20 @@ namespace Magic {
 
 		inline const Magic::Screen_Rect& Rect() { return m_Rect; }
 
+		void Target(Template_Effects* _pTemplate_Effects);
+
+		void RenderTarget();
+
+		void RenderRequest(Template_Effects* _pTemplate_Effects);
+
+		//virtual void RenderRequestNULLCallBack() {}
+
+		//RT
 		virtual void Render() = 0;
 	private:
 		std::string m_Name;
 		Magic::Screen_Rect m_Rect;
+		std::vector<Template_Effects*> m_vec_Template_Effects;
 	};
 }
 

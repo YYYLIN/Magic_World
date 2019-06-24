@@ -31,6 +31,8 @@
 #define BindClassFunction(F) std::bind(F, this)
 #define BindClassFunctionObject(F,O) std::bind(F, O)
 
+#define MM_MESS		Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message
+
 namespace Magic
 {
 	namespace Management
