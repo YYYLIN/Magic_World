@@ -8,6 +8,7 @@ template<class T>
 class VariableMonitoring {
 public:
 	typedef std::function<void(const T&)> Callback;
+	VariableMonitoring() :m_Variable(0) {}
 
 	void Monitor(Callback* _Callback);
 	void RemoveMonitor(Callback* _Callback);
@@ -66,7 +67,11 @@ class VariableRecord :public VariableMonitoring<T> {
 public:
 	const T& operator=(const T& _t);
 
-	void back();
+	const T& back();
+
+	inline const size_t& LogNumber() {
+		return m_vec_Record.size();
+	}
 protected:
 	std::vector<T> m_vec_Record;
 };
@@ -80,10 +85,19 @@ const T& VariableRecord<T>::operator=(const T& _t) {
 }
 
 template<class T>
-void VariableRecord<T>::back() {
+const T& VariableRecord<T>::back() {
 	if (m_vec_Record.size()) {
 		VariableMonitoring<T>::operator=(m_vec_Record.back());
 		m_vec_Record.erase(m_vec_Record.end() - 1);
+		if (m_vec_Record.size()) {
+			return m_vec_Record.back();
+		}
+		else {
+			return 0;
+		}
+	}
+	else {
+		return 0;
 	}
 }
 

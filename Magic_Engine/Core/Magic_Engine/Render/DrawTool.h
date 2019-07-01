@@ -14,19 +14,38 @@ namespace Magic {
 	//RenderThread ¶ÔÏó---------->
 	class DrawTool {
 	public:
+		struct PTEID
+		{
+			PTEID() :Layers(0), pTE(0) {}
+			PTEID(const size_t& _Layers, const ::Magic::PTemplate_Effects& _pTE) :Layers(_Layers), pTE(_pTE) {}
+			size_t Layers;
+			::Magic::PTemplate_Effects pTE;
+		};
+
+		bool operator < (const PTEID& left, const PTEID& right) {
+			if (left.Layers != right.Layers) {
+				return left.Layers < right.Layers;
+			}
+			else {
+				return left.pTE < right.pTE;
+			}
+
+			return false;
+		}
+
 		DrawTool(const ::Magic::Fun_Template_Effects& _Fun = NULL);
 		virtual ~DrawTool();
 
 		void MonitorTEffects(const ::Magic::PTemplate_Effects& _pTemplate_Effects);
 
 		inline T* operator->() {
-			return m_this;
+			return m_this.;
 		}
 
 	protected:
 		T* m_this;
 	private:
-		std::map<::Magic::PTemplate_Effects, T> m_vec_DrawContent;
+		std::map<PTEID, T> m_vec_DrawContent;
 		::Magic::Fun_Template_Effects m_Fun, m_Monitor;
 	};
 
@@ -47,13 +66,14 @@ namespace Magic {
 	void DrawTool<T>::MonitorTEffects(const ::Magic::PTemplate_Effects& _pTemplate_Effects) {
 		if (!_pTemplate_Effects)
 			return;
-		RenderThread([this, _pTemplate_Effects](Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message) {
-			auto _auto = m_vec_DrawContent.find(_pTemplate_Effects);
+		PTEID _PTEID(_pTemplate_Effects, NumberOfLayersEffects());
+		RenderThread([this, _PTEID](Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message) {
+			auto _auto = m_vec_DrawContent.find(_PTEID);
 			if (_auto != m_vec_DrawContent.end()) {
 				m_this = &_auto->second;
 			}
 			else {
-				m_this = &m_vec_DrawContent[_pTemplate_Effects];
+				m_this = &m_vec_DrawContent[_PTEID];
 				m_this->Now_PTE = _pTemplate_Effects;
 			}
 			if (m_Fun)

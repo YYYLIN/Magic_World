@@ -25,7 +25,11 @@ namespace Magic {
 		Rect(MESSAGE_TO_SCREEN_RECT(_Message));
 	}
 
-	void Main_Template_Effects::Render() {
+	void Main_Template_Effects::RenderStart() {
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	}
+
+	void Main_Template_Effects::RenderEnd(const Template_Effects* _pTemplate_Effects) {
 		Render_thread::Instance()->DrawFrame();
 	}
 }

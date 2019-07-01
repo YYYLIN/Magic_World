@@ -15,7 +15,9 @@ namespace Magic {
 		bool Initialize();
 	protected:
 		void Event_Rect(Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message);
-		virtual void Render();
+		virtual void RenderStart();
+		virtual void RenderEnd(const Template_Effects* _pTemplate_Effects);
+		virtual bool SynchRender() { return true; }
 	private:
 		static Main_Template_Effects* m_S_pMain_Template_Effects;
 	};

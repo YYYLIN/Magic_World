@@ -16,16 +16,7 @@ namespace Magic {
 
 			_Fun(_TE->second);
 
-			Template_Effects* _pTemplate_Effects = _TE->second;
-			if (Main_Template_Effects::Instance() == _pTemplate_Effects) {
-				_pTemplate_Effects->Render();
-			}
-			else {
-				Magic::RenderThread([_pTemplate_Effects](Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message) {
-					_pTemplate_Effects->Render();
-				});
-			}
-			m_S_Now_Template_Effects.back();
+			_TE->second->RenderRequest(m_S_Now_Template_Effects.back());
 
 			return true;
 		}
@@ -40,16 +31,7 @@ namespace Magic {
 
 			_Fun(_pTemplate_Effects);
 
-			if (Main_Template_Effects::Instance() == _pTemplate_Effects) {
-				_pTemplate_Effects->Render();
-			}
-			else {
-				Magic::RenderThread([_pTemplate_Effects](Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message) {
-					_pTemplate_Effects->Render();
-				});
-			}
-
-			m_S_Now_Template_Effects.back();
+			_pTemplate_Effects->RenderRequest(m_S_Now_Template_Effects.back());
 
 			return true;
 		}
@@ -85,17 +67,7 @@ namespace Magic {
 		auto _TE = m_umap_Template_Effects.find(_Name);
 		if (_TE != m_umap_Template_Effects.end()) {
 
-			Template_Effects* _pTemplate_Effects = _TE->second;
-			if (Main_Template_Effects::Instance() == _pTemplate_Effects) {
-				_pTemplate_Effects->Render();
-			}
-			else {
-				Magic::RenderThread([_pTemplate_Effects](Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message) {
-					_pTemplate_Effects->Render();
-				});
-			}
-
-			m_S_Now_Template_Effects.back();
+			_TE->second->RenderRequest(m_S_Now_Template_Effects.back());
 
 			return true;
 		}
@@ -107,16 +79,7 @@ namespace Magic {
 	bool DisableTemplateEffects(Template_Effects* _pTemplate_Effects) {
 		if (_pTemplate_Effects) {
 
-			if (Main_Template_Effects::Instance() == _pTemplate_Effects) {
-				_pTemplate_Effects->Render();
-			}
-			else {
-				Magic::RenderThread([_pTemplate_Effects](Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message) {
-					_pTemplate_Effects->Render();
-				});
-			}
-
-			m_S_Now_Template_Effects.back();
+			_pTemplate_Effects->RenderRequest(m_S_Now_Template_Effects.back());
 
 			return true;
 		}
@@ -131,6 +94,10 @@ namespace Magic {
 
 	void RemoveMonitorTemplateEffects(Fun_Template_Effects* _Fun) {
 		m_S_Now_Template_Effects.RemoveMonitor(_Fun);
+	}
+
+	size_t NumberOfLayersEffects() {
+		return m_S_Now_Template_Effects.LogNumber();
 	}
 
 	Template_Effects::Template_Effects(const char* _Name) {
@@ -155,27 +122,38 @@ namespace Magic {
 		m_Rect = _Rect;
 	}
 
-	void Template_Effects::Target(Template_Effects* _pTemplate_Effects) {
-		m_vec_Template_Effects.push_back(_pTemplate_Effects);
-	}
-
-	void Template_Effects::RenderTarget() {
-		for (auto& _p : m_vec_Template_Effects) {
-			_p->RenderTarget();
-		}
-
-		this->Render();
-	}
-
 	void Template_Effects::RenderRequest(Template_Effects* _pTemplate_Effects) {
 		if (_pTemplate_Effects) {
 			_pTemplate_Effects->Target(this);
-			RenderThread([this](MM_MESS) {
-				this->RenderTarget();
-			});
 		}
 		else {
-			//this->RenderRequestNULLCallBack();
+			this->RenderTarget(0);
 		}
+	}
+
+	void Template_Effects::Target(Template_Effects* _pTemplate_Effects) {
+		m_vec_Template_Effects.insert(_pTemplate_Effects);
+	}
+
+	void Template_Effects::RenderTarget(Template_Effects* _pTemplate_Effects) {
+		m_S_Now_Template_Effects = _pTemplate_Effects;
+
+		for (auto& _p : m_vec_Template_Effects) {
+			_p->RenderTarget(this);
+		}
+		m_vec_Template_Effects.clear();
+
+		RenderThread([this](MM_MESS) {
+			this->RenderStart();
+		});
+
+		SendRenderThread(Magic::RENDER, 0);
+		SendRenderThread(Magic::RENDER_TRANSPARENT, 0);
+
+		RenderThread([this, _pTemplate_Effects](MM_MESS) {
+			this->RenderEnd(_pTemplate_Effects);
+		}, this->SynchRender());
+
+		m_S_Now_Template_Effects.back();
 	}
 }

@@ -40,13 +40,15 @@ namespace Magic
 
 	enum RENDER_THREAD_EVENT
 	{
-		RENDER_START = 1,
-		RENDER,
+		//RENDER_START = 1,
+		RENDER = 1,
 		RENDER_TRANSPARENT,
-		RENDER_END,
+		//RENDER_END,
 
 		RENDER_SET_RECT
 	};
+
+	bool SendRenderThread(Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message, bool _Synch = false);
 
 	bool RenderThread(Magic::Management::Callback_Message _Callback_Message, bool _Synch = false);
 
@@ -68,7 +70,7 @@ namespace Magic
 
 		Magic::Management::THREAD_OBJECT GetTHREAD_OBJECT() { return m_TO_Render_thread; }
 
-		void DrawFrame();
+		//void DrawFrame();
 
 		void SetScreenWidthHeight(Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message);
 
@@ -76,10 +78,10 @@ namespace Magic
 
 		inline const Screen_Rect& GetScreenWidthHeight() { return m_Screen_Rect; }
 	private:
-		void RenderStart(Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message);
+		//void RenderStart(Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message);
 		void Render(Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message);
 		void RenderTransparent(Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message);
-		void RenderEnd(Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message);
+		//void RenderEnd(Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message);
 
 	private:
 		//render_thread线程对象
