@@ -106,7 +106,7 @@ namespace Magic
 		::SwapBuffers(m_HDC);
 	}
 
-	bool SendRenderThread(Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message, bool _Synch = false) {
+	bool SendRenderThread(Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message, bool _Synch) {
 		return Magic::Management::SendMessageTo(Magic::Render_thread::Instance()->GetTHREAD_OBJECT(), _MessageType, _Message, nullptr, _Synch);
 	}
 
@@ -169,10 +169,8 @@ namespace Magic
 			wglSwapIntervalEXT = (PFNWGLSWAPINTERVALFARPROC)wglGetProcAddress("wglSwapIntervalEXT");
 			wglSwapIntervalEXT(1);//打开垂直分布，限制帧率
 
-			//MonitorRenderThread(RENDER_START, BindClassFunctionToMessage(&Render_thread::RenderStart));
 			MonitorRenderThread(RENDER, BindClassFunctionToMessage(&Render_thread::Render));
 			MonitorRenderThread(RENDER_TRANSPARENT, BindClassFunctionToMessage(&Render_thread::RenderTransparent));
-			//MonitorRenderThread(RENDER_END, BindClassFunctionToMessage(&Render_thread::RenderEnd));
 
 			MonitorRenderThread(RENDER_SET_RECT, BindClassFunctionToMessage(&Render_thread::SetScreenWidthHeight));
 
@@ -215,12 +213,9 @@ namespace Magic
 		});
 	}
 
-	/*void Render_thread::DrawFrame() {
-		Magic::Management::SendMessageTo(m_TO_Render_thread, RENDER_START, 0);
-		Magic::Management::SendMessageTo(m_TO_Render_thread, RENDER, 0);
-		Magic::Management::SendMessageTo(m_TO_Render_thread, RENDER_TRANSPARENT, 0);
-		Magic::Management::SendMessageTo(m_TO_Render_thread, RENDER_END, 0, NULL, true);
-	}*/
+	void Render_thread::SwapBuffers() {
+		m_pRender_Context->SwapBuffers();
+	}
 
 	void Render_thread::SetScreenWidthHeight(Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message) {
 		m_Screen_Rect = MESSAGE_TO_SCREEN_RECT(_Message);
@@ -231,10 +226,6 @@ namespace Magic
 		Magic::Management::SendMessageTo(m_TO_Render_thread, RENDER_SET_RECT, SCREEN_RECT_TO_MESSAGE(_Screen_Rect));
 	}
 
-	/*void Render_thread::RenderStart(Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message) {
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	}*/
-
 	void Render_thread::Render(Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message) {
 		glDisable(GL_BLEND);
 	}
@@ -242,8 +233,4 @@ namespace Magic
 	void Render_thread::RenderTransparent(Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message) {
 		glEnable(GL_BLEND);
 	}
-
-	/*void Render_thread::RenderEnd(Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message) {
-		m_pRender_Context->SwapBuffers();
-	}*/
 }

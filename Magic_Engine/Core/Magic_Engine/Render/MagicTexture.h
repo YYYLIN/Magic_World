@@ -105,10 +105,10 @@ public:
 	static void CopyFBOTO(MagicFBOTexture* _pTagetFBO, int _tagetX, int _tagetY, int _tagetW, int _tagetH,
 		MagicFBOTexture* _pSourceFBO, int _sourceX, int _sourceY, int _sourceW, int _sourceH);
 
-	void Clear(unsigned int _b_mode);
+	static void Clear(unsigned int _b_mode);
 
 	void Use();
-	void UnUse();
+	static void UnUse();
 
 protected:
 	//参数;1.只创建深度数据      GL_DEPTH_COMPONENT32

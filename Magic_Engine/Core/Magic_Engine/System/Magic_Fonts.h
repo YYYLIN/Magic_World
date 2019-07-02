@@ -8,7 +8,7 @@
 #ifndef _MAGIC_FONTS_H_
 #define _MAGIC_FONTS_H_
 
-#include "MagicTexture.h"
+#include "Render/MagicTexture.h"
 #include "Define/Magic_Macro.h"
 #include <vector>
 #include <unordered_map>

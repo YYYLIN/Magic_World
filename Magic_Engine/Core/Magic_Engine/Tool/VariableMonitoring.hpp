@@ -69,7 +69,7 @@ public:
 
 	const T& back();
 
-	inline const size_t& LogNumber() {
+	inline size_t LogNumber() {
 		return m_vec_Record.size();
 	}
 protected:
@@ -86,6 +86,8 @@ const T& VariableRecord<T>::operator=(const T& _t) {
 
 template<class T>
 const T& VariableRecord<T>::back() {
+	static T result(0);
+
 	if (m_vec_Record.size()) {
 		VariableMonitoring<T>::operator=(m_vec_Record.back());
 		m_vec_Record.erase(m_vec_Record.end() - 1);
@@ -93,11 +95,11 @@ const T& VariableRecord<T>::back() {
 			return m_vec_Record.back();
 		}
 		else {
-			return 0;
+			return result;
 		}
 	}
 	else {
-		return 0;
+		return result;
 	}
 }
 

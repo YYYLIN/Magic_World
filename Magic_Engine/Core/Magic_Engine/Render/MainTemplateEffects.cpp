@@ -1,6 +1,7 @@
 #include "MainTemplateEffects.h"
 #include "Tool/InjectFunction.h"
 #include "Render_thread.h"
+#include "MagicTexture.h"
 
 namespace Magic {
 
@@ -26,10 +27,11 @@ namespace Magic {
 	}
 
 	void Main_Template_Effects::RenderStart() {
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		MagicFBOTexture::UnUse();
+		MagicFBOTexture::Clear(MagicFBOTexture::BUFFER_MODE::B_COLOR | MagicFBOTexture::BUFFER_MODE::B_DEPTH);
 	}
 
 	void Main_Template_Effects::RenderEnd(const Template_Effects* _pTemplate_Effects) {
-		Render_thread::Instance()->DrawFrame();
+		Render_thread::Instance()->SwapBuffers();
 	}
 }
