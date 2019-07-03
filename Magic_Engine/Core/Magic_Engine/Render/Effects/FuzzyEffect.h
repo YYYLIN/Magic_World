@@ -1,23 +1,24 @@
-#ifndef _MAIN_TEMPLAT_EFFECTS_H_
-#define _MAIN_TEPLATE_EFFECTS_H_
+#ifndef _FUZZY_EFFECT_H_
+#define _FUZZY_EFEECT_H_
 
-#include "TemplateEffects.h"
+#include "Render/TemplateEffects.h"
 #include "Magic_Thread.h"
 
 namespace Magic {
-	class Main_Template_Effects :public Template_Effects {
+	class Fuzzy_Effect :public Template_Effects {
 	public:
-		Main_Template_Effects();
-		virtual ~Main_Template_Effects();
+		Fuzzy_Effect();
+		virtual ~Fuzzy_Effect();
 
 		bool Initialize();
 	protected:
-		virtual MagicFBO* GetFBO() { return 0; }
+		virtual MagicFBO* GetFBO() { return &m_FBOBuffer; }
 		void Event_Rect(Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message);
 		virtual void RenderStart();
 		virtual void RenderEnd();
 		virtual void RenderToTarget(Template_Effects* _pTemplate_Effects);
-		virtual bool SynchRender() { return true; }
+	private:
+		MagicFBO m_FBOBuffer;
 	};
 }
 

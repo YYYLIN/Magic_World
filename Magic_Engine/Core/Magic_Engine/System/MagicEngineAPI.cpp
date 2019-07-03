@@ -37,12 +37,12 @@ namespace Magic
 		return true;
 	}
 
-	void RunEngine()
+	unsigned int RunEngine()
 	{
-		MagicEngineContext::Instance()->Run();
+		return MagicEngineContext::Instance()->Run();
 	}
 
-	void ShutdownEngine(Magic::Management::MESSAGE _Message, const char* _Text)
+	void ShutdownEngine(unsigned int _Message, const char* _Text)
 	{
 		if (MagicEngineContext::Instance())
 		{
@@ -50,7 +50,7 @@ namespace Magic
 		}
 	}
 
-	void ShutdownEngine(Magic::Management::MESSAGE _Message) {
+	void ShutdownEngine(unsigned int _Message) {
 		ShutdownEngine(_Message, GetEngineErrorMessage());
 	}
 

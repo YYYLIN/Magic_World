@@ -45,7 +45,13 @@ ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/TemplateEffects.h
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/DrawTool.cpp
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/DrawTool.h
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MainTemplateEffects.cpp
-${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MainTemplateEffects.h)
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MainTemplateEffects.h
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicFBO.cpp
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/MagicFBO.h)
+
+set(MAGIC_RENDER_EFFECTS_FILES
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/Effects/FuzzyEffect.h
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Render/Effects/FuzzyEffect.cpp)
 
 set(MAGIC_SYSTEM_FILES
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/System/MagicWorld.h
@@ -81,6 +87,7 @@ ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/Tool/InjectFunction.cpp)
 
 IF(WIN32)
 	SOURCE_GROUP("Engine\\Render" FILES ${MAGIC_RENDER_FILES})
+		SOURCE_GROUP("Engine\\Render\\Effects" FILES ${MAGIC_RENDER_EFFECTS_FILES})
 	SOURCE_GROUP("Engine\\Math" FILES ${MAGIC_MATH_FILES})
 	SOURCE_GROUP("Engine\\System" FILES ${MAGIC_SYSTEM_FILES})
 	SOURCE_GROUP("Engine\\Physical" FILES ${MAGIC_PHYSICAL_FILES})
@@ -88,7 +95,7 @@ IF(WIN32)
 	SOURCE_GROUP("Engine\\Tool" FILES ${MAGIC_TOOL_FILES})
 ENDIF(WIN32)
 
-link_libraries(glew32.lib opengl32.lib 
+link_libraries(glew32.lib opengl32.lib libpng16.lib
 	debug MagicThread_d.lib optimized MagicThread.lib)
 add_definitions(-DMAGIC_ENGINE_EXPORTS)
 IF(WIN32)
@@ -106,6 +113,7 @@ set(NOW_PROJECT_NAME Magic_Engine)
 add_library (${NOW_PROJECT_NAME} SHARED ${DIR_LIB_SRCS} 
 ${MAGIC_MATH_FILES}
 ${MAGIC_RENDER_FILES}
+${MAGIC_RENDER_EFFECTS_FILES}
 ${MAGIC_SYSTEM_FILES}
 ${MAGIC_PHYSICAL_FILES}
 ${MAGIC_DEFINE_FILES}

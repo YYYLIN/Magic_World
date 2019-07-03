@@ -17,4 +17,7 @@ void Inject_function(const char* _C, const std::function<void(void)>& _F, bool _
 #define __INJECT_FUNCTION__(N, C, F)	_INJECT_FUNCTION_(N, C, F)
 #define INJECT_FUNCTION(C, F)	__INJECT_FUNCTION__(__COUNTER__, C, F)
 
+#define TO_STRING(a)		#a
+#define STRING_AND_STRING(a,b)		TO_STRING(a##b)
+
 #endif

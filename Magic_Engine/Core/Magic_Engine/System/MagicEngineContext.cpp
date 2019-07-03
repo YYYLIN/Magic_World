@@ -48,6 +48,7 @@ MagicEngineContext::MagicEngineContext()
 {
 	pMagicEngineContext = this;
 	m_EngineRunState = false;
+	m_Error = 0;
 }
 
 
@@ -73,18 +74,17 @@ bool MagicEngineContext::Initialize(RenderContext _pRenderContext)
 	if (!_result)
 		return false;
 
-	_result = m_Main_Template_Effects.Initialize();
-	if (!_result)
-		return false;
+	Inject_function("LoadEffects", NULL, true);
 
 	return true;
 }
 
-void MagicEngineContext::ShutdownMessage(Magic::Management::MESSAGE _Message, const char* _Text) {
+void MagicEngineContext::ShutdownMessage(unsigned int _Message, const char* _Text) {
 	std::string _str_text = _Text;
 
 	Magic::Management::SendMessageTo(MAGIC_MAIN_THREAD_NAME, Magic::SHUTOWN_ENGINE, _Message,
-		[this, _str_text](Magic::Management::MESSAGE_TYPE, Magic::Management::MESSAGE) {
+		[this, _str_text](Magic::Management::MESSAGE_TYPE, Magic::Management::MESSAGE _Message) {
+		m_Error = (unsigned int)_Message;
 		Magic::SetEngineErrorMessage(_str_text.c_str());
 		m_EngineRunState = false;
 	});
@@ -98,7 +98,7 @@ void MagicEngineContext::Shutdown()
 	Magic::Management::ShutdownThreadManagement();
 }
 
-void MagicEngineContext::Run(void)
+unsigned int MagicEngineContext::Run(void)
 {
 	Magic::RenderThread([](Magic::Management::MESSAGE_TYPE, Magic::Management::MESSAGE) {
 		Inject_function("EngineRunStart_RT", NULL, true);
@@ -112,6 +112,8 @@ void MagicEngineContext::Run(void)
 	}
 
 	Shutdown();
+
+	return m_Error;
 }
 
 void MagicEngineContext::LoadThread(const Magic::Management::Callback_Message& _Callback_Message)

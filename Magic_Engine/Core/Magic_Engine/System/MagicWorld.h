@@ -23,7 +23,7 @@ protected:
 private:
 	MagicModelObject m_MagicModelObject;
 	MagicModelObject m_GroundModelObject, m_BallModelObject;
-	MagicFBOTexture m_DepthFBO;
+	MagicFBO m_DepthFBO;
 
 	MagicShader* pLightShader, *pDepthShader;
 

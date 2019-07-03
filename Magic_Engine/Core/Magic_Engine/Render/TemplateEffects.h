@@ -7,9 +7,19 @@
 #include "Tool/VariableMonitoring.hpp"
 #include "Define/MagicType.h"
 #include "Define/Magic_Macro.h"
+#include "MagicFBO.h"
+#include "Tool/InjectFunction.h"
 
 #define BindClassFunction_F_1(F) std::bind(F, this, std::placeholders::_1)
 #define BindClassFunction_FO_1(F,O) std::bind(F, O, std::placeholders::_1)
+
+#define LOAD_TEMPLATE_EFFECTS(C) INJECT_FUNCTION("LoadEffects",		\
+									[](){							\
+										C* _pC = new C;				\
+										if(!_pC->Initialize()){		\
+											::Magic::ShutdownEngine(1,STRING_AND_STRING(C,_Initialize_Fail!));\
+										}							\
+									})
 
 namespace Magic {
 
@@ -47,12 +57,15 @@ namespace Magic {
 		inline const Magic::Screen_Rect& Rect() { return m_Rect; }
 
 		void RenderRequest(Template_Effects* _pTemplate_Effects);
+
+		virtual MagicFBO* GetFBO() = 0;
 	protected:
 		//RT线程函数
 		virtual void RenderStart() = 0;
-
 		//RT线程函数
-		virtual void RenderEnd(const Template_Effects* _pTemplate_Effects) = 0;
+		virtual void RenderEnd() = 0;
+		//RT线程函数
+		virtual void RenderToTarget(Template_Effects* _pTemplate_Effects) = 0;
 
 		virtual bool SynchRender() { return false; }
 	private:

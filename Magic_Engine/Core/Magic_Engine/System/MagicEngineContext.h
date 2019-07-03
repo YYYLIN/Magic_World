@@ -15,6 +15,8 @@
 #include "Render/DrawSimpleGraphics.h"
 #include "Render/MainTemplateEffects.h"
 
+#include "Render/Effects/FuzzyEffect.h"
+
 #pragma warning(push)
 #pragma warning(disable:4251)
 
@@ -55,10 +57,10 @@ public:
 
 	bool Initialize(RenderContext _pRenderContext);
 	//_Message = 0 为正常退出
-	void ShutdownMessage(Magic::Management::MESSAGE _Message, const char* _Text);
+	void ShutdownMessage(unsigned int _Message, const char* _Text);
 	void Shutdown();
 
-	void Run(void);
+	unsigned int Run(void);
 
 	void LoadThread(const Magic::Management::Callback_Message& _Callback_Message);
 
@@ -71,13 +73,13 @@ public:
 
 private:
 	bool m_EngineRunState;
+	unsigned int m_Error;
 
 	std::map<std::string, MagicTexture*> Map_Texture;
 
 	Magic::Render_thread m_Render_thread;
 	Magic::Management::THREAD_OBJECT m_Load_Thread;
 	DrawSimpleGraphics m_DrawSimpleGraphics;
-	Magic::Main_Template_Effects m_Main_Template_Effects;
 
 	static MagicEngineContext* pMagicEngineContext;
 };

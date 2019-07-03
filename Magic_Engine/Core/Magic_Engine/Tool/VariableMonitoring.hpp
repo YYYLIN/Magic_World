@@ -89,14 +89,9 @@ const T& VariableRecord<T>::back() {
 	static T result(0);
 
 	if (m_vec_Record.size()) {
-		VariableMonitoring<T>::operator=(m_vec_Record.back());
-		m_vec_Record.erase(m_vec_Record.end() - 1);
-		if (m_vec_Record.size()) {
-			return m_vec_Record.back();
-		}
-		else {
-			return result;
-		}
+		T _t = m_vec_Record.back();
+		m_vec_Record.pop_back();
+		return VariableMonitoring<T>::operator=(_t);
 	}
 	else {
 		return result;

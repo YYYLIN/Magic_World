@@ -136,22 +136,28 @@ namespace Magic {
 	}
 
 	void Template_Effects::RenderTarget(Template_Effects* _pTemplate_Effects) {
-		m_S_Now_Template_Effects = _pTemplate_Effects;
+		m_S_Now_Template_Effects = this;
 
 		for (auto& _p : m_vec_Template_Effects) {
 			_p->RenderTarget(this);
 		}
-		m_vec_Template_Effects.clear();
 
 		RenderThread([this](MM_MESS) {
 			this->RenderStart();
 		});
 
+		for (auto _p : m_vec_Template_Effects) {
+			RenderThread([this, _p](MM_MESS) {
+				_p->RenderToTarget(this);
+			});
+		}
+		m_vec_Template_Effects.clear();
+
 		SendRenderThread(Magic::RENDER, 0);
 		SendRenderThread(Magic::RENDER_TRANSPARENT, 0);
 
-		RenderThread([this, _pTemplate_Effects](MM_MESS) {
-			this->RenderEnd(_pTemplate_Effects);
+		RenderThread([this](MM_MESS) {
+			this->RenderEnd();
 		}, this->SynchRender());
 
 		m_S_Now_Template_Effects.back();

@@ -25,10 +25,26 @@ int CALLBACK _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevainstance, LPWSTR lpc
 			DrawSimpleGraphics::Instance()->DrawLine(0.0f, 40, 100, 40);
 			DrawSimpleGraphics::Instance()->SetColor(Magic::Color4(1.0f, 1.0f, 0.0f, 1.0f));
 			DrawSimpleGraphics::Instance()->DrawLine(0.0f, 100, 100, 100.0f);
+			DrawSimpleGraphics::Instance()->DrawLine(220.0f, 300.0f, 320.0f, 400.0f);
+
+			Magic::TemplateEffects("Fuzzy", [](const ::Magic::PTemplate_Effects& _PTE) {
+				DrawSimpleGraphics::Instance()->SetColor(Magic::Color4(0.0f, 1.0f, 0.0f, 1.0f));
+				DrawSimpleGraphics::Instance()->DrawLine(200.0f, 300.0f, 300.0f, 400.0f);
+			});
+
+			DrawSimpleGraphics::Instance()->DrawLine(220.0f, 300.0f, 320.0f, 400.0f);
+
+			Magic::TemplateEffects("Fuzzy", [](const ::Magic::PTemplate_Effects& _PTE) {
+				DrawSimpleGraphics::Instance()->SetColor(Magic::Color4(0.0f, 1.0f, 1.0f, 1.0f));
+				DrawSimpleGraphics::Instance()->DrawLine(230.0f, 300.0f, 330.0f, 400.0f);
+			});
 		});	
 	});
 
-	Magic::RunEngine();
+	if (Magic::RunEngine() != 0) {
+		MessageBoxA(NULL, Magic::GetEngineErrorMessage(), "´íÎó", MB_OK);
+		return false;
+	}
 
 	return 0;
 }

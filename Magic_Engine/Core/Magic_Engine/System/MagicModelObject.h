@@ -3,7 +3,7 @@
 
 #include "glm.hpp"
 #include "Render/MagicVertex.h"
-#include "Render/MagicTexture.h"
+#include "Render/MagicFBO.h"
 
 
 struct FILE_OBG_TYPE

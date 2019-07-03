@@ -1,18 +1,16 @@
 #include "MainTemplateEffects.h"
 #include "Tool/InjectFunction.h"
 #include "Render_thread.h"
-#include "MagicTexture.h"
+#include "MagicFBO.h"
+#include "System/MagicEngineAPI.h"
 
 namespace Magic {
-
-	Main_Template_Effects* Main_Template_Effects::m_S_pMain_Template_Effects = nullptr;
+	LOAD_TEMPLATE_EFFECTS(Main_Template_Effects);
 
 	Main_Template_Effects::Main_Template_Effects() :Template_Effects("Main") {
-		m_S_pMain_Template_Effects = this;
 	}
 
 	Main_Template_Effects::~Main_Template_Effects() {
-		m_S_pMain_Template_Effects = nullptr;
 	}
 
 	bool Main_Template_Effects::Initialize() {
@@ -27,11 +25,14 @@ namespace Magic {
 	}
 
 	void Main_Template_Effects::RenderStart() {
-		MagicFBOTexture::UnUse();
-		MagicFBOTexture::Clear(MagicFBOTexture::BUFFER_MODE::B_COLOR | MagicFBOTexture::BUFFER_MODE::B_DEPTH);
+		MagicFBO::UnUse();
+		MagicFBO::Clear(MagicFBO::BUFFER_MODE::B_COLOR | MagicFBO::BUFFER_MODE::B_DEPTH);
 	}
 
-	void Main_Template_Effects::RenderEnd(const Template_Effects* _pTemplate_Effects) {
+	void Main_Template_Effects::RenderEnd() {
 		Render_thread::Instance()->SwapBuffers();
+	}
+
+	void Main_Template_Effects::RenderToTarget(Template_Effects* _pTemplate_Effects) {
 	}
 }

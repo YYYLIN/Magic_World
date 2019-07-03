@@ -34,7 +34,7 @@ namespace Magic
 	*返回值：
 	*	空
 	*/
-	DLL_MAGIC_ENGINE_OUTPUT_INPUT void RunEngine();
+	DLL_MAGIC_ENGINE_OUTPUT_INPUT unsigned int RunEngine();
 
 	/*
 	*功能：
@@ -44,8 +44,8 @@ namespace Magic
 	*返回值：
 	*	空
 	*/
-	DLL_MAGIC_ENGINE_OUTPUT_INPUT void ShutdownEngine(Magic::Management::MESSAGE _Message, const char* _Text);
-	DLL_MAGIC_ENGINE_OUTPUT_INPUT void ShutdownEngine(Magic::Management::MESSAGE _Message);
+	DLL_MAGIC_ENGINE_OUTPUT_INPUT void ShutdownEngine(unsigned int _Message, const char* _Text);
+	DLL_MAGIC_ENGINE_OUTPUT_INPUT void ShutdownEngine(unsigned int _Message);
 
 	/*
 	*功能：
