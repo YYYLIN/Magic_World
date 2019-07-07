@@ -9,13 +9,14 @@
 #include "Define/Magic_Macro.h"
 #include "MagicFBO.h"
 #include "Tool/InjectFunction.h"
+#include "Tool/GlobalStaticMemory.h"
 
 #define BindClassFunction_F_1(F) std::bind(F, this, std::placeholders::_1)
 #define BindClassFunction_FO_1(F,O) std::bind(F, O, std::placeholders::_1)
 
 #define LOAD_TEMPLATE_EFFECTS(C) INJECT_FUNCTION("LoadEffects",		\
 									[](){							\
-										C* _pC = new C;				\
+										C* _pC = NewGS<C>();				\
 										if(!_pC->Initialize()){		\
 											::Magic::ShutdownEngine(1,STRING_AND_STRING(C,_Initialize_Fail!));\
 										}							\

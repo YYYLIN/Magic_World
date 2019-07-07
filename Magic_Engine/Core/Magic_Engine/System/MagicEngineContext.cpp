@@ -96,6 +96,8 @@ void MagicEngineContext::Shutdown()
 		delete i->second;
 
 	Magic::Management::ShutdownThreadManagement();
+
+	DeleteGSAll();
 }
 
 unsigned int MagicEngineContext::Run(void)
@@ -111,9 +113,11 @@ unsigned int MagicEngineContext::Run(void)
 		Magic::Management::UpdataThreadManagement();
 	}
 
-	Shutdown();
+	unsigned int _Error = m_Error;
 
-	return m_Error;
+	delete pMagicEngineContext;
+
+	return _Error;
 }
 
 void MagicEngineContext::LoadThread(const Magic::Management::Callback_Message& _Callback_Message)
