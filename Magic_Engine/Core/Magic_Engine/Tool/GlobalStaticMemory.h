@@ -5,6 +5,13 @@
 
 void* NewGlobalStaticMemory(const size_t& _size);
 
+template<class T>
+T* NewGS() {
+	void* _pVoid = NewGlobalStaticMemory(sizeof(T));
+	::new (_pVoid) T();
+	return (T*)_pVoid;
+}
+
 template<class T,class... A>
 T* NewGS(A... args) {
 	void* _pVoid = NewGlobalStaticMemory(sizeof(T));

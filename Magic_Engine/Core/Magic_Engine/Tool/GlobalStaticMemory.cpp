@@ -39,7 +39,7 @@ void* NewGlobalStaticMemory(const size_t& _size) {
 	}
 	_GS_MemoryPiece.Size = _NumberSize;
 	_GS_MemoryPiece.pMemory = (unsigned char*)malloc(_NumberSize);
-	_GS_MemoryPiece.EndPos = _NumberSize;
+	_GS_MemoryPiece.EndPos = _size;
 
 	G_vec_GS_MemoryPiece.push_back(_GS_MemoryPiece);
 

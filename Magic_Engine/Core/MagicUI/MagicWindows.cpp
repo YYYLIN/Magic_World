@@ -182,11 +182,13 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
 		// 如果窗口被销毁。
 	case WM_DESTROY:
 		PostQuitMessage(0);
+		Magic::ShutdownEngine(0);
 		return 0;
 
 		// 如果窗口被关闭。
 	case WM_CLOSE:
 		PostQuitMessage(0);
+		Magic::ShutdownEngine(0);
 		return 0;
 
 		// 所有其它的消息传递系统中的类的消息处理程序。
