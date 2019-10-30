@@ -2,7 +2,6 @@
 #include <wchar.h>
 #include <stdio.h>
 #include <gl/glew.h>
-#include <glut.h>
 #include <png.h>
 
 int power_of_two(int n)
@@ -23,10 +22,10 @@ Magic::Color4::Color4(float _R, float _G, float _B, float _A)
 
 Magic::Color4::Color4(unsigned char _R, unsigned char _G, unsigned char _B, unsigned char _A)
 {
-	R = _R / 255;
-	G = _G / 255;
-	B = _B / 255;
-	A = _A / 255;
+	R = (float)(_R / 255);
+	G = (float)(_G / 255);
+	B = (float)(_B / 255);
+	A = (float)(_A / 255);
 }
 
 MagicTexture::MagicTexture()
@@ -67,7 +66,7 @@ bool MagicTexture::Initialize(const unsigned char* Data, int _width, int _height
 {
 	width = _width;
 	height = _height;
-	total_bytes = _width *_height * 4;
+	total_bytes = _width * _height * 4;
 	// 分配一个新的纹理编号
 	glGenTextures(1, &texture);
 	if (texture == 0)
@@ -266,9 +265,9 @@ bool MagicTexture::LoadBMP(const char* file_name)
 			}
 
 			// 进行像素缩放
-			gluScaleImage(GL_RGB,
+			/*gluScaleImage(GL_RGB,
 				width, height, GL_UNSIGNED_BYTE, pixels,
-				new_width, new_height, GL_UNSIGNED_BYTE, new_pixels);
+				new_width, new_height, GL_UNSIGNED_BYTE, new_pixels);*/
 
 			// 释放原来的像素数据，把pixels指向新的像素数据，并重新设置width和height
 			delete[]pixels;
@@ -313,7 +312,7 @@ bool MagicTexture::LoadBMP(const char* file_name)
 }
 
 
-bool MagicTexture::LoadPNG(const char*file_name)
+bool MagicTexture::LoadPNG(const char* file_name)
 {
 	unsigned char header[8];     //8
 	png_byte color_type; //图片到类型（可能会用在是否是开启来通道）
@@ -390,7 +389,7 @@ bool MagicTexture::LoadPNG(const char*file_name)
 			}*/
 
 	total_bytes = width * height * 4;
-	GLubyte *rgba = new GLubyte[total_bytes];
+	GLubyte* rgba = new GLubyte[total_bytes];
 
 	int pos = total_bytes - (4 * width);
 	for (int row = 0; row < height; row++)

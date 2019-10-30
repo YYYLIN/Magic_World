@@ -4,7 +4,7 @@
 #include "MagicMath.hpp"
 
 #ifdef _WIN64
-typedef long long MGObjectType
+typedef long long MGObjectType;
 #elif _WIN32
 typedef unsigned int MGObjectType;
 #endif

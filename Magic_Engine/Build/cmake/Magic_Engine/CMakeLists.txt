@@ -1,19 +1,26 @@
+if(CMAKE_CL_64)
+set(NOW_x86_x64 "x64")
+else(CMAKE_CL_64)
+set(NOW_x86_x64 "x86")
+endif(CMAKE_CL_64)
+
 include_directories(
 ../../../Plugins/Structure
-../../../Plugins/OpenGL/H-files
-../../../Plugins/lpng1621/Include
+../../../Plugins/lpng/Include
 ../../../Plugins/glm
-../../../Plugins/glew-1.9.0/include
+../../../Plugins/glew/include
 ../../../Plugins/freetype-2.6/include
 ../../../Core/Magic_Engine
 ../../../Core/MagicThread)
 
 link_directories(
-${PROJECT_SOURCE_DIR}../../../lib/${CMAKE_SYSTEM_NAME}/
-${PROJECT_SOURCE_DIR}../../../Plugins/OpenGL/lib/
-${PROJECT_SOURCE_DIR}../../../Plugins/lpng1621/lib/
-${PROJECT_SOURCE_DIR}../../../Plugins/glew-1.9.0/lib
+${PROJECT_SOURCE_DIR}../../../lib/${CMAKE_SYSTEM_NAME}/${NOW_x86_x64}
 ${PROJECT_SOURCE_DIR}../../../Plugins/freetype-2.6/lib
+)
+
+link_directories(
+${PROJECT_SOURCE_DIR}../../../Plugins/glew/lib/${NOW_x86_x64}
+${PROJECT_SOURCE_DIR}../../../Plugins/lpng/lib/${NOW_x86_x64}
 )
 
 set(MAGIC_MATH_FILES
@@ -97,7 +104,8 @@ IF(WIN32)
 	SOURCE_GROUP("Engine\\Tool" FILES ${MAGIC_TOOL_FILES})
 ENDIF(WIN32)
 
-link_libraries(glew32.lib opengl32.lib libpng16.lib
+link_libraries(glew32.lib opengl32.lib
+	debug libpngd.lib optimized libpng.lib
 	debug MagicThread_d.lib optimized MagicThread.lib)
 add_definitions(-DMAGIC_ENGINE_EXPORTS)
 IF(WIN32)
@@ -122,10 +130,10 @@ ${MAGIC_DEFINE_FILES}
 ${MAGIC_TOOL_FILES})
 
 #RUNTIME	.exe、.dll	可执行档
-SET_TARGET_PROPERTIES(${NOW_PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ../../../bin/${CMAKE_SYSTEM_NAME})
+SET_TARGET_PROPERTIES(${NOW_PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ../../../bin/${CMAKE_SYSTEM_NAME}/${NOW_x86_x64} OUTPUT_NAME_DEBUG ${NOW_PROJECT_NAME}_d)
 #LIBRARY		.so
 #SET_TARGET_PROPERTIES(${NOW_PROJECT_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ../../../lib)
 #ARCHIVE	.a、.lib包含 dll 的连结介面	.a
-SET_TARGET_PROPERTIES(${NOW_PROJECT_NAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ../../../lib/${CMAKE_SYSTEM_NAME})
+SET_TARGET_PROPERTIES(${NOW_PROJECT_NAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ../../../lib/${CMAKE_SYSTEM_NAME}/${NOW_x86_x64} OUTPUT_NAME_DEBUG ${NOW_PROJECT_NAME}_d)
 
 add_dependencies(${NOW_PROJECT_NAME} MagicThread)

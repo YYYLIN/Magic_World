@@ -1,3 +1,9 @@
+if(CMAKE_CL_64)
+set(NOW_x86_x64 "x64")
+else(CMAKE_CL_64)
+set(NOW_x86_x64 "x86")
+endif(CMAKE_CL_64)
+
 include_directories(
 ../../../Plugins/glm
 ../../../Core/Magic_Engine/
@@ -6,9 +12,10 @@ include_directories(
 ../../../Core/MagicThread)
 
 link_directories(
-${PROJECT_SOURCE_DIR}../../../lib/${CMAKE_SYSTEM_NAME}/)
+${PROJECT_SOURCE_DIR}../../../lib/${CMAKE_SYSTEM_NAME}/${NOW_x86_x64})
 
-link_libraries(Magic_Engine.lib)
+link_libraries(
+	debug Magic_Engine_d.lib optimized Magic_Engine.lib)
 
 set(INCLUDE_FILES
 ${PROJECT_SOURCE_DIR}../../../Core/MagicUI/Include/MagicUIAPI.h
@@ -46,11 +53,11 @@ ${SOURCE_FILES}
 ${UI_CONTROL_FILES})
 
 #RUNTIME	.exe、.dll	可执行档
-SET_TARGET_PROPERTIES(${NOW_PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ../../../bin/${CMAKE_SYSTEM_NAME})
+SET_TARGET_PROPERTIES(${NOW_PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ../../../bin/${CMAKE_SYSTEM_NAME}/${NOW_x86_x64} OUTPUT_NAME_DEBUG ${NOW_PROJECT_NAME}_d)
 #LIBRARY		.so
 #SET_TARGET_PROPERTIES(${NOW_PROJECT_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ../../../lib)
 #ARCHIVE	.a、.lib包含 dll 的连结介面	.a
-SET_TARGET_PROPERTIES(${NOW_PROJECT_NAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ../../../lib/${CMAKE_SYSTEM_NAME})
+SET_TARGET_PROPERTIES(${NOW_PROJECT_NAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ../../../lib/${CMAKE_SYSTEM_NAME}/${NOW_x86_x64} OUTPUT_NAME_DEBUG ${NOW_PROJECT_NAME}_d)
 
 #添加顶级目标之间的依赖关系。
 add_dependencies(${NOW_PROJECT_NAME} Magic_Engine)

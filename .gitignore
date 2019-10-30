@@ -17,6 +17,7 @@
 *.suo
 *.opensdf
 clear.bat
+Magic_Engine/Install
 Magic_Engine/Media
 Magic_Engine/Build/*
 !Magic_Engine/Build/cmake

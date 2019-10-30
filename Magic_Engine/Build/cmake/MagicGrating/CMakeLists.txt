@@ -1,3 +1,11 @@
+set(NOW_PROJECT_NAME MagicGrating)
+
+if(CMAKE_CL_64)
+set(NOW_x86_x64 "x64")
+else(CMAKE_CL_64)
+set(NOW_x86_x64 "x86")
+endif(CMAKE_CL_64)
+
 include_directories(
 ../../../Plugins/Structure
 ../../../Core/MagicGrating/MagicGrating
@@ -41,8 +49,8 @@ aux_source_directory(../../../Core/MagicGrating DIR_LIB_SRCS)
 add_library (MagicGrating SHARED ${DIR_LIB_SRCS} ${INCLUDE_FILES} ${SOURCE_FILES})
 
 #RUNTIME	.exe、.dll	可执行档
-SET_TARGET_PROPERTIES(MagicGrating PROPERTIES RUNTIME_OUTPUT_DIRECTORY ../../../bin/${CMAKE_SYSTEM_NAME})
+SET_TARGET_PROPERTIES(MagicGrating PROPERTIES RUNTIME_OUTPUT_DIRECTORY ../../../bin/${CMAKE_SYSTEM_NAME}/${NOW_x86_x64} OUTPUT_NAME_DEBUG ${NOW_PROJECT_NAME}_d)
 #LIBRARY		.so
 #SET_TARGET_PROPERTIES(MagicGrating PROPERTIES LIBRARY_OUTPUT_DIRECTORY ../../../lib)
 #ARCHIVE	.a、.lib包含 dll 的连结介面	.a
-SET_TARGET_PROPERTIES(MagicGrating PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ../../../lib/${CMAKE_SYSTEM_NAME})
+SET_TARGET_PROPERTIES(MagicGrating PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ../../../lib/${CMAKE_SYSTEM_NAME}/${NOW_x86_x64} OUTPUT_NAME_DEBUG ${NOW_PROJECT_NAME}_d)

@@ -1,6 +1,5 @@
 #include "MagicFBO.h"
 #include <gl/glew.h>
-#include <glut.h>
 #include <stdio.h>
 
 
@@ -9,6 +8,7 @@ MagicFBO::MagicFBO()
 	m_Textrue = 0;
 	m_Depth_Stencil = 0;
 	m_MultisampleNumber = 0;
+	m_MODE = COLOR4;
 }
 
 MagicFBO::~MagicFBO()

@@ -3,7 +3,7 @@
 
 namespace Magic
 {
-	typedef  struct {
+	typedef struct {
 		unsigned int count;
 		unsigned int instanceCount;
 		unsigned int first;

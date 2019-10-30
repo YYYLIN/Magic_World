@@ -42,7 +42,7 @@ namespace Magic {
 	};
 
 	template<class T>
-	DrawTool<T>::DrawTool(const ::Magic::Fun_Template_Effects& _Fun = NULL) {
+	DrawTool<T>::DrawTool(const ::Magic::Fun_Template_Effects& _Fun) {
 		m_Monitor = BindClassFunction_F_1(&DrawTool<T>::MonitorTEffects);
 		m_Fun = _Fun;
 		m_this = 0;

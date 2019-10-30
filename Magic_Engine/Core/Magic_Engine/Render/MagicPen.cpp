@@ -161,7 +161,7 @@ namespace Magic
 		state = 0;
 	}
 
-	Pen_Normal::SCISSOR_MESSAGE::SCISSOR_MESSAGE(const bool & _state, const glm::vec4 & _scissorPosWH)
+	Pen_Normal::SCISSOR_MESSAGE::SCISSOR_MESSAGE(const bool& _state, const glm::vec4& _scissorPosWH)
 		:state(_state), ScissorPosWH(_scissorPosWH)
 	{
 	}
@@ -349,7 +349,7 @@ namespace Magic
 		return true;
 	}
 
-	void Pen_Normal::DrawVertex(Pen_Normal::DRAW_MODE _drawMode, const float * _pPos, const Magic::Color4 * _pColor, unsigned int _Number)
+	void Pen_Normal::DrawVertex(Pen_Normal::DRAW_MODE _drawMode, const float* _pPos, const Magic::Color4* _pColor, unsigned int _Number)
 	{
 		switch (_drawMode)
 		{
@@ -393,8 +393,8 @@ namespace Magic
 
 			_DEICommand.count = _Number;
 			_DEICommand.instanceCount = 1;
-			_DEICommand.first = _pV_VERTEX->size();
-			_DEICommand.baseInstance = pNowDRAW_BOX->Line_Draw.V_Instance.size() - 1;
+			_DEICommand.first = (unsigned int)_pV_VERTEX->size();
+			_DEICommand.baseInstance = (unsigned int)pNowDRAW_BOX->Line_Draw.V_Instance.size() - 1;
 
 			pNowDRAW_BOX->Line_Draw.V_DEICommand.push_back(_DEICommand);
 			pNowDRAW_BOX->V_Message.back().DrawNumber++;
@@ -405,7 +405,7 @@ namespace Magic
 			pNowDRAW_BOX->Line_Draw.V_DEICommand.back().count += _Number;
 
 		pNowDRAW_BOX->LastCount = _Number;
-		pNowDRAW_BOX->LastFirstIndex = _pV_VERTEX->size();
+		pNowDRAW_BOX->LastFirstIndex = (unsigned int)_pV_VERTEX->size();
 		pNowDRAW_BOX->Last_Draw_Type = SHADER_PURE_COLOR;
 		pNowDRAW_BOX->Draw_Number++;
 
@@ -420,7 +420,7 @@ namespace Magic
 			pNowDRAW_BOX->Line_Draw.V_Vertex.push_back(_Vertex);
 		}
 	}
-	void Pen_Normal::DrawVertex(Pen_Normal::DRAW_MODE _drawMode, const float * _pPos, unsigned int _Number)
+	void Pen_Normal::DrawVertex(Pen_Normal::DRAW_MODE _drawMode, const float* _pPos, unsigned int _Number)
 	{
 		switch (_drawMode)
 		{
@@ -464,8 +464,8 @@ namespace Magic
 
 			_DEICommand.count = _Number;
 			_DEICommand.instanceCount = 1;
-			_DEICommand.first = _pV_VERTEX->size();
-			_DEICommand.baseInstance = pNowDRAW_BOX->Line_Draw.V_Instance.size() - 1;
+			_DEICommand.first = (unsigned int)_pV_VERTEX->size();
+			_DEICommand.baseInstance = (unsigned int)pNowDRAW_BOX->Line_Draw.V_Instance.size() - 1;
 
 			pNowDRAW_BOX->Line_Draw.V_DEICommand.push_back(_DEICommand);
 			pNowDRAW_BOX->V_Message.back().DrawNumber++;
@@ -476,7 +476,7 @@ namespace Magic
 			pNowDRAW_BOX->Line_Draw.V_DEICommand.back().count += _Number;
 
 		pNowDRAW_BOX->LastCount = _Number;
-		pNowDRAW_BOX->LastFirstIndex = _pV_VERTEX->size();
+		pNowDRAW_BOX->LastFirstIndex = (unsigned int)_pV_VERTEX->size();
 		pNowDRAW_BOX->Last_Draw_Type = SHADER_PURE_COLOR;
 		pNowDRAW_BOX->Draw_Number++;
 
@@ -510,8 +510,8 @@ namespace Magic
 
 			_DEICommand.count = 2;
 			_DEICommand.instanceCount = 1;
-			_DEICommand.first = _pV_VERTEX->size();
-			_DEICommand.baseInstance = pNowDRAW_BOX->Line_Draw.V_Instance.size() - 1;
+			_DEICommand.first = (unsigned int)_pV_VERTEX->size();
+			_DEICommand.baseInstance = (unsigned int)pNowDRAW_BOX->Line_Draw.V_Instance.size() - 1;
 
 			pNowDRAW_BOX->Line_Draw.V_DEICommand.push_back(_DEICommand);
 			pNowDRAW_BOX->V_Message.back().DrawNumber++;
@@ -522,7 +522,7 @@ namespace Magic
 			pNowDRAW_BOX->Line_Draw.V_DEICommand.back().count += 2;
 
 		pNowDRAW_BOX->LastCount = 2;
-		pNowDRAW_BOX->LastFirstIndex = pNowDRAW_BOX->Line_Draw.V_Vertex.size();
+		pNowDRAW_BOX->LastFirstIndex = (unsigned int)pNowDRAW_BOX->Line_Draw.V_Vertex.size();
 		pNowDRAW_BOX->Last_Draw_Type = SHADER_PURE_COLOR;
 		pNowDRAW_BOX->Draw_Number++;
 
@@ -550,7 +550,7 @@ namespace Magic
 		if (pNowDRAW_BOX->V_Message.back().pTexture != _pPICTURE_DRAW->pNowTexture)
 			BindPicture(_pPICTURE_DRAW->pNowTexture);
 
-		unsigned int _Vertex_Number = _pV_VERTEX->size();
+		unsigned int _Vertex_Number = (unsigned int)_pV_VERTEX->size();
 
 		if (pNowDRAW_BOX->Picture_Draw.NewInstanceState)
 		{
@@ -564,9 +564,9 @@ namespace Magic
 		{
 			_DEICommand.count = 6;
 			_DEICommand.instanceCount = 1;
-			_DEICommand.firstIndex = _pV_Index->size();
+			_DEICommand.firstIndex = (unsigned int)_pV_Index->size();
 			_DEICommand.baseVertex = 0;
-			_DEICommand.baseInstance = _pPICTURE_DRAW->V_Instance.size() - 1;
+			_DEICommand.baseInstance = (unsigned int)_pPICTURE_DRAW->V_Instance.size() - 1;
 
 			_pPICTURE_DRAW->V_DEICommand.push_back(_DEICommand);
 			pNowDRAW_BOX->V_Message.back().DrawNumber++;
@@ -577,7 +577,7 @@ namespace Magic
 			pNowDRAW_BOX->Picture_Draw.V_DEICommand.back().count += 6;
 
 		pNowDRAW_BOX->LastCount = 6;
-		pNowDRAW_BOX->LastFirstIndex = _pV_Index->size();
+		pNowDRAW_BOX->LastFirstIndex = (unsigned int)_pV_Index->size();
 		pNowDRAW_BOX->Last_Draw_Type = SHADER_PICTURE;
 		pNowDRAW_BOX->Draw_Number++;
 
@@ -612,9 +612,9 @@ namespace Magic
 		_pV_Index->push_back(_Vertex_Number + 3);
 	}
 
-	float Pen_Normal::DrawTEXT(float _x, float _y, const wchar_t * _text, float _fontsize, unsigned char _ArrayState)
+	float Pen_Normal::DrawTEXT(float _x, float _y, const wchar_t* _text, float _fontsize, unsigned char _ArrayState)
 	{
-		int _textsize = wcslen(_text);
+		size_t _textsize = wcslen(_text);
 		Magic::Fonts* _pFonts = pNowDRAW_BOX->Picture_Draw.pFonts;
 		if (_text && _textsize && _pFonts)
 		{
@@ -633,7 +633,7 @@ namespace Magic
 
 			_pFonts->UpdataTexture(_text);
 
-			unsigned int _Vertex_Number = _pV_VERTEX->size();
+			unsigned int _Vertex_Number = (unsigned int)_pV_VERTEX->size();
 
 			if (pNowDRAW_BOX->Picture_Draw.NewInstanceState)
 			{
@@ -647,9 +647,9 @@ namespace Magic
 			{
 				_DEICommand.count = 0;
 				_DEICommand.instanceCount = 1;
-				_DEICommand.firstIndex = _pV_Index->size();
+				_DEICommand.firstIndex = (unsigned int)_pV_Index->size();
 				_DEICommand.baseVertex = 0;
-				_DEICommand.baseInstance = _pPICTURE_DRAW->V_Instance.size() - 1;
+				_DEICommand.baseInstance = (unsigned int)_pPICTURE_DRAW->V_Instance.size() - 1;
 
 				_pPICTURE_DRAW->V_DEICommand.push_back(_DEICommand);
 				_pCount = &pNowDRAW_BOX->Picture_Draw.V_DEICommand.back().count;
@@ -661,13 +661,13 @@ namespace Magic
 				_pCount = &pNowDRAW_BOX->Picture_Draw.V_DEICommand.back().count;
 
 			pNowDRAW_BOX->LastCount = 0;
-			pNowDRAW_BOX->LastFirstIndex = _pV_Index->size();
+			pNowDRAW_BOX->LastFirstIndex = (unsigned int)_pV_Index->size();
 			pNowDRAW_BOX->Last_Draw_Type = SHADER_DISTANCE_TEXT;
 			pNowDRAW_BOX->Draw_Number++;
 
 			float _X = _x, _Y = _y;
 			float const _rel_size = _fontsize / _pFonts->GetCharSize();
-			for (int a = 0; a < _textsize; a++)
+			for (size_t a = 0; a < _textsize; a++)
 			{
 				auto _char_index_advance = _pFonts->GetCharIndexAdvance(_text[a]);
 
@@ -762,8 +762,8 @@ namespace Magic
 
 			_DEICommand.count = 6;
 			_DEICommand.instanceCount = 1;
-			_DEICommand.first = _pV_VERTEX->size();
-			_DEICommand.baseInstance = pNowDRAW_BOX->Line_Draw.V_Instance.size() - 1;
+			_DEICommand.first = (unsigned int)_pV_VERTEX->size();
+			_DEICommand.baseInstance = (unsigned int)pNowDRAW_BOX->Line_Draw.V_Instance.size() - 1;
 
 			pNowDRAW_BOX->Line_Draw.V_DEICommand.push_back(_DEICommand);
 			pNowDRAW_BOX->V_Message.back().DrawNumber++;
@@ -774,7 +774,7 @@ namespace Magic
 			pNowDRAW_BOX->Line_Draw.V_DEICommand.back().count += 6;
 
 		pNowDRAW_BOX->LastCount = 6;
-		pNowDRAW_BOX->LastFirstIndex = _pV_VERTEX->size();
+		pNowDRAW_BOX->LastFirstIndex = (unsigned int)_pV_VERTEX->size();
 		pNowDRAW_BOX->Last_Draw_Type = SHADER_PURE_COLOR;
 		pNowDRAW_BOX->Draw_Number++;
 
@@ -823,7 +823,7 @@ namespace Magic
 				_DEICommand.instanceCount = 1;
 				_DEICommand.firstIndex = pNowDRAW_BOX->LastFirstIndex;
 				_DEICommand.baseVertex = 0;
-				_DEICommand.baseInstance = pNowDRAW_BOX->Picture_Draw.V_Instance.size() - 1;
+				_DEICommand.baseInstance = (unsigned int)pNowDRAW_BOX->Picture_Draw.V_Instance.size() - 1;
 
 				pNowDRAW_BOX->Picture_Draw.V_DEICommand.push_back(_DEICommand);
 				pNowDRAW_BOX->V_Message.back().DrawNumber++;
@@ -843,7 +843,7 @@ namespace Magic
 				_DEICommand.count = pNowDRAW_BOX->LastCount;
 				_DEICommand.instanceCount = 1;
 				_DEICommand.first = pNowDRAW_BOX->LastFirstIndex;
-				_DEICommand.baseInstance = pNowDRAW_BOX->Line_Draw.V_Instance.size() - 1;
+				_DEICommand.baseInstance = (unsigned int)pNowDRAW_BOX->Line_Draw.V_Instance.size() - 1;
 
 				pNowDRAW_BOX->Line_Draw.V_DEICommand.push_back(_DEICommand);
 				pNowDRAW_BOX->V_Message.back().DrawNumber++;
@@ -853,7 +853,7 @@ namespace Magic
 		}
 	}
 
-	void Pen_Normal::BindFonts(Magic::Fonts * _pFonts)
+	void Pen_Normal::BindFonts(Magic::Fonts* _pFonts)
 	{
 		if (pNowDRAW_BOX->V_Message.back().pTexture != _pFonts->GetTexture())
 		{
@@ -873,7 +873,7 @@ namespace Magic
 		}
 	}
 
-	void Pen_Normal::BindPicture(MagicTexture * _pTexture)
+	void Pen_Normal::BindPicture(MagicTexture* _pTexture)
 	{
 		if (pNowDRAW_BOX->V_Message.back().pTexture != _pTexture)
 		{
@@ -914,7 +914,7 @@ namespace Magic
 		_pUV[3].y = 1.0f;
 	}
 
-	void Pen_Normal::SetColor(const Magic::Color4 & _color)
+	void Pen_Normal::SetColor(const Magic::Color4& _color)
 	{
 		pNowDRAW_BOX->NowColor = _color;
 		pNowDRAW_BOX->Line_Draw.NewInstanceState = true;
@@ -1147,14 +1147,14 @@ namespace Magic
 		}
 	}
 
-	void Pen_Normal::SetCameraMatrix(const glm::mat4 & _matrix)
+	void Pen_Normal::SetCameraMatrix(const glm::mat4& _matrix)
 	{
 		pNowDRAW_BOX->CameraMatrix = pNowDRAW_BOX->WorldMatrix = _matrix;
 		pNowDRAW_BOX->Line_Draw.NewInstanceState = true;
 		pNowDRAW_BOX->Picture_Draw.NewInstanceState = true;
 	}
 
-	void Pen_Normal::SetWorldMatrix(const glm::mat4 & _matrix)
+	void Pen_Normal::SetWorldMatrix(const glm::mat4& _matrix)
 	{
 		pNowDRAW_BOX->WorldMatrix = pNowDRAW_BOX->CameraMatrix * _matrix;
 		pNowDRAW_BOX->Line_Draw.NewInstanceState = true;
@@ -1221,10 +1221,10 @@ namespace Magic
 				glUniformMatrix4fv(m_Text_projectrionMatrix, 1, GL_FALSE, &pNowDRAW_BOX->projectionMatrix[0][0]);
 
 				PICTURE_DRAW* _pPICTURE_DRAW_BOX = &pNowDRAW_BOX->Picture_Draw;
-				m_Picture_VBO.DynamicWrite(0, _pPICTURE_DRAW_BOX->V_Vertex.size() * sizeof(PICTURE_VERTEX), &_pPICTURE_DRAW_BOX->V_Vertex[0]);
-				m_Picture_VBO.DynamicWrite(1, _pPICTURE_DRAW_BOX->V_Instance.size() * sizeof(PICTURE_INSTANCE), &_pPICTURE_DRAW_BOX->V_Instance[0]);
-				m_Picture_VBO.DynamicWrite(2, _pPICTURE_DRAW_BOX->V_Index.size() * sizeof(unsigned int), &_pPICTURE_DRAW_BOX->V_Index[0]);
-				m_Picture_VBO.DynamicWrite(3, _pPICTURE_DRAW_BOX->V_DEICommand.size() * sizeof(DrawElementsIndirectCommand), &_pPICTURE_DRAW_BOX->V_DEICommand[0]);
+				m_Picture_VBO.DynamicWrite(0, (unsigned int)(_pPICTURE_DRAW_BOX->V_Vertex.size() * sizeof(PICTURE_VERTEX)), &_pPICTURE_DRAW_BOX->V_Vertex[0]);
+				m_Picture_VBO.DynamicWrite(1, (unsigned int)(_pPICTURE_DRAW_BOX->V_Instance.size() * sizeof(PICTURE_INSTANCE)), &_pPICTURE_DRAW_BOX->V_Instance[0]);
+				m_Picture_VBO.DynamicWrite(2, (unsigned int)(_pPICTURE_DRAW_BOX->V_Index.size() * sizeof(unsigned int)), &_pPICTURE_DRAW_BOX->V_Index[0]);
+				m_Picture_VBO.DynamicWrite(3, (unsigned int)(_pPICTURE_DRAW_BOX->V_DEICommand.size() * sizeof(DrawElementsIndirectCommand)), &_pPICTURE_DRAW_BOX->V_DEICommand[0]);
 			}
 
 			if (pNowDRAW_BOX->Line_Draw.V_Vertex.size())
@@ -1233,9 +1233,9 @@ namespace Magic
 				glUniformMatrix4fv(m_Line_projectionMatrix, 1, GL_FALSE, &pNowDRAW_BOX->projectionMatrix[0][0]);
 
 				LINE_DRAW* _pLINE_DRAW = &pNowDRAW_BOX->Line_Draw;
-				m_Line_VBO.DynamicWrite(0, _pLINE_DRAW->V_Vertex.size() * sizeof(LINE_VERTEX), &_pLINE_DRAW->V_Vertex[0]);
-				m_Line_VBO.DynamicWrite(1, _pLINE_DRAW->V_Instance.size() * sizeof(LINE_INSTANCE), &_pLINE_DRAW->V_Instance[0]);
-				m_Line_VBO.DynamicWrite(2, _pLINE_DRAW->V_DEICommand.size() * sizeof(DrawArraysIndirectCommand), &_pLINE_DRAW->V_DEICommand[0]);
+				m_Line_VBO.DynamicWrite(0, (unsigned int)(_pLINE_DRAW->V_Vertex.size() * sizeof(LINE_VERTEX)), &_pLINE_DRAW->V_Vertex[0]);
+				m_Line_VBO.DynamicWrite(1, (unsigned int)(_pLINE_DRAW->V_Instance.size() * sizeof(LINE_INSTANCE)), &_pLINE_DRAW->V_Instance[0]);
+				m_Line_VBO.DynamicWrite(2, (unsigned int)(_pLINE_DRAW->V_DEICommand.size() * sizeof(DrawArraysIndirectCommand)), &_pLINE_DRAW->V_DEICommand[0]);
 
 				glLineWidth(1.0f);
 				//glPointSize(1.0f);
@@ -1481,7 +1481,7 @@ namespace Magic
 						}
 						if (_iterator->DrawNumber)
 						{
-							glMultiDrawElementsIndirect(GL_TRIANGLES, GL_UNSIGNED_INT, (GLvoid*)(sizeof(DrawElementsIndirectCommand)* _Picture_Now_DrawNumber), _iterator->DrawNumber, 0);
+							glMultiDrawElementsIndirect(GL_TRIANGLES, GL_UNSIGNED_INT, (GLvoid*)(sizeof(DrawElementsIndirectCommand) * _Picture_Now_DrawNumber), _iterator->DrawNumber, 0);
 							_Picture_Now_DrawNumber += _iterator->DrawNumber;
 							//DEBUG_AddDrawMessageNumber(1);
 						}
@@ -1501,7 +1501,7 @@ namespace Magic
 						}
 						if (_iterator->DrawNumber)
 						{
-							glMultiDrawArraysIndirect(_Color_DrawMode, (GLvoid*)(sizeof(DrawArraysIndirectCommand)* _Line_Now_DrawNumber), _iterator->DrawNumber, 0);
+							glMultiDrawArraysIndirect(_Color_DrawMode, (GLvoid*)(sizeof(DrawArraysIndirectCommand) * _Line_Now_DrawNumber), _iterator->DrawNumber, 0);
 							_Line_Now_DrawNumber += _iterator->DrawNumber;
 							//DEBUG_AddDrawMessageNumber(1);
 						}

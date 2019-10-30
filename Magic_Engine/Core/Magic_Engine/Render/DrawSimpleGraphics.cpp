@@ -47,7 +47,7 @@ static const char* S_Pure_Color_Frag =
 #define DRAW_TYPE_TRIANGLE_FAN					0x08
 #define DRAW_TYPE_DISTANCE_TEXT					0x09
 
-DrawSimpleGraphics* DrawSimpleGraphics::m_S_pDrawSimpleGraphics = nullptr;
+DrawSimpleGraphics * DrawSimpleGraphics::m_S_pDrawSimpleGraphics = nullptr;
 
 DrawSimpleGraphics::DrawSimpleGraphics() {
 	m_S_pDrawSimpleGraphics = this;
@@ -105,7 +105,7 @@ bool DrawSimpleGraphics::Initialize() {
 		m_Line_VBO.SetDrawIndirectBuffer(2, Magic::VERTEX_BUFFER::DYNAMIC_DRAW);
 
 		Magic::MonitorRenderThread(Magic::RENDER, BindClassFunctionToMessage(&DrawSimpleGraphics::Render));
-	}, true);
+		}, true);
 
 	return true;
 }
@@ -135,8 +135,8 @@ void DrawSimpleGraphics::DrawLine(float _x1, float _y1, float _x2, float _y2, Ma
 
 			_DEICommand.count = 2;
 			_DEICommand.instanceCount = 1;
-			_DEICommand.first = m_this->m_vec_Line_Vertex.size();
-			_DEICommand.baseInstance = m_this->m_vec_Instance.size() - 1;
+			_DEICommand.first = (unsigned int)m_this->m_vec_Line_Vertex.size();
+			_DEICommand.baseInstance = (unsigned int)m_this->m_vec_Instance.size() - 1;
 
 			m_this->m_vec_DEICommand.push_back(_DEICommand);
 		}
@@ -151,7 +151,7 @@ void DrawSimpleGraphics::DrawLine(float _x1, float _y1, float _x2, float _y2, Ma
 		_Vertex.Position.x = _x2;
 		_Vertex.Position.y = _y2;
 		m_this->m_vec_Line_Vertex.push_back(_Vertex);
-	});
+		});
 
 	m_LastDrawType = DRAW_TYPE_LINES;
 }
@@ -174,9 +174,9 @@ void DrawSimpleGraphics::Render(Magic::Management::MESSAGE_TYPE _MessageType, Ma
 		m_LineShader.Use();
 		glUniformMatrix4fv(m_Line_projectionMatrix, 1, GL_FALSE, &m_this->m_projectionMatrix[0][0]);
 
-		m_Line_VBO.DynamicWrite(0, m_this->m_vec_Line_Vertex.size() * sizeof(LINE_VERTEX), &m_this->m_vec_Line_Vertex[0]);
-		m_Line_VBO.DynamicWrite(1, m_this->m_vec_Instance.size() * sizeof(LINE_INSTANCE), &m_this->m_vec_Instance[0]);
-		m_Line_VBO.DynamicWrite(2, m_this->m_vec_DEICommand.size() * sizeof(Magic::DrawArraysIndirectCommand), &m_this->m_vec_DEICommand[0]);
+		m_Line_VBO.DynamicWrite(0, (unsigned int)m_this->m_vec_Line_Vertex.size() * sizeof(LINE_VERTEX), &m_this->m_vec_Line_Vertex[0]);
+		m_Line_VBO.DynamicWrite(1, (unsigned int)m_this->m_vec_Instance.size() * sizeof(LINE_INSTANCE), &m_this->m_vec_Instance[0]);
+		m_Line_VBO.DynamicWrite(2, (unsigned int)m_this->m_vec_DEICommand.size() * sizeof(Magic::DrawArraysIndirectCommand), &m_this->m_vec_DEICommand[0]);
 
 		glLineWidth(1.0f);
 		//glPointSize(1.0f);
@@ -184,7 +184,7 @@ void DrawSimpleGraphics::Render(Magic::Management::MESSAGE_TYPE _MessageType, Ma
 
 		m_Line_VBO.BindBuffer(2);
 		m_Line_VBO.Bind();
-		glMultiDrawArraysIndirect(GL_LINES, (GLvoid*)(sizeof(Magic::DrawArraysIndirectCommand) * 0), m_this->m_vec_DEICommand.size(), 0);
+		glMultiDrawArraysIndirect(GL_LINES, (GLvoid*)(sizeof(Magic::DrawArraysIndirectCommand) * 0), (GLsizei)m_this->m_vec_DEICommand.size(), 0);
 	}
 
 	m_this->m_vec_Line_Vertex.clear();

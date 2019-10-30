@@ -1,3 +1,9 @@
+if(CMAKE_CL_64)
+set(NOW_x86_x64 "x64")
+else(CMAKE_CL_64)
+set(NOW_x86_x64 "x86")
+endif(CMAKE_CL_64)
+
 include_directories(
 ../../../Plugins/glm
 ../../../Core/Magic_Engine/Include
@@ -9,14 +15,16 @@ include_directories(
 ../../../Core/MagicThread)
 
 link_directories(
-${PROJECT_SOURCE_DIR}../../../lib/${CMAKE_SYSTEM_NAME}/)
+${PROJECT_SOURCE_DIR}../../../lib/${CMAKE_SYSTEM_NAME}/${NOW_x86_x64})
 
 set(SCENE_FILES
 )
 
 SOURCE_GROUP("Scene" FILES ${SCENE_FILES})
 
-link_libraries(Magic_Engine.lib MagicUI.lib)
+link_libraries(
+	debug Magic_Engine_d.lib optimized Magic_Engine.lib
+	debug MagicUI_d.lib optimized MagicUI.lib)
 
 # 查找当前目录下的所有源文件
 # 并将名称保存到 DIR_LIB_SRCS 变量
@@ -32,11 +40,11 @@ set(NOW_PROJECT_NAME WaterMagic)
 ADD_EXECUTABLE (${NOW_PROJECT_NAME} ${DIR_LIB_SRCS} ${SCENE_FILES})
 
 #RUNTIME	.exe、.dll	可执行档
-SET_TARGET_PROPERTIES(${NOW_PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ../../../bin/${CMAKE_SYSTEM_NAME})
+SET_TARGET_PROPERTIES(${NOW_PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ../../../bin/${CMAKE_SYSTEM_NAME}/${NOW_x86_x64} OUTPUT_NAME_DEBUG ${NOW_PROJECT_NAME}_d)
 #LIBRARY		.so
 #SET_TARGET_PROPERTIES(${NOW_PROJECT_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ../../../lib)
 #ARCHIVE	.a、.lib包含 dll 的连结介面	.a
-SET_TARGET_PROPERTIES(${NOW_PROJECT_NAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ../../../lib/${CMAKE_SYSTEM_NAME})
+SET_TARGET_PROPERTIES(${NOW_PROJECT_NAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ../../../lib/${CMAKE_SYSTEM_NAME}/${NOW_x86_x64} OUTPUT_NAME_DEBUG ${NOW_PROJECT_NAME}_d)
 
 add_dependencies(${NOW_PROJECT_NAME} Magic_Engine)
 add_dependencies(${NOW_PROJECT_NAME} MagicUI)
@@ -61,15 +69,17 @@ configure_file("vcxproj.user.in"
 	
 IF(WIN32)
 	set(DLL_DEBUG_INSTALL_FILES
-	${PROJECT_SOURCE_DIR}/../../Plugins/lpng1621/dll/Debug/libpng16.dll
-	${PROJECT_SOURCE_DIR}/../../Plugins/glew-1.9.0/dll/glew32.dll
+	${PROJECT_SOURCE_DIR}/../../Plugins/lpng/dll/${NOW_x86_x64}/libpng16d.dll
+	${PROJECT_SOURCE_DIR}/../../Plugins/lpng/dll/${NOW_x86_x64}/zlib1d.dll
+	${PROJECT_SOURCE_DIR}/../../Plugins/glew/bin/${NOW_x86_x64}/glew32.dll
 	)
 	
 	set(DLL_RELEASE_INSTALL_FILES
-	${PROJECT_SOURCE_DIR}/../../Plugins/lpng1621/dll/Release/libpng16.dll
-	${PROJECT_SOURCE_DIR}/../../Plugins/glew-1.9.0/dll/glew32.dll
+	${PROJECT_SOURCE_DIR}/../../Plugins/lpng/dll/${NOW_x86_x64}/libpng16.dll
+    ${PROJECT_SOURCE_DIR}/../../Plugins/lpng/dll/${NOW_x86_x64}/zlib1.dll
+	${PROJECT_SOURCE_DIR}/../../Plugins/glew/bin/${NOW_x86_x64}/glew32.dll
 	)
 	
-	install(FILES ${DLL_DEBUG_INSTALL_FILES} DESTINATION ${PROJECT_SOURCE_DIR}../../../bin/${CMAKE_SYSTEM_NAME}/Debug)
-	install(FILES ${DLL_RELEASE_INSTALL_FILES} DESTINATION ${PROJECT_SOURCE_DIR}../../../bin/${CMAKE_SYSTEM_NAME}/Release)
+	install(FILES ${DLL_DEBUG_INSTALL_FILES} DESTINATION ${PROJECT_SOURCE_DIR}../../../bin/${CMAKE_SYSTEM_NAME}/${NOW_x86_x64}/Debug)
+	install(FILES ${DLL_RELEASE_INSTALL_FILES} DESTINATION ${PROJECT_SOURCE_DIR}../../../bin/${CMAKE_SYSTEM_NAME}/${NOW_x86_x64}/Release)
 ENDIF(WIN32)
