@@ -1,0 +1,71 @@
+if(CMAKE_CL_64)
+set(NOW_x86_x64 "x64")
+else(CMAKE_CL_64)
+set(NOW_x86_x64 "x86")
+endif(CMAKE_CL_64)
+
+IF(UNIX)
+	IF(RELEASE_MODE)
+	set(CMAKE_BUILD_TYPE "Release")
+	MESSAGE(STATUS "This is Release Mode")
+	ELSE(RELEASE_MODE)
+	set(CMAKE_BUILD_TYPE "Debug")
+	MESSAGE(STATUS "This is Debug Mode")
+	ENDIF(RELEASE_MODE)
+set(CMAKE_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX} "/usr/local")
+#ARM版优化指令
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -mfloat-abi=softfp -mfpu=neon -fPIC -optimize-sibling-calls -fsigned-char")
+ENDIF(UNIX)
+
+set(NOW_PROJECT_NAME MagicThread)
+
+include_directories(
+../../../Plugins/Universal)
+
+set(INCLUDE_INSTALL_FILES
+${PROJECT_SOURCE_DIR}../../../Core/${NOW_PROJECT_NAME}/Magic_Thread.h)
+
+set(Management_FILES
+${PROJECT_SOURCE_DIR}../../../Core/${NOW_PROJECT_NAME}/Magic_Thread.cpp
+${PROJECT_SOURCE_DIR}../../../Core/${NOW_PROJECT_NAME}/Magic_Thread_Management.h
+${PROJECT_SOURCE_DIR}../../../Core/${NOW_PROJECT_NAME}/Magic_Thread_Management.cpp
+${PROJECT_SOURCE_DIR}../../../Core/${NOW_PROJECT_NAME}/Cross_Platform_Port.h)
+
+IF(WIN32)
+	SOURCE_GROUP("Management" FILES ${Management_FILES})
+	SOURCE_GROUP("Management" FILES ${INCLUDE_INSTALL_FILES})
+ENDIF(WIN32)
+
+add_definitions(-DMAGIC_THREAD_EXPORTS)
+IF(UNIX)
+	add_definitions(-DLINUX)
+ENDIF(UNIX)
+IF(WIN32)
+	add_definitions(-DUNICODE -D_UNICODE)
+ENDIF(WIN32)
+
+
+# 查找当前目录下的所有源文件
+# 并将名称保存到 DIR_LIB_SRCS 变量
+#aux_source_directory(../../../Core/${NOW_PROJECT_NAME} DIR_LIB_SRCS)
+
+# 生成链接库
+#add_library (Magic_Engine STATIC ${DIR_LIB_SRCS})
+add_library (${NOW_PROJECT_NAME} SHARED
+${INCLUDE_INSTALL_FILES} 
+${Management_FILES})
+
+#RUNTIME	.exe、.dll	可执行档
+SET_TARGET_PROPERTIES(${NOW_PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ../../../bin/${CMAKE_SYSTEM_NAME}/${NOW_x86_x64} OUTPUT_NAME_DEBUG ${NOW_PROJECT_NAME}_d)
+#LIBRARY		.so
+SET_TARGET_PROPERTIES(${NOW_PROJECT_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ../../../bin/${CMAKE_SYSTEM_NAME}/${NOW_x86_x64} OUTPUT_NAME_DEBUG ${NOW_PROJECT_NAME}_d)
+#ARCHIVE	.a、.lib包含 dll 的连结介面	.a
+SET_TARGET_PROPERTIES(${NOW_PROJECT_NAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ../../../lib/${CMAKE_SYSTEM_NAME}/${NOW_x86_x64} OUTPUT_NAME_DEBUG ${NOW_PROJECT_NAME}_d)
+
+#安装头文件
+install(FILES ${INCLUDE_INSTALL_FILES} DESTINATION ${PROJECT_SOURCE_DIR}../../../Install/${NOW_PROJECT_NAME}/Include/Management)
+#安装可执行文件
+install(TARGETS ${NOW_PROJECT_NAME}
+RUNTIME DESTINATION ${PROJECT_SOURCE_DIR}../../../Install/${NOW_PROJECT_NAME}/bin/${NOW_x86_x64}
+LIBRARY DESTINATION ${PROJECT_SOURCE_DIR}../../../Install/${NOW_PROJECT_NAME}/lib/${NOW_x86_x64}
+ARCHIVE DESTINATION ${PROJECT_SOURCE_DIR}../../../Install/${NOW_PROJECT_NAME}/lib/${NOW_x86_x64})

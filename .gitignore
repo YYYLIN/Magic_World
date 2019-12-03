@@ -17,10 +17,10 @@
 *.suo
 *.opensdf
 clear.bat
-Magic_Engine/Install
-Magic_Engine/Media
-Magic_Engine/Build/*
-!Magic_Engine/Build/cmake
+Install/*
+Media/*
+Build/*
+!Build/cmake
 [Dd]ebug/
 [Rr]elease/
 [Bb]in/
