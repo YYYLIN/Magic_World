@@ -21,10 +21,10 @@ Install/*
 Media/*
 Build/*
 !Build/cmake
-[Dd]ebug/
-[Rr]elease/
-[Bb]in/
-[Ll]ib/
+[Dd]ebug/*
+[Rr]elease/*
+[Bb]in/*
+[Ll]ib/*
 
 # Precompiled Headers
 *.gch
