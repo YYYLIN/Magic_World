@@ -15,24 +15,31 @@ include_directories(
 ../../../Core/MagicUI/Include
 ../../../Core/MagicUI/
 ../../../Core/WaterMagic
+../../../Core/MagicThread
 ../../../Plugins/Structure
-../../../Core/MagicThread)
+../../../Plugins/litehtml/include
+)
 
 link_directories(
-${PROJECT_SOURCE_DIR}../../../lib/${CMAKE_SYSTEM_NAME}/${NOW_x86_x64})
+${PROJECT_SOURCE_DIR}../../../lib/${CMAKE_SYSTEM_NAME}/${NOW_x86_x64}
+${PROJECT_SOURCE_DIR}../../../Plugins/litehtml/Win32)
 
 set(SCENE_FILES
 )
 
+set(SOURCE_FILES
+${PROJECT_SOURCE_DIR}../../../Core/WaterMagic/Main.cpp
+${PROJECT_SOURCE_DIR}../../../Core/WaterMagic/container_test.cpp
+${PROJECT_SOURCE_DIR}../../../Core/WaterMagic/container_test.h)
+
 SOURCE_GROUP("Scene" FILES ${SCENE_FILES})
 
 link_libraries(
+	litehtml.lib
 	debug Magic_Engine_d.lib optimized Magic_Engine.lib
 	debug MagicUI_d.lib optimized MagicUI.lib)
 
-# 查找当前目录下的所有源文件
-# 并将名称保存到 DIR_LIB_SRCS 变量
-aux_source_directory(../../../Core/WaterMagic DIR_LIB_SRCS)
+
 
 IF(WIN32)
 	add_definitions(-DUNICODE -D_UNICODE)
@@ -41,7 +48,7 @@ ENDIF(WIN32)
 
 set(NOW_PROJECT_NAME WaterMagic)
 
-ADD_EXECUTABLE (${NOW_PROJECT_NAME} ${DIR_LIB_SRCS} ${SCENE_FILES})
+ADD_EXECUTABLE (${NOW_PROJECT_NAME} ${SOURCE_FILES} ${SCENE_FILES})
 
 #RUNTIME	.exe、.dll	可执行档
 SET_TARGET_PROPERTIES(${NOW_PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ../../../bin/${CMAKE_SYSTEM_NAME}/${NOW_x86_x64} OUTPUT_NAME_DEBUG ${NOW_PROJECT_NAME}_d)

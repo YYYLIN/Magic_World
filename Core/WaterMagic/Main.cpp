@@ -5,6 +5,9 @@
 #include "Render/DrawSimpleGraphics.h"
 #include "Render/TemplateEffects.h"
 
+#include "container_test.h"
+#include <assert.h>
+
 int CALLBACK _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevainstance, LPWSTR lpcmdline, int iCmdshow)
 {
 	bool _result = Magic::CreateSystemUI(L"WaterMagic", 0, 0, 1024, 768);
@@ -19,6 +22,11 @@ int CALLBACK _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevainstance, LPWSTR lpc
 
 	Magic::Engine([]() {
 		Magic::TemplateEffects("Main", [](const ::Magic::PTemplate_Effects& _PTE) {
+			litehtml::context ctx;
+			container_test container;
+			litehtml::document::ptr doc = litehtml::document::createFromString(L"<html>Body<div style='background-color: #ff0000;top: 10px;width: 100px;height: 100px;'></div></html>", &container, &ctx);
+			doc->render(50, litehtml::render_all);
+
 			DrawSimpleGraphics::Instance()->SetColor(Magic::Color4(0.0f, 1.0f, 0.0f, 1.0f));
 			DrawSimpleGraphics::Instance()->DrawLine(0.0f, 10, 100.0f, 10);
 			DrawSimpleGraphics::Instance()->SetColor(Magic::Color4(1.0f, 0.0f, 0.0f, 1.0f));
@@ -38,7 +46,7 @@ int CALLBACK _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevainstance, LPWSTR lpc
 				DrawSimpleGraphics::Instance()->SetColor(Magic::Color4(0.0f, 1.0f, 1.0f, 1.0f));
 				DrawSimpleGraphics::Instance()->DrawLine(230.0f, 300.0f, 330.0f, 400.0f);
 			});
-		});	
+		});
 	});
 
 	if (Magic::RunEngine() != 0) {
