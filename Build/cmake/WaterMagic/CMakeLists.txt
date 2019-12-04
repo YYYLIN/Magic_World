@@ -4,6 +4,10 @@ else(CMAKE_CL_64)
 set(NOW_x86_x64 "x86")
 endif(CMAKE_CL_64)
 
+execute_process(
+COMMAND git clone https://github.com/litehtml/litehtml
+WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}../../../Plugins/)
+
 include_directories(
 ../../../Plugins/glm
 ../../../Core/Magic_Engine/Include

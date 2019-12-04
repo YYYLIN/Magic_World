@@ -25,6 +25,7 @@ Build/*
 [Rr]elease/*
 [Bb]in/*
 [Ll]ib/*
+Plugins/litehtml
 
 # Precompiled Headers
 *.gch
