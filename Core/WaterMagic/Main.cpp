@@ -8,8 +8,43 @@
 #include "container_test.h"
 #include <assert.h>
 
+std::string g_Html;
+std::wstring g_MasteCSS;
+
+litehtml::document::ptr g_spdoc;
+
 int CALLBACK _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevainstance, LPWSTR lpcmdline, int iCmdshow)
 {
+	{
+		FILE* _pFile;
+		fopen_s(&_pFile, "Text.html", "r");
+		char _Html[1024];
+
+
+		while (!feof(_pFile))
+		{
+			if (fgets(_Html, 1024, _pFile) == NULL) break;
+			g_Html += _Html;
+		}
+
+		fclose(_pFile);
+	}
+
+	{
+		FILE* _pFile;
+		fopen_s(&_pFile, "master.css", "r");
+		wchar_t _Html[1024];
+
+
+		while (!feof(_pFile))
+		{
+			if (fgetws(_Html, 1024, _pFile) == NULL) break;
+			g_MasteCSS += _Html;
+		}
+
+		fclose(_pFile);
+	}
+
 	bool _result = Magic::CreateSystemUI(L"WaterMagic", 0, 0, 1024, 768);
 	if (!_result)
 	{
@@ -17,15 +52,23 @@ int CALLBACK _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevainstance, LPWSTR lpc
 		return false;
 	}
 
+	litehtml::context ctx;
+	container_test container;
+	ctx.load_master_stylesheet(g_MasteCSS.c_str());
+	g_spdoc = litehtml::document::createFromUTF8(g_Html.c_str(), &container, &ctx);
+
+	int _width = g_spdoc->width();
+	g_spdoc->render(_width);
+
 	HICON _ico = (HICON)::LoadImageA(NULL, 0, IMAGE_ICON, 0, 0, LR_DEFAULTSIZE | LR_LOADFROMFILE);
 	Magic::SetWindowICO(_ico);
 
 	Magic::Engine([]() {
 		Magic::TemplateEffects("Main", [](const ::Magic::PTemplate_Effects& _PTE) {
-			litehtml::context ctx;
-			container_test container;
-			litehtml::document::ptr doc = litehtml::document::createFromString(L"<html>Body<div style='background-color: #ff0000;top: 10px;width: 100px;height: 100px;'></div></html>", &container, &ctx);
-			doc->render(50, litehtml::render_all);
+
+			int _width = g_spdoc->width();
+			int _height = g_spdoc->height();
+			g_spdoc->draw(0, 0, 0, &litehtml::position(0, 0, _width, _height));
 
 			DrawSimpleGraphics::Instance()->SetColor(Magic::Color4(0.0f, 1.0f, 0.0f, 1.0f));
 			DrawSimpleGraphics::Instance()->DrawLine(0.0f, 10, 100.0f, 10);
