@@ -75,6 +75,10 @@ ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/System/Magic_Fonts.h
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/System/Magic_Fonts.cpp
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/System/MagicAlphaWindow.h
 ${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/System/MagicAlphaWindow.cpp
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/System/FT_Font.h
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/System/FT_Font.cpp
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/System/LRU_Font_Texture.h
+${PROJECT_SOURCE_DIR}../../../Core/Magic_Engine/System/LRU_Font_Texture.cpp
 )
 
 set(MAGIC_PHYSICAL_FILES
@@ -104,7 +108,7 @@ IF(WIN32)
 	SOURCE_GROUP("Engine\\Tool" FILES ${MAGIC_TOOL_FILES})
 ENDIF(WIN32)
 
-link_libraries(glew32.lib opengl32.lib
+link_libraries(glew32.lib opengl32.lib freetype26.lib
 	debug libpngd.lib optimized libpng.lib
 	debug MagicThread_d.lib optimized MagicThread.lib)
 add_definitions(-DMAGIC_ENGINE_EXPORTS)

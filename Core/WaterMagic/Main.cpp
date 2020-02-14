@@ -68,6 +68,10 @@ int CALLBACK _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevainstance, LPWSTR lpc
 
 			int _width = g_spdoc->width();
 			int _height = g_spdoc->height();
+			/*glm::mat4 _WorldMatrix;
+			_WorldMatrix = glm::rotate(-180.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+			_WorldMatrix[3].y = _height;
+			DrawSimpleGraphics::Instance()->SetWorldMatrix(_WorldMatrix);*/
 			g_spdoc->draw(0, 0, 0, &litehtml::position(0, 0, _width, _height));
 
 			DrawSimpleGraphics::Instance()->SetColor(Magic::Color4(0.0f, 1.0f, 0.0f, 1.0f));

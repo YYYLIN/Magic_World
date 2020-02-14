@@ -75,18 +75,14 @@ void container_test::get_image_size(const litehtml::tchar_t* src, const litehtml
 
 //在此功能中绘制背景。参数bg描述元素背景（请参阅background_paint描述）。注意<img>html元素被绘制为背景。
 void container_test::draw_background(litehtml::uint_ptr hdc, const litehtml::background_paint& bg) {
-	DrawSimpleGraphics::Instance()->SetColor(Magic::Color4(bg.color.red, bg.color.green, bg.color.blue, bg.color.alpha));
-	DrawSimpleGraphics::Instance()->DrawLine(bg.clip_box.x, bg.clip_box.y, bg.clip_box.right(), bg.clip_box.y);
-	DrawSimpleGraphics::Instance()->DrawLine(bg.clip_box.x, bg.clip_box.y, bg.clip_box.x, bg.clip_box.bottom());
-	DrawSimpleGraphics::Instance()->DrawLine(bg.clip_box.right(), bg.clip_box.y, bg.clip_box.right(), bg.clip_box.bottom());
-	DrawSimpleGraphics::Instance()->DrawLine(bg.clip_box.x, bg.clip_box.bottom(), bg.clip_box.right(), bg.clip_box.bottom());
+	DrawSimpleGraphics::Instance()->DrawRectangle(bg.clip_box.x, bg.clip_box.y, bg.clip_box.width, bg.clip_box.height, Magic::Color4(bg.color.red, bg.color.green, bg.color.blue, bg.color.alpha));
 }
 
 void container_test::make_url(const litehtml::tchar_t* url, const litehtml::tchar_t* basepath, litehtml::tstring& out) { out = url; }
 
 //在此处绘制元素边框。如果必须为根元素绘制边框，则参数root为true（通常是<html>）。
 void container_test::draw_borders(litehtml::uint_ptr hdc, const litehtml::borders& borders, const litehtml::position& draw_pos, bool root) {
-	OutputDebugStringA("draw_borders\n");
+	//OutputDebugStringA("draw_borders\n");
 }
 
 //litehtml用<title>html标签文本调用此函数。您可以使用caption参数将窗口标题文本设置为html页面标题。
@@ -125,9 +121,6 @@ void container_test::del_clip() {}
 void container_test::get_client_rect(litehtml::position& client) const {
 	client.width = 1024;
 	client.height = 768;
-	char _text[64];
-	sprintf_s(_text, 64, "x:%dy:%dw:%dh:%d\n", client.x, client.y, client.width, client.height);
-	OutputDebugStringA(_text);
 }  //: get_client_rect
 
 //使用此功能，您可以处理自定义标签。只需创建您自己的litehtml :: element，然后从此函数返回即可。参数tag_name是HTML标记（a，p，表等）。
