@@ -89,4 +89,49 @@ namespace Magic
 	void SetRenderContextRect(const Screen_Rect& _Screen_Rect) {
 		Render_thread::Instance()->SetRect(_Screen_Rect);
 	}
+
+	const FONT CreateFONT(const char* _Name, const char* _Path, unsigned int _w, unsigned int _h) {
+		FONT _FONT = 0;
+		Magic::RenderThread([&_FONT, _Name, _Path, _w, _h](MM_MESS) {
+			Magic::LRU_Font_Texture* _Font = MagicEngineContext::Instance()->CreateFont_Texture(_Name);
+			if (!_Font) {
+				_FONT = 0;
+				return;
+			}
+
+			Magic::FT_Font* _pFT_Font = MagicEngineContext::Instance()->CreateFT_Font(_Name);;
+			int _Error = _pFT_Font->Initialize(_Path, _w, _h);
+			if (_Error) {
+				_FONT = 0;
+				return;
+			}
+
+			bool _result = _Font->Initialize(_pFT_Font);
+			if (!_result) {
+				MagicEngineContext::Instance()->DeleteFont_Texture(_Name);
+				MagicEngineContext::Instance()->DeleteFT_Font(_Name);
+				_FONT = 0;
+				return;
+			}
+
+			_FONT = (FONT)_Font;
+		}, true);
+
+		return _FONT;
+	}
+
+	const FONT GetFONT(const char* _Name) {
+		FONT _FONT = 0;
+		Magic::RenderThread([&_FONT, _Name](MM_MESS) {
+			_FONT = (FONT)MagicEngineContext::Instance()->GetFont_Texture(_Name);
+		}, true);
+		return (FONT)_FONT;
+	}
+
+	void DeleteFONT(const char* _Name) {
+		Magic::RenderThread([_Name](MM_MESS) {
+			MagicEngineContext::Instance()->DeleteFont_Texture(_Name);
+		}, true);
+
+	}
 }

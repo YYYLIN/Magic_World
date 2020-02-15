@@ -70,6 +70,10 @@ namespace Magic
 
 	DLL_MAGIC_ENGINE_OUTPUT_INPUT void SetRenderContextRect(const Screen_Rect& _Screen_Rect);
 
+	DLL_MAGIC_ENGINE_OUTPUT_INPUT const FONT CreateFONT(const char* _Name, const char* _Path, unsigned int _w, unsigned int _h);
+	DLL_MAGIC_ENGINE_OUTPUT_INPUT const FONT GetFONT(const char* _Name);
+	DLL_MAGIC_ENGINE_OUTPUT_INPUT void DeleteFONT(const char* _Name);
+
 #ifdef _DEBUG 
 #define DEBUG_AddDrawMessageNumber(a)			AddDrawMessageNumber(a) 
 #else

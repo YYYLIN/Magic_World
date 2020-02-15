@@ -39,6 +39,8 @@ namespace Magic {
 	enum ENGINE_MESSAGE {
 		SHUTOWN_ENGINE = 1
 	};
+
+	typedef void* FONT;
 }
 
 typedef void* RenderContext;

@@ -176,3 +176,52 @@ MagicTexture* MagicEngineContext::GetTextrue(const char* _name)
 	else
 		return 0;
 }
+
+Magic::LRU_Font_Texture* MagicEngineContext::CreateFont_Texture(const char* _Name) {
+	auto _find = m_map_Font_Textrue.find(_Name);
+	if (_find != m_map_Font_Textrue.end()) {
+		return 0;
+	}
+	else {
+		return &m_map_Font_Textrue.insert(std::make_pair(_Name, Magic::LRU_Font_Texture())).first->second;
+	}
+}
+
+Magic::LRU_Font_Texture* MagicEngineContext::GetFont_Texture(const char* _Name)
+{
+	auto _find = m_map_Font_Textrue.find(_Name);
+	if (_find != m_map_Font_Textrue.end()) {
+		return &_find->second;
+	}
+	else {
+		return 0;
+	}
+}
+
+void MagicEngineContext::DeleteFont_Texture(const char* _Name) {
+	m_map_Font_Textrue.erase(_Name);
+}
+
+Magic::FT_Font* MagicEngineContext::CreateFT_Font(const char* _Name) {
+	auto _find = m_map_FT_Font.find(_Name);
+	if (_find != m_map_FT_Font.end()) {
+		return 0;
+	}
+	else {
+		return &m_map_FT_Font.insert(std::make_pair(_Name, Magic::FT_Font())).first->second;
+	}
+}
+
+Magic::FT_Font* MagicEngineContext::GetFT_Font(const char* _Name) {
+	auto _find = m_map_FT_Font.find(_Name);
+	if (_find != m_map_FT_Font.end()) {
+		return &_find->second;
+	}
+	else {
+		return 0;
+	}
+}
+
+void MagicEngineContext::DeleteFT_Font(const char* _Name) {
+	m_map_FT_Font.erase(_Name);
+}

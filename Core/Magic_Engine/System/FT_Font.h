@@ -2,9 +2,6 @@
 *功能：将freetype字体库，进行一次封装，提供更简洁的，字符图像查找->渲染->获取
 */
 
-#include "ft2build.h"
-#include  FT_FREETYPE_H
-
 namespace Magic
 {
 	class FT_Font
@@ -33,8 +30,8 @@ namespace Magic
 		inline const unsigned int& GetHeight() { return m_Height; }
 
 	private:
-		FT_Library m_FT_Library;
-		FT_Face m_FT_Face;
+		void* m_FT_Library;
+		void* m_FT_Face;
 
 		unsigned int m_Width;
 		unsigned int m_Height;

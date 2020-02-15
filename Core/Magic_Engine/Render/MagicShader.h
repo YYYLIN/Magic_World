@@ -12,6 +12,8 @@
 class DLL_MAGIC_ENGINE_OUTPUT_INPUT MagicShader
 {
 public:
+	enum ShaderType { VERTEX_SHADER, FRAGMENT_SHADER, GEOMETRY_SHADER };
+
 	MagicShader();
 	~MagicShader();
 
@@ -19,8 +21,12 @@ public:
 	bool LoadFromString(unsigned int whichShader, const std::string& source);
 	//创建链接到着色器对象上
 	bool CreateAndLinkProgram();
+	bool LinkProgranm();
 	void Use();
 	void UnUse();
+
+	void Enable(ShaderType _ShaderType);
+	void Disable(ShaderType _ShaderType);
 
 	void AddAttribute(const std::string& attribute);
 	void AddUniform(const std::string& uniform);
@@ -33,7 +39,6 @@ public:
 	unsigned int GetHandler();
 
 private:
-	enum ShaderType { VERTEX_SHADER, FRAGMENT_SHADER, GEOMETRY_SHADER };
 
 	int totalShaders;
 	unsigned int programHandle; //着色器程序对象

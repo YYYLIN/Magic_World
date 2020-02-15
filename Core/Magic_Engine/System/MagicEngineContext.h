@@ -66,16 +66,28 @@ public:
 
 	MagicTexture* LoadTextrue(const char* file_name, const char* _name, char format);
 	MagicTexture* LoadTextrue(const unsigned char* Data, int _width, int _height, const char* _name);
-
 	void DeleteTextrue(const char* _name);
-
 	MagicTexture* GetTextrue(const char* _name);
+
+	/*
+	*返回空指针创建失败，已经存在相同名字的字体
+	*/
+	//Render线程
+	Magic::LRU_Font_Texture* CreateFont_Texture(const char* _Name);
+	Magic::LRU_Font_Texture* GetFont_Texture(const char* _Name);
+	void DeleteFont_Texture(const char* _Name);
+
+	Magic::FT_Font* CreateFT_Font(const char* _Name);
+	Magic::FT_Font* GetFT_Font(const char* _Name);
+	void DeleteFT_Font(const char* _Name);
 
 private:
 	bool m_EngineRunState;
 	unsigned int m_Error;
-
+	//临时内存管理，以后移植
 	std::map<std::string, MagicTexture*> Map_Texture;
+	std::map<std::string, Magic::LRU_Font_Texture> m_map_Font_Textrue;
+	std::map<std::string, Magic::FT_Font> m_map_FT_Font;
 
 	Magic::Render_thread m_Render_thread;
 	Magic::Management::THREAD_OBJECT m_Load_Thread;

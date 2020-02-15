@@ -117,6 +117,11 @@ bool MagicShader::CreateAndLinkProgram()
 	if (Shaders[GEOMETRY_SHADER] != 0) {
 		glAttachShader(programHandle, Shaders[GEOMETRY_SHADER]);
 	}
+
+	return LinkProgranm();
+}
+
+bool MagicShader::LinkProgranm() {
 	//2.将这些对象链接成一个可执行程序  
 	glLinkProgram(programHandle);
 	//3.查询链接的结果  
@@ -142,10 +147,6 @@ bool MagicShader::CreateAndLinkProgram()
 		}
 	}
 
-	glDeleteShader(Shaders[VERTEX_SHADER]);
-	glDeleteShader(Shaders[FRAGMENT_SHADER]);
-	glDeleteShader(Shaders[GEOMETRY_SHADER]);
-
 	return true;
 }
 
@@ -157,6 +158,16 @@ void MagicShader::Use()
 void MagicShader::UnUse()
 {
 	glUseProgram(0);
+}
+
+void MagicShader::Enable(ShaderType _ShaderType) {
+	glAttachShader(programHandle, Shaders[_ShaderType]);
+	LinkProgranm();
+}
+
+void MagicShader::Disable(ShaderType _ShaderType) {
+	glDetachShader(programHandle, Shaders[_ShaderType]);
+	LinkProgranm();
 }
 
 void MagicShader::AddAttribute(const std::string& attribute)
@@ -182,6 +193,9 @@ GLuint MagicShader::operator()(const std::string& uniform)
 
 void MagicShader::DeleteShaderProgram()
 {
+	glDeleteShader(Shaders[VERTEX_SHADER]);
+	glDeleteShader(Shaders[FRAGMENT_SHADER]);
+	glDeleteShader(Shaders[GEOMETRY_SHADER]);
 	if (programHandle)
 		glDeleteProgram(programHandle);
 }

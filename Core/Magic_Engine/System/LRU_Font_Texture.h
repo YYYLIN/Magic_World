@@ -11,53 +11,21 @@
 
 namespace Magic
 {
-	typedef struct FontsTexture
-	{
-		unsigned int    rows;
-		unsigned int    width;
-		signed   int    left;  //字符到最左边边界的距离
-		signed   int    top;  //基准线到字符最高点的距离
-		signed   int    Ascender;//基准线到字符最高轮廓的距离
-		int X, Y;
-
-		FontsTexture();
-	} FontsTexture;
-
-	struct FONT_HEADER
-	{
-		char FileType[8];
-		uint32_t version;
-		uint32_t validate_chars;
-		uint32_t non_empty_chars;
-		uint32_t char_size;
-
-		int16_t base;
-		int16_t scale;
-	};
-
-	struct FONT_INFO
-	{
-		int16_t x;
-		int16_t y;
-		uint16_t width;
-		uint16_t height;
-	};
-
-	struct CHARINFO
-	{
-		//渲染的像素位置
-		int16_t x;
-		int16_t y;
-		uint16_t width;
-		uint16_t height;
-		//在纹理的UV坐标上
-		float top, left, right, bottom;
-		uint64_t tick;
-	};
-
 	class LRU_Font_Texture
 	{
 	public:
+		struct CHARINFO
+		{
+			//渲染的像素位置
+			int16_t x;
+			int16_t y;
+			uint16_t width;
+			uint16_t height;
+			//在纹理的UV坐标上
+			float top, left, right, bottom;
+			uint64_t tick;
+		};
+
 		LRU_Font_Texture();
 		~LRU_Font_Texture();
 	public:
