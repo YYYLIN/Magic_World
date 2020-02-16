@@ -1,6 +1,11 @@
 /*
 *功能：将freetype字体库，进行一次封装，提供更简洁的，字符图像查找->渲染->获取
 */
+#ifndef _SYSTEM_FT_FONT_H_
+#define _SYSTEM_FT_FONT_H_
+
+
+#include <vector>
 
 namespace Magic
 {
@@ -9,11 +14,12 @@ namespace Magic
 	public:
 		struct CHAR_INFO
 		{
+			unsigned int width;
 			unsigned int drawHeight;
 			unsigned int drawWidth;
 			int left;
 			int top;
-			signed long ascender;
+			//signed long ascender;
 			unsigned char* buffer;
 		};
 
@@ -37,3 +43,5 @@ namespace Magic
 		unsigned int m_Height;
 	};
 }
+
+#endif

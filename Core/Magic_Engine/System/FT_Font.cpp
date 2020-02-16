@@ -6,11 +6,15 @@ namespace Magic
 {
 	FT_Font::FT_Font()
 	{
+		m_FT_Library = nullptr;
 	}
 
 	FT_Font::~FT_Font()
 	{
-		FT_Done_FreeType((FT_Library)m_FT_Library);
+		if (m_FT_Library) {
+			FT_Done_FreeType((FT_Library)m_FT_Library);
+			m_FT_Library = nullptr;
+		}
 	}
 
 	int FT_Font::Initialize(const char* _Path, unsigned int _w, unsigned int _h) {
@@ -38,14 +42,14 @@ namespace Magic
 		m_FT_Face = _FT_Face;
 
 		//…Ë÷√◊÷ÃÂ≥ﬂ¥Á
-		/*_Error = FT_Set_Char_Size(m_FT_Face, 0, 16 << 6, width * 8, high * 8);
+		/*_Error = FT_Set_Char_Size(_FT_Face, 16 * 64, 16 * 64, _w*8, _h*8);
 		if (_Error)
 		{
 			return _Error;
 		}*/
 		m_Width = _w;
 		m_Height = _h;
-		_Error = FT_Set_Pixel_Sizes(_FT_Face, _w, _h);
+		_Error = FT_Set_Pixel_Sizes(_FT_Face, m_Width, m_Height);
 		if (_Error)
 		{
 			return _Error;
@@ -70,10 +74,11 @@ namespace Magic
 		_pCHAR_INFO->drawWidth = _FT_Face->glyph->bitmap.width;
 		_pCHAR_INFO->drawHeight = _FT_Face->glyph->bitmap.rows;
 		_pCHAR_INFO->left = _FT_Face->glyph->bitmap_left;
-		_pCHAR_INFO->top = _FT_Face->glyph->bitmap_top;
-		_pCHAR_INFO->ascender = _FT_Face->size->metrics.ascender >> 6;
+		_pCHAR_INFO->top = -_FT_Face->glyph->bitmap_top;
+		_pCHAR_INFO->width = _FT_Face->glyph->advance.x / 64;
+		//_pCHAR_INFO->ascender = _FT_Face->size->metrics.ascender >> 6;
 		_pCHAR_INFO->buffer = _FT_Face->glyph->bitmap.buffer;
 
-		return true;
+		return 0;
 	}
 }

@@ -2,6 +2,9 @@
 *功能：使用LRU算法，将字体图像缓存在一张纹理中，提供给着色器做快速渲染
 */
 
+#ifndef _SYSTEM_LRU_FONT_TEXTURE_H_
+#define _SYSTEM_LRU_FONT_TEXTURE_H_
+
 #include <stdint.h>
 #include "Render/MagicTexture.h"
 #include <vector>
@@ -16,6 +19,7 @@ namespace Magic
 	public:
 		struct CHARINFO
 		{
+			uint16_t TotalWidth;//字符原点到下一个字符原点的宽度
 			//渲染的像素位置
 			int16_t x;
 			int16_t y;
@@ -48,8 +52,14 @@ namespace Magic
 		unsigned int m_MaxCapacity;//最大容量
 		unsigned int m_X_MaxCapacity;//X轴最大容量
 		unsigned int m_Y_MaxCapacity;//Y轴最大容量
+		unsigned int m_Char_Width_Capacity;
+		unsigned int m_Char_Height_Capacity;
 		MagicTexture m_MagicTexture;
 
 		FT_Font* m_pFT_Font;
+
+		std::vector<unsigned char> m_BufferImage;
 	};
 }
+
+#endif

@@ -15,7 +15,7 @@ include_directories(
 
 link_directories(
 ${PROJECT_SOURCE_DIR}../../../lib/${CMAKE_SYSTEM_NAME}/${NOW_x86_x64}
-${PROJECT_SOURCE_DIR}../../../Plugins/freetype-2.6/lib
+${PROJECT_SOURCE_DIR}../../../Plugins/freetype-2.6/${NOW_x86_x64}/
 )
 
 link_directories(
@@ -108,7 +108,8 @@ IF(WIN32)
 	SOURCE_GROUP("Engine\\Tool" FILES ${MAGIC_TOOL_FILES})
 ENDIF(WIN32)
 
-link_libraries(glew32.lib opengl32.lib freetype26.lib
+link_libraries(glew32.lib opengl32.lib
+	debug freetype26d.lib optimized freetype26.lib
 	debug libpngd.lib optimized libpng.lib
 	debug MagicThread_d.lib optimized MagicThread.lib)
 add_definitions(-DMAGIC_ENGINE_EXPORTS)

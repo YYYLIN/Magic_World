@@ -6,6 +6,7 @@ namespace Magic
 {
 	LRU_Font_Texture::LRU_Font_Texture()
 	{
+		m_Tick = 0;
 	}
 
 	LRU_Font_Texture::~LRU_Font_Texture()
@@ -21,9 +22,28 @@ namespace Magic
 			return false;
 		m_MagicTexture.SetParameteri(MagicTexture::LINEAR);
 
+		//只能拷贝2的n次方的宽高
+		m_Char_Width_Capacity = m_pFT_Font->GetWidth();
+		double _log2 = log2(m_Char_Width_Capacity);
+		if (_log2 - (float)((int)_log2) > 0) {
+			m_Char_Width_Capacity = (unsigned int)pow(2, (int)_log2 + 1);
+		}
+		else {
+			m_Char_Width_Capacity = (unsigned int)pow(2, (int)_log2);
+		}
+
+		m_Char_Height_Capacity = m_pFT_Font->GetHeight();
+		_log2 = log2(m_Char_Height_Capacity);
+		if (_log2 - (float)((int)_log2) > 0) {
+			m_Char_Height_Capacity = (unsigned int)pow(2, (int)_log2 + 1);
+		}
+		else {
+			m_Char_Height_Capacity = (unsigned int)pow(2, (int)_log2);
+		}
+
 		//初始化总共可以存放的字符缓存大小数量
-		m_X_MaxCapacity = m_MagicTexture.GetWidth() / m_pFT_Font->GetWidth();
-		m_Y_MaxCapacity = m_MagicTexture.GetHeight() / m_pFT_Font->GetHeight();
+		m_X_MaxCapacity = m_MagicTexture.GetWidth() / m_Char_Width_Capacity;
+		m_Y_MaxCapacity = m_MagicTexture.GetHeight() / m_Char_Height_Capacity;
 		m_MaxCapacity = m_X_MaxCapacity * m_Y_MaxCapacity;
 
 		L_Char_free.emplace_back(0, m_MaxCapacity);
@@ -54,8 +74,8 @@ namespace Magic
 					_char_pos.y = s / m_Y_MaxCapacity;
 					_char_pos.x = s - _char_pos.y * m_X_MaxCapacity;
 
-					_char_pos.x *= m_pFT_Font->GetWidth();
-					_char_pos.y *= m_pFT_Font->GetHeight();
+					_char_pos.x *= m_Char_Width_Capacity;
+					_char_pos.y *= m_Char_Height_Capacity;
 
 					_charInfo.left = static_cast<float>(_char_pos.x) / m_MagicTexture.GetWidth();
 					_charInfo.top = static_cast<float>(_char_pos.y) / m_MagicTexture.GetHeight();
@@ -99,7 +119,7 @@ namespace Magic
 							//释放缓存
 							U_Char_Info_Map.erase(chiter);
 							//置空纹理
-							m_MagicTexture.UpdataData(x, y, m_pFT_Font->GetWidth(), m_pFT_Font->GetHeight(), 0);
+							m_MagicTexture.UpdataData(x, y, m_Char_Width_Capacity, m_Char_Height_Capacity, 0);
 						}
 					}
 					//将两个相连的空区域合并为一个对象
@@ -136,8 +156,17 @@ namespace Magic
 					_charInfo.y = _CHAR_INFO.top;
 					_charInfo.width = _CHAR_INFO.drawWidth;
 					_charInfo.height = _CHAR_INFO.drawHeight;
+					_charInfo.TotalWidth = _CHAR_INFO.width;
 
-					m_MagicTexture.UpdataData(_char_pos.x, _char_pos.y, _CHAR_INFO.drawWidth, _CHAR_INFO.drawHeight, _CHAR_INFO.buffer);
+					//在低版本Opengl中必须拷贝2的次方
+					m_BufferImage.resize(0);
+					m_BufferImage.resize(m_Char_Width_Capacity * m_Char_Height_Capacity);
+					for (unsigned int _H = 0; _H < _CHAR_INFO.drawHeight; _H++) {
+						memcpy(&m_BufferImage[_H * m_Char_Width_Capacity],
+							&_CHAR_INFO.buffer[_H * _CHAR_INFO.drawWidth], _CHAR_INFO.drawWidth);
+					}
+
+					m_MagicTexture.UpdataData(_char_pos.x, _char_pos.y, m_Char_Width_Capacity, m_Char_Height_Capacity, &m_BufferImage[0]);
 
 					U_Char_Info_Map.emplace(_wchar, _charInfo);
 				}

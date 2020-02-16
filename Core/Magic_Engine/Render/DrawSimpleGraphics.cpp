@@ -44,7 +44,7 @@ static const char* S_Pure_Color_Frag =
 "	if(DrawType == 1){"
 "		gl_FragColor = _texColor * gl_Color;"
 "	}else if(DrawType == 2){"
-"		gl_FragColor = _texColor.a * gl_Color;"
+"		gl_FragColor = vec4(gl_Color.rgb, _texColor.a * gl_Color.a);"
 "	}else{"
 "		gl_FragColor = gl_Color;"
 "	}"
@@ -176,6 +176,8 @@ void DrawSimpleGraphics::DrawTEXT(const std::wstring _wText, float _x, float _y,
 			float _X = _x;
 			float _Y = _y;
 
+			m_this->m_Bind_LRU_Font_Texture->UpdataTexture(_wText.c_str());
+
 			for (auto _wchar : _wText) {
 				auto _CharInfo = m_this->m_Bind_LRU_Font_Texture->GetCHARINFO(_wchar);
 				_Vertex.Position.x = _X + _CharInfo.x;
@@ -209,7 +211,8 @@ void DrawSimpleGraphics::DrawTEXT(const std::wstring _wText, float _x, float _y,
 				_Vertex.uv.y = _CharInfo.top;
 				m_this->m_vec_Line_Vertex.push_back(_Vertex);
 
-				_X += _CharInfo.width;
+				_X += _CharInfo.TotalWidth;
+				*_count += 6;
 			}
 		}
 	});

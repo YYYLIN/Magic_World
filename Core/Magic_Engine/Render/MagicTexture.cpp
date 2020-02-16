@@ -186,6 +186,7 @@ void MagicTexture::UpdataData(int _xoffset, int _yoffset, unsigned int _width, u
 		_type = GL_BYTE;
 		break;
 	}
+	//4.0以前的只能为2的次方
 	glTexSubImage2D(GL_TEXTURE_2D, 0, _xoffset, _yoffset, _width, _hegiht, _internalformat, _type, _pdata);
 }
 
