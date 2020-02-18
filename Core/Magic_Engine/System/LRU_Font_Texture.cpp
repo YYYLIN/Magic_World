@@ -1,5 +1,6 @@
 #include "LRU_Font_Texture.h"
 #include "glm.hpp"
+#include <bitset>
 
 
 namespace Magic
@@ -22,23 +23,30 @@ namespace Magic
 			return false;
 		m_MagicTexture.SetParameteri(MagicTexture::LINEAR);
 
-		//只能拷贝2的n次方的宽高
+		//只能拷贝2的n次方的宽高,字体缓存区大小，预留本身宽高的多一个2倍，防止缓存区溢出
 		m_Char_Width_Capacity = m_pFT_Font->GetWidth();
 		double _log2 = log2(m_Char_Width_Capacity);
-		if (_log2 - (float)((int)_log2) > 0) {
-			m_Char_Width_Capacity = (unsigned int)pow(2, (int)_log2 + 1);
+		if (_log2 - (float)((int)_log2) > 0.5) {
+			m_Char_Width_Capacity = (unsigned int)pow(2, (int)_log2 + 2);
 		}
 		else {
-			m_Char_Width_Capacity = (unsigned int)pow(2, (int)_log2);
+			m_Char_Width_Capacity = (unsigned int)pow(2, (int)_log2 + 1);
 		}
 
 		m_Char_Height_Capacity = m_pFT_Font->GetHeight();
 		_log2 = log2(m_Char_Height_Capacity);
-		if (_log2 - (float)((int)_log2) > 0) {
-			m_Char_Height_Capacity = (unsigned int)pow(2, (int)_log2 + 1);
+		if (_log2 - (float)((int)_log2) > 0.5) {
+			m_Char_Height_Capacity = (unsigned int)pow(2, (int)_log2 + 2);
 		}
 		else {
-			m_Char_Height_Capacity = (unsigned int)pow(2, (int)_log2);
+			m_Char_Height_Capacity = (unsigned int)pow(2, (int)_log2 + 1);
+		}
+
+		if (m_Char_Width_Capacity == 0) {
+			m_Char_Width_Capacity = m_Char_Height_Capacity;
+		}
+		else if (m_Char_Height_Capacity == 0) {
+			m_Char_Height_Capacity = m_Char_Width_Capacity;
 		}
 
 		//初始化总共可以存放的字符缓存大小数量
@@ -157,10 +165,9 @@ namespace Magic
 					_charInfo.width = _CHAR_INFO.drawWidth;
 					_charInfo.height = _CHAR_INFO.drawHeight;
 					_charInfo.TotalWidth = _CHAR_INFO.width;
-
-					//在低版本Opengl中必须拷贝2的次方
 					m_BufferImage.resize(0);
 					m_BufferImage.resize(m_Char_Width_Capacity * m_Char_Height_Capacity);
+					//在低版本Opengl中必须拷贝2的次方
 					for (unsigned int _H = 0; _H < _CHAR_INFO.drawHeight; _H++) {
 						memcpy(&m_BufferImage[_H * m_Char_Width_Capacity],
 							&_CHAR_INFO.buffer[_H * _CHAR_INFO.drawWidth], _CHAR_INFO.drawWidth);

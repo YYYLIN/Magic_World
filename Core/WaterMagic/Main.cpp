@@ -63,7 +63,7 @@ int CALLBACK _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevainstance, LPWSTR lpc
 	HICON _ico = (HICON)::LoadImageA(NULL, 0, IMAGE_ICON, 0, 0, LR_DEFAULTSIZE | LR_LOADFROMFILE);
 	Magic::SetWindowICO(_ico);
 
-	Magic::CreateFONT("msyh", "msyh.ttc", 16, 16);
+	Magic::CreateFONT("msyh", "simsun.ttc", 0, 13);
 
 	Magic::Engine([]() {
 		Magic::TemplateEffects("Main", [](const ::Magic::PTemplate_Effects& _PTE) {
@@ -77,7 +77,7 @@ int CALLBACK _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevainstance, LPWSTR lpc
 			g_spdoc->draw(0, 0, 0, &litehtml::position(0, 0, _width, _height));
 
 			DrawSimpleGraphics::Instance()->BindFont("msyh");
-			DrawSimpleGraphics::Instance()->DrawTEXT(L"ÄãÂðABCDHGJGDfFdfsd154564632", 100.0f, 200.0f, Magic::Color4(0.0f, 0.0f, 1.0f, 1.0f));
+			DrawSimpleGraphics::Instance()->DrawTEXT(L"ÄãÂðABCDHGJGDfFdfsd154564632", 100.0f, 200.0f, Magic::Color4(1.0f, 1.0f, 1.0f, 1.0f));
 
 			DrawSimpleGraphics::Instance()->SetColor(Magic::Color4(0.0f, 1.0f, 0.0f, 1.0f));
 			DrawSimpleGraphics::Instance()->DrawLine(0.0f, 10, 100.0f, 10);
