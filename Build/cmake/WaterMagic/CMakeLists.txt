@@ -8,6 +8,9 @@ execute_process(
 COMMAND git clone https://github.com/litehtml/litehtml
 WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}../../../Plugins/)
 
+execute_process(
+COMMAND scp root@106.52.237.27:/home/git/Magic_World/Media ${PROJECT_SOURCE_DIR}../../../Media/)
+
 include_directories(
 ../../../Plugins/glm
 ../../../Core/Magic_Engine/Include
