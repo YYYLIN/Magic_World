@@ -148,26 +148,9 @@ void DrawSimpleGraphics::DrawTEXT(const std::wstring _wText, float _x, float _y,
 		if (m_this->m_Bind_LRU_Font_Texture) {
 			LINE_VERTEX _Vertex;
 
-			if (_LastDrawType != DRAW_TYPE_PICTURE_TEXT || !m_this->m_vec_Instance.size())
-			{
-				LINE_INSTANCE _Instance;
-				_Instance.CameraMatrix = CONST_CAMERA * _WorldMatrix;
-				m_this->m_vec_Instance.push_back(_Instance);
-			}
-
-			if (_LastDrawType != DRAW_TYPE_PICTURE_TEXT || !m_this->m_vec_DEICommand.size())
-			{
-				Magic::DrawArraysIndirectCommand _DEICommand;
-
-				_DEICommand.count = 0;
-				_DEICommand.instanceCount = 1;
-				_DEICommand.first = (unsigned int)m_this->m_vec_Line_Vertex.size();
-				_DEICommand.baseInstance = (unsigned int)m_this->m_vec_Instance.size() - 1;
-
-				m_this->m_Draw_Type_Queue.push_back(DRAW_TYPE_QUEUE(DRAW_TYPE_PICTURE_TEXT, m_this->m_vec_DEICommand.size(), m_this->m_Bind_LRU_Font_Texture->GetTexture()));
-
-				m_this->m_vec_DEICommand.push_back(_DEICommand);
-			}
+			CheckResendDraw(m_this->m_Bind_LRU_Font_Texture != m_this->m_Load_LRU_Font_Texture || _LastDrawType != DRAW_TYPE_PICTURE_TEXT,
+				DRAW_TYPE_PICTURE_TEXT, m_this->m_Bind_LRU_Font_Texture->GetTexture(), _WorldMatrix);
+			m_this->m_Load_LRU_Font_Texture = m_this->m_Bind_LRU_Font_Texture;
 
 			auto _count = &m_this->m_vec_DEICommand.back().count;
 
@@ -232,28 +215,9 @@ void DrawSimpleGraphics::DrawLine(float _x1, float _y1, float _x2, float _y2, Ma
 	Magic::RenderThread([this, _LastDrawType, _Color, _WorldMatrix, _x1, _y1, _x2, _y2](Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message) {
 		LINE_VERTEX _Vertex;
 
-		if (_LastDrawType != DRAW_TYPE_LINES || !m_this->m_vec_Instance.size())
-		{
-			LINE_INSTANCE _Instance;
-			_Instance.CameraMatrix = CONST_CAMERA * _WorldMatrix;
-			m_this->m_vec_Instance.push_back(_Instance);
-		}
+		CheckResendDraw(_LastDrawType != DRAW_TYPE_LINES, DRAW_TYPE_LINES, 0, _WorldMatrix);
 
-		if (_LastDrawType != DRAW_TYPE_LINES || !m_this->m_vec_DEICommand.size())
-		{
-			Magic::DrawArraysIndirectCommand _DEICommand;
-
-			_DEICommand.count = 2;
-			_DEICommand.instanceCount = 1;
-			_DEICommand.first = (unsigned int)m_this->m_vec_Line_Vertex.size();
-			_DEICommand.baseInstance = (unsigned int)m_this->m_vec_Instance.size() - 1;
-
-			m_this->m_Draw_Type_Queue.push_back(DRAW_TYPE_QUEUE(DRAW_TYPE_LINES, m_this->m_vec_DEICommand.size()));
-
-			m_this->m_vec_DEICommand.push_back(_DEICommand);
-		}
-		else
-			m_this->m_vec_DEICommand.back().count += 2;
+		m_this->m_vec_DEICommand.back().count += 2;
 
 		_Vertex.Color = _Color;
 
@@ -277,30 +241,12 @@ void DrawSimpleGraphics::DrawRectangle(float _x, float _y, float _w, float _h, M
 	glm::mat4 _WorldMatrix = m_WorldMatrix;
 
 	Magic::RenderThread([this, _LastDrawType, _Color, _WorldMatrix, _x, _y, _w, _h](Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message) {
+		//检查是否需要重新发送绘制指令
+		CheckResendDraw(_LastDrawType != DRAW_TYPE_TRIANGLES, DRAW_TYPE_TRIANGLES, 0, _WorldMatrix);
+
+		m_this->m_vec_DEICommand.back().count += 6;
+
 		LINE_VERTEX _Vertex;
-
-		if (_LastDrawType != DRAW_TYPE_TRIANGLES || !m_this->m_vec_Instance.size())
-		{
-			LINE_INSTANCE _Instance;
-			_Instance.CameraMatrix = CONST_CAMERA * _WorldMatrix;
-			m_this->m_vec_Instance.push_back(_Instance);
-		}
-
-		if (_LastDrawType != DRAW_TYPE_TRIANGLES || !m_this->m_vec_DEICommand.size())
-		{
-			Magic::DrawArraysIndirectCommand _DEICommand;
-
-			_DEICommand.count = 6;
-			_DEICommand.instanceCount = 1;
-			_DEICommand.first = (unsigned int)m_this->m_vec_Line_Vertex.size();
-			_DEICommand.baseInstance = (unsigned int)m_this->m_vec_Instance.size() - 1;
-
-			m_this->m_Draw_Type_Queue.push_back(DRAW_TYPE_QUEUE(DRAW_TYPE_TRIANGLES, m_this->m_vec_DEICommand.size()));
-
-			m_this->m_vec_DEICommand.push_back(_DEICommand);
-		}
-		else
-			m_this->m_vec_DEICommand.back().count += 6;
 
 		_Vertex.Color = _Color;
 
@@ -333,6 +279,29 @@ void DrawSimpleGraphics::SetColor(Magic::Color4 _Color) {
 
 void DrawSimpleGraphics::SetWorldMatrix(glm::mat4 _WorldMatrix) {
 	m_WorldMatrix = _WorldMatrix;
+}
+
+void DrawSimpleGraphics::CheckResendDraw(bool _IsNew, unsigned int _DrawType, MagicTexture* _pMagicTexture, const glm::mat4& _WorldMatrix) {
+	if (_IsNew || !m_this->m_vec_Instance.size())
+	{
+		LINE_INSTANCE _Instance;
+		_Instance.CameraMatrix = CONST_CAMERA * _WorldMatrix;
+		m_this->m_vec_Instance.push_back(_Instance);
+	}
+
+	if (_IsNew || !m_this->m_vec_DEICommand.size())
+	{
+		Magic::DrawArraysIndirectCommand _DEICommand;
+
+		_DEICommand.count = 0;
+		_DEICommand.instanceCount = 1;
+		_DEICommand.first = (unsigned int)m_this->m_vec_Line_Vertex.size();
+		_DEICommand.baseInstance = (unsigned int)m_this->m_vec_Instance.size() - 1;
+
+		m_this->m_Draw_Type_Queue.push_back(DRAW_TYPE_QUEUE(_DrawType, m_this->m_vec_DEICommand.size(), _pMagicTexture));
+
+		m_this->m_vec_DEICommand.push_back(_DEICommand);
+	}
 }
 
 void DrawSimpleGraphics::Render(Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message)
@@ -381,7 +350,7 @@ void DrawSimpleGraphics::Render(Magic::Management::MESSAGE_TYPE _MessageType, Ma
 				glBindTexture(GL_TEXTURE_2D, _auto->m_Texture->GetTextrue());
 				break;
 			}
-
+			
 			GLsizei _DrawSize = 0;
 			auto _Next = _auto + 1;
 			if (_Next != m_this->m_Draw_Type_Queue.end()) {

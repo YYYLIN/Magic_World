@@ -18,7 +18,7 @@
 *.opensdf
 clear.bat
 Install/*
-Media/*
+Media/
 Build/*
 !Build/cmake
 [Dd]ebug/*

@@ -70,6 +70,9 @@ public:
 
 
 private:
+	//检查是否需要重新发送绘制指令
+	void CheckResendDraw(bool _IsNew, unsigned int _DrawType, MagicTexture* _pMagicTexture, const glm::mat4& _WorldMatrix);
+
 	void Render(Magic::Management::MESSAGE_TYPE _MessageType, Magic::Management::MESSAGE _Message);
 private:
 	unsigned int m_LastDrawType;
@@ -89,7 +92,7 @@ private:
 	std::vector<Magic::DrawArraysIndirectCommand> m_vec_DEICommand;
 	std::vector<DRAW_TYPE_QUEUE> m_Draw_Type_Queue; //渲染类型切换的队列
 
-	Magic::LRU_Font_Texture* m_Bind_LRU_Font_Texture;
+	Magic::LRU_Font_Texture* m_Bind_LRU_Font_Texture, *m_Load_LRU_Font_Texture;
 	RT_ENVIRONMENT_END;
 	//---------------------------<
 
